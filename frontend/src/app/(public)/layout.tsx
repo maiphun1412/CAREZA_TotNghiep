@@ -1,6 +1,7 @@
 "use client";
 
 import type { ReactNode } from "react";
+import { Suspense } from "react";
 import { usePathname } from "next/navigation";
 import PublicHeader from "@/components/layouts/public-header";
 import PublicFooter from "@/components/layouts/public-footer";
@@ -21,7 +22,9 @@ export default function PublicLayout({ children }: { children: ReactNode }) {
 
   return (
     <div className="flex flex-col min-h-screen">
-      <PublicHeader />
+      <Suspense fallback={<div className="h-16 w-full bg-white border-b border-slate-200" />}>
+        <PublicHeader />
+      </Suspense>
       <main className="flex-1 flex flex-col bg-slate-50">{children}</main>
       <PublicFooter />
     </div>

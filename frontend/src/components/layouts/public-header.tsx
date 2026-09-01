@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useMemo } from "react";
+import { useState, useEffect, useMemo, Suspense } from "react";
 import Link from "next/link";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
@@ -68,7 +68,7 @@ import {
 } from "@ant-design/icons";
 import { RoleCode } from "@/enums/role.enum";
 
-export default function PublicHeader() {
+function PublicHeaderMain() {
   const { message } = App.useApp();
   const pathname = usePathname();
   const router = useRouter();
@@ -1506,5 +1506,13 @@ export default function PublicHeader() {
         </div>
       </Drawer>
     </header>
+  );
+}
+
+export default function PublicHeader() {
+  return (
+    <Suspense fallback={null}>
+      <PublicHeaderMain />
+    </Suspense>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
 import {
@@ -215,7 +215,7 @@ const RECENT_ACTIVITIES = [
 // MAIN COMPONENT
 // =====================================================================
 
-export default function EmployerCompanySettingsPage() {
+function EmployerCompanySettingsMain() {
   const { message } = App.useApp();
   const { user } = useAuthStore();
   const searchParams = useSearchParams();
@@ -2232,5 +2232,13 @@ export default function EmployerCompanySettingsPage() {
         </div>
       </Modal>
     </div>
+  );
+}
+
+export default function EmployerCompanySettingsPage() {
+  return (
+    <Suspense fallback={null}>
+      <EmployerCompanySettingsMain />
+    </Suspense>
   );
 }
