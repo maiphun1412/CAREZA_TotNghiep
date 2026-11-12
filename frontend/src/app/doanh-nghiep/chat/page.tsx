@@ -463,7 +463,7 @@ export default function EmployerChatPage() {
     },
     {
       key: "priority",
-      label: activeConv.isPriority ? "Bỏ đánh dấu ưu tiên" : "Đánh dấu ưu tiên",
+      label: activeConv?.isPriority ? "Bỏ đánh dấu ưu tiên" : "Đánh dấu ưu tiên",
       icon: <Star className="w-3.5 h-3.5 text-amber-500" />,
       onClick: () => handleTogglePriority(activeConv.id),
     },
@@ -1485,7 +1485,7 @@ export default function EmployerChatPage() {
         title={
           <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
             <Calendar className="w-5 h-5 text-emerald-600" />
-            <span>Gửi lịch phỏng vấn cho {activeConv.candidateName}</span>
+            <span>Gửi lịch phỏng vấn cho {activeConv?.candidateName}</span>
           </div>
         }
         open={isInterviewModalOpen}
@@ -1563,7 +1563,7 @@ export default function EmployerChatPage() {
         title={
           <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
             <Mail className="w-5 h-5 text-blue-600" />
-            <span>Gửi Email đến {activeConv.email}</span>
+            <span>Gửi Email đến {activeConv?.email}</span>
           </div>
         }
         open={isEmailModalOpen}
@@ -1626,7 +1626,7 @@ export default function EmployerChatPage() {
         title={
           <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
             <Sparkles className="w-5 h-5 text-purple-600" />
-            <span>Thêm {activeConv.candidateName} vào Talent Pool</span>
+            <span>Thêm {activeConv?.candidateName} vào Talent Pool</span>
           </div>
         }
         open={isTalentPoolModalOpen}
@@ -1681,7 +1681,7 @@ export default function EmployerChatPage() {
         title={
           <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
             <FileText className="w-5 h-5 text-emerald-600" />
-            <span>Hồ sơ ứng viên: {activeConv.candidateName}</span>
+            <span>Hồ sơ ứng viên: {activeConv?.candidateName}</span>
           </div>
         }
         open={isCvModalOpen}
@@ -1698,7 +1698,7 @@ export default function EmployerChatPage() {
             </div>
             <div>
               <h4 className="font-bold text-sm text-slate-900 m-0">
-                CV_{activeConv.candidateName.replace(/\s+/g, "")}_{activeConv.jobTitle.replace(/\s+/g, "")}.pdf
+                CV_{activeConv?.candidateName.replace(/\s+/g, "")}_{activeConv?.jobTitle.replace(/\s+/g, "")}.pdf
               </h4>
               <span className="text-xs text-slate-500 font-medium">
                 Dung lượng: 2.4 MB • Định dạng: PDF tài liệu

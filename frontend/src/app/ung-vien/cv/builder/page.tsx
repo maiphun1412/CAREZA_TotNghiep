@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { Suspense, useState } from "react";
 import { useCvBuilder } from "./hooks/use-cv-builder";
 import { TopBar } from "./components/top-bar";
 import { SidebarContainer } from "./components/sidebar/sidebar-container";
@@ -9,6 +9,14 @@ import { Modal, Segmented } from "antd";
 import { EditOutlined, EyeOutlined } from "@ant-design/icons";
 
 export default function CvBuilderPage() {
+  return (
+    <Suspense fallback={null}>
+      <CvBuilderPageContent />
+    </Suspense>
+  );
+}
+
+function CvBuilderPageContent() {
   const {
     resumeData,
     updateResumeData,
