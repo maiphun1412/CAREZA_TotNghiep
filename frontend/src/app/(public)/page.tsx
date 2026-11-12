@@ -18,7 +18,7 @@ export default function LandingPage() {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
             entry.target.classList.add("opacity-100", "translate-y-0");
-            entry.target.classList.remove("opacity-0", "translate-y-12");
+            entry.target.classList.remove("opacity-0", "translate-y-4");
           }
         });
       },
@@ -27,7 +27,7 @@ export default function LandingPage() {
 
     const revealSections = document.querySelectorAll(".reveal-section");
     revealSections.forEach((section) => {
-      section.classList.add("transition-all", "duration-[1000ms]", "opacity-0", "translate-y-12");
+      section.classList.add("transition-all", "duration-[700ms]", "opacity-0", "translate-y-4");
       observer.observe(section);
     });
 

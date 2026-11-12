@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
+import { interactionService } from "@/services/interaction.service";
 import {
   Modal,
   Select,
@@ -14,6 +15,9 @@ import {
   Pagination,
   Switch,
   Drawer,
+  Spin,
+  Alert,
+  Empty,
 } from "antd";
 import {
   Bell,
@@ -78,123 +82,7 @@ export interface NotificationItem {
 
 // =====================================================================
 // INITIAL NOTIFICATION DATA
-// =====================================================================
-
-const INITIAL_NOTIFICATIONS: NotificationItem[] = [
-  // Group: Hôm nay
-  {
-    id: "notif-1",
-    category: "candidate",
-    title: "Nguyễn Thanh Hương đã ứng tuyển vị trí Senior Product Manager",
-    subtitle: "Ứng viên phù hợp với tin tuyển dụng của bạn",
-    time: "10:30 AM",
-    dateGroup: "Hôm nay",
-    dateKey: "2024-05-31",
-    isUnread: true,
-    targetUrl: "/doanh-nghiep/ung-vien",
-  },
-  {
-    id: "notif-2",
-    category: "job",
-    title: "Ứng viên mới phù hợp với vị trí Product Designer",
-    subtitle: "Có 8 ứng viên mới phù hợp với tiêu chí tìm kiếm của bạn",
-    time: "09:15 AM",
-    dateGroup: "Hôm nay",
-    dateKey: "2024-05-31",
-    isUnread: true,
-    avatars: [
-      "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80",
-      "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80",
-      "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80",
-    ],
-    targetUrl: "/doanh-nghiep/tim-kiem-ho-so",
-  },
-  {
-    id: "notif-3",
-    category: "interview",
-    title: "Lịch phỏng vấn được xác nhận",
-    subtitle: "Phỏng vấn với ứng viên Trần Minh Quân vào 15:00 hôm nay",
-    time: "08:45 AM",
-    dateGroup: "Hôm nay",
-    dateKey: "2024-05-31",
-    isUnread: true,
-    targetUrl: "/doanh-nghiep/lich-phong-van",
-  },
-  {
-    id: "notif-4",
-    category: "report",
-    title: "Báo cáo tuyển dụng tuần đã sẵn sàng",
-    subtitle: "Báo cáo tổng quan từ 20/05/2024 - 26/05/2024",
-    time: "08:20 AM",
-    dateGroup: "Hôm nay",
-    dateKey: "2024-05-31",
-    isUnread: false,
-    thumbnail: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=240&q=80",
-    targetUrl: "/doanh-nghiep/bao-cao-tuyen-dung",
-  },
-
-  // Group: Hôm qua
-  {
-    id: "notif-5",
-    category: "job",
-    title: 'Tin tuyển dụng "Product Manager" sắp hết hạn',
-    subtitle: "Tin sẽ hết hạn vào 28/05/2024",
-    time: "05:30 PM",
-    dateGroup: "Hôm qua",
-    dateKey: "2024-05-30",
-    isUnread: true,
-    targetUrl: "/doanh-nghiep/tin-tuyen-dung",
-  },
-  {
-    id: "notif-6",
-    category: "payment",
-    title: "Thanh toán thành công",
-    subtitle: "Gói Premium - 6.990.000đ - Hóa đơn #HD-2024-05-001",
-    time: "04:15 PM",
-    dateGroup: "Hôm qua",
-    dateKey: "2024-05-30",
-    isUnread: true,
-    isImportant: true,
-    targetUrl: "/doanh-nghiep/goi-dich-vu",
-  },
-  {
-    id: "notif-7",
-    category: "candidate",
-    title: "Vũ Quốc Bảo đã gửi đề xuất ứng viên",
-    subtitle: "Ứng viên: Lê Hoàng Nam - Senior Developer",
-    time: "03:10 PM",
-    dateGroup: "Hôm qua",
-    dateKey: "2024-05-30",
-    isUnread: false,
-    singleAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80",
-    targetUrl: "/doanh-nghiep/ung-vien",
-  },
-
-  // Group: 25/05/2024
-  {
-    id: "notif-8",
-    category: "message",
-    title: "Ứng viên đã gửi tin nhắn mới",
-    subtitle: "Ứng viên Phạm Anh Dương đã gửi tin nhắn",
-    time: "11:20 AM",
-    dateGroup: "25/05/2024",
-    dateKey: "2024-05-25",
-    isUnread: true,
-    badgeCount: 2,
-    targetUrl: "/doanh-nghiep/chat",
-  },
-  {
-    id: "notif-9",
-    category: "system",
-    title: "Mai Phương đã được thêm vào dự án tuyển dụng",
-    subtitle: "Dự án: Tuyển dụng Product Team Q2/2024",
-    time: "09:05 AM",
-    dateGroup: "25/05/2024",
-    dateKey: "2024-05-25",
-    isUnread: true,
-    targetUrl: "/doanh-nghiep/thanh-vien",
-  },
-];
+// =====================================================================const INITIAL_NOTIFICATIONS: NotificationItem[] = [];
 
 // =====================================================================
 // MAIN COMPONENT
@@ -205,7 +93,10 @@ export default function EmployerNotificationsPage() {
   const router = useRouter();
 
   // State
-  const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [activeTab, setActiveTab] = useState<"all" | "unread" | "important">("all");
   const [selectedCategory, setSelectedCategory] = useState<string>("all");
   const [currentPage, setCurrentPage] = useState(1);
@@ -220,20 +111,75 @@ export default function EmployerNotificationsPage() {
     frequency: "realtime",
   });
 
+  const fetchNotifications = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await interactionService.getNotifications({ page: 1, page_size: 50 });
+      const rawList = res?.notifications || [];
+      const mapped: NotificationItem[] = rawList.map((n: any) => {
+        const dt = n.created_at ? new Date(n.created_at) : new Date();
+        const dateStr = dt.toLocaleDateString("vi-VN");
+        const isToday = new Date().toLocaleDateString("vi-VN") === dateStr;
+        const dateGroup = isToday ? "Hôm nay" : dateStr;
+
+        let cat: NotificationCategory = "system";
+        if (n.type?.includes("job")) cat = "job";
+        else if (n.type?.includes("candidate") || n.type?.includes("apply") || n.type?.includes("application")) cat = "candidate";
+        else if (n.type?.includes("interview")) cat = "interview";
+        else if (n.type?.includes("payment") || n.type?.includes("order")) cat = "payment";
+        else if (n.type?.includes("message") || n.type?.includes("chat")) cat = "message";
+
+        return {
+          id: String(n.id),
+          category: cat,
+          title: n.title,
+          subtitle: n.message || "",
+          time: dt.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+          dateGroup,
+          dateKey: dt.toISOString().split("T")[0],
+          isUnread: !n.is_read,
+          isImportant: n.type?.includes("payment") || n.type?.includes("urgent"),
+          targetUrl: n.metadata?.url || (cat === "candidate" ? "/doanh-nghiep/ung-vien" : cat === "interview" ? "/doanh-nghiep/lich-phong-van" : "/doanh-nghiep/dashboard"),
+        };
+      });
+      setNotifications(mapped);
+    } catch (err: any) {
+      console.error("Lỗi nạp thông báo:", err);
+      setError(err?.message || "Không thể tải danh sách thông báo từ máy chủ.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]);
+
   // Calculate Counts
   const totalCount = notifications.length;
   const unreadCount = notifications.filter((n) => n.isUnread).length;
   const importantCount = notifications.filter((n) => n.isImportant).length;
 
   // Mark all as read
-  const handleMarkAllAsRead = () => {
+  const handleMarkAllAsRead = async () => {
+    try {
+      await interactionService.markAllNotificationsRead();
+    } catch {
+      // ignore
+    }
     setNotifications(notifications.map((n) => ({ ...n, isUnread: false })));
     message.success("Đã đánh dấu tất cả thông báo là đã đọc!");
   };
 
   // Toggle single read status
-  const handleToggleRead = (id: string, e?: React.MouseEvent) => {
+  const handleToggleRead = async (id: string, e?: React.MouseEvent) => {
     e?.stopPropagation();
+    try {
+      await interactionService.markNotificationRead(Number(id));
+    } catch {
+      // ignore
+    }
     setNotifications(
       notifications.map((n) => (n.id === id ? { ...n, isUnread: !n.isUnread } : n))
     );
@@ -249,13 +195,19 @@ export default function EmployerNotificationsPage() {
   };
 
   // Handle click item navigation
-  const handleClickNotification = (item: NotificationItem) => {
+  const handleClickNotification = async (item: NotificationItem) => {
     // Mark as read
     if (item.isUnread) {
+      try {
+        await interactionService.markNotificationRead(Number(item.id));
+      } catch {
+        // ignore
+      }
       setNotifications(
         notifications.map((n) => (n.id === item.id ? { ...n, isUnread: false } : n))
       );
     }
+
     if (item.targetUrl) {
       router.push(item.targetUrl);
     }
@@ -452,10 +404,31 @@ export default function EmployerNotificationsPage() {
 
           {/* Notification List (Grouped by Date) */}
           <div className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs overflow-hidden divide-y divide-slate-100">
-            {Object.keys(groupedNotifications).length === 0 ? (
+            {loading ? (
+              <div className="p-12 text-center text-slate-400">
+                <Spin tip="Đang tải danh sách thông báo..." />
+              </div>
+            ) : error ? (
+              <div className="p-6">
+                <Alert
+                  type="error"
+                  showIcon
+                  message="Lỗi tải thông báo"
+                  description={error}
+                  action={
+                    <button
+                      type="button"
+                      onClick={fetchNotifications}
+                      className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition-all cursor-pointer"
+                    >
+                      Tải lại
+                    </button>
+                  }
+                />
+              </div>
+            ) : Object.keys(groupedNotifications).length === 0 ? (
               <div className="p-12 text-center text-slate-400 space-y-2">
-                <Bell className="w-8 h-8 text-slate-300 mx-auto" />
-                <span className="font-bold text-xs block">Không có thông báo nào</span>
+                <Empty description="Không có thông báo nào" image={Empty.PRESENTED_IMAGE_SIMPLE} />
               </div>
             ) : (
               Object.entries(groupedNotifications).map(([groupName, items]) => (

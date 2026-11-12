@@ -1,0 +1,4610 @@
+[
+  {
+    "query_id": "query_01",
+    "query": "Các trường thông tin cốt lõi bắt buộc phải có trong một CV chuyên nghiệp là gì?",
+    "category": "candidate_cv",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_01_c01",
+      "doc_01_c00"
+    ],
+    "retrieved_total": 19,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_01_c00",
+        "score": 0.2186,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_19_c00",
+        "score": 0.096,
+        "is_relevant": false,
+        "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ"
+      },
+      {
+        "chunk_id": "doc_17_c01",
+        "score": 0.0928,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.092,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      },
+      {
+        "chunk_id": "doc_16_c00",
+        "score": 0.0786,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_02",
+    "query": "Dung lượng tối đa cho phép tải lên file CV trên hệ thống CAREZA là bao nhiêu?",
+    "category": "candidate_cv",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_01_c02"
+    ],
+    "retrieved_total": 25,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_01_c02",
+        "score": 0.1942,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.1489,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_20_c00",
+        "score": 0.1418,
+        "is_relevant": false,
+        "document_title": "Quy tắc tiêu chuẩn cộng đồng và chống tin tuyển dụng giả mạo"
+      },
+      {
+        "chunk_id": "doc_16_c00",
+        "score": 0.1313,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_02_c00",
+        "score": 0.1264,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_03",
+    "query": "Kinh nghiệm làm việc trong CV nên được sắp xếp theo thứ tự thời gian như thế nào?",
+    "category": "candidate_cv",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_01_c01"
+    ],
+    "retrieved_total": 6,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_01_c01",
+        "score": 0.162,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_07_c00",
+        "score": 0.1011,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_01_c00",
+        "score": 0.0911,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_02_c00",
+        "score": 0.0862,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_01_c02",
+        "score": 0.0763,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_04",
+    "query": "Tính năng Match Score giữa CV và JD của CAREZA hoạt động dựa trên nguyên lý nào?",
+    "category": "ai_intelligence",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_02_c01"
+    ],
+    "retrieved_total": 22,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_02_c00",
+        "score": 0.1664,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_02_c01",
+        "score": 0.1344,
+        "is_relevant": true,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_06_c00",
+        "score": 0.1293,
+        "is_relevant": false,
+        "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.1041,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_01_c02",
+        "score": 0.1025,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_05",
+    "query": "AI của CAREZA hỗ trợ phát hiện những thông tin gì từ CV của ứng viên?",
+    "category": "ai_intelligence",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_02_c00",
+      "doc_02_c01"
+    ],
+    "retrieved_total": 39,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_01_c00",
+        "score": 0.2089,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_02_c00",
+        "score": 0.2062,
+        "is_relevant": true,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_19_c00",
+        "score": 0.1968,
+        "is_relevant": false,
+        "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ"
+      },
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.1933,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_05_c00",
+        "score": 0.1904,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_06",
+    "query": "Một hồ sơ ứng tuyển trên CAREZA trải qua những trạng thái xét duyệt nào?",
+    "category": "candidate_application",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_03_c00",
+      "doc_03_c02",
+      "doc_03_c01"
+    ],
+    "retrieved_total": 39,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.4995,
+        "is_relevant": true,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.3178,
+        "is_relevant": true,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.2681,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_03_c01",
+        "score": 0.2102,
+        "is_relevant": true,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_11_c01",
+        "score": 0.2037,
+        "is_relevant": false,
+        "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.3333,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.6667,
+      "recall@3": 0.6667,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.6,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_07",
+    "query": "Khi nào thì ứng viên được phép rút hồ sơ đã nộp trên hệ thống?",
+    "category": "candidate_application",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_03_c00",
+      "doc_03_c02"
+    ],
+    "retrieved_total": 41,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.3672,
+        "is_relevant": true,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.3568,
+        "is_relevant": true,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.2634,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_10_c01",
+        "score": 0.2052,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.2019,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.6667,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_08",
+    "query": "Hai chế độ hiển thị hồ sơ cá nhân của ứng viên gồm những lựa chọn nào?",
+    "category": "candidate_profile",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_04_c01"
+    ],
+    "retrieved_total": 37,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_04_c01",
+        "score": 0.2211,
+        "is_relevant": true,
+        "document_title": "Quản lý hồ sơ cá nhân, học vấn và chứng chỉ nghề nghiệp"
+      },
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.1952,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.1719,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.1595,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_13_c00",
+        "score": 0.1572,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_09",
+    "query": "Cần cung cấp những thông tin gì khi cập nhật mục Học vấn và Chứng chỉ trong hồ sơ cá nhân?",
+    "category": "candidate_profile",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_04_c01"
+    ],
+    "retrieved_total": 35,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_01_c00",
+        "score": 0.2771,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_04_c01",
+        "score": 0.2158,
+        "is_relevant": true,
+        "document_title": "Quản lý hồ sơ cá nhân, học vấn và chứng chỉ nghề nghiệp"
+      },
+      {
+        "chunk_id": "doc_04_c00",
+        "score": 0.1911,
+        "is_relevant": false,
+        "document_title": "Quản lý hồ sơ cá nhân, học vấn và chứng chỉ nghề nghiệp"
+      },
+      {
+        "chunk_id": "doc_19_c00",
+        "score": 0.1735,
+        "is_relevant": false,
+        "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ"
+      },
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.1694,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_10",
+    "query": "AI Mock Interview trên CAREZA hỗ trợ mô phỏng phỏng vấn cho những đối tượng và vị trí nào?",
+    "category": "ai_mock_interview",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_05_c00"
+    ],
+    "retrieved_total": 23,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.2511,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_05_c00",
+        "score": 0.2385,
+        "is_relevant": true,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_05_c01",
+        "score": 0.1529,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_02_c01",
+        "score": 0.1437,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_02_c00",
+        "score": 0.1318,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_11",
+    "query": "Báo cáo kết quả sau buổi phỏng vấn thử AI Mock Interview cung cấp những nội dung gì?",
+    "category": "ai_mock_interview",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_05_c01"
+    ],
+    "retrieved_total": 23,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.1821,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_05_c01",
+        "score": 0.1403,
+        "is_relevant": true,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_14_c01",
+        "score": 0.1397,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_05_c00",
+        "score": 0.1354,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_24_c01",
+        "score": 0.1145,
+        "is_relevant": false,
+        "document_title": "Kỹ năng viết cover letter và thư cảm ơn sau phỏng vấn"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_12",
+    "query": "Rubric chấm điểm của AI Mock Interview gồm những tiêu chí cốt lõi nào?",
+    "category": "ai_mock_interview",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_06_c00",
+      "doc_06_c01"
+    ],
+    "retrieved_total": 10,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_06_c00",
+        "score": 0.2265,
+        "is_relevant": true,
+        "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_01_c00",
+        "score": 0.0881,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_02_c00",
+        "score": 0.0803,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_07_c00",
+        "score": 0.0789,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_03_c01",
+        "score": 0.0673,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_13",
+    "query": "Những hành vi trả lời nào sẽ bị hệ thống AI Mock Interview trừ điểm tiêu cực?",
+    "category": "ai_mock_interview",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_06_c01"
+    ],
+    "retrieved_total": 22,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_06_c01",
+        "score": 0.1757,
+        "is_relevant": true,
+        "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_05_c01",
+        "score": 0.1423,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.1265,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_17_c01",
+        "score": 0.1111,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_06_c00",
+        "score": 0.1092,
+        "is_relevant": false,
+        "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_14",
+    "query": "Tỷ trọng phần trăm các yếu tố tạo nên điểm gợi ý việc làm thông minh là bao nhiêu?",
+    "category": "ai_recommendation",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_07_c00"
+    ],
+    "retrieved_total": 11,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_07_c00",
+        "score": 0.1488,
+        "is_relevant": true,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_01_c00",
+        "score": 0.093,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_15_c01",
+        "score": 0.0922,
+        "is_relevant": false,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_24_c00",
+        "score": 0.0773,
+        "is_relevant": false,
+        "document_title": "Kỹ năng viết cover letter và thư cảm ơn sau phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_01_c01",
+        "score": 0.0705,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_15",
+    "query": "Tin tuyển dụng đạt mức tương đồng bao nhiêu phần trăm thì được gắn nhãn Phù hợp cao?",
+    "category": "ai_recommendation",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_07_c01"
+    ],
+    "retrieved_total": 31,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_07_c01",
+        "score": 0.2148,
+        "is_relevant": true,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.18,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_07_c00",
+        "score": 0.165,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_02_c01",
+        "score": 0.1625,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_09_c00",
+        "score": 0.1513,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_16",
+    "query": "Ứng viên có thể lọc tìm kiếm việc làm theo những tiêu chí nâng cao nào?",
+    "category": "candidate_job_search",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_08_c00"
+    ],
+    "retrieved_total": 33,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_08_c00",
+        "score": 0.2602,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.217,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_07_c01",
+        "score": 0.1999,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_14_c01",
+        "score": 0.1964,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_13_c00",
+        "score": 0.1915,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_17",
+    "query": "Hệ thống sẽ gửi cảnh báo việc làm đã lưu sắp hết hạn trước bao nhiêu ngày?",
+    "category": "candidate_job_search",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_08_c01"
+    ],
+    "retrieved_total": 23,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.284,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_18_c01",
+        "score": 0.1398,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      },
+      {
+        "chunk_id": "doc_07_c01",
+        "score": 0.1136,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.1105,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_12_c01",
+        "score": 0.1069,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_18",
+    "query": "Một tin tuyển dụng chuẩn mực trên CAREZA cần có những cấu trúc nội dung nào?",
+    "category": "employer_jobs",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_09_c00"
+    ],
+    "retrieved_total": 39,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_09_c00",
+        "score": 0.3012,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_20_c00",
+        "score": 0.2674,
+        "is_relevant": false,
+        "document_title": "Quy tắc tiêu chuẩn cộng đồng và chống tin tuyển dụng giả mạo"
+      },
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.2382,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.2064,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.1838,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_19",
+    "query": "Thời hạn hiển thị tiêu chuẩn của một tin tuyển dụng sau khi được duyệt là bao lâu?",
+    "category": "employer_jobs",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_09_c01"
+    ],
+    "retrieved_total": 30,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.4119,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_09_c00",
+        "score": 0.2408,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_15_c01",
+        "score": 0.2126,
+        "is_relevant": false,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.2096,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_17_c01",
+        "score": 0.185,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_20",
+    "query": "Bảng Kanban quản lý quy trình ứng viên (Hiring Pipeline) gồm những cột trạng thái nào?",
+    "category": "employer_pipeline",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_10_c00"
+    ],
+    "retrieved_total": 25,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.1919,
+        "is_relevant": true,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.1719,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_12_c01",
+        "score": 0.1423,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_11_c01",
+        "score": 0.1281,
+        "is_relevant": false,
+        "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.1194,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_21",
+    "query": "Nhà tuyển dụng có thể thực hiện những thao tác hàng loạt nào trên bảng quản lý ứng viên?",
+    "category": "employer_pipeline",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_10_c01"
+    ],
+    "retrieved_total": 44,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.2783,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_10_c01",
+        "score": 0.2634,
+        "is_relevant": true,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.2569,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.2339,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_13_c00",
+        "score": 0.2272,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_22",
+    "query": "Phân quyền thành viên doanh nghiệp trên CAREZA gồm 4 vai trò nào và quyền hạn khác nhau ra sao?",
+    "category": "employer_team",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_11_c00",
+      "doc_11_c01"
+    ],
+    "retrieved_total": 22,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_11_c00",
+        "score": 0.297,
+        "is_relevant": true,
+        "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_15_c00",
+        "score": 0.1325,
+        "is_relevant": false,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_11_c01",
+        "score": 0.1153,
+        "is_relevant": true,
+        "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.0915,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.0898,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.6667,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_23",
+    "query": "Vai trò Reviewer trong công ty có những quyền hạn và giới hạn gì?",
+    "category": "employer_team",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_11_c01"
+    ],
+    "retrieved_total": 5,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.1322,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_11_c00",
+        "score": 0.11,
+        "is_relevant": false,
+        "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_11_c01",
+        "score": 0.0669,
+        "is_relevant": true,
+        "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.0602,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.0528,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 3,
+      "reciprocal_rank": 0.3333333333333333,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_24",
+    "query": "Biểu mẫu lên lịch phỏng vấn cho ứng viên yêu cầu những thông tin bắt buộc nào?",
+    "category": "employer_interview",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_12_c00"
+    ],
+    "retrieved_total": 41,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.3692,
+        "is_relevant": true,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.2529,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      },
+      {
+        "chunk_id": "doc_12_c01",
+        "score": 0.2152,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_05_c00",
+        "score": 0.1967,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.1873,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_25",
+    "query": "Ứng viên có thể phản hồi những lựa chọn nào khi nhận được lời mời phỏng vấn?",
+    "category": "employer_interview",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_12_c01"
+    ],
+    "retrieved_total": 34,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_12_c01",
+        "score": 0.278,
+        "is_relevant": true,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_05_c00",
+        "score": 0.2363,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.2284,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_04_c01",
+        "score": 0.184,
+        "is_relevant": false,
+        "document_title": "Quản lý hồ sơ cá nhân, học vấn và chứng chỉ nghề nghiệp"
+      },
+      {
+        "chunk_id": "doc_23_c01",
+        "score": 0.1779,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_26",
+    "query": "Tính năng Talent Pool cho phép nhà tuyển dụng tìm kiếm hồ sơ theo những tiêu chí gì?",
+    "category": "employer_talent_pool",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_13_c00"
+    ],
+    "retrieved_total": 38,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_13_c00",
+        "score": 0.3936,
+        "is_relevant": true,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_04_c00",
+        "score": 0.2607,
+        "is_relevant": false,
+        "document_title": "Quản lý hồ sơ cá nhân, học vấn và chứng chỉ nghề nghiệp"
+      },
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.2257,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_02_c01",
+        "score": 0.213,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.2078,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_27",
+    "query": "Làm thế nào để nhà tuyển dụng xem được thông tin liên hệ đầy đủ của ứng viên trong Talent Pool?",
+    "category": "employer_talent_pool",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_13_c01",
+      "doc_13_c00"
+    ],
+    "retrieved_total": 43,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.4249,
+        "is_relevant": true,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_13_c00",
+        "score": 0.2883,
+        "is_relevant": true,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_17_c01",
+        "score": 0.2797,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.2648,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.2615,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.6667,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_28",
+    "query": "Báo cáo tuyển dụng trên CAREZA cung cấp những chỉ số đo lường hiệu quả then chốt nào?",
+    "category": "employer_analytics",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_14_c00"
+    ],
+    "retrieved_total": 39,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.33,
+        "is_relevant": true,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_02_c01",
+        "score": 0.1415,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.1398,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_13_c00",
+        "score": 0.1286,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.1286,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_29",
+    "query": "Hồ sơ xác minh doanh nghiệp (Verified Badge) cần nộp những giấy tờ pháp lý nào?",
+    "category": "employer_company",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_15_c00"
+    ],
+    "retrieved_total": 22,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_15_c00",
+        "score": 0.4341,
+        "is_relevant": true,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.138,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_04_c00",
+        "score": 0.12,
+        "is_relevant": false,
+        "document_title": "Quản lý hồ sơ cá nhân, học vấn và chứng chỉ nghề nghiệp"
+      },
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.1199,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_16_c00",
+        "score": 0.096,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_30",
+    "query": "Thời gian xác thực hồ sơ công ty của đội ngũ kiểm duyệt CAREZA là bao lâu?",
+    "category": "employer_company",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_15_c01"
+    ],
+    "retrieved_total": 23,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_15_c01",
+        "score": 0.2527,
+        "is_relevant": true,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.153,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_15_c00",
+        "score": 0.1403,
+        "is_relevant": false,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.138,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.119,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_31",
+    "query": "Sự khác biệt về số lượng tin đăng và tài khoản giữa gói Basic, Pro và Enterprise là gì?",
+    "category": "billing_packages",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_16_c00",
+      "doc_16_c01"
+    ],
+    "retrieved_total": 14,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_16_c00",
+        "score": 0.1573,
+        "is_relevant": true,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_19_c01",
+        "score": 0.1466,
+        "is_relevant": false,
+        "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ"
+      },
+      {
+        "chunk_id": "doc_17_c01",
+        "score": 0.1418,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.1385,
+        "is_relevant": true,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_20_c01",
+        "score": 0.1224,
+        "is_relevant": false,
+        "document_title": "Quy tắc tiêu chuẩn cộng đồng và chống tin tuyển dụng giả mạo"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_32",
+    "query": "Quy định trừ điểm tín dụng khi mở lại một hồ sơ ứng viên đã từng mở trong Talent Pool là gì?",
+    "category": "billing_ledger",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_17_c01"
+    ],
+    "retrieved_total": 40,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_17_c01",
+        "score": 0.3052,
+        "is_relevant": true,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.2524,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.2253,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_16_c00",
+        "score": 0.2126,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.2019,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_33",
+    "query": "Điều gì xảy ra với hạn mức đăng tin nếu tin tuyển dụng bị từ chối phê duyệt do lỗi kỹ thuật?",
+    "category": "billing_ledger",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_17_c01"
+    ],
+    "retrieved_total": 35,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_17_c01",
+        "score": 0.2971,
+        "is_relevant": true,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.2699,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_09_c00",
+        "score": 0.1893,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.179,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.1785,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_34",
+    "query": "Những hành vi nào bị nghiêm cấm trong tính năng nhắn tin trực tiếp In-app Chat?",
+    "category": "platform_communication",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_18_c01"
+    ],
+    "retrieved_total": 17,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.2149,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      },
+      {
+        "chunk_id": "doc_18_c01",
+        "score": 0.155,
+        "is_relevant": true,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      },
+      {
+        "chunk_id": "doc_20_c00",
+        "score": 0.1303,
+        "is_relevant": false,
+        "document_title": "Quy tắc tiêu chuẩn cộng đồng và chống tin tuyển dụng giả mạo"
+      },
+      {
+        "chunk_id": "doc_20_c01",
+        "score": 0.1243,
+        "is_relevant": false,
+        "document_title": "Quy tắc tiêu chuẩn cộng đồng và chống tin tuyển dụng giả mạo"
+      },
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.1126,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_35",
+    "query": "Chính sách của CAREZA về việc bảo mật và chia sẻ dữ liệu cá nhân của ứng viên như thế nào?",
+    "category": "policy_privacy",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_19_c00"
+    ],
+    "retrieved_total": 35,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_19_c00",
+        "score": 0.3065,
+        "is_relevant": true,
+        "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ"
+      },
+      {
+        "chunk_id": "doc_19_c01",
+        "score": 0.1638,
+        "is_relevant": false,
+        "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ"
+      },
+      {
+        "chunk_id": "doc_22_c00",
+        "score": 0.1473,
+        "is_relevant": false,
+        "document_title": "Cài đặt bảo mật tài khoản, xác thực hai lớp và đổi mật khẩu"
+      },
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.1346,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_14_c01",
+        "score": 0.1214,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_36",
+    "query": "Các hành vi vi phạm tiêu chuẩn cộng đồng nào sẽ khiến tài khoản nhà tuyển dụng bị khóa vĩnh viễn?",
+    "category": "policy_community",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_20_c00",
+      "doc_20_c01"
+    ],
+    "retrieved_total": 26,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_20_c01",
+        "score": 0.3832,
+        "is_relevant": true,
+        "document_title": "Quy tắc tiêu chuẩn cộng đồng và chống tin tuyển dụng giả mạo"
+      },
+      {
+        "chunk_id": "doc_21_c01",
+        "score": 0.2175,
+        "is_relevant": false,
+        "document_title": "Quy trình giải quyết khiếu nại và tranh chấp giữa ứng viên và nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.2089,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_21_c00",
+        "score": 0.1803,
+        "is_relevant": false,
+        "document_title": "Quy trình giải quyết khiếu nại và tranh chấp giữa ứng viên và nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_02_c01",
+        "score": 0.1474,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_37",
+    "query": "Quy trình 3 bước xử lý khiếu nại giữa ứng viên và nhà tuyển dụng gồm những gì?",
+    "category": "policy_dispute",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_21_c00",
+      "doc_21_c01"
+    ],
+    "retrieved_total": 40,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_21_c00",
+        "score": 0.3905,
+        "is_relevant": true,
+        "document_title": "Quy trình giải quyết khiếu nại và tranh chấp giữa ứng viên và nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.262,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.2419,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.2106,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.1973,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_38",
+    "query": "Quy định về độ phức tạp của mật khẩu và tính năng xác thực hai yếu tố 2FA trên CAREZA ra sao?",
+    "category": "platform_security",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_22_c00",
+      "doc_22_c01"
+    ],
+    "retrieved_total": 18,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_22_c00",
+        "score": 0.2211,
+        "is_relevant": true,
+        "document_title": "Cài đặt bảo mật tài khoản, xác thực hai lớp và đổi mật khẩu"
+      },
+      {
+        "chunk_id": "doc_22_c01",
+        "score": 0.1783,
+        "is_relevant": true,
+        "document_title": "Cài đặt bảo mật tài khoản, xác thực hai lớp và đổi mật khẩu"
+      },
+      {
+        "chunk_id": "doc_02_c00",
+        "score": 0.1077,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_07_c00",
+        "score": 0.1044,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.1022,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.6667,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_39",
+    "query": "Nguyên tắc xử lý tình huống khi gặp câu hỏi khó trong buổi phỏng vấn kỹ thuật là gì?",
+    "category": "career_interview_prep",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_23_c01"
+    ],
+    "retrieved_total": 16,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_05_c01",
+        "score": 0.3211,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_23_c01",
+        "score": 0.2564,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.1636,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_23_c00",
+        "score": 0.124,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_24_c01",
+        "score": 0.0932,
+        "is_relevant": false,
+        "document_title": "Kỹ năng viết cover letter và thư cảm ơn sau phỏng vấn"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_40",
+    "query": "Thời gian lý tưởng để gửi thư cảm ơn sau phỏng vấn là khi nào và nội dung nên có gì?",
+    "category": "career_communication",
+    "language": "vi",
+    "query_type": "direct",
+    "relevant_chunk_ids": [
+      "doc_24_c00",
+      "doc_24_c01"
+    ],
+    "retrieved_total": 18,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_24_c01",
+        "score": 0.3026,
+        "is_relevant": true,
+        "document_title": "Kỹ năng viết cover letter và thư cảm ơn sau phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_24_c00",
+        "score": 0.2204,
+        "is_relevant": true,
+        "document_title": "Kỹ năng viết cover letter và thư cảm ơn sau phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.163,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_12_c01",
+        "score": 0.1195,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_18_c01",
+        "score": 0.1081,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.6667,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_41",
+    "query": "Quy định dung lượng tối đa cho tệp sơ yếu lý lịch tải lên web là bao nhiêu MB?",
+    "category": "candidate_cv",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_01_c02",
+      "doc_01_c00"
+    ],
+    "retrieved_total": 11,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_01_c02",
+        "score": 0.0978,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_10_c01",
+        "score": 0.0844,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_16_c00",
+        "score": 0.0816,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_20_c00",
+        "score": 0.0801,
+        "is_relevant": false,
+        "document_title": "Quy tắc tiêu chuẩn cộng đồng và chống tin tuyển dụng giả mạo"
+      },
+      {
+        "chunk_id": "doc_22_c01",
+        "score": 0.0661,
+        "is_relevant": false,
+        "document_title": "Cài đặt bảo mật tài khoản, xác thực hai lớp và đổi mật khẩu"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_42",
+    "query": "Làm sao để hệ thống ATS chấm điểm khớp hồ sơ với bản mô tả công việc JD đạt kết quả cao?",
+    "category": "ai_intelligence",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_02_c01"
+    ],
+    "retrieved_total": 29,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_07_c00",
+        "score": 0.1662,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.1542,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.1449,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_03_c01",
+        "score": 0.113,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.1117,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 20,
+      "reciprocal_rank": 0.05,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_43",
+    "query": "Trạng thái nộp đơn 'screening' và 'offered' trên sàn tuyển dụng nghĩa là gì?",
+    "category": "candidate_application",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_03_c00",
+      "doc_03_c01"
+    ],
+    "retrieved_total": 23,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.2504,
+        "is_relevant": true,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.1931,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.1633,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.1396,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_09_c00",
+        "score": 0.1339,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_44",
+    "query": "Bật chế độ riêng tư ẩn danh profile người tìm việc để headhunter không thấy ở đâu?",
+    "category": "candidate_profile",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_04_c01",
+      "doc_04_c00"
+    ],
+    "retrieved_total": 6,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_13_c00",
+        "score": 0.0907,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_04_c01",
+        "score": 0.0844,
+        "is_relevant": true,
+        "document_title": "Quản lý hồ sơ cá nhân, học vấn và chứng chỉ nghề nghiệp"
+      },
+      {
+        "chunk_id": "doc_07_c01",
+        "score": 0.0623,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_23_c01",
+        "score": 0.0525,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.052,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_45",
+    "query": "Thử làm bài phỏng vấn ảo mô phỏng bằng bot AI vị trí Backend và Frontend thế nào?",
+    "category": "ai_mock_interview",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_05_c00"
+    ],
+    "retrieved_total": 14,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.2223,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_05_c00",
+        "score": 0.1774,
+        "is_relevant": true,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_23_c01",
+        "score": 0.1515,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_05_c01",
+        "score": 0.1472,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_03_c01",
+        "score": 0.0864,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_46",
+    "query": "Nói dông dài spam từ khóa keyword stuffing trong phỏng vấn có bị trừ điểm bài test không?",
+    "category": "ai_mock_interview",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_06_c01"
+    ],
+    "retrieved_total": 13,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.1509,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_23_c01",
+        "score": 0.1456,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_05_c01",
+        "score": 0.1302,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_03_c01",
+        "score": 0.1263,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_06_c01",
+        "score": 0.1131,
+        "is_relevant": true,
+        "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 5,
+      "reciprocal_rank": 0.2,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_47",
+    "query": "Gắn nhãn job High Match yêu cầu độ tương thích skill bao nhiêu %?",
+    "category": "ai_recommendation",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_07_c00",
+      "doc_07_c01"
+    ],
+    "retrieved_total": 5,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_07_c01",
+        "score": 0.163,
+        "is_relevant": true,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_07_c00",
+        "score": 0.1278,
+        "is_relevant": true,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_09_c00",
+        "score": 0.0709,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_21_c00",
+        "score": 0.0518,
+        "is_relevant": false,
+        "document_title": "Quy trình giải quyết khiếu nại và tranh chấp giữa ứng viên và nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_02_c01",
+        "score": 0.0503,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.6667,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_48",
+    "query": "Bookmark việc làm yêu thích để lưu tin tuyển dụng xem lại ở trang nào?",
+    "category": "candidate_job_search",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_08_c01"
+    ],
+    "retrieved_total": 34,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.2355,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.1987,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.1887,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_09_c00",
+        "score": 0.1886,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.1886,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_49",
+    "query": "Thời gian hết hạn của một bài post tuyển dụng sau khi public là mấy tuần?",
+    "category": "employer_jobs",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_09_c01",
+      "doc_09_c00"
+    ],
+    "retrieved_total": 22,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.1592,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.1572,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.1351,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.1333,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_09_c00",
+        "score": 0.131,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_50",
+    "query": "Bảng tiến trình ứng viên dạng Kanban board có những bước chuyển nào?",
+    "category": "employer_pipeline",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_10_c00"
+    ],
+    "retrieved_total": 23,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.1612,
+        "is_relevant": true,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.1604,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_05_c00",
+        "score": 0.1142,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_01_c00",
+        "score": 0.1103,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_10_c01",
+        "score": 0.1052,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_51",
+    "query": "Tài khoản nhân sự Recruiter và Người thẩm định Reviewer khác nhau ra sao về quyền xem CV?",
+    "category": "employer_team",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_11_c01"
+    ],
+    "retrieved_total": 10,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_19_c01",
+        "score": 0.1671,
+        "is_relevant": false,
+        "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ"
+      },
+      {
+        "chunk_id": "doc_11_c00",
+        "score": 0.1624,
+        "is_relevant": false,
+        "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_20_c01",
+        "score": 0.1243,
+        "is_relevant": false,
+        "document_title": "Quy tắc tiêu chuẩn cộng đồng và chống tin tuyển dụng giả mạo"
+      },
+      {
+        "chunk_id": "doc_22_c01",
+        "score": 0.0714,
+        "is_relevant": false,
+        "document_title": "Cài đặt bảo mật tài khoản, xác thực hai lớp và đổi mật khẩu"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.0689,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 0,
+      "reciprocal_rank": 0.0,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_52",
+    "query": "Setup cuộc hẹn phỏng vấn online qua link Google Meet hoặc Zoom trên hệ thống thế nào?",
+    "category": "employer_interview",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_12_c01",
+      "doc_12_c00"
+    ],
+    "retrieved_total": 17,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.2015,
+        "is_relevant": true,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_12_c01",
+        "score": 0.1699,
+        "is_relevant": true,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_05_c01",
+        "score": 0.1381,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.1212,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      },
+      {
+        "chunk_id": "doc_10_c01",
+        "score": 0.1081,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.6667,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_53",
+    "query": "Cần bao nhiêu credit unlock hồ sơ để xem số điện thoại và email ứng viên trong kho CV?",
+    "category": "employer_talent_pool",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_13_c01",
+      "doc_13_c00"
+    ],
+    "retrieved_total": 31,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_01_c00",
+        "score": 0.2451,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.2238,
+        "is_relevant": true,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.2037,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_13_c00",
+        "score": 0.1982,
+        "is_relevant": true,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_17_c01",
+        "score": 0.1767,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_54",
+    "query": "Chỉ số Time-to-Hire và View-to-Apply trong dashboard đo lường cái gì?",
+    "category": "employer_analytics",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_14_c00"
+    ],
+    "retrieved_total": 2,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.1477,
+        "is_relevant": true,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.0609,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_55",
+    "query": "Làm thế nào để nhận tích xanh Verified Badge chứng nhận doanh nghiệp uy tín?",
+    "category": "employer_company",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_15_c00",
+      "doc_15_c01"
+    ],
+    "retrieved_total": 7,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_15_c00",
+        "score": 0.1281,
+        "is_relevant": true,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_07_c01",
+        "score": 0.0991,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.0901,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_01_c01",
+        "score": 0.0869,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_03_c01",
+        "score": 0.058,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_56",
+    "query": "Số lượt post bài tuyển dụng và add member tối đa của subscription Pro là bao nhiêu?",
+    "category": "billing_packages",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_16_c00"
+    ],
+    "retrieved_total": 19,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.1933,
+        "is_relevant": false,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      },
+      {
+        "chunk_id": "doc_02_c01",
+        "score": 0.1118,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.1116,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.106,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_09_c00",
+        "score": 0.1028,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 6,
+      "reciprocal_rank": 0.16666666666666666,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_57",
+    "query": "Nếu lỡ unlock 1 CV rồi bấm mở lại trong vòng 3 tháng có mất thêm token quota không?",
+    "category": "billing_ledger",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_17_c00",
+      "doc_17_c01"
+    ],
+    "retrieved_total": 4,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_17_c01",
+        "score": 0.1402,
+        "is_relevant": true,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.1254,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.1117,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.0779,
+        "is_relevant": true,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_58",
+    "query": "Làm sao kích hoạt mã bảo mật xác minh hai bước 2FA Authenticator app cho tài khoản?",
+    "category": "platform_security",
+    "language": "vi",
+    "query_type": "synonym_acronym",
+    "relevant_chunk_ids": [
+      "doc_22_c00"
+    ],
+    "retrieved_total": 12,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_22_c00",
+        "score": 0.3315,
+        "is_relevant": true,
+        "document_title": "Cài đặt bảo mật tài khoản, xác thực hai lớp và đổi mật khẩu"
+      },
+      {
+        "chunk_id": "doc_19_c01",
+        "score": 0.156,
+        "is_relevant": false,
+        "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ"
+      },
+      {
+        "chunk_id": "doc_21_c01",
+        "score": 0.1219,
+        "is_relevant": false,
+        "document_title": "Quy trình giải quyết khiếu nại và tranh chấp giữa ứng viên và nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_15_c01",
+        "score": 0.0885,
+        "is_relevant": false,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_15_c00",
+        "score": 0.0763,
+        "is_relevant": false,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_59",
+    "query": "Làm sao để trình bày những việc mình từng làm trước đây một cách thuyết phục nhất?",
+    "category": "candidate_cv",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_01_c01",
+      "doc_01_c00"
+    ],
+    "retrieved_total": 5,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_01_c01",
+        "score": 0.1403,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_07_c00",
+        "score": 0.0869,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_07_c01",
+        "score": 0.0817,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.0584,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_06_c01",
+        "score": 0.056,
+        "is_relevant": false,
+        "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_60",
+    "query": "Tại sao tôi nộp hồ sơ mà hệ thống báo tỷ lệ phù hợp với công việc còn thấp?",
+    "category": "ai_intelligence",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_02_c01"
+    ],
+    "retrieved_total": 28,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.2542,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.2005,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_07_c01",
+        "score": 0.1451,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_17_c00",
+        "score": 0.1399,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_16_c00",
+        "score": 0.1363,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 0,
+      "reciprocal_rank": 0.0,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_61",
+    "query": "Nếu tôi đổi ý không muốn ứng tuyển vào công ty đó nữa thì có hủy đơn được không?",
+    "category": "candidate_application",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_03_c00",
+      "doc_03_c02"
+    ],
+    "retrieved_total": 27,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.1606,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.1571,
+        "is_relevant": true,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_11_c01",
+        "score": 0.1524,
+        "is_relevant": false,
+        "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.1392,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_05_c00",
+        "score": 0.1226,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_62",
+    "query": "Tôi không muốn công ty hiện tại nhìn thấy hồ sơ của tôi trên web tuyển dụng thì phải làm sao?",
+    "category": "candidate_profile",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_04_c01",
+      "doc_04_c00"
+    ],
+    "retrieved_total": 38,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.2171,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.1643,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_04_c00",
+        "score": 0.1637,
+        "is_relevant": true,
+        "document_title": "Quản lý hồ sơ cá nhân, học vấn và chứng chỉ nghề nghiệp"
+      },
+      {
+        "chunk_id": "doc_03_c01",
+        "score": 0.163,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.1578,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 3,
+      "reciprocal_rank": 0.3333333333333333,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_63",
+    "query": "Tôi sắp phỏng vấn vị trí lập trình nhưng rất run, có chỗ nào để luyện nói trước không?",
+    "category": "ai_mock_interview",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_05_c00"
+    ],
+    "retrieved_total": 9,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.163,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_23_c01",
+        "score": 0.1238,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_05_c01",
+        "score": 0.089,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_03_c01",
+        "score": 0.0811,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.0783,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 7,
+      "reciprocal_rank": 0.14285714285714285,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_64",
+    "query": "Nếu trong lúc trả lời câu hỏi mà tôi lặp lại y nguyên câu của người phỏng vấn thì kết quả thế nào?",
+    "category": "ai_mock_interview",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_06_c01"
+    ],
+    "retrieved_total": 10,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_05_c01",
+        "score": 0.3279,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_23_c01",
+        "score": 0.2966,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_06_c01",
+        "score": 0.1826,
+        "is_relevant": true,
+        "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.1489,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_24_c00",
+        "score": 0.1297,
+        "is_relevant": false,
+        "document_title": "Kỹ năng viết cover letter và thư cảm ơn sau phỏng vấn"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 3,
+      "reciprocal_rank": 0.3333333333333333,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_65",
+    "query": "Tin tuyển dụng nào tôi thấy hứng thú nhưng chưa kịp ứng tuyển thì có sợ bị trôi mất không?",
+    "category": "candidate_job_search",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_08_c01"
+    ],
+    "retrieved_total": 38,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.2302,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.2173,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.2161,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.2121,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_18_c00",
+        "score": 0.2056,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 3,
+      "reciprocal_rank": 0.3333333333333333,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_66",
+    "query": "Tôi là chủ doanh nghiệp, muốn cấp quyền cho nhân viên vào xem CV nhưng cấm không cho họ nhắn tin riêng thì chọn quyền gì?",
+    "category": "employer_team",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_11_c01"
+    ],
+    "retrieved_total": 25,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_11_c00",
+        "score": 0.2332,
+        "is_relevant": false,
+        "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_15_c00",
+        "score": 0.1652,
+        "is_relevant": false,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_01_c00",
+        "score": 0.1264,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_17_c01",
+        "score": 0.1176,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.1147,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 8,
+      "reciprocal_rank": 0.125,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_67",
+    "query": "Ứng viên bận việc đột xuất vào giờ phỏng vấn thì có thể xin dời sang khung giờ khác trên web được không?",
+    "category": "employer_interview",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_12_c01"
+    ],
+    "retrieved_total": 33,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.2116,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_12_c01",
+        "score": 0.1978,
+        "is_relevant": true,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_05_c00",
+        "score": 0.1583,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.1496,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_23_c01",
+        "score": 0.1231,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 2,
+      "reciprocal_rank": 0.5,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_68",
+    "query": "Công ty muốn tìm ứng viên lập trình viên nhưng không muốn đăng tin chờ đợi thì làm cách nào?",
+    "category": "employer_talent_pool",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_13_c00"
+    ],
+    "retrieved_total": 38,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.2647,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_17_c01",
+        "score": 0.184,
+        "is_relevant": false,
+        "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch"
+      },
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.1488,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_07_c01",
+        "score": 0.1428,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_05_c00",
+        "score": 0.1414,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 6,
+      "reciprocal_rank": 0.16666666666666666,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_69",
+    "query": "Làm sao để biết tin tuyển dụng của công ty mình có đủ sức hút hay ứng viên bỏ qua ngay từ đầu?",
+    "category": "employer_analytics",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_14_c00"
+    ],
+    "retrieved_total": 41,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.2442,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.24,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.2399,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_09_c01",
+        "score": 0.2044,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên"
+      },
+      {
+        "chunk_id": "doc_14_c00",
+        "score": 0.19,
+        "is_relevant": true,
+        "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 5,
+      "reciprocal_rank": 0.2,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_70",
+    "query": "Ứng viên phát hiện một công ty bắt đóng tiền đặt cọc trước khi nhận việc thì cần làm gì?",
+    "category": "policy_community",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_20_c00",
+      "doc_20_c01"
+    ],
+    "retrieved_total": 33,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_08_c01",
+        "score": 0.1635,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích"
+      },
+      {
+        "chunk_id": "doc_07_c01",
+        "score": 0.1336,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_10_c00",
+        "score": 0.1182,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_12_c01",
+        "score": 0.1164,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.1109,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 27,
+      "reciprocal_rank": 0.037037037037037035,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_71",
+    "query": "Tôi bị nhà tuyển dụng hủy hẹn đột ngột và có lời lẽ xúc phạm thì gửi khiếu nại ở đâu?",
+    "category": "policy_dispute",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_21_c00",
+      "doc_21_c01"
+    ],
+    "retrieved_total": 25,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_21_c00",
+        "score": 0.1952,
+        "is_relevant": true,
+        "document_title": "Quy trình giải quyết khiếu nại và tranh chấp giữa ứng viên và nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_13_c01",
+        "score": 0.1712,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_21_c01",
+        "score": 0.1491,
+        "is_relevant": true,
+        "document_title": "Quy trình giải quyết khiếu nại và tranh chấp giữa ứng viên và nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_03_c01",
+        "score": 0.1173,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_18_c01",
+        "score": 0.1142,
+        "is_relevant": false,
+        "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.6667,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.4,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_72",
+    "query": "Trong buổi phỏng vấn mà gặp câu hỏi quá khó không biết giải quyết ra sao thì nên làm gì?",
+    "category": "career_interview_prep",
+    "language": "vi",
+    "query_type": "indirect",
+    "relevant_chunk_ids": [
+      "doc_23_c01"
+    ],
+    "retrieved_total": 13,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_23_c01",
+        "score": 0.3246,
+        "is_relevant": true,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_05_c01",
+        "score": 0.206,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_12_c00",
+        "score": 0.1582,
+        "is_relevant": false,
+        "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên"
+      },
+      {
+        "chunk_id": "doc_24_c01",
+        "score": 0.1307,
+        "is_relevant": false,
+        "document_title": "Kỹ năng viết cover letter và thư cảm ơn sau phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_23_c00",
+        "score": 0.1202,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_73",
+    "query": "What are the core required sections to include in a standard resume on CAREZA?",
+    "category": "candidate_cv",
+    "language": "en",
+    "query_type": "english",
+    "relevant_chunk_ids": [
+      "doc_01_c01",
+      "doc_01_c02",
+      "doc_01_c00"
+    ],
+    "retrieved_total": 0,
+    "top_retrieved": [],
+    "metrics": {
+      "first_relevant_rank": 0,
+      "reciprocal_rank": 0.0,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_74",
+    "query": "How does the AI calculate the Match Score between an applicant CV and the job description?",
+    "category": "ai_intelligence",
+    "language": "en",
+    "query_type": "english",
+    "relevant_chunk_ids": [
+      "doc_02_c01"
+    ],
+    "retrieved_total": 2,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_02_c01",
+        "score": 0.0576,
+        "is_relevant": true,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      },
+      {
+        "chunk_id": "doc_02_c00",
+        "score": 0.0575,
+        "is_relevant": false,
+        "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 1.0,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 1.0,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 1.0,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_75",
+    "query": "What are the lifecycle status stages of an application on the platform?",
+    "category": "candidate_application",
+    "language": "en",
+    "query_type": "english",
+    "relevant_chunk_ids": [
+      "doc_03_c00",
+      "doc_03_c02",
+      "doc_03_c01"
+    ],
+    "retrieved_total": 0,
+    "top_retrieved": [],
+    "metrics": {
+      "first_relevant_rank": 0,
+      "reciprocal_rank": 0.0,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_76",
+    "query": "What are the 4 core criteria evaluated in the AI Mock Interview scoring rubric?",
+    "category": "ai_mock_interview",
+    "language": "en",
+    "query_type": "english",
+    "relevant_chunk_ids": [
+      "doc_06_c00",
+      "doc_06_c01"
+    ],
+    "retrieved_total": 2,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_06_c00",
+        "score": 0.0591,
+        "is_relevant": true,
+        "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_05_c00",
+        "score": 0.0554,
+        "is_relevant": false,
+        "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_77",
+    "query": "What are the different member roles and permissions within an enterprise employer account?",
+    "category": "employer_team",
+    "language": "en",
+    "query_type": "english",
+    "relevant_chunk_ids": [
+      "doc_11_c00",
+      "doc_11_c01"
+    ],
+    "retrieved_total": 0,
+    "top_retrieved": [],
+    "metrics": {
+      "first_relevant_rank": 0,
+      "reciprocal_rank": 0.0,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_78",
+    "query": "How can an employer search for anonymous candidates and unlock full profiles in the Talent Pool?",
+    "category": "employer_talent_pool",
+    "language": "en",
+    "query_type": "english",
+    "relevant_chunk_ids": [
+      "doc_13_c01",
+      "doc_13_c00"
+    ],
+    "retrieved_total": 0,
+    "top_retrieved": [],
+    "metrics": {
+      "first_relevant_rank": 0,
+      "reciprocal_rank": 0.0,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_79",
+    "query": "What documents are required for a company to obtain the Verified Badge?",
+    "category": "employer_company",
+    "language": "en",
+    "query_type": "english",
+    "relevant_chunk_ids": [
+      "doc_15_c00"
+    ],
+    "retrieved_total": 0,
+    "top_retrieved": [],
+    "metrics": {
+      "first_relevant_rank": 0,
+      "reciprocal_rank": 0.0,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0,
+      "recall@5": 0.0,
+      "hit_rate@5": 0.0
+    }
+  },
+  {
+    "query_id": "query_80",
+    "query": "What are the password requirements and how to setup Two-Factor Authentication 2FA?",
+    "category": "platform_security",
+    "language": "en",
+    "query_type": "english",
+    "relevant_chunk_ids": [
+      "doc_22_c00",
+      "doc_22_c01"
+    ],
+    "retrieved_total": 1,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_22_c00",
+        "score": 0.0606,
+        "is_relevant": true,
+        "document_title": "Cài đặt bảo mật tài khoản, xác thực hai lớp và đổi mật khẩu"
+      }
+    ],
+    "metrics": {
+      "first_relevant_rank": 1,
+      "reciprocal_rank": 1.0,
+      "precision@1": 1.0,
+      "recall@1": 0.5,
+      "hit_rate@1": 1.0,
+      "precision@3": 0.3333,
+      "recall@3": 0.5,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2,
+      "recall@5": 0.5,
+      "hit_rate@5": 1.0
+    }
+  },
+  {
+    "query_id": "query_81",
+    "query": "Thủ tục xin visa kỹ sư đi làm việc tại Nhật Bản năm nay cần những giấy tờ gì?",
+    "category": "unanswerable",
+    "language": "vi",
+    "query_type": "unanswerable",
+    "relevant_chunk_ids": [],
+    "retrieved_total": 5,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_07_c00",
+        "score": 0.083,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_01_c02",
+        "score": 0.0814,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_15_c00",
+        "score": 0.0691,
+        "is_relevant": false,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_23_c00",
+        "score": 0.0605,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_01_c01",
+        "score": 0.0517,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      }
+    ],
+    "metrics": {
+      "correct_rejection": false,
+      "false_retrieval": true,
+      "retrieved_count": 5,
+      "top_score": 0.083,
+      "top_retrieved_chunk_id": "doc_07_c00"
+    }
+  },
+  {
+    "query_id": "query_82",
+    "query": "Chính sách đổi trả hàng hóa và hoàn tiền trong 7 ngày của sàn Shopee quy định thế nào?",
+    "category": "unanswerable",
+    "language": "vi",
+    "query_type": "unanswerable",
+    "relevant_chunk_ids": [],
+    "retrieved_total": 6,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_10_c01",
+        "score": 0.0904,
+        "is_relevant": false,
+        "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng"
+      },
+      {
+        "chunk_id": "doc_06_c01",
+        "score": 0.0668,
+        "is_relevant": false,
+        "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_20_c00",
+        "score": 0.0612,
+        "is_relevant": false,
+        "document_title": "Quy tắc tiêu chuẩn cộng đồng và chống tin tuyển dụng giả mạo"
+      },
+      {
+        "chunk_id": "doc_22_c01",
+        "score": 0.0558,
+        "is_relevant": false,
+        "document_title": "Cài đặt bảo mật tài khoản, xác thực hai lớp và đổi mật khẩu"
+      },
+      {
+        "chunk_id": "doc_11_c01",
+        "score": 0.0533,
+        "is_relevant": false,
+        "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp"
+      }
+    ],
+    "metrics": {
+      "correct_rejection": false,
+      "false_retrieval": true,
+      "retrieved_count": 6,
+      "top_score": 0.0904,
+      "top_retrieved_chunk_id": "doc_10_c01"
+    }
+  },
+  {
+    "query_id": "query_83",
+    "query": "CAREZA có chương trình cho người tìm việc vay vốn trả góp mua xe máy không?",
+    "category": "unanswerable",
+    "language": "vi",
+    "query_type": "unanswerable",
+    "relevant_chunk_ids": [],
+    "retrieved_total": 5,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_23_c01",
+        "score": 0.0691,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      },
+      {
+        "chunk_id": "doc_13_c00",
+        "score": 0.0658,
+        "is_relevant": false,
+        "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)"
+      },
+      {
+        "chunk_id": "doc_06_c01",
+        "score": 0.0569,
+        "is_relevant": false,
+        "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview"
+      },
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.0543,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_19_c00",
+        "score": 0.0535,
+        "is_relevant": false,
+        "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ"
+      }
+    ],
+    "metrics": {
+      "correct_rejection": false,
+      "false_retrieval": true,
+      "retrieved_count": 5,
+      "top_score": 0.0691,
+      "top_retrieved_chunk_id": "doc_23_c01"
+    }
+  },
+  {
+    "query_id": "query_84",
+    "query": "Giá vé máy bay khứ hồi từ Hà Nội đi Đà Nẵng của Vietnam Airlines tháng sau là bao nhiêu?",
+    "category": "unanswerable",
+    "language": "vi",
+    "query_type": "unanswerable",
+    "relevant_chunk_ids": [],
+    "retrieved_total": 1,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_04_c00",
+        "score": 0.0657,
+        "is_relevant": false,
+        "document_title": "Quản lý hồ sơ cá nhân, học vấn và chứng chỉ nghề nghiệp"
+      }
+    ],
+    "metrics": {
+      "correct_rejection": false,
+      "false_retrieval": true,
+      "retrieved_count": 1,
+      "top_score": 0.0657,
+      "top_retrieved_chunk_id": "doc_04_c00"
+    }
+  },
+  {
+    "query_id": "query_85",
+    "query": "Cách nấu món phở bò truyền thống chuẩn vị Bắc cần những gia vị thảo mộc nào?",
+    "category": "unanswerable",
+    "language": "vi",
+    "query_type": "unanswerable",
+    "relevant_chunk_ids": [],
+    "retrieved_total": 0,
+    "top_retrieved": [],
+    "metrics": {
+      "correct_rejection": true,
+      "false_retrieval": false,
+      "retrieved_count": 0,
+      "top_score": 0.0,
+      "top_retrieved_chunk_id": null
+    }
+  },
+  {
+    "query_id": "query_86",
+    "query": "Đội bóng nào đã vô địch cúp C1 Champions League mùa giải 2023-2024?",
+    "category": "unanswerable",
+    "language": "vi",
+    "query_type": "unanswerable",
+    "relevant_chunk_ids": [],
+    "retrieved_total": 0,
+    "top_retrieved": [],
+    "metrics": {
+      "correct_rejection": true,
+      "false_retrieval": false,
+      "retrieved_count": 0,
+      "top_score": 0.0,
+      "top_retrieved_chunk_id": null
+    }
+  },
+  {
+    "query_id": "query_87",
+    "query": "Thời tiết ngày mai tại Thành phố Hồ Chí Minh có mưa dông vào buổi chiều không?",
+    "category": "unanswerable",
+    "language": "vi",
+    "query_type": "unanswerable",
+    "relevant_chunk_ids": [],
+    "retrieved_total": 8,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_15_c00",
+        "score": 0.0896,
+        "is_relevant": false,
+        "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp"
+      },
+      {
+        "chunk_id": "doc_03_c00",
+        "score": 0.0879,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_03_c01",
+        "score": 0.0854,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      },
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.0841,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_03_c02",
+        "score": 0.0734,
+        "is_relevant": false,
+        "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt"
+      }
+    ],
+    "metrics": {
+      "correct_rejection": false,
+      "false_retrieval": true,
+      "retrieved_count": 8,
+      "top_score": 0.0896,
+      "top_retrieved_chunk_id": "doc_15_c00"
+    }
+  },
+  {
+    "query_id": "query_88",
+    "query": "Làm thế nào để cài đặt bộ phát wifi Mesh cho nhà 3 tầng không bị giật lag?",
+    "category": "unanswerable",
+    "language": "vi",
+    "query_type": "unanswerable",
+    "relevant_chunk_ids": [],
+    "retrieved_total": 8,
+    "top_retrieved": [
+      {
+        "chunk_id": "doc_07_c01",
+        "score": 0.0779,
+        "is_relevant": false,
+        "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ"
+      },
+      {
+        "chunk_id": "doc_16_c01",
+        "score": 0.0753,
+        "is_relevant": false,
+        "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota"
+      },
+      {
+        "chunk_id": "doc_01_c01",
+        "score": 0.0705,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA"
+      },
+      {
+        "chunk_id": "doc_19_c01",
+        "score": 0.068,
+        "is_relevant": false,
+        "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ"
+      },
+      {
+        "chunk_id": "doc_23_c01",
+        "score": 0.0619,
+        "is_relevant": false,
+        "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn"
+      }
+    ],
+    "metrics": {
+      "correct_rejection": false,
+      "false_retrieval": true,
+      "retrieved_count": 8,
+      "top_score": 0.0779,
+      "top_retrieved_chunk_id": "doc_07_c01"
+    }
+  },
+  {
+    "query_id": "query_89",
+    "query": "What is the recommended stock portfolio allocation for retirement in 2026?",
+    "category": "unanswerable",
+    "language": "en",
+    "query_type": "unanswerable",
+    "relevant_chunk_ids": [],
+    "retrieved_total": 0,
+    "top_retrieved": [],
+    "metrics": {
+      "correct_rejection": true,
+      "false_retrieval": false,
+      "retrieved_count": 0,
+      "top_score": 0.0,
+      "top_retrieved_chunk_id": null
+    }
+  },
+  {
+    "query_id": "query_90",
+    "query": "How to repair a flat bicycle tire using a patch kit on the roadside?",
+    "category": "unanswerable",
+    "language": "en",
+    "query_type": "unanswerable",
+    "relevant_chunk_ids": [],
+    "retrieved_total": 0,
+    "top_retrieved": [],
+    "metrics": {
+      "correct_rejection": true,
+      "false_retrieval": false,
+      "retrieved_count": 0,
+      "top_score": 0.0,
+      "top_retrieved_chunk_id": null
+    }
+  }
+]

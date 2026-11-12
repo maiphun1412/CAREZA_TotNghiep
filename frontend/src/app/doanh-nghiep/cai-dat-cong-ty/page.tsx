@@ -62,6 +62,7 @@ import {
   Laptop,
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth-store";
+import { employerService } from "@/services/employer.service";
 
 // =====================================================================
 // MENU SECTIONS DEFINITION
@@ -105,7 +106,7 @@ const INITIAL_COMPANY_DATA = {
   workHoursStart: "08:30",
   workHoursEnd: "17:30",
   languages: ["Tiếng Việt", "Tiếng Anh"],
-  
+
   // About
   shortIntro: "Google Vietnam là công ty công nghệ tiên phong toàn cầu, mang đến các giải pháp hữu ích cho hàng tỷ người dùng trên thế giới.",
   detailedIntro: "Được thành lập từ năm 1997, Google đã không ngừng phát triển và mở rộng mạng lưới sản phẩm từ tìm kiếm trực tuyến, điện toán đám mây, trí tuệ nhân tạo (AI) đến hệ điều hành Android. Tại Việt Nam, chúng tôi tập trung phát triển hệ sinh thái số và đồng hành cùng các doanh nghiệp địa phương.",
@@ -227,6 +228,8 @@ function EmployerCompanySettingsMain() {
   const [activeSection, setActiveSection] = useState<SettingSection>("basic_info");
   const [formData, setFormData] = useState(INITIAL_COMPANY_DATA);
   const [isSaving, setIsSaving] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [activities, setActivities] = useState<any[]>([]);
 
   // Modals for CRUD operations
   const [isLogoModalOpen, setIsLogoModalOpen] = useState(false);
@@ -241,6 +244,44 @@ function EmployerCompanySettingsMain() {
   const [newBenefit, setNewBenefit] = useState({ title: "", desc: "", category: "Lương thưởng" });
   const [newAward, setNewAward] = useState({ title: "", issuer: "", year: "2024", desc: "" });
 
+  // Fetch real company profile and activities on mount
+  useEffect(() => {
+    async function fetchCompanyData() {
+      try {
+        setLoading(true);
+        const [profileRes, actRes] = await Promise.allSettled([
+          employerService.getCompanyProfile(),
+          employerService.getActivities(),
+        ]);
+        if (profileRes.status === "fulfilled" && profileRes.value.data?.company) {
+          const c = profileRes.value.data.company;
+          setFormData((prev) => ({
+            ...prev,
+            name: c.name || prev.name,
+            displayName: c.name || prev.displayName,
+            logo: c.logo_url || prev.logo,
+            banner: c.branding?.banner_url || prev.banner,
+            slogan: c.branding?.slogan || prev.slogan,
+            website: c.website || prev.website,
+            size: c.company_size || prev.size,
+            shortIntro: c.description || prev.shortIntro,
+            detailedIntro: c.description || prev.detailedIntro,
+            benefits: Array.isArray(c.branding?.benefits) && c.branding.benefits.length > 0 ? c.branding.benefits : prev.benefits,
+            socials: c.branding?.social_links ? { ...prev.socials, ...c.branding.social_links } : prev.socials,
+          }));
+        }
+        if (actRes.status === "fulfilled" && actRes.value.data?.activities) {
+          setActivities(actRes.value.data.activities);
+        }
+      } catch {
+        // preserve current form data if initial load fails
+      } finally {
+        setLoading(false);
+      }
+    }
+    fetchCompanyData();
+  }, []);
+
   // Sync with URL search params on mount or change
   useEffect(() => {
     const sectionParam = searchParams.get("section") as SettingSection;
@@ -254,12 +295,27 @@ function EmployerCompanySettingsMain() {
     router.replace(`/doanh-nghiep/cai-dat-cong-ty?section=${sec}`, { scroll: false });
   };
 
-  const handleSaveAll = () => {
-    setIsSaving(true);
-    setTimeout(() => {
-      setIsSaving(false);
+  const handleSaveAll = async () => {
+    try {
+      setIsSaving(true);
+      await employerService.updateCompanyProfile({
+        name: formData.name,
+        website: formData.website,
+        company_size: formData.size,
+        description: formData.detailedIntro || formData.shortIntro,
+        logo_url: formData.logo,
+        banner_url: formData.banner,
+        slogan: formData.slogan,
+        benefits: formData.benefits,
+        social_links: formData.socials,
+      });
       message.success("Đã lưu tất cả thay đổi cài đặt công ty thành công!");
-    }, 600);
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || "Lưu thay đổi thất bại.";
+      message.error(msg);
+    } finally {
+      setIsSaving(false);
+    }
   };
 
   // Add Handlers
@@ -476,11 +532,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("basic_info")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "basic_info"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "basic_info"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <FileText className="w-3.5 h-3.5" />
               <span>Thông tin cơ bản</span>
@@ -489,11 +544,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("brand_images")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "brand_images"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "brand_images"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <ImageIcon className="w-3.5 h-3.5" />
               <span>Thương hiệu &amp; Hình ảnh</span>
@@ -502,11 +556,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("about")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "about"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "about"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Building className="w-3.5 h-3.5" />
               <span>Giới thiệu công ty</span>
@@ -515,11 +568,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("culture_values")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "culture_values"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "culture_values"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Sparkles className="w-3.5 h-3.5" />
               <span>Văn hóa &amp; Giá trị</span>
@@ -528,11 +580,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("benefits")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "benefits"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "benefits"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Gift className="w-3.5 h-3.5" />
               <span>Phúc lợi</span>
@@ -541,11 +592,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("workplace")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "workplace"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "workplace"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Briefcase className="w-3.5 h-3.5" />
               <span>Môi trường làm việc</span>
@@ -554,11 +604,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("video")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "video"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "video"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Video className="w-3.5 h-3.5" />
               <span>Video giới thiệu</span>
@@ -567,11 +616,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("awards")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "awards"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "awards"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Award className="w-3.5 h-3.5" />
               <span>Chứng nhận &amp; Giải thưởng</span>
@@ -587,11 +635,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("visibility")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "visibility"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "visibility"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Eye className="w-3.5 h-3.5" />
               <span>Hiển thị &amp; Quyền truy cập</span>
@@ -600,11 +647,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("seo")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "seo"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "seo"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Search className="w-3.5 h-3.5" />
               <span>SEO &amp; Từ khóa</span>
@@ -613,11 +659,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("quick_contact")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "quick_contact"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "quick_contact"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Zap className="w-3.5 h-3.5" />
               <span>Nút liên hệ nhanh</span>
@@ -633,11 +678,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("contact_info")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "contact_info"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "contact_info"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Phone className="w-3.5 h-3.5" />
               <span>Thông tin liên hệ</span>
@@ -646,11 +690,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("socials")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "socials"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "socials"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Globe className="w-3.5 h-3.5" />
               <span>Mạng xã hội</span>
@@ -666,11 +709,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("integrations")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "integrations"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "integrations"
                   ? "bg-blue-50 text-[#0062ff] font-black border border-blue-100"
                   : "text-slate-600 hover:bg-slate-50 hover:text-slate-900"
-              }`}
+                }`}
             >
               <Sliders className="w-3.5 h-3.5" />
               <span>Tích hợp</span>
@@ -679,11 +721,10 @@ function EmployerCompanySettingsMain() {
             <button
               type="button"
               onClick={() => handleSelectSection("danger_zone")}
-              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${
-                activeSection === "danger_zone"
+              className={`w-full flex items-center gap-2 px-2.5 py-1.5 rounded-xl text-xs font-bold transition-all text-left cursor-pointer ${activeSection === "danger_zone"
                   ? "bg-rose-50 text-rose-600 font-black border border-rose-100"
                   : "text-rose-500 hover:bg-rose-50/50"
-              }`}
+                }`}
             >
               <Trash2 className="w-3.5 h-3.5" />
               <span>Xóa công ty</span>
@@ -1897,31 +1938,34 @@ function EmployerCompanySettingsMain() {
               <span className="font-extrabold text-xs text-slate-900 uppercase tracking-wider">
                 HOẠT ĐỘNG GẦN ĐÂY
               </span>
-              <button
-                type="button"
-                onClick={() => message.info("Xem toàn bộ nhật ký cài đặt công ty")}
+              <Link
+                href="/doanh-nghiep/nhat-ky-hoat-dong"
                 className="text-[#0062ff] hover:underline font-bold text-[11px] cursor-pointer"
               >
                 Xem tất cả
-              </button>
+              </Link>
             </div>
 
             <div className="space-y-2.5 text-xs">
-              {RECENT_ACTIVITIES.map((act) => (
-                <div key={act.id} className="flex items-start gap-2">
-                  <div className="w-5 h-5 rounded-md bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0 mt-0.5">
-                    <FileText className="w-3 h-3" />
+              {activities.length > 0 ? (
+                activities.slice(0, 5).map((act) => (
+                  <div key={act.id} className="flex items-start gap-2">
+                    <div className="w-5 h-5 rounded-md bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0 mt-0.5">
+                      <FileText className="w-3 h-3" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span className="font-bold text-slate-800 block text-[11px] leading-snug">
+                        {act.action || act.text || "Hoạt động hệ thống"}
+                      </span>
+                      <span className="text-[10px] text-slate-400 font-medium block mt-0.5">
+                        {act.created_at ? new Date(act.created_at).toLocaleString("vi-VN") : act.time}
+                      </span>
+                    </div>
                   </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="font-bold text-slate-800 block text-[11px] leading-snug">
-                      {act.text}
-                    </span>
-                    <span className="text-[10px] text-slate-400 font-medium block mt-0.5">
-                      {act.time}
-                    </span>
-                  </div>
-                </div>
-              ))}
+                ))
+              ) : (
+                <div className="text-slate-400 text-[11px] py-2">Chưa có nhật ký hoạt động gần đây</div>
+              )}
             </div>
           </div>
         </aside>

@@ -1,0 +1,100 @@
+[
+  {
+    "id": "hdoc_01",
+    "title": "Quy định về định dạng CV chuẩn quốc tế và mẹo tối ưu dung lượng tệp",
+    "category": "candidate_cv_formatting",
+    "content": "Hệ thống CAREZA hỗ trợ các tệp sơ yếu lý lịch (CV) dưới định dạng PDF chuẩn A4 để đảm bảo bố cục không bị xô lệch khi mở trên các thiết bị khác nhau. Kích thước tệp tải lên tối đa được giới hạn là 5MB. Để tối ưu dung lượng mà không làm giảm chất lượng chữ, ứng viên nên xuất trực tiếp từ Microsoft Word hoặc Google Docs thay vì chụp ảnh rồi dán vào file.\n\nCác phông chữ chuẩn quốc tế được khuyến nghị cho CV bao gồm: Arial, Calibri, Roboto và Open Sans với kích thước chữ từ 10pt đến 12pt cho nội dung chính và 14pt đến 16pt cho các tiêu đề mục. Tránh sử dụng các phông chữ nghệ thuật khó đọc hoặc chèn quá nhiều icon đồ họa phức tạp vì có thể làm thuật toán bóc tách CV (CV Parsing) gặp lỗi nhận diện ký tự.",
+    "disclaimer": false
+  },
+  {
+    "id": "hdoc_02",
+    "title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+    "category": "candidate_career_gap",
+    "content": "Khoảng trống sự nghiệp (Career Gap) là quãng thời gian ngắt quãng giữa các mốc công việc trong lịch sử công tác của ứng viên. Tính năng AI Đánh giá CV của CAREZA sẽ tự động gắn cờ lưu ý nếu phát hiện khoảng trống thời gian trên 6 tháng không có hoạt động công tác.\n\nĐể không bị trừ điểm ấn tượng ban đầu, ứng viên nên chủ động bổ sung phần giải trình ngắn gọn trong phần tóm tắt hoặc mục kinh nghiệm. Các lý do hợp lý được nhà tuyển dụng tôn trọng bao gồm: tham gia các khóa đào tạo nâng cao chuyên môn, chăm sóc gia đình, thực hiện nghĩa vụ quân sự hoặc triển khai các dự án cá nhân (Freelance/Startup). Sự trung thực và tinh thần học hỏi liên tục luôn được đánh giá cao hơn việc che giấu thông tin.",
+    "disclaimer": false
+  },
+  {
+    "id": "hdoc_03",
+    "title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+    "category": "candidate_profile_sync",
+    "content": "Ứng viên trên CAREZA có thể tiết kiệm thời gian tạo hồ sơ bằng cách sử dụng công cụ 'Nhập hồ sơ thông minh'. Hệ thống cho phép kết nối tài khoản hoặc tải lên file dữ liệu tóm tắt từ các mạng nghề nghiệp quốc tế để tự động điền các trường: vị trí hiện tại, lịch sử công tác, kỹ năng chuyên môn và các đường liên kết dự án (GitHub, Portfolio).\n\nSau khi dữ liệu được đồng bộ, ứng viên cần xem lại và xác nhận tính chính xác trước khi lưu vào hồ sơ chính thức. Người dùng có thể ngắt kết nối đồng bộ bất kỳ lúc nào tại mục Cài đặt tài khoản mà không làm mất các thông tin đã được lưu trước đó.",
+    "disclaimer": false
+  },
+  {
+    "id": "hdoc_04",
+    "title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+    "category": "candidate_assessment",
+    "content": "Một số vị trí tuyển dụng trên CAREZA yêu cầu ứng viên hoàn thành bài kiểm tra năng lực (Assessment Test) trước khi bước vào vòng phỏng vấn chuyên sâu. Bài kiểm tra có thể bao gồm trắc nghiệm kiến thức kỹ thuật, bài tập viết mã nguồn trực tuyến (Coding Challenge) hoặc bài trắc nghiệm tính cách công việc.\n\nKhi nhận được lời mời làm bài test, ứng viên có thời hạn hoàn thành trong vòng 48 giờ. Hệ thống áp dụng cơ chế giám sát tự động: đếm ngược thời gian làm bài, cảnh báo nếu ứng viên chuyển tab trình duyệt quá 3 lần và khóa bài thi nếu phát hiện gian lận. Kết quả điểm thi sẽ được chuyển trực tiếp đến nhà tuyển dụng và lưu vào hồ sơ ứng tuyển của ứng viên.",
+    "disclaimer": false
+  },
+  {
+    "id": "hdoc_05",
+    "title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+    "category": "candidate_offer",
+    "content": "Khi hồ sơ chuyển sang giai đoạn 'offered', nhà tuyển dụng sẽ gửi thư mời nhận việc (Offer Letter) chính thức qua hệ thống CAREZA. Thư mời quy định rõ: chức danh đảm nhiệm, mức lương gộp (Gross) hoặc thực nhận (Net), các khoản phụ cấp, chế độ bảo hiểm và ngày dự kiến bắt đầu làm việc.\n\nỨng viên có thời hạn chuẩn là 3 ngày làm việc để phản hồi: 'Chấp nhận đề nghị' (Accept Offer), 'Từ chối đề nghị' (Decline Offer) hoặc 'Yêu cầu thảo luận thêm' (Negotiate). Nếu có nguyện vọng điều chỉnh mức lương hoặc ngày nhận việc, ứng viên nên chọn 'Yêu cầu thảo luận thêm' kèm ghi chú chi tiết để chuyên viên tuyển dụng sắp xếp trao đổi trực tiếp.",
+    "disclaimer": false
+  },
+  {
+    "id": "hdoc_06",
+    "title": "Chính sách thử việc và quy trình gia nhập doanh nghiệp",
+    "category": "employer_onboarding",
+    "content": "[Lưu ý: Dữ liệu tổng hợp phục vụ mục đích benchmark và kiểm thử độc lập RAG Retrieval, nhãn tham chiếu chưa được chuyên gia độc lập xác nhận.]\n\nQuy trình Onboarding trên CAREZA hỗ trợ doanh nghiệp quản lý giai đoạn chuyển tiếp của ứng viên sau khi chấp nhận lời mời làm việc. Thời gian thử việc tiêu chuẩn cho các vị trí chuyên môn kỹ thuật theo quy định thông thường là 60 ngày với mức lương thử việc tối thiểu bằng 85% lương chính thức.\n\nHệ thống cung cấp danh mục công việc chuẩn bị trước ngày đi làm (Pre-onboarding Checklist) gồm: nộp hồ sơ nhân sự (sơ yếu lý lịch công chứng, giấy khám sức khỏe, bằng cấp bản sao), chuẩn bị thiết bị làm việc và cấp tài khoản nội bộ công ty. Đánh giá kết thúc thử việc được thực hiện trước 7 ngày để quyết định ký hợp đồng lao động chính thức.",
+    "disclaimer": true
+  },
+  {
+    "id": "hdoc_07",
+    "title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+    "category": "employer_email_triggers",
+    "content": "Nhà tuyển dụng có thể thiết lập các mẫu email tự động (Email Templates) trên CAREZA để nâng cao trải nghiệm ứng viên và tiết kiệm thời gian phản hồi. Các kịch bản kích hoạt email tự động bao gồm: gửi thư xác nhận đã tiếp nhận hồ sơ ngay khi ứng viên nộp đơn, gửi thư mời phỏng vấn tự động khi chuyển trạng thái sang 'interview', và gửi thư cảm ơn kèm lý do từ chối lịch sự khi hồ sơ chuyển sang 'rejected'.\n\nHệ thống hỗ trợ các thẻ biến động (Placeholders) như {{candidate_name}}, {{job_title}}, {{company_name}} để cá nhân hóa nội dung từng email. Tính năng này giúp tăng 45% mức độ hài lòng của ứng viên đối với thương hiệu tuyển dụng của công ty.",
+    "disclaimer": false
+  },
+  {
+    "id": "hdoc_08",
+    "title": "Quản lý nhãn ứng viên và ghi chú nội bộ phòng nhân sự",
+    "category": "employer_candidate_tags",
+    "content": "Để hỗ trợ phối hợp nhóm tuyển dụng, CAREZA cho phép gán nhãn tùy chỉnh (Tags) cho từng ứng viên trong bảng quản lý hồ sơ. Ví dụ các nhãn thông dụng: 'Tiếng Anh tốt', 'Sẵn sàng đi làm ngay', 'Kỳ vọng lương cao', 'Ưu tiên vòng 2'.\n\nMục Ghi chú nội bộ (Internal Notes) cho phép các thành viên có quyền (Admin, Recruiter, Reviewer) trao đổi nhận xét về ứng viên sau buổi phỏng vấn. Tất cả các ghi chú nội bộ và nhãn ứng viên đều được bảo mật tuyệt đối, chỉ hiển thị với nội bộ doanh nghiệp và ứng viên hoàn toàn không thể xem được những thông tin này.",
+    "disclaimer": false
+  },
+  {
+    "id": "hdoc_09",
+    "title": "Bảo mật kênh trao đổi trực tiếp và lưu trữ nhật ký hội thoại tuyển dụng",
+    "category": "employer_chat_archival",
+    "content": "Tính năng nhắn tin trực tiếp giữa nhà tuyển dụng và ứng viên trên CAREZA tuân thủ chính sách lưu trữ và kiểm toán nghiêm ngặt. Toàn bộ lịch sử hội thoại được lưu trữ mã hóa trong thời hạn 12 tháng phục vụ đối soát và giải quyết khiếu nại nếu phát sinh tranh chấp.\n\nChủ sở hữu công ty (Owner) và Quản trị viên (Admin) có quyền tải về bản sao nhật ký tin nhắn của các tin tuyển dụng thuộc doanh nghiệp. Hệ thống tự động quét và chặn các tin nhắn chứa đường link độc hại, từ ngữ xúc phạm hoặc thông tin nhạy cảm vi phạm quy định sàn.",
+    "disclaimer": false
+  },
+  {
+    "id": "hdoc_10",
+    "title": "Chính sách tài khoản dùng thử và chương trình ưu đãi dành cho doanh nghiệp khởi nghiệp",
+    "category": "billing_startup_trial",
+    "content": "[Lưu ý: Dữ liệu tổng hợp phục vụ mục đích benchmark và kiểm thử độc lập RAG Retrieval, nhãn tham chiếu chưa được chuyên gia độc lập xác nhận.]\n\nChương trình CAREZA Startup Booster cung cấp gói tài khoản dùng thử miễn phí dành cho các công ty khởi nghiệp công nghệ có thời gian thành lập dưới 2 năm. Doanh nghiệp đủ điều kiện sẽ được tặng 3 tháng trải nghiệm miễn phí gói Chuyên nghiệp (Pro) với 15 tin tuyển dụng và 30 lượt mở hồ sơ trong Talent Pool.\n\nĐể đăng ký chương trình, đại diện công ty cần gửi đơn đăng ký kèm đường link website sản phẩm và giấy chứng nhận đăng ký doanh nghiệp. Mỗi doanh nghiệp chỉ được hưởng chính sách ưu đãi này duy nhất 01 lần và không được quy đổi hạn mức khuyến mãi thành tiền mặt.",
+    "disclaimer": true
+  },
+  {
+    "id": "hdoc_11",
+    "title": "Quy trình xuất hóa đơn giá trị gia tăng điện tử cho dịch vụ tuyển dụng",
+    "category": "billing_einvoice",
+    "content": "[Lưu ý: Dữ liệu tổng hợp phục vụ mục đích benchmark và kiểm thử độc lập RAG Retrieval, nhãn tham chiếu chưa được chuyên gia độc lập xác nhận.]\n\nCAREZA cung cấp hóa đơn giá trị gia tăng điện tử (e-Invoice) hợp lệ cho tất cả các giao dịch mua gói dịch vụ tuyển dụng hoặc nạp điểm Quota trên nền tảng. Doanh nghiệp cần cung cấp thông tin xuất hóa đơn gồm: Tên công ty, Mã số thuế (MST), Địa chỉ trụ sở theo giấy phép và Email nhận hóa đơn tại mục Cài đặt thanh toán.\n\nHóa đơn điện tử sẽ được khởi tạo và gửi về email đã đăng ký trong vòng 48 giờ làm việc kể từ thời điểm thanh toán thành công. Người dùng có thể tra cứu và tải lại hóa đơn dưới định dạng XML và PDF có chữ ký số bất kỳ lúc nào trong lịch sử thanh toán.",
+    "disclaimer": true
+  },
+  {
+    "id": "hdoc_12",
+    "title": "Quy định xử lý hành vi quấy rối, phân biệt đối xử và bảo vệ quyền lợi ứng viên",
+    "category": "policy_antiharassment",
+    "content": "[Lưu ý: Dữ liệu tổng hợp phục vụ mục đích benchmark và kiểm thử độc lập RAG Retrieval, nhãn tham chiếu chưa được chuyên gia độc lập xác nhận.]\n\nCAREZA kiên quyết bài trừ mọi hành vi quấy rối tình dục, đe dọa, xúc phạm hoặc phân biệt đối xử dựa trên giới tính, độ tuổi, tôn giáo và tình trạng hôn nhân trong toàn bộ quá trình tuyển dụng. Nhà tuyển dụng tuyệt đối không được hỏi các câu hỏi đời tư không liên quan đến năng lực công việc trong buổi phỏng vấn.\n\nỨng viên có quyền bấm nút 'Báo cáo vi phạm' trên trang tin tuyển dụng hoặc trong cửa sổ nhắn tin khi phát hiện hành vi sai trái. Ban kiểm duyệt sẽ tạm đình chỉ tài khoản bị khiếu nại trong vòng 24 giờ để điều tra và khóa tài khoản vĩnh viễn nếu vi phạm nghiêm trọng.",
+    "disclaimer": true
+  },
+  {
+    "id": "hdoc_13",
+    "title": "Quy trình xử lý sự cố quên mật khẩu và khôi phục quyền truy cập tài khoản",
+    "category": "platform_password_reset",
+    "content": "Trong trường hợp quên mật khẩu đăng nhập trên CAREZA, người dùng có thể sử dụng chức năng 'Quên mật khẩu' tại màn hình đăng nhập. Hệ thống sẽ gửi một liên kết đặt lại mật khẩu an toàn vào địa chỉ email đã đăng ký. Đường link khôi phục này chỉ có hiệu lực duy nhất trong vòng 15 phút vì lý do an ninh.\n\nNếu tài khoản đã kích hoạt xác thực hai yếu tố (2FA) nhưng người dùng bị mất thiết bị tạo mã OTP, người dùng cần sử dụng Mã khôi phục dự phòng (Backup Code) được cấp lúc cài đặt 2FA. Nếu không có mã dự phòng, người dùng bắt buộc phải gửi yêu cầu hỗ trợ danh tính đến bộ phận kỹ thuật CAREZA để được xác minh thủ công.",
+    "disclaimer": false
+  },
+  {
+    "id": "hdoc_14",
+    "title": "Mẹo xử lý sự cố kỹ thuật và đường truyền trong phòng phỏng vấn trực tuyến",
+    "category": "platform_video_troubleshooting",
+    "content": "Phòng phỏng vấn trực tuyến tích hợp trên CAREZA yêu cầu đường truyền Internet ổn định với tốc độ tải lên/tải xuống tối thiểu 5 Mbps. Để tránh gián đoạn, ứng viên và nhà tuyển dụng nên sử dụng trình duyệt Google Chrome hoặc Microsoft Edge phiên bản mới nhất và cấp quyền truy cập Camera, Microphone trước khi vào phòng.\n\nNếu gặp sự cố mất tiếng hoặc hình ảnh bị giật lag, người dùng nên thực hiện các bước khắc phục nhanh sau:\n1. Tải lại trang (F5) hoặc đóng bớt các ứng dụng chạy ngầm tốn băng thông.\n2. Kiểm tra lại thiết bị đầu vào trong phần Cài đặt âm thanh của trình duyệt.\n3. Nếu đường truyền mạng quá yếu, người dùng có thể tắt Camera để ưu tiên băng thông cho Microphone và gửi tin nhắn trong phòng họp để thông báo cho đối phương.",
+    "disclaimer": false
+  }
+]

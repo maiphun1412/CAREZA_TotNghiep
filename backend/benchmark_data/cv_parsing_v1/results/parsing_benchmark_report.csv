@@ -1,0 +1,51 @@
+﻿cv_id,format,group_id,group_name,language,name_em,email_em,phone_em,skill_precision,skill_recall,skill_f1,exp_years_extracted,exp_years_expected,exp_mae,exp_accuracy_tol_0_5,edu_detection,work_detection,proj_detection,cert_detection,error_notes
+PARSE_CV_01,PDF,GROUP_1_STANDARD,Bố cục một cột chuẩn,vi,1.0,1.0,1.0,0.5455,1.0,0.7059,2.5,2.5,0.0,1.0,1.0,1.0,1.0,1.0,"Skills F1=0.71, thừa: ['redis', 'rest api', 'microservices']"
+PARSE_CV_02,PDF,GROUP_1_STANDARD,Bố cục một cột chuẩn,vi,1.0,1.0,1.0,0.875,1.0,0.9333,3.0,3.0,0.0,1.0,1.0,1.0,1.0,1.0,
+PARSE_CV_03,PDF,GROUP_1_STANDARD,Bố cục một cột chuẩn,en,1.0,1.0,1.0,0.6364,1.0,0.7778,1.5,1.5,0.0,1.0,1.0,1.0,0.0,1.0,"Skills F1=0.78, thừa: ['oop', 'oracle', 'clean code']"
+PARSE_CV_04,PDF,GROUP_1_STANDARD,Bố cục một cột chuẩn,vi,1.0,1.0,1.0,1.0,1.0,1.0,2.0,2.0,0.0,1.0,1.0,1.0,1.0,1.0,
+PARSE_CV_05,PDF,GROUP_1_STANDARD,Bố cục một cột chuẩn,en,1.0,1.0,1.0,0.7143,1.0,0.8333,3.0,3.0,0.0,1.0,1.0,1.0,0.0,1.0,
+PARSE_CV_06,PDF,GROUP_2_MULTIPAGE,Nhiều kinh nghiệm và dài trang,vi,1.0,1.0,1.0,0.75,1.0,0.8571,8.0,8.0,0.0,1.0,1.0,1.0,1.0,1.0,
+PARSE_CV_07,PDF,GROUP_2_MULTIPAGE,Nhiều kinh nghiệm và dài trang,en,1.0,1.0,1.0,1.0,1.0,1.0,7.0,7.0,0.0,1.0,1.0,1.0,0.0,1.0,
+PARSE_CV_08,PDF,GROUP_2_MULTIPAGE,Nhiều kinh nghiệm và dài trang,vi,1.0,1.0,1.0,0.9091,1.0,0.9524,6.0,6.0,0.0,1.0,1.0,1.0,1.0,1.0,
+PARSE_CV_09,PDF,GROUP_2_MULTIPAGE,Nhiều kinh nghiệm và dài trang,en,1.0,1.0,1.0,0.8571,1.0,0.9231,6.5,6.5,0.0,1.0,1.0,1.0,0.0,1.0,
+PARSE_CV_10,PDF,GROUP_2_MULTIPAGE,Nhiều kinh nghiệm và dài trang,vi,1.0,1.0,1.0,0.8,0.7273,0.7619,10.0,10.0,0.0,1.0,1.0,1.0,1.0,1.0,"Skills F1=0.76, thiếu: ['asp.net', '.net', 'c#'], thừa: ['c', 'ci/cd']"
+PARSE_CV_11,PDF,GROUP_3_SKILL_HEAVY,Nhiều kỹ năng và dày đặc từ khóa,en,1.0,1.0,1.0,0.8571,1.0,0.9231,4.0,4.0,0.0,1.0,1.0,1.0,0.0,1.0,
+PARSE_CV_12,PDF,GROUP_3_SKILL_HEAVY,Nhiều kỹ năng và dày đặc từ khóa,vi,1.0,1.0,1.0,0.9286,1.0,0.963,3.0,3.0,0.0,1.0,1.0,1.0,1.0,1.0,
+PARSE_CV_13,PDF,GROUP_3_SKILL_HEAVY,Nhiều kỹ năng và dày đặc từ khóa,vi,1.0,1.0,1.0,1.0,1.0,1.0,3.5,3.5,0.0,1.0,1.0,1.0,1.0,1.0,
+PARSE_CV_14,PDF,GROUP_3_SKILL_HEAVY,Nhiều kỹ năng và dày đặc từ khóa,en,1.0,1.0,1.0,1.0,1.0,1.0,2.5,2.5,0.0,1.0,1.0,1.0,0.0,1.0,
+PARSE_CV_15,PDF,GROUP_3_SKILL_HEAVY,Nhiều kỹ năng và dày đặc từ khóa,vi,1.0,1.0,1.0,0.9333,1.0,0.9655,5.0,5.0,0.0,1.0,1.0,1.0,1.0,1.0,
+PARSE_CV_16,PDF,GROUP_4_INCOMPLETE,Thiếu thông tin và ca biên,vi,1.0,1.0,1.0,1.0,0.8,0.8889,2.0,2.0,0.0,1.0,1.0,1.0,1.0,1.0,
+PARSE_CV_17,PDF,GROUP_4_INCOMPLETE,Thiếu thông tin và ca biên,en,1.0,1.0,1.0,1.0,1.0,1.0,4.0,0.0,4.0,0.0,1.0,1.0,0.0,1.0,Kinh nghiệm lệch: trích xuất 4.0n != kỳ vọng 0.0n (MAE=4.0)
+PARSE_CV_18,PDF,GROUP_4_INCOMPLETE,Thiếu thông tin và ca biên,vi,1.0,1.0,1.0,1.0,1.0,1.0,3.0,3.0,0.0,1.0,0.0,1.0,1.0,1.0,
+PARSE_CV_19,PDF,GROUP_4_INCOMPLETE,Thiếu thông tin và ca biên,en,0.0,1.0,1.0,1.0,1.0,1.0,4.0,4.0,0.0,1.0,1.0,1.0,0.0,1.0,Tên lệch: trích xuất 'PROFILE SUMMARY' != kỳ vọng 'None'
+PARSE_CV_20,PDF,GROUP_4_INCOMPLETE,Thiếu thông tin và ca biên,vi,1.0,1.0,1.0,0.6667,0.4,0.5,2.0,2.0,0.0,1.0,1.0,1.0,1.0,1.0,"Skills F1=0.50, thiếu: ['asp.net', '.net', 'c#'], thừa: ['c']"
+PARSE_CV_21,PDF,GROUP_5_TWO_COLUMN,Bố cục hai cột (Sidebar),vi,0.0,1.0,1.0,0.875,1.0,0.9333,3.0,3.0,0.0,1.0,1.0,1.0,1.0,1.0,Tên lệch: trích xuất 'THÔNG TIN CÁ NHÂN' != kỳ vọng 'Lương Gia Bảo'
+PARSE_CV_22,PDF,GROUP_5_TWO_COLUMN,Bố cục hai cột (Sidebar),en,0.0,1.0,1.0,1.0,1.0,1.0,3.0,3.0,0.0,1.0,1.0,1.0,0.0,0.0,Tên lệch: trích xuất 'CONTACT & SKILLS' != kỳ vọng 'Jessica Hoang'
+PARSE_CV_23,PDF,GROUP_5_TWO_COLUMN,Bố cục hai cột (Sidebar),vi,0.0,1.0,1.0,0.875,1.0,0.9333,2.5,2.5,0.0,1.0,1.0,1.0,1.0,1.0,Tên lệch: trích xuất 'LIÊN HỆ & KỸ NĂNG' != kỳ vọng 'Ngô Minh Trí'
+PARSE_CV_24,PDF,GROUP_5_TWO_COLUMN,Bố cục hai cột (Sidebar),en,0.0,1.0,1.0,1.0,1.0,1.0,4.0,4.0,0.0,1.0,1.0,1.0,0.0,1.0,Tên lệch: trích xuất 'CANDIDATE INFO' != kỳ vọng 'Daniel Vu'
+PARSE_CV_25,PDF,GROUP_5_TWO_COLUMN,Bố cục hai cột (Sidebar),vi,0.0,1.0,1.0,1.0,1.0,1.0,2.0,2.0,0.0,1.0,1.0,1.0,1.0,1.0,Tên lệch: trích xuất 'THÔNG TIN LIÊN HỆ' != kỳ vọng 'Đinh Văn Quyết'
+PARSE_CV_01,DOCX,GROUP_1_STANDARD,Bố cục một cột chuẩn,vi,0.0,1.0,1.0,0.5455,1.0,0.7059,2.5,2.5,0.0,1.0,1.0,0.0,0.0,1.0,"Tên lệch: trích xuất '' != kỳ vọng 'Nguyễn Hoàng Nam' | Skills F1=0.71, thừa: ['redis', 'rest api', 'microservices']"
+PARSE_CV_02,DOCX,GROUP_1_STANDARD,Bố cục một cột chuẩn,vi,0.0,1.0,1.0,0.875,1.0,0.9333,3.0,3.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Trần Thị Mai'
+PARSE_CV_03,DOCX,GROUP_1_STANDARD,Bố cục một cột chuẩn,en,0.0,1.0,1.0,0.6364,1.0,0.7778,1.5,1.5,0.0,1.0,1.0,0.0,0.0,1.0,"Tên lệch: trích xuất '' != kỳ vọng 'David Le' | Skills F1=0.78, thừa: ['oop', 'oracle', 'clean code']"
+PARSE_CV_04,DOCX,GROUP_1_STANDARD,Bố cục một cột chuẩn,vi,0.0,1.0,1.0,1.0,1.0,1.0,2.0,2.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Lê Quang Vinh'
+PARSE_CV_05,DOCX,GROUP_1_STANDARD,Bố cục một cột chuẩn,en,0.0,1.0,1.0,0.7143,1.0,0.8333,3.0,3.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Sarah Pham'
+PARSE_CV_06,DOCX,GROUP_2_MULTIPAGE,Nhiều kinh nghiệm và dài trang,vi,0.0,1.0,1.0,0.75,1.0,0.8571,8.0,8.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Phạm Minh Tuấn'
+PARSE_CV_07,DOCX,GROUP_2_MULTIPAGE,Nhiều kinh nghiệm và dài trang,en,0.0,1.0,1.0,1.0,1.0,1.0,7.0,7.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Michael Tran'
+PARSE_CV_08,DOCX,GROUP_2_MULTIPAGE,Nhiều kinh nghiệm và dài trang,vi,0.0,1.0,1.0,0.9091,1.0,0.9524,6.0,6.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Vũ Đình Trọng'
+PARSE_CV_09,DOCX,GROUP_2_MULTIPAGE,Nhiều kinh nghiệm và dài trang,en,0.0,1.0,1.0,0.8571,1.0,0.9231,6.5,6.5,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Emily Nguyen'
+PARSE_CV_10,DOCX,GROUP_2_MULTIPAGE,Nhiều kinh nghiệm và dài trang,vi,0.0,1.0,1.0,0.8333,0.9091,0.8696,10.0,10.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Hoàng Kim Long'
+PARSE_CV_11,DOCX,GROUP_3_SKILL_HEAVY,Nhiều kỹ năng và dày đặc từ khóa,en,0.0,1.0,1.0,0.8571,1.0,0.9231,4.0,4.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Alex Nguyen'
+PARSE_CV_12,DOCX,GROUP_3_SKILL_HEAVY,Nhiều kỹ năng và dày đặc từ khóa,vi,0.0,1.0,1.0,0.9286,1.0,0.963,3.0,3.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Đặng Thu Trang'
+PARSE_CV_13,DOCX,GROUP_3_SKILL_HEAVY,Nhiều kỹ năng và dày đặc từ khóa,vi,0.0,1.0,1.0,1.0,1.0,1.0,3.5,3.5,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Bùi Anh Khoa'
+PARSE_CV_14,DOCX,GROUP_3_SKILL_HEAVY,Nhiều kỹ năng và dày đặc từ khóa,en,0.0,1.0,1.0,1.0,1.0,1.0,2.5,2.5,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Kevin Vu'
+PARSE_CV_15,DOCX,GROUP_3_SKILL_HEAVY,Nhiều kỹ năng và dày đặc từ khóa,vi,0.0,1.0,1.0,0.9333,1.0,0.9655,5.0,5.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Phan Quốc Huy'
+PARSE_CV_16,DOCX,GROUP_4_INCOMPLETE,Thiếu thông tin và ca biên,vi,0.0,1.0,1.0,1.0,0.8,0.8889,2.0,2.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Đỗ Quốc Hưng'
+PARSE_CV_17,DOCX,GROUP_4_INCOMPLETE,Thiếu thông tin và ca biên,en,0.0,1.0,1.0,1.0,1.0,1.0,4.0,0.0,4.0,0.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Mark Harrison' | Kinh nghiệm lệch: trích xuất 4.0n != kỳ vọng 0.0n (MAE=4.0)
+PARSE_CV_18,DOCX,GROUP_4_INCOMPLETE,Thiếu thông tin và ca biên,vi,0.0,1.0,1.0,1.0,1.0,1.0,3.0,3.0,0.0,1.0,0.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Nguyễn Mai Phương'
+PARSE_CV_19,DOCX,GROUP_4_INCOMPLETE,Thiếu thông tin và ca biên,en,1.0,1.0,1.0,1.0,1.0,1.0,4.0,4.0,0.0,1.0,1.0,0.0,0.0,1.0,
+PARSE_CV_20,DOCX,GROUP_4_INCOMPLETE,Thiếu thông tin và ca biên,vi,0.0,1.0,1.0,0.8,0.8,0.8,2.0,2.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Vũ Hải Đăng'
+PARSE_CV_21,DOCX,GROUP_5_TWO_COLUMN,Bố cục hai cột (Sidebar),vi,0.0,1.0,1.0,0.875,1.0,0.9333,3.0,3.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Lương Gia Bảo'
+PARSE_CV_22,DOCX,GROUP_5_TWO_COLUMN,Bố cục hai cột (Sidebar),en,0.0,1.0,1.0,1.0,1.0,1.0,3.0,3.0,0.0,1.0,1.0,0.0,0.0,0.0,Tên lệch: trích xuất '' != kỳ vọng 'Jessica Hoang'
+PARSE_CV_23,DOCX,GROUP_5_TWO_COLUMN,Bố cục hai cột (Sidebar),vi,0.0,1.0,1.0,0.875,1.0,0.9333,2.5,2.5,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Ngô Minh Trí'
+PARSE_CV_24,DOCX,GROUP_5_TWO_COLUMN,Bố cục hai cột (Sidebar),en,0.0,1.0,1.0,1.0,1.0,1.0,4.0,4.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Daniel Vu'
+PARSE_CV_25,DOCX,GROUP_5_TWO_COLUMN,Bố cục hai cột (Sidebar),vi,0.0,1.0,1.0,1.0,1.0,1.0,2.0,2.0,0.0,1.0,1.0,0.0,0.0,1.0,Tên lệch: trích xuất '' != kỳ vọng 'Đinh Văn Quyết'

@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useMemo, Suspense, Fragment } from "react";
+import { useState, useMemo, useEffect, useCallback, Suspense, Fragment } from "react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/auth-store";
+import { employerService } from "@/services/employer.service";
 import {
   Dropdown,
   Tooltip,
@@ -13,6 +14,9 @@ import {
   Avatar,
   Checkbox,
   Pagination,
+  Spin,
+  Alert,
+  Empty,
 } from "antd";
 import {
   Plus,
@@ -137,198 +141,8 @@ const STATUS_CONFIG: Record<
   },
 };
 
-// Initial Talent Pool candidates dataset matching reference
-const INITIAL_TALENT_CANDIDATES: TalentCandidate[] = [
-  {
-    id: "tp-1",
-    name: "Nguyễn Minh Anh",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-    email: "minhanh@email.com",
-    phone: "0345 678 901",
-    desiredPosition: "Product Manager",
-    experienceYears: 5,
-    expectedSalary: "$2,000 – $2,500",
-    workingMode: "Hybrid",
-    location: "Hà Nội, Việt Nam",
-    bio: "Product Manager giàu kinh nghiệm trong việc xây dựng và phát triển sản phẩm SaaS. Từng dẫn dắt đội nhóm 8+ người, tăng trưởng user 200% trong 1 năm.",
-    notes: "Ứng viên rất tiềm năng. Kinh nghiệm phù hợp với vị trí Product Manager của công ty. Nên ưu tiên liên hệ.",
-    notesUpdatedBy: "Mai Phương",
-    notesUpdatedAt: "18/08/2026",
-    skills: ["Product", "Agile", "SQL", "Scrum", "Roadmap"],
-    source: "LinkedIn",
-    status: "TRACKING",
-    group: "Product",
-    tags: ["Sản phẩm", "Lãnh đạo", "Chiến lược", "Tăng trưởng"],
-    isFavorite: false,
-    addedDate: "20/08/2026",
-    addedTimeAgo: "2 ngày trước",
-    cvName: "NguyenMinhAnh_CV.pdf",
-    cvSize: "PDF • 2.4 MB",
-    linkedInUrl: "linkedin.com/in/minhanh",
-  },
-  {
-    id: "tp-2",
-    name: "Trần Hoàng Nam",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-    email: "namth@outlook.com",
-    phone: "0389 123 456",
-    desiredPosition: "UX/UI Designer",
-    experienceYears: 4,
-    expectedSalary: "$1,500 – $2,000",
-    workingMode: "Toàn thời gian",
-    location: "Hồ Chí Minh, Việt Nam",
-    bio: "Senior UI/UX Designer với thế mạnh về Design System và nghiên cứu hành vi người dùng B2B/Fintech.",
-    notes: "Đã liên hệ trao đổi sơ bộ qua LinkedIn, ứng viên hào hứng và sẵn sàng nhận offer khi có dự án mới.",
-    notesUpdatedBy: "Mai Phương",
-    notesUpdatedAt: "19/08/2026",
-    skills: ["Figma", "UI/UX", "Wireframe", "Design System"],
-    source: "Referral",
-    status: "CONTACTED",
-    group: "Design",
-    tags: ["Design System", "Figma Expert", "Fintech"],
-    isFavorite: false,
-    addedDate: "18/08/2026",
-    addedTimeAgo: "4 ngày trước",
-    cvName: "TranHoangNam_Portfolio.pdf",
-    cvSize: "PDF • 8.1 MB",
-    linkedInUrl: "linkedin.com/in/namth-design",
-  },
-  {
-    id: "tp-3",
-    name: "Lê Quang Huy",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-    email: "lequanghuy@gmail.com",
-    phone: "0378 456 789",
-    desiredPosition: "Frontend Developer",
-    experienceYears: 3,
-    expectedSalary: "$1,200 – $1,800",
-    workingMode: "Remote / Hybrid",
-    location: "Hồ Chí Minh, Việt Nam",
-    bio: "Frontend Engineer chuyên sâu về React, Next.js 14 và TypeScript. Tối ưu performance tốt.",
-    notes: "Ứng viên có tư duy clean code tốt, đã lưu vào danh sách chờ mở đợt tuyển FE quý 4.",
-    notesUpdatedBy: "Quang Huy",
-    notesUpdatedAt: "16/08/2026",
-    skills: ["React", "TypeScript", "Next.js", "TailwindCSS"],
-    source: "TopCV",
-    status: "TRACKING",
-    group: "Engineering",
-    tags: ["React", "Next.js", "Frontend"],
-    isFavorite: false,
-    addedDate: "15/08/2026",
-    addedTimeAgo: "1 tuần trước",
-    cvName: "LeQuangHuy_Frontend_CV.pdf",
-    cvSize: "PDF • 1.8 MB",
-    linkedInUrl: "linkedin.com/in/huy-dev",
-  },
-  {
-    id: "tp-4",
-    name: "Phạm Thu Hằng",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
-    email: "hangpt@gmail.com",
-    phone: "0357 890 123",
-    desiredPosition: "Data Analyst",
-    experienceYears: 3,
-    expectedSalary: "$1,300 – $1,700",
-    workingMode: "Toàn thời gian",
-    location: "Hà Nội, Việt Nam",
-    bio: "Chuyên gia phân tích dữ liệu kinh doanh với SQL, Python và PowerBI Dashboard.",
-    notes: "Đã trao đổi vòng 1, ứng viên đồng ý giữ liên hệ cho các vị trí Lead DA sắp tới.",
-    notesUpdatedBy: "Mai Phương",
-    notesUpdatedAt: "14/08/2026",
-    skills: ["SQL", "Python", "Power BI", "Tableau"],
-    source: "VietnamWorks",
-    status: "CONTACTED",
-    group: "Data",
-    tags: ["Data Analytics", "PowerBI", "SQL"],
-    isFavorite: false,
-    addedDate: "14/08/2026",
-    addedTimeAgo: "1 tuần trước",
-    cvName: "PhamThuHang_Data_CV.pdf",
-    cvSize: "PDF • 2.1 MB",
-    linkedInUrl: "linkedin.com/in/hang-data",
-  },
-  {
-    id: "tp-5",
-    name: "Đỗ Thành Tùng",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80",
-    email: "thanhtung@gmail.com",
-    phone: "0334 567 890",
-    desiredPosition: "DevOps Engineer",
-    experienceYears: 4,
-    expectedSalary: "$2,200 – $2,800",
-    workingMode: "Hybrid / Remote",
-    location: "Hà Nội, Việt Nam",
-    bio: "DevOps Engineer có chứng chỉ AWS Certified Solutions Architect, Kubernetes và CI/CD Automation.",
-    notes: "Ứng viên rất mạnh về hạ tầng Cloud, đã phỏng vấn tốt và lưu lại cho dự án Cloud Native.",
-    notesUpdatedBy: "Quang Huy",
-    notesUpdatedAt: "13/08/2026",
-    skills: ["AWS", "Docker", "CI/CD", "Kubernetes"],
-    source: "Website",
-    status: "CONTACTED",
-    group: "Engineering",
-    tags: ["DevOps", "AWS", "K8s"],
-    isFavorite: false,
-    addedDate: "12/08/2026",
-    addedTimeAgo: "1 tuần trước",
-    cvName: "DoThanhTung_DevOps_CV.pdf",
-    cvSize: "PDF • 3.2 MB",
-    linkedInUrl: "linkedin.com/in/tung-devops",
-  },
-  {
-    id: "tp-6",
-    name: "Lê Thị Ngọc Ánh",
-    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
-    email: "ngocanh@gmail.com",
-    phone: "0388 999 000",
-    desiredPosition: "Product Manager",
-    experienceYears: 5,
-    expectedSalary: "$2,200 – $2,700",
-    workingMode: "Toàn thời gian",
-    location: "Hồ Chí Minh, Việt Nam",
-    bio: "Senior PM chuyên mảng E-commerce và Payment Gateway, am hiểu sâu về Growth và conversion rate.",
-    notes: "Ứng viên xuất sắc, ưu tiên hàng đầu cho các vị trí quản lý cấp cao.",
-    notesUpdatedBy: "Mai Phương",
-    notesUpdatedAt: "10/08/2026",
-    skills: ["Product Roadmap", "Growth", "A/B Testing", "Fintech"],
-    source: "LinkedIn",
-    status: "POTENTIAL",
-    group: "Product",
-    tags: ["High-Potential", "Leadership", "Fintech"],
-    isFavorite: true,
-    addedDate: "10/08/2026",
-    addedTimeAgo: "2 tuần trước",
-    cvName: "LeThiNgocAnh_PM_CV.pdf",
-    cvSize: "PDF • 2.6 MB",
-    linkedInUrl: "linkedin.com/in/ngocanh-pm",
-  },
-  {
-    id: "tp-7",
-    name: "Vũ Minh Tâm",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
-    email: "tamvm@gmail.com",
-    phone: "0311 222 333",
-    desiredPosition: "Data Engineer",
-    experienceYears: 4,
-    expectedSalary: "$1,800 – $2,400",
-    workingMode: "Hybrid",
-    location: "Hà Nội, Việt Nam",
-    bio: "Data Engineer dày dặn kinh nghiệm thiết kế Pipeline xử lý dữ liệu lớn bằng Spark và Airflow.",
-    notes: "Hồ sơ dự phòng cho team Data Platform.",
-    notesUpdatedBy: "Quang Huy",
-    notesUpdatedAt: "08/08/2026",
-    skills: ["Python", "Spark", "Airflow", "ETL", "BigQuery"],
-    source: "VietnamWorks",
-    status: "POTENTIAL",
-    group: "Data",
-    tags: ["Data Engineer", "Spark", "BigData"],
-    isFavorite: true,
-    addedDate: "08/08/2026",
-    addedTimeAgo: "2 tuần trước",
-    cvName: "VuMinhTam_DataEngineer.pdf",
-    cvSize: "PDF • 2.0 MB",
-    linkedInUrl: "linkedin.com/in/tam-data",
-  },
-];
+// Initial Talent Pool candidates dataset
+const INITIAL_TALENT_CANDIDATES: TalentCandidate[] = [];
 
 // Source icon helper
 function renderSourceBadge(source: string) {
@@ -386,7 +200,11 @@ function EmployerTalentPoolContent() {
   const recruiterName = user?.fullName || "Mai Phương";
 
   // State
-  const [candidates, setCandidates] = useState<TalentCandidate[]>(INITIAL_TALENT_CANDIDATES);
+  const [candidates, setCandidates] = useState<TalentCandidate[]>([]);
+  const [talentPools, setTalentPools] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [activeTab, setActiveTab] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedGroup, setSelectedGroup] = useState<string>("all");
@@ -402,7 +220,7 @@ function EmployerTalentPoolContent() {
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
 
   // EXPANDED ROW STATE (Only 1 candidate expanded at a time)
-  const [expandedCandidateId, setExpandedCandidateId] = useState<string | null>("tp-1");
+  const [expandedCandidateId, setExpandedCandidateId] = useState<string | null>(null);
 
   // Modals state
   const [isAddModalOpen, setIsAddModalOpen] = useState(false);
@@ -411,9 +229,146 @@ function EmployerTalentPoolContent() {
   const [isCreateGroupModalOpen, setIsCreateGroupModalOpen] = useState(false);
   const [viewCvCandidate, setViewCvCandidate] = useState<TalentCandidate | null>(null);
 
+  // Form tạo nhóm mới
+  const [newGroupName, setNewGroupName] = useState("");
+  const [newGroupDesc, setNewGroupDesc] = useState("");
+  const [isCreatingGroup, setIsCreatingGroup] = useState(false);
+
   // Edit note state
   const [editingCandidate, setEditingCandidate] = useState<TalentCandidate | null>(null);
   const [editNoteContent, setEditNoteContent] = useState<string>("");
+
+  const fetchData = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const [poolsRes, appsRes] = await Promise.all([
+        employerService.getTalentPools().catch(() => ({ success: true, data: { pools: [] } })),
+        employerService.getApplications({ page_size: 50 }).catch(() => ({ success: true, message: "", data: { applications: [] } })),
+      ]);
+
+      const pools = (poolsRes?.data as any)?.pools || (poolsRes?.data as any)?.talent_pools || [];
+      setTalentPools(pools);
+
+      const mappedList: TalentCandidate[] = [];
+      const seenIds = new Set<string>();
+
+      pools.forEach((p: any) => {
+        if (Array.isArray(p.members)) {
+          p.members.forEach((m: any) => {
+            const cId = `pool-${p.id}-${m.candidate_id}`;
+            if (!seenIds.has(cId)) {
+              seenIds.add(cId);
+              const cand = m.candidate || {};
+              mappedList.push({
+                id: cId,
+                name: cand.full_name || `Ứng viên #${m.candidate_id}`,
+                avatar: cand.avatar_url || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+                email: cand.email || `candidate${m.candidate_id}@example.com`,
+                phone: cand.phone || "0900 000 000",
+                desiredPosition: cand.headline || "Chuyên viên",
+                experienceYears: 3,
+                expectedSalary: "Thỏa thuận",
+                workingMode: "Toàn thời gian",
+                location: "Việt Nam",
+                bio: cand.headline || "Hồ sơ lưu trữ trong nhóm ứng viên tiềm năng.",
+                notes: m.notes || "Lưu trữ từ Talent Pool",
+                notesUpdatedBy: recruiterName,
+                notesUpdatedAt: "Gần đây",
+                skills: ["Chuyên môn"],
+                source: "Website",
+                status: "POTENTIAL",
+                group: p.name,
+                tags: [p.name],
+                isFavorite: true,
+                addedDate: "Hôm nay",
+                addedTimeAgo: "Gần đây",
+                cvName: "HoSo_UngVien.pdf",
+                cvSize: "PDF • Đầy đủ",
+              });
+            }
+          });
+        }
+      });
+
+      const apps = appsRes?.data?.applications || [];
+      apps.forEach((a: any) => {
+        const cId = `app-${a.id}`;
+        if (!seenIds.has(cId)) {
+          seenIds.add(cId);
+          const cand = a.candidate || {};
+          let candStatus: TalentPoolStatus = "TRACKING";
+          if (a.status === "hired") candStatus = "POTENTIAL";
+          else if (a.status === "interview") candStatus = "CONTACTED";
+          else if (a.status === "rejected") candStatus = "ARCHIVED";
+
+          mappedList.push({
+            id: cId,
+            name: cand.full_name || "Ứng viên",
+            avatar: cand.avatar_url || "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
+            email: cand.email || "",
+            phone: cand.phone || "",
+            desiredPosition: a.job?.title || cand.headline || "Vị trí tuyển dụng",
+            experienceYears: 2,
+            expectedSalary: "Thỏa thuận",
+            workingMode: "Toàn thời gian",
+            location: "Việt Nam",
+            bio: a.cover_letter || cand.headline || "",
+            notes: `Hồ sơ ứng tuyển vị trí ${a.job?.title || ""}`,
+            notesUpdatedBy: recruiterName,
+            notesUpdatedAt: a.applied_at ? new Date(a.applied_at).toLocaleDateString("vi-VN") : "Gần đây",
+            skills: ["Chuyên môn"],
+            source: "Website",
+            status: candStatus,
+            group: pools.length > 0 ? pools[0].name : "Chung",
+            tags: [a.job?.title || "Tuyển dụng"],
+            isFavorite: false,
+            addedDate: a.applied_at ? new Date(a.applied_at).toLocaleDateString("vi-VN") : "Gần đây",
+            addedTimeAgo: "Đã nộp",
+            cvName: a.cv?.title || "CV_UngVien.pdf",
+            cvSize: "PDF • Trực tuyến",
+          });
+        }
+      });
+
+      setCandidates(mappedList);
+      if (mappedList.length > 0) {
+        setExpandedCandidateId(mappedList[0].id);
+      }
+    } catch (err: any) {
+      console.error("Lỗi nạp talent pools:", err);
+      setError(err?.message || "Không thể tải danh sách Talent Pool từ máy chủ.");
+    } finally {
+      setLoading(false);
+    }
+  }, [recruiterName]);
+
+  useEffect(() => {
+    fetchData();
+  }, [fetchData]);
+
+  const handleCreateGroup = async () => {
+    if (!newGroupName.trim()) {
+      message.error("Vui lòng nhập tên nhóm Talent Pool!");
+      return;
+    }
+    setIsCreatingGroup(true);
+    try {
+      await employerService.createTalentPool({
+        name: newGroupName.trim(),
+        description: newGroupDesc.trim(),
+      });
+      message.success(`Đã tạo nhóm "${newGroupName}" thành công!`);
+      setNewGroupName("");
+      setNewGroupDesc("");
+      setIsCreateGroupModalOpen(false);
+      fetchData();
+    } catch (err: any) {
+      message.error(err?.response?.data?.message || "Không thể tạo nhóm mới.");
+    } finally {
+      setIsCreatingGroup(false);
+    }
+  };
 
   // Toggle Favorite
   const toggleFavorite = (candidateId: string, e: React.MouseEvent) => {
@@ -460,14 +415,14 @@ function EmployerTalentPoolContent() {
   // Tab count calculations
   const tabCounts = useMemo(() => {
     return {
-      all: 1860, // Matching reference design
-      potential: 421,
-      tracking: 862,
-      contacted: 539,
-      uncontacted: 1021,
-      archived: 186,
+      all: candidates.length,
+      potential: candidates.filter((c) => c.status === "POTENTIAL" || c.isFavorite).length,
+      tracking: candidates.filter((c) => c.status === "TRACKING").length,
+      contacted: candidates.filter((c) => c.status === "CONTACTED").length,
+      uncontacted: candidates.filter((c) => c.status === "UNCONTACTED").length,
+      archived: candidates.filter((c) => c.status === "ARCHIVED").length,
     };
-  }, []);
+  }, [candidates]);
 
   // Filtered dataset
   const filteredCandidates = useMemo(() => {
@@ -643,28 +598,28 @@ function EmployerTalentPoolContent() {
               Tổng ứng viên
             </span>
             <span className="text-xl font-black text-slate-900 block my-1 leading-tight">
-              1,860
+              {tabCounts.all}
             </span>
-            <span className="text-[10px] font-bold text-emerald-600 block leading-none">
-              ↑ 18% <span className="text-slate-400 font-normal">so với tháng trước</span>
+            <span className="text-[10px] font-bold text-slate-400 block leading-none">
+              Kho nhân tài
             </span>
           </div>
         </div>
 
-        {/* Card 2: Ứng viên mới */}
+        {/* Card 2: Chưa liên hệ */}
         <div className="p-3.5 rounded-2xl bg-white border border-[#E2E8F0] shadow-2xs flex items-center gap-3.5 hover:border-emerald-300 transition-all">
-          <div className="w-11 h-11 rounded-2xl bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center justify-center shrink-0 shadow-2xs">
+          <div className="w-11 h-11 rounded-2xl bg-slate-100 text-slate-700 border border-slate-200 flex items-center justify-center shrink-0 shadow-2xs">
             <UserPlus className="w-5 h-5" />
           </div>
           <div className="flex-1 text-center min-w-0 pr-2">
             <span className="text-xs font-semibold text-slate-500 block leading-none">
-              Ứng viên mới
+              Chưa liên hệ
             </span>
             <span className="text-xl font-black text-slate-900 block my-1 leading-tight">
-              248
+              {tabCounts.uncontacted}
             </span>
-            <span className="text-[10px] font-bold text-emerald-600 block leading-none">
-              ↑ 12% <span className="text-slate-400 font-normal">so với tháng trước</span>
+            <span className="text-[10px] font-bold text-slate-400 block leading-none">
+              Hồ sơ mới
             </span>
           </div>
         </div>
@@ -679,10 +634,10 @@ function EmployerTalentPoolContent() {
               Đang theo dõi
             </span>
             <span className="text-xl font-black text-slate-900 block my-1 leading-tight">
-              862
+              {tabCounts.tracking}
             </span>
-            <span className="text-[10px] font-bold text-emerald-600 block leading-none">
-              ↑ 8% <span className="text-slate-400 font-normal">so với tháng trước</span>
+            <span className="text-[10px] font-bold text-blue-600 block leading-none">
+              Đang xem xét
             </span>
           </div>
         </div>
@@ -697,10 +652,10 @@ function EmployerTalentPoolContent() {
               Đã liên hệ
             </span>
             <span className="text-xl font-black text-slate-900 block my-1 leading-tight">
-              539
+              {tabCounts.contacted}
             </span>
             <span className="text-[10px] font-bold text-emerald-600 block leading-none">
-              ↑ 15% <span className="text-slate-400 font-normal">so với tháng trước</span>
+              Đang trao đổi
             </span>
           </div>
         </div>
@@ -715,10 +670,10 @@ function EmployerTalentPoolContent() {
               Tiềm năng cao
             </span>
             <span className="text-xl font-black text-slate-900 block my-1 leading-tight">
-              421
+              {tabCounts.potential}
             </span>
-            <span className="text-[10px] font-bold text-emerald-600 block leading-none">
-              ↑ 22% <span className="text-slate-400 font-normal">so với tháng trước</span>
+            <span className="text-[10px] font-bold text-rose-600 block leading-none">
+              Ưu tiên tuyển
             </span>
           </div>
         </div>
@@ -757,10 +712,7 @@ function EmployerTalentPoolContent() {
                   size="small"
                   options={[
                     { value: "all", label: "Tất cả nhóm" },
-                    { value: "Product", label: "Product & Management" },
-                    { value: "Design", label: "Design & UX/UI" },
-                    { value: "Engineering", label: "Engineering / Dev" },
-                    { value: "Data", label: "Data Analytics" },
+                    ...(talentPools.map((p: any) => ({ value: p.name, label: p.name }))),
                   ]}
                 />
 
@@ -964,7 +916,43 @@ function EmployerTalentPoolContent() {
                 </thead>
 
                 <tbody className="divide-y divide-slate-100 text-xs">
-                  {filteredCandidates.map((candidate) => {
+                  {loading ? (
+                    <tr>
+                      <td colSpan={8} className="py-16 text-center">
+                        <Spin tip="Đang tải danh sách hồ sơ Talent Pool..." />
+                      </td>
+                    </tr>
+                  ) : error ? (
+                    <tr>
+                      <td colSpan={8} className="p-6">
+                        <Alert
+                          type="error"
+                          showIcon
+                          message="Lỗi tải dữ liệu"
+                          description={error}
+                          action={
+                            <button
+                              type="button"
+                              onClick={fetchData}
+                              className="px-3 py-1 bg-rose-600 hover:bg-rose-700 text-white rounded-lg text-xs font-bold transition-all cursor-pointer"
+                            >
+                              Tải lại
+                            </button>
+                          }
+                        />
+                      </td>
+                    </tr>
+                  ) : filteredCandidates.length === 0 ? (
+                    <tr>
+                      <td colSpan={8} className="py-14 text-center">
+                        <Empty
+                          description="Chưa có ứng viên nào trong Talent Pool"
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        />
+                      </td>
+                    </tr>
+                  ) : (
+                    filteredCandidates.map((candidate) => {
                     const isExpanded = expandedCandidateId === candidate.id;
                     const isChecked = selectedIds.includes(candidate.id);
                     const statusInfo = STATUS_CONFIG[candidate.status] || STATUS_CONFIG.TRACKING;
@@ -1344,7 +1332,8 @@ function EmployerTalentPoolContent() {
                         )}
                       </Fragment>
                     );
-                  })}
+                  })
+                )}
                 </tbody>
               </table>
             </div>
@@ -1352,26 +1341,20 @@ function EmployerTalentPoolContent() {
 
             {/* Pagination */}
             <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-500 flex-wrap gap-3">
-              <span>Hiển thị 1 – 10 trong tổng số <strong>1,860</strong> ứng viên</span>
+              <span>
+                Hiển thị {filteredCandidates.length === 0 ? 0 : 1} –{" "}
+                {Math.min(pageSize, filteredCandidates.length)} trong tổng số{" "}
+                <strong>{filteredCandidates.length}</strong> ứng viên
+              </span>
 
               <div className="flex items-center gap-2">
                 <Pagination
-                  defaultCurrent={1}
-                  total={1860}
+                  current={currentPage}
+                  onChange={(p) => setCurrentPage(p)}
+                  total={filteredCandidates.length}
                   pageSize={pageSize}
                   showSizeChanger={false}
                   size="small"
-                />
-
-                <Select
-                  defaultValue="10"
-                  size="small"
-                  className="w-24 text-xs font-semibold"
-                  options={[
-                    { value: "10", label: "10 / trang" },
-                    { value: "20", label: "20 / trang" },
-                    { value: "50", label: "50 / trang" },
-                  ]}
                 />
               </div>
             </div>
@@ -2068,13 +2051,20 @@ function EmployerTalentPoolContent() {
 
           <div>
             <label className="font-semibold text-slate-700 block mb-1">Tên nhóm *</label>
-            <Input placeholder="Ví dụ: Senior Backend Engineers..." className="rounded-xl text-xs" />
+            <Input
+              value={newGroupName}
+              onChange={(e) => setNewGroupName(e.target.value)}
+              placeholder="Ví dụ: Senior Backend Engineers..."
+              className="rounded-xl text-xs"
+            />
           </div>
 
           <div>
             <label className="font-semibold text-slate-700 block mb-1">Mô tả nhóm</label>
             <Input.TextArea
               rows={2}
+              value={newGroupDesc}
+              onChange={(e) => setNewGroupDesc(e.target.value)}
               placeholder="Mô tả tiêu chí tuyển dụng của nhóm này..."
               className="rounded-xl text-xs"
             />
@@ -2090,13 +2080,11 @@ function EmployerTalentPoolContent() {
             </button>
             <button
               type="button"
-              onClick={() => {
-                setIsCreateGroupModalOpen(false);
-                message.success("Đã tạo nhóm Talent Pool mới thành công!");
-              }}
-              className="px-5 py-2 rounded-xl bg-purple-600 text-white font-bold text-xs shadow-md"
+              disabled={isCreatingGroup}
+              onClick={handleCreateGroup}
+              className="px-5 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md transition-all cursor-pointer disabled:opacity-50"
             >
-              Tạo nhóm
+              {isCreatingGroup ? "Đang tạo..." : "Tạo nhóm"}
             </button>
           </div>
         </div>

@@ -1,0 +1,56 @@
+query_id,query,query_type,language,relevance_count,base_top1_chunk,base_top1_score,base_hit@1,base_hit@3,base_hit@5,base_mrr,hybrid_top1_chunk,hybrid_top1_score,hybrid_hit@1,hybrid_hit@3,hybrid_hit@5,hybrid_mrr
+hq_01,Các phông chữ chuẩn quốc tế nào được khuyến nghị sử dụng khi tạo CV trên CAREZA?,direct,vi,1,hdoc_01_c01,0.3089,1.0,1.0,1.0,1.0,hdoc_01_c01,0.6074,1.0,1.0,1.0,1.0
+hq_02,Hệ thống AI Đánh giá CV sẽ gắn cờ cảnh báo nếu khoảng trống sự nghiệp của ứng viên kéo dài bao lâu?,direct,vi,1,hdoc_02_c00,0.3038,1.0,1.0,1.0,1.0,hdoc_02_c00,0.6189,1.0,1.0,1.0,1.0
+hq_03,Ứng viên có thể đồng bộ những trường thông tin nào từ tài khoản mạng nghề nghiệp sang CAREZA?,direct,vi,1,hdoc_03_c00,0.3501,1.0,1.0,1.0,1.0,hdoc_03_c00,0.377,1.0,1.0,1.0,1.0
+hq_04,Thời hạn hoàn thành bài kiểm tra năng lực trực tuyến của ứng viên là bao lâu?,direct,vi,2,hdoc_04_c00,0.4058,1.0,1.0,1.0,1.0,hdoc_04_c00,0.4303,1.0,1.0,1.0,1.0
+hq_05,"Khi nhận được thư mời nhận việc Offer Letter, ứng viên có thời hạn bao nhiêu ngày để phản hồi?",direct,vi,2,hdoc_05_c01,0.2595,1.0,1.0,1.0,1.0,hdoc_05_c01,0.6194,1.0,1.0,1.0,1.0
+hq_06,Thời gian thử việc tiêu chuẩn cho các vị trí kỹ thuật và tỷ lệ lương thử việc tối thiểu là bao nhiêu?,direct,vi,2,hdoc_06_c00,0.2601,1.0,1.0,1.0,1.0,hdoc_06_c00,0.2498,1.0,1.0,1.0,1.0
+hq_07,Những kịch bản tự động kích hoạt gửi email phản hồi ứng viên trên CAREZA gồm những gì?,direct,vi,1,hdoc_07_c00,0.4241,1.0,1.0,1.0,1.0,hdoc_07_c00,0.4403,1.0,1.0,1.0,1.0
+hq_08,Ai có quyền xem và chỉnh sửa các nhãn tùy chỉnh cùng ghi chú nội bộ về ứng viên?,direct,vi,1,hdoc_08_c00,0.3987,1.0,1.0,1.0,1.0,hdoc_08_c00,0.3881,1.0,1.0,1.0,1.0
+hq_09,Thời gian lưu trữ mã hóa lịch sử hội thoại tin nhắn trực tiếp giữa nhà tuyển dụng và ứng viên là bao lâu?,direct,vi,1,hdoc_09_c00,0.4301,1.0,1.0,1.0,1.0,hdoc_09_c00,0.6822,1.0,1.0,1.0,1.0
+hq_10,Chương trình ưu đãi Startup Booster dành cho doanh nghiệp dưới 2 năm thành lập gồm những quyền lợi gì?,direct,vi,1,hdoc_10_c00,0.2323,1.0,1.0,1.0,1.0,hdoc_10_c00,0.2684,1.0,1.0,1.0,1.0
+hq_11,Doanh nghiệp cần cung cấp những thông tin gì để xuất hóa đơn điện tử VAT cho dịch vụ tuyển dụng?,direct,vi,1,hdoc_11_c00,0.3896,1.0,1.0,1.0,1.0,hdoc_11_c00,0.4068,1.0,1.0,1.0,1.0
+hq_12,Những hành vi quấy rối và phân biệt đối xử nào bị nghiêm cấm trong các buổi phỏng vấn tuyển dụng?,direct,vi,1,hdoc_12_c00,0.2243,1.0,1.0,1.0,1.0,hdoc_12_c00,0.5978,1.0,1.0,1.0,1.0
+hq_13,Đường link đặt lại mật khẩu gửi về email của người dùng có hiệu lực trong vòng bao nhiêu phút?,direct,vi,1,hdoc_13_c00,0.3586,1.0,1.0,1.0,1.0,hdoc_13_c00,0.3348,1.0,1.0,1.0,1.0
+hq_14,Tốc độ đường truyền Internet tối thiểu yêu cầu cho phòng phỏng vấn trực tuyến là bao nhiêu?,direct,vi,1,hdoc_14_c00,0.2201,1.0,1.0,1.0,1.0,hdoc_14_c00,0.2709,1.0,1.0,1.0,1.0
+hq_15,Những lý do hợp lý nào có thể dùng để giải trình khoảng trống sự nghiệp trên CV?,direct,vi,1,hdoc_02_c00,0.1794,0.0,1.0,1.0,0.5,hdoc_02_c00,0.5901,0.0,1.0,1.0,0.5
+hq_16,Các thẻ biến động nào được hỗ trợ để cá nhân hóa email tự động gửi ứng viên?,direct,vi,1,hdoc_07_c01,0.3122,1.0,1.0,1.0,1.0,hdoc_07_c00,0.3321,0.0,1.0,1.0,0.5
+hq_17,Ứng viên có xem được các nhãn tùy chỉnh và ghi chú nội bộ mà nhân sự đã viết về mình không?,direct,vi,1,hdoc_08_c00,0.3751,1.0,1.0,1.0,1.0,hdoc_08_c00,0.432,1.0,1.0,1.0,1.0
+hq_18,Thời gian gửi hóa đơn giá trị gia tăng điện tử về email của doanh nghiệp sau khi thanh toán là bao lâu?,direct,vi,2,hdoc_11_c00,0.2676,1.0,1.0,1.0,1.0,hdoc_11_c00,0.303,1.0,1.0,1.0,1.0
+hq_19,Nếu người dùng mất thiết bị tạo mã OTP thì sử dụng phương thức nào để khôi phục quyền truy cập?,direct,vi,1,hdoc_13_c01,0.3199,1.0,1.0,1.0,1.0,hdoc_13_c01,0.6138,1.0,1.0,1.0,1.0
+hq_20,Các bước xử lý nhanh khi gặp sự cố gián đoạn hình ảnh hoặc mất tiếng trong buổi phỏng vấn online là gì?,direct,vi,2,hdoc_14_c00,0.222,1.0,1.0,1.0,1.0,hdoc_14_c00,0.2328,1.0,1.0,1.0,1.0
+hq_21,Quy định font chữ tiêu chuẩn cho tệp sơ yếu lý lịch định dạng PDF là gì?,synonym_acronym,vi,2,hdoc_01_c00,0.2192,1.0,1.0,1.0,1.0,hdoc_01_c00,0.5989,1.0,1.0,1.0,1.0
+hq_22,Bot AI quét hồ sơ sẽ cảnh báo thời gian gián đoạn công việc nếu nghỉ việc ngắt quãng mấy tháng?,synonym_acronym,vi,1,hdoc_02_c00,0.1132,1.0,1.0,1.0,1.0,,0.0,0.0,0.0,0.0,0.0
+hq_23,Làm bài test đánh giá năng lực Coding Challenge của HR thì được chuyển tab mấy lần?,synonym_acronym,vi,2,hdoc_04_c00,0.1747,1.0,1.0,1.0,1.0,hdoc_04_c00,0.1715,1.0,1.0,1.0,1.0
+hq_24,Nhận được offer việc làm thì có nút Accept Offer hay xin deal lại mức lương trong mấy ngày?,synonym_acronym,vi,1,hdoc_05_c01,0.183,1.0,1.0,1.0,1.0,,0.0,0.0,0.0,0.0,0.0
+hq_25,Giai đoạn thử việc theo quy trình onboarding nhân sự mới kéo dài mấy tháng?,synonym_acronym,vi,2,hdoc_06_c00,0.1709,1.0,1.0,1.0,1.0,,0.0,0.0,0.0,0.0,0.0
+hq_26,Thiết lập email template tự động phản hồi cho ứng viên nộp hồ sơ ở đâu?,synonym_acronym,vi,1,hdoc_07_c00,0.377,1.0,1.0,1.0,1.0,hdoc_07_c00,0.3726,1.0,1.0,1.0,1.0
+hq_27,Gán tag phân loại và ghi note ứng viên trong đội ngũ HR thế nào?,synonym_acronym,vi,1,hdoc_08_c00,0.1585,1.0,1.0,1.0,1.0,,0.0,0.0,0.0,0.0,0.0
+hq_28,Lịch sử log chat giữa headhunter và ứng viên được backup lưu lại trong thời gian bao lâu?,synonym_acronym,vi,1,hdoc_03_c00,0.132,0.0,0.0,1.0,0.25,,0.0,0.0,0.0,0.0,0.0
+hq_29,Startup mới thành lập được tặng trial gói subscription Pro bao nhiêu tháng?,synonym_acronym,vi,1,hdoc_10_c00,0.1707,1.0,1.0,1.0,1.0,hdoc_10_c00,0.5288,1.0,1.0,1.0,1.0
+hq_30,Xuất hóa đơn đỏ điện tử e-Invoice VAT cho đơn hàng dịch vụ tuyển dụng mất mấy ngày?,synonym_acronym,vi,2,hdoc_11_c00,0.2796,1.0,1.0,1.0,1.0,hdoc_11_c00,0.3218,1.0,1.0,1.0,1.0
+hq_31,Quên password đăng nhập thì nhận link reset mật khẩu qua hòm thư điện tử có hạn mấy phút?,synonym_acronym,vi,1,hdoc_13_c00,0.2579,1.0,1.0,1.0,1.0,hdoc_13_c00,0.2229,1.0,1.0,1.0,1.0
+hq_32,Phòng video call phỏng vấn online yêu cầu băng thông mạng internet tối thiểu mấy megabit?,synonym_acronym,vi,2,hdoc_14_c00,0.1241,1.0,1.0,1.0,1.0,,0.0,0.0,0.0,0.0,0.0
+hq_33,Làm thế nào để xuất file lý lịch vừa đẹp mắt vừa nhẹ mà không bị vỡ giao diện trên máy khác?,indirect,vi,1,hdoc_01_c00,0.1528,1.0,1.0,1.0,1.0,,0.0,0.0,0.0,0.0,0.0
+hq_34,Tôi từng nghỉ việc ở nhà chăm con gần một năm thì điền vào hồ sơ xin việc thế nào cho khéo?,indirect,vi,2,hdoc_03_c00,0.0994,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0
+hq_35,Tôi không muốn mất công gõ lại từng dự án kinh nghiệm từ đầu trên web thì có cách nào nhập nhanh không?,indirect,vi,1,hdoc_03_c00,0.0995,1.0,1.0,1.0,1.0,,0.0,0.0,0.0,0.0,0.0
+hq_36,Đang làm bài kiểm tra năng lực mà lỡ tay bấm nhầm sang cửa sổ khác thì bài thi có bị hủy không?,indirect,vi,1,hdoc_04_c00,0.2169,0.0,1.0,1.0,0.5,hdoc_04_c00,0.2324,0.0,0.0,0.0,0.0
+hq_37,Nếu mức lương trong thư mời nhận việc thấp hơn kỳ vọng của tôi thì tôi có thể xin đàm phán lại không?,indirect,vi,2,hdoc_05_c00,0.1452,1.0,1.0,1.0,1.0,hdoc_05_c00,0.5735,1.0,1.0,1.0,1.0
+hq_38,Công ty tuyển được người mới thì cần chuẩn bị những thủ tục và hồ sơ gì trước ngày đi làm đầu tiên?,indirect,vi,1,hdoc_06_c01,0.2085,1.0,1.0,1.0,1.0,,0.0,0.0,0.0,0.0,0.0
+hq_39,Tôi muốn mỗi khi từ chối hồ sơ ứng viên thì hệ thống tự gửi thư cảm ơn lịch sự thì cài đặt thế nào?,indirect,vi,1,hdoc_07_c00,0.2986,1.0,1.0,1.0,1.0,hdoc_07_c00,0.4801,1.0,1.0,1.0,1.0
+hq_40,Người phỏng vấn có thể ghi chú đánh giá ứng viên mà không sợ ứng viên đọc trộm được ở đâu?,indirect,vi,1,hdoc_08_c00,0.2903,1.0,1.0,1.0,1.0,hdoc_08_c00,0.2783,1.0,1.0,1.0,1.0
+hq_41,Nếu người phỏng vấn cố tình hỏi chuyện riêng tư về kế hoạch kết hôn sinh con thì ứng viên làm gì?,indirect,vi,2,hdoc_04_c01,0.1515,0.0,0.0,1.0,0.25,,0.0,0.0,0.0,0.0,0.0
+hq_42,Đang phỏng vấn trực tiếp mà bỗng dưng mic bị rè hoặc không nghe thấy tiếng đối phương thì làm sao?,indirect,vi,2,hdoc_01_c00,0.1356,0.0,1.0,1.0,0.5,,0.0,0.0,0.0,0.0,0.0
+hq_43,What are the recommended standard fonts and size for resume documents on CAREZA?,english,vi,1,,0.0,0.0,0.0,0.0,0.0,hdoc_03_c00,0.4637,0.0,0.0,1.0,0.25
+hq_44,How many days does an applicant have to respond to an official Offer Letter on the platform?,english,vi,2,hdoc_13_c00,0.0536,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0
+hq_45,What are the benefits offered to tech startups in the Startup Booster trial program?,english,vi,1,,0.0,0.0,0.0,0.0,0.0,hdoc_05_c00,0.4601,0.0,0.0,0.0,0.0
+hq_46,What information is required from a business to issue a valid VAT electronic invoice?,english,vi,1,,0.0,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0
+hq_47,How long is the password reset link valid after being sent to the user email address?,english,vi,1,,0.0,0.0,0.0,0.0,0.0,,0.0,0.0,0.0,0.0,0.0
+hq_48,What are the minimum internet bandwidth requirements and browser recommendations for online video interviews?,english,vi,1,,0.0,0.0,0.0,0.0,0.0,hdoc_05_c00,0.45,0.0,0.0,0.0,0.0
+hq_49,Hồ sơ hưởng trợ cấp bảo hiểm thất nghiệp tại trung tâm dịch vụ việc làm gồm những giấy tờ gì?,unanswerable,vi,0,hdoc_06_c01,0.1605,N/A,N/A,N/A,N/A,,0.0,N/A,N/A,N/A,N/A
+hq_50,Quy trình nộp hồ sơ thi tuyển công chức nhà nước ngạch chuyên viên năm nay quy định ra sao?,unanswerable,vi,0,hdoc_05_c00,0.1476,N/A,N/A,N/A,N/A,,0.0,N/A,N/A,N/A,N/A
+hq_51,Cách kết nối máy chấm công vân tay Ronald Jack qua mạng LAN vào phần mềm máy chủ?,unanswerable,vi,0,hdoc_03_c00,0.0771,N/A,N/A,N/A,N/A,,0.0,N/A,N/A,N/A,N/A
+hq_52,CAREZA có hỗ trợ dịch vụ đóng hộ bảo hiểm y tế tự nguyện cho cá nhân tự do không?,unanswerable,vi,0,hdoc_01_c00,0.089,N/A,N/A,N/A,N/A,,0.0,N/A,N/A,N/A,N/A
+hq_53,Thủ tục xin cấp giấy phép lao động work permit cho chuyên gia nước ngoài tại Sở LĐTBXH?,unanswerable,vi,0,hdoc_11_c00,0.1059,N/A,N/A,N/A,N/A,,0.0,N/A,N/A,N/A,N/A
+hq_54,What is the capital gains tax rate applied to cryptocurrency trading in Vietnam?,unanswerable,vi,0,,0.0,N/A,N/A,N/A,N/A,hdoc_05_c00,0.45,N/A,N/A,N/A,N/A
+hq_55,What are the financial proof requirements when applying for an Australian subclass 500 student visa?,unanswerable,vi,0,,0.0,N/A,N/A,N/A,N/A,,0.0,N/A,N/A,N/A,N/A

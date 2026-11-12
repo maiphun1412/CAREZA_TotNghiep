@@ -1,0 +1,54 @@
+{
+  "metadata": {
+    "benchmark_name": "CAREZA Independent Holdout AI Mock Interview Benchmark Dataset V1",
+    "version": "1.0.0",
+    "generator_service": "MockInterviewService.generate_interview_questions",
+    "rubric_code": "rubric_interview_standard",
+    "criteria_weights": {
+      "relevance": 0.35,
+      "technical_depth": 0.35,
+      "structure_clarity": 0.15,
+      "practical_experience": 0.15
+    },
+    "total_scenarios": 12,
+    "total_questions": 60,
+    "total_answers": 240,
+    "total_positions": 4,
+    "total_levels": 3,
+    "ground_truth_note": "Nhãn tham chiếu là dữ liệu tổng hợp độc lập dựa trên Rubric 4 tiêu chí chuẩn hóa, hoàn toàn chưa được chuyên gia độc lập xác nhận."
+  },
+  "distribution": {
+    "by_position": {
+      "Backend Java/Spring Boot": 3,
+      "Data Engineer (Big Data & ETL)": 3,
+      "AI/ML Engineer (MLOps & Deep Learning)": 3,
+      "DevSecOps & Cloud Security": 3
+    },
+    "by_level": {
+      "junior": 4,
+      "middle": 4,
+      "senior": 4
+    },
+    "by_category": {
+      "introductory": 12,
+      "technical_core": 12,
+      "architecture_database": 12,
+      "problem_solving": 12,
+      "behavioral_teamwork": 12
+    },
+    "by_response_type": {
+      "good": 60,
+      "average": 60,
+      "poor": 60,
+      "adversarial": 60
+    },
+    "adversarial_subtypes": {
+      "keyword_stuffing": 10,
+      "synonym_match": 10,
+      "indirect_negation": 10,
+      "partial_parrot": 10,
+      "long_hallucination": 10,
+      "short_correct": 10
+    }
+  }
+}

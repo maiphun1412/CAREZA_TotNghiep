@@ -1,7 +1,8 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { employerService } from "@/services/employer.service";
 import {
   Modal,
   Select,
@@ -13,6 +14,9 @@ import {
   App,
   Pagination,
   Popover,
+  Spin,
+  Alert,
+  Empty,
 } from "antd";
 import {
   History,
@@ -87,201 +91,7 @@ export interface LogItem {
 // INITIAL DATA
 // =====================================================================
 
-const INITIAL_LOGS: LogItem[] = [
-  // Group: Hôm nay - 31/05/2024
-  {
-    id: "log-1",
-    time: "10:30 AM",
-    dateGroup: "Hôm nay - 31/05/2024",
-    dateKey: "2024-05-31",
-    actor: {
-      name: "Mai Phương",
-      role: "Owner",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80",
-      email: "phuong.mai@google.com",
-    },
-    action: "Cập nhật thông tin công ty",
-    target: "Google Vietnam",
-    type: "update",
-    ip: "203.113.45.67",
-    device: "Chrome • MacOS",
-    isMine: true,
-    diff: [
-      { field: "Slogan", before: "Connecting the world", after: "Building products that help billions of people" },
-      { field: "Địa chỉ", before: "Cầu Giấy, Hà Nội", after: "Hà Nội, Việt Nam" },
-    ],
-  },
-  {
-    id: "log-2",
-    time: "09:15 AM",
-    dateGroup: "Hôm nay - 31/05/2024",
-    dateKey: "2024-05-31",
-    actor: {
-      name: "Trần Minh Quân",
-      role: "Admin",
-      avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80",
-      email: "quan.tran@google.com",
-    },
-    action: "Thêm thành viên mới",
-    target: "Nguyễn Thị Thanh Hương",
-    type: "member",
-    ip: "203.113.45.68",
-    device: "Chrome • Windows",
-    isImportant: true,
-    diff: [
-      { field: "Vai trò", before: "Chưa kích hoạt", after: "Admin (Phòng Tuyển dụng)" },
-    ],
-  },
-  {
-    id: "log-3",
-    time: "08:45 AM",
-    dateGroup: "Hôm nay - 31/05/2024",
-    dateKey: "2024-05-31",
-    actor: {
-      name: "Nguyễn Thanh Hương",
-      role: "Admin",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80",
-      email: "huong.nguyen@google.com",
-    },
-    action: "Đăng tin tuyển dụng mới",
-    target: "Senior Product Manager",
-    type: "job",
-    ip: "203.113.45.69",
-    device: "Chrome • MacOS",
-    diff: [
-      { field: "Trạng thái", before: "Bản nháp", after: "Đang tuyển dụng (Công khai)" },
-    ],
-  },
-  {
-    id: "log-4",
-    time: "08:20 AM",
-    dateGroup: "Hôm nay - 31/05/2024",
-    dateKey: "2024-05-31",
-    actor: {
-      name: "Lê Hoàng Nam",
-      role: "Recruiter",
-      avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80",
-      email: "nam.le@google.com",
-    },
-    action: "Cập nhật ứng viên",
-    target: "Trần Văn A",
-    type: "candidate",
-    ip: "203.113.45.70",
-    device: "Chrome • Windows",
-    diff: [
-      { field: "Vòng tuyển dụng", before: "Sàng lọc CV", after: "Phỏng vấn kỹ thuật" },
-    ],
-  },
-
-  // Group: Hôm qua - 30/05/2024
-  {
-    id: "log-5",
-    time: "04:30 PM",
-    dateGroup: "Hôm qua - 30/05/2024",
-    dateKey: "2024-05-30",
-    actor: {
-      name: "Phạm Anh Dương",
-      role: "Recruiter",
-      avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80",
-      email: "duong.pham@google.com",
-    },
-    action: "Gửi email cho ứng viên",
-    target: "Nguyễn Văn B",
-    type: "email",
-    ip: "203.113.45.71",
-    device: "Chrome • MacOS",
-  },
-  {
-    id: "log-6",
-    time: "02:15 PM",
-    dateGroup: "Hôm qua - 30/05/2024",
-    dateKey: "2024-05-30",
-    actor: {
-      name: "Vũ Quốc Bảo",
-      role: "Viewer",
-      avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=120&q=80",
-      email: "bao.vu@google.com",
-    },
-    action: "Xem báo cáo tuyển dụng",
-    target: "Báo cáo tháng 05/2024",
-    type: "report",
-    ip: "203.113.45.72",
-    device: "Safari • MacOS",
-  },
-  {
-    id: "log-7",
-    time: "11:00 AM",
-    dateGroup: "Hôm qua - 30/05/2024",
-    dateKey: "2024-05-30",
-    actor: {
-      name: "Mai Phương",
-      role: "Owner",
-      avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80",
-      email: "phuong.mai@google.com",
-    },
-    action: "Thay đổi gói dịch vụ",
-    target: "Premium",
-    type: "payment",
-    ip: "203.113.45.67",
-    device: "Chrome • MacOS",
-    isImportant: true,
-    isMine: true,
-    diff: [
-      { field: "Gói dịch vụ", before: "Professional (3.490.000đ)", after: "Premium (6.990.000đ)" },
-    ],
-  },
-
-  // Group: 29/05/2024
-  {
-    id: "log-8",
-    time: "03:45 PM",
-    dateGroup: "29/05/2024",
-    dateKey: "2024-05-29",
-    actor: {
-      name: "Đặng Minh Anh",
-      role: "Admin",
-      avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=120&q=80",
-      email: "anh.dang@google.com",
-    },
-    action: "Xóa tin tuyển dụng",
-    target: "UI/UX Designer",
-    type: "job",
-    ip: "203.113.45.68",
-    device: "Chrome • Windows",
-    isImportant: true,
-  },
-  {
-    id: "log-9",
-    time: "10:30 AM",
-    dateGroup: "29/05/2024",
-    dateKey: "2024-05-29",
-    actor: {
-      name: "Nguyễn Thanh Hương",
-      role: "Admin",
-      avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80",
-      email: "huong.nguyen@google.com",
-    },
-    action: "Đánh giá ứng viên",
-    target: "Lê Văn C",
-    type: "candidate",
-    ip: "203.113.45.69",
-    device: "Chrome • MacOS",
-  },
-];
-
-const TOP_MEMBERS = [
-  { name: "Mai Phương", role: "Owner", avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80", count: 245 },
-  { name: "Nguyễn Thanh Hương", role: "Admin", avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=120&q=80", count: 189 },
-  { name: "Trần Minh Quân", role: "Admin", avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=120&q=80", count: 156 },
-  { name: "Phạm Anh Dương", role: "Recruiter", avatar: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?auto=format&fit=crop&w=120&q=80", count: 134 },
-  { name: "Lê Hoàng Nam", role: "Recruiter", avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=120&q=80", count: 98 },
-];
-
-const IMPORTANT_EVENTS = [
-  { title: "Thay đổi gói dịch vụ", actor: "Mai Phương", time: "31/05/2024 08:20", icon: CreditCard, color: "text-amber-600 bg-amber-50" },
-  { title: "Thêm thành viên mới", actor: "Trần Minh Quân", time: "31/05/2024 09:15", icon: Users, color: "text-emerald-600 bg-emerald-50" },
-  { title: "Xóa tin tuyển dụng", actor: "Đặng Minh Anh", time: "29/05/2024 15:45", icon: Trash2, color: "text-purple-600 bg-purple-50" },
-];
+const INITIAL_LOGS: LogItem[] = [];
 
 // =====================================================================
 // MAIN COMPONENT
@@ -292,6 +102,10 @@ export default function EmployerAuditLogPage() {
   const { user } = useAuthStore();
 
   // State
+  const [logs, setLogs] = useState<LogItem[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
   const [activeTab, setActiveTab] = useState<"all" | "mine" | "important">("all");
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedMember, setSelectedMember] = useState<string>("all");
@@ -303,9 +117,110 @@ export default function EmployerAuditLogPage() {
   const [selectedLog, setSelectedLog] = useState<LogItem | null>(null);
   const [isDetailModalOpen, setIsDetailModalOpen] = useState(false);
 
+  const fetchLogs = useCallback(async () => {
+    setLoading(true);
+    setError(null);
+    try {
+      const res = await employerService.getActivities();
+      const rawList = res?.data?.activities || [];
+      const mapped: LogItem[] = rawList.map((l: any) => {
+        const dt = l.created_at ? new Date(l.created_at) : new Date();
+        const dateStr = dt.toLocaleDateString("vi-VN");
+        const isToday = new Date().toLocaleDateString("vi-VN") === dateStr;
+        const dateGroup = isToday ? `Hôm nay - ${dateStr}` : dateStr;
+
+        let actType: ActivityType = "other";
+        if (l.entity_type === "job") actType = "job";
+        else if (l.entity_type === "application" || l.entity_type === "candidate") actType = "candidate";
+        else if (l.entity_type === "company") actType = "update";
+        else if (l.entity_type === "member") actType = "member";
+        else if (l.entity_type === "payment" || l.entity_type === "order") actType = "payment";
+
+        const actName = l.action || "Thực hiện thao tác";
+        const isImportant =
+          actName.toLowerCase().includes("xóa") ||
+          actName.toLowerCase().includes("gói") ||
+          actName.toLowerCase().includes("quyền") ||
+          actName.toLowerCase().includes("thành viên");
+
+        return {
+          id: String(l.id),
+          time: dt.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+          dateGroup,
+          dateKey: dt.toISOString().split("T")[0],
+          actor: {
+            name: l.actor_name || "Thành viên",
+            role: "Admin",
+            avatar: l.actor_avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=120&q=80",
+            email: l.actor_email || "",
+          },
+          action: actName,
+          target: l.entity_type ? `${l.entity_type} #${l.entity_id || ""}` : "Hệ thống",
+          type: actType,
+          ip: "127.0.0.1",
+          device: "Careza Web",
+          isImportant,
+          isMine: l.actor_id === user?.id,
+          diff: l.changes && Object.keys(l.changes).length > 0
+            ? Object.entries(l.changes).map(([k, v]: any) => ({
+                field: k,
+                before: String(v?.before ?? "—"),
+                after: String(v?.after ?? v ?? "—"),
+              }))
+            : undefined,
+        };
+      });
+      setLogs(mapped);
+    } catch (err: any) {
+      console.error("Lỗi nạp nhật ký hoạt động:", err);
+      setError(err?.message || "Không thể tải nhật ký hoạt động từ máy chủ.");
+    } finally {
+      setLoading(false);
+    }
+  }, [user]);
+
+  useEffect(() => {
+    fetchLogs();
+  }, [fetchLogs]);
+
+  // Top members tính động từ logs
+  const topMembers = useMemo(() => {
+    const memberCounts: { [name: string]: { count: number; avatar: string; email: string } } = {};
+    logs.forEach((l) => {
+      const n = l.actor.name;
+      if (!memberCounts[n]) {
+        memberCounts[n] = { count: 0, avatar: l.actor.avatar, email: l.actor.email };
+      }
+      memberCounts[n].count += 1;
+    });
+    return Object.entries(memberCounts)
+      .map(([name, d]) => ({
+        name,
+        role: "Thành viên",
+        avatar: d.avatar,
+        count: d.count,
+      }))
+      .sort((a, b) => b.count - a.count)
+      .slice(0, 5);
+  }, [logs]);
+
+  // Sự kiện quan trọng tính từ logs
+  const importantEvents = useMemo(() => {
+    return logs
+      .filter((l) => l.isImportant)
+      .slice(0, 4)
+      .map((l) => ({
+        title: l.action,
+        actor: l.actor.name,
+        time: `${l.dateKey} ${l.time}`,
+        icon: History,
+        color: "text-blue-600 bg-blue-50",
+      }));
+  }, [logs]);
+
   // Filtered Logs
   const filteredLogs = useMemo(() => {
-    return INITIAL_LOGS.filter((log) => {
+    return logs.filter((log) => {
       // Tab filter
       if (activeTab === "mine" && !log.isMine) return false;
       if (activeTab === "important" && !log.isImportant) return false;
@@ -600,13 +515,39 @@ export default function EmployerAuditLogPage() {
                 </thead>
 
                 <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                  {Object.keys(groupedLogs).length === 0 ? (
+                  {loading ? (
                     <tr>
                       <td colSpan={7} className="py-12 text-center text-slate-400">
-                        <div className="space-y-2">
-                          <History className="w-8 h-8 text-slate-300 mx-auto" />
-                          <span className="font-bold text-xs block">Không tìm thấy hoạt động nào phù hợp</span>
-                        </div>
+                        <Spin tip="Đang tải nhật ký hoạt động..." />
+                      </td>
+                    </tr>
+                  ) : error ? (
+                    <tr>
+                      <td colSpan={7} className="p-4">
+                        <Alert
+                          type="error"
+                          showIcon
+                          message="Lỗi tải nhật ký"
+                          description={error}
+                          action={
+                            <button
+                              type="button"
+                              onClick={fetchLogs}
+                              className="px-3 py-1 bg-rose-600 text-white font-bold rounded-lg text-xs"
+                            >
+                              Tải lại
+                            </button>
+                          }
+                        />
+                      </td>
+                    </tr>
+                  ) : Object.keys(groupedLogs).length === 0 ? (
+                    <tr>
+                      <td colSpan={7} className="py-12 text-center text-slate-400">
+                        <Empty
+                          description="Chưa có hoạt động nào được ghi nhận"
+                          image={Empty.PRESENTED_IMAGE_SIMPLE}
+                        />
                       </td>
                     </tr>
                   ) : (
@@ -722,14 +663,14 @@ export default function EmployerAuditLogPage() {
             {/* Pagination Footer */}
             <div className="p-4 border-t border-slate-100 flex flex-col sm:flex-row sm:items-center justify-between gap-3 text-xs">
               <span className="text-slate-500 font-medium">
-                Hiển thị 1 - {filteredLogs.length} trong {INITIAL_LOGS.length * 138} hoạt động
+                Hiển thị {filteredLogs.length > 0 ? `1 - ${filteredLogs.length}` : 0} trong {logs.length} hoạt động
               </span>
 
               <div className="flex items-center gap-2">
                 <Pagination
                   current={currentPage}
                   onChange={(page) => setCurrentPage(page)}
-                  total={1248}
+                  total={logs.length}
                   pageSize={pageSize}
                   showSizeChanger={false}
                   size="small"
@@ -850,23 +791,27 @@ export default function EmployerAuditLogPage() {
             </div>
 
             <div className="space-y-2.5 text-xs">
-              {TOP_MEMBERS.map((m, idx) => (
-                <div key={idx} className="flex items-center justify-between">
-                  <div className="flex items-center gap-2 min-w-0">
-                    <img src={m.avatar} alt={m.name} className="w-7 h-7 rounded-full object-cover shrink-0" />
-                    <div className="min-w-0">
-                      <div className="flex items-center gap-1">
-                        <span className="font-bold text-slate-900 text-xs block truncate">{m.name}</span>
-                        {getRoleTag(m.role)}
+              {topMembers.length === 0 ? (
+                <div className="py-4 text-center text-slate-400 text-xs">Chưa có dữ liệu thành viên</div>
+              ) : (
+                topMembers.map((m: any, idx: number) => (
+                  <div key={idx} className="flex items-center justify-between">
+                    <div className="flex items-center gap-2 min-w-0">
+                      <img src={m.avatar} alt={m.name} className="w-7 h-7 rounded-full object-cover shrink-0" />
+                      <div className="min-w-0">
+                        <div className="flex items-center gap-1">
+                          <span className="font-bold text-slate-900 text-xs block truncate">{m.name}</span>
+                          {getRoleTag(m.role)}
+                        </div>
                       </div>
                     </div>
-                  </div>
 
-                  <span className="font-bold text-slate-500 text-[11px] shrink-0">
-                    {m.count} hoạt động
-                  </span>
-                </div>
-              ))}
+                    <span className="font-bold text-slate-500 text-[11px] shrink-0">
+                      {m.count} hoạt động
+                    </span>
+                  </div>
+                ))
+              )}
             </div>
 
             <button
@@ -887,24 +832,28 @@ export default function EmployerAuditLogPage() {
             </div>
 
             <div className="space-y-2.5 text-xs">
-              {IMPORTANT_EVENTS.map((evt, idx) => {
-                const IconComponent = evt.icon;
-                return (
-                  <div key={idx} className="flex items-start gap-2.5 p-2 bg-slate-50 hover:bg-blue-50/50 rounded-xl transition-colors cursor-pointer">
-                    <div className={`w-7 h-7 rounded-lg ${evt.color} flex items-center justify-center shrink-0 mt-0.5`}>
-                      <IconComponent className="w-3.5 h-3.5" />
+              {importantEvents.length === 0 ? (
+                <div className="py-4 text-center text-slate-400 text-xs">Chưa có sự kiện quan trọng</div>
+              ) : (
+                importantEvents.map((evt: any, idx: number) => {
+                  const IconComponent = evt.icon;
+                  return (
+                    <div key={idx} className="flex items-start gap-2.5 p-2 bg-slate-50 hover:bg-blue-50/50 rounded-xl transition-colors cursor-pointer">
+                      <div className={`w-7 h-7 rounded-lg ${evt.color} flex items-center justify-center shrink-0 mt-0.5`}>
+                        <IconComponent className="w-3.5 h-3.5" />
+                      </div>
+                      <div className="min-w-0 flex-1">
+                        <span className="font-bold text-slate-900 block text-xs truncate">
+                          {evt.title}
+                        </span>
+                        <span className="text-[10.5px] text-slate-400 font-medium block mt-0.5">
+                          {evt.actor} • {evt.time}
+                        </span>
+                      </div>
                     </div>
-                    <div className="min-w-0 flex-1">
-                      <span className="font-bold text-slate-900 block text-xs truncate">
-                        {evt.title}
-                      </span>
-                      <span className="text-[10.5px] text-slate-400 font-medium block mt-0.5">
-                        {evt.actor} • {evt.time}
-                      </span>
-                    </div>
-                  </div>
-                );
-              })}
+                  );
+                })
+              )}
             </div>
 
             <button

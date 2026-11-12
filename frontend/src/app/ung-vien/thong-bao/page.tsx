@@ -1,8 +1,10 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect, useCallback } from "react";
 import Link from "next/link";
-import { message, Drawer, Tag, Tooltip, Popconfirm } from "antd";
+import { message, Drawer, Tag, Tooltip, Popconfirm, Spin, Empty } from "antd";
+import { interactionService, NotificationItemApi } from "@/services/interaction.service";
+
 import {
   Bell,
   CheckCheck,
@@ -193,13 +195,70 @@ const INITIAL_NOTIFICATIONS: NotificationItem[] = [
   },
 ];
 
+function mapApiNotification(item: NotificationItemApi): NotificationItem {
+  const typeMap: Record<string, NotificationItem["category"]> = {
+    interview: "interview",
+    job: "job",
+    application: "job",
+    company: "company",
+    profile: "profile",
+    system: "system",
+  };
+  const category = typeMap[item.type] || "system";
+
+  const createdAt = new Date(item.created_at);
+  const now = new Date();
+  const diffDays = Math.floor((now.getTime() - createdAt.getTime()) / (1000 * 3600 * 24));
+  let groupDate: "today" | "yesterday" | "earlier" = "earlier";
+  if (diffDays === 0) groupDate = "today";
+  else if (diffDays === 1) groupDate = "yesterday";
+
+  const timeStr = createdAt.toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" });
+
+  return {
+    id: String(item.id),
+    category,
+    title: item.title,
+    description: item.content,
+    fullContent: item.content,
+    time: timeStr,
+    groupDate,
+    isRead: item.is_read,
+    meta: item.data || {},
+  };
+}
+
 export default function CandidateNotificationsPage() {
-  const [notifications, setNotifications] = useState<NotificationItem[]>(INITIAL_NOTIFICATIONS);
+  const [notifications, setNotifications] = useState<NotificationItem[]>([]);
+  const [isLoading, setIsLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
   const [activeCategory, setActiveCategory] = useState<NotificationCategory>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
-  const [selectedNotifId, setSelectedNotifId] = useState<string>("notif-1");
+  const [selectedNotifId, setSelectedNotifId] = useState<string>("");
   const [isMobileDrawerOpen, setIsMobileDrawerOpen] = useState<boolean>(false);
+
+  const fetchNotifications = useCallback(async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const res = await interactionService.getNotifications();
+      const rawList = res?.notifications || [];
+      const mapped = rawList.map(mapApiNotification);
+      setNotifications(mapped);
+      if (mapped.length > 0 && !selectedNotifId) {
+        setSelectedNotifId(mapped[0].id);
+      }
+    } catch {
+      setError("Không thể tải danh sách thông báo từ hệ thống. Vui lòng thử lại.");
+    } finally {
+      setIsLoading(false);
+    }
+  }, [selectedNotifId]);
+
+  useEffect(() => {
+    fetchNotifications();
+  }, [fetchNotifications]);
 
   // Đếm số lượng theo category
   const categoryCounts = useMemo(() => {
@@ -239,12 +298,18 @@ export default function CandidateNotificationsPage() {
   }, [notifications, selectedNotifId]);
 
   // Handlers
-  const handleSelectNotif = (notif: NotificationItem) => {
+  const handleSelectNotif = async (notif: NotificationItem) => {
     setSelectedNotifId(notif.id);
     if (!notif.isRead) {
-      setNotifications((prev) =>
-        prev.map((item) => (item.id === notif.id ? { ...item, isRead: true } : item))
-      );
+      try {
+        await interactionService.markNotificationRead(Number(notif.id), true);
+        setNotifications((prev) =>
+          prev.map((item) => (item.id === notif.id ? { ...item, isRead: true } : item))
+        );
+        window.dispatchEvent(new Event("notifications_updated"));
+      } catch {
+        // ignore
+      }
     }
     // Mở drawer trên màn hình nhỏ
     if (window.innerWidth < 1024) {
@@ -267,21 +332,49 @@ export default function CandidateNotificationsPage() {
     );
   };
 
-  const handleMarkAsRead = () => {
+  const handleMarkAsRead = async () => {
     if (selectedIds.length === 0) return;
-    setNotifications((prev) =>
-      prev.map((item) => (selectedIds.includes(item.id) ? { ...item, isRead: true } : item))
-    );
-    message.success(`Đã đánh dấu đã đọc ${selectedIds.length} thông báo.`);
-    setSelectedIds([]);
+    try {
+      await Promise.all(
+        selectedIds.map((id) => interactionService.markNotificationRead(Number(id), true))
+      );
+      setNotifications((prev) =>
+        prev.map((item) => (selectedIds.includes(item.id) ? { ...item, isRead: true } : item))
+      );
+      message.success(`Đã đánh dấu đã đọc ${selectedIds.length} thông báo.`);
+      setSelectedIds([]);
+      window.dispatchEvent(new Event("notifications_updated"));
+    } catch {
+      message.error("Lỗi cập nhật trạng thái thông báo.");
+    }
   };
 
-  const handleDeleteSelected = () => {
-    if (selectedIds.length === 0) return;
-    setNotifications((prev) => prev.filter((item) => !selectedIds.includes(item.id)));
-    message.success(`Đã xóa ${selectedIds.length} thông báo.`);
-    setSelectedIds([]);
+  const handleMarkAllAsRead = async () => {
+    try {
+      await interactionService.markAllNotificationsRead();
+      setNotifications((prev) => prev.map((item) => ({ ...item, isRead: true })));
+      message.success("Đã đánh dấu tất cả thông báo là đã đọc.");
+      window.dispatchEvent(new Event("notifications_updated"));
+    } catch {
+      message.error("Thao tác thất bại.");
+    }
   };
+
+  const handleDeleteSelected = async () => {
+    if (selectedIds.length === 0) return;
+    try {
+      await Promise.all(
+        selectedIds.map((id) => interactionService.deleteNotification(Number(id)))
+      );
+      setNotifications((prev) => prev.filter((item) => !selectedIds.includes(item.id)));
+      message.success(`Đã xóa ${selectedIds.length} thông báo.`);
+      setSelectedIds([]);
+      window.dispatchEvent(new Event("notifications_updated"));
+    } catch {
+      message.error("Lỗi khi xóa thông báo.");
+    }
+  };
+
 
   // Helper render icon theo category
   const renderCategoryIcon = (category: NotificationItem["category"]) => {
@@ -439,12 +532,27 @@ export default function CandidateNotificationsPage() {
   };
 
   return (
-    <div className="w-full max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-[38px] pb-12 pt-2 bg-[#F6F9FF] min-h-screen space-y-5">
+    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 pb-12 pt-0 bg-[#F6F9FF] min-h-screen">
       {/* ======================================================== */}
-      {/* 1. HERO BANNER SỬ DỤNG /images/thongbao.png              */}
+      {/* 1. BREADCRUMB NỀN TRANG NGOÀI BANNER                      */}
+      {/* ======================================================== */}
+      <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium pb-2.5 sm:pb-3">
+        <Link href="/" className="hover:text-[#0062ff] transition-colors">
+          Trang chủ
+        </Link>
+        <span className="text-slate-300">/</span>
+        <Link href="/ung-vien/ho-so" className="hover:text-[#0062ff] transition-colors">
+          Ứng viên
+        </Link>
+        <span className="text-slate-300">/</span>
+        <span className="text-slate-800 font-semibold">Thông báo</span>
+      </div>
+
+      {/* ======================================================== */}
+      {/* 2. HERO BANNER SỬ DỤNG /images/thongbao.png (GỌN 90-105px)*/}
       {/* ======================================================== */}
       <div
-        className="relative w-full rounded-[22px] overflow-hidden min-h-[165px] sm:min-h-[185px] border border-blue-200/70 shadow-sm p-5 sm:p-6 lg:p-7 flex flex-col justify-between"
+        className="relative w-full rounded-2xl overflow-hidden h-[96px] md:h-[100px] border border-blue-200/80 shadow-2xs px-4 sm:px-6 md:px-7 flex items-center justify-between mb-4 sm:mb-4.5"
         style={{
           backgroundImage: "url('/images/thongbao.png')",
           backgroundSize: "cover",
@@ -456,40 +564,24 @@ export default function CandidateNotificationsPage() {
         <div className="absolute inset-0 bg-gradient-to-r from-[#0a359c]/95 via-[#0d47a1]/75 to-transparent sm:w-[60%] pointer-events-none" />
 
         {/* Nội dung bên trái Hero */}
-        <div className="relative z-10 max-w-2xl space-y-2 text-white">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs sm:text-[13px] text-blue-200 font-medium">
-            <Link href="/" className="hover:text-white transition-colors">
-              Trang chủ
-            </Link>
-            <span>›</span>
-            <Link href="/ung-vien/dashboard" className="hover:text-white transition-colors">
-              Hồ sơ của tôi
-            </Link>
-            <span>›</span>
-            <span className="text-white font-semibold">Thông báo</span>
-          </div>
-
-          {/* Heading + Badge */}
-          <div className="flex flex-wrap items-center gap-3 pt-0.5">
-            <h1 className="text-2xl sm:text-3xl lg:text-[30px] font-black text-white tracking-tight m-0 leading-tight">
+        <div className="relative z-10 max-w-xl text-white">
+          <div className="flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-white/20 backdrop-blur-xs text-white flex items-center justify-center shrink-0">
+              <Bell className="w-4 h-4" />
+            </div>
+            <h1 className="text-lg sm:text-xl font-bold text-white tracking-tight m-0 leading-tight">
               Thông báo
             </h1>
-            <span className="bg-white/20 backdrop-blur-xs text-white text-xs font-bold px-3.5 py-1 rounded-full border border-white/30">
-              Cập nhật đúng lúc, nắm bắt cơ hội tốt hơn
-            </span>
           </div>
-
-          <p className="text-[13.5px] sm:text-[14.5px] text-blue-100 font-normal m-0 leading-relaxed max-w-xl">
-            Cập nhật mọi hoạt động quan trọng, không bỏ lỡ cơ hội nào trong hành trình sự nghiệp của bạn.
-          </p>
         </div>
       </div>
 
-      {/* ======================================================== */}
-      {/* 2. TAB FILTER THEO CATEGORY                              */}
-      {/* ======================================================== */}
-      <div className="flex flex-wrap items-center gap-2 pt-0.5">
+      {/* Container nội dung bên dưới banner */}
+      <div className="space-y-4">
+        {/* ======================================================== */}
+        {/* 2. TAB FILTER THEO CATEGORY                              */}
+        {/* ======================================================== */}
+        <div className="flex flex-wrap items-center gap-2 pt-0.5">
         {[
           { key: "all", label: `Tất cả (${categoryCounts.all})` },
           { key: "job", label: `Việc làm (${categoryCounts.job})` },
@@ -502,11 +594,10 @@ export default function CandidateNotificationsPage() {
             key={tab.key}
             type="button"
             onClick={() => setActiveCategory(tab.key as any)}
-            className={`px-4.5 py-2 rounded-xl text-xs sm:text-[13px] font-semibold whitespace-nowrap transition-all cursor-pointer ${
-              activeCategory === tab.key
-                ? "bg-[#0062ff] text-white shadow-xs"
-                : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/50 border border-slate-200"
-            }`}
+            className={`px-4.5 py-2 rounded-xl text-xs sm:text-[13px] font-semibold whitespace-nowrap transition-all cursor-pointer ${activeCategory === tab.key
+              ? "bg-[#0062ff] text-white shadow-xs"
+              : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/50 border border-slate-200"
+              }`}
           >
             {tab.label}
           </button>
@@ -533,24 +624,32 @@ export default function CandidateNotificationsPage() {
             type="button"
             disabled={selectedIds.length === 0}
             onClick={handleMarkAsRead}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${
-              selectedIds.length > 0
-                ? "bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
-                : "bg-slate-50 text-slate-400 cursor-not-allowed"
-            }`}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors ${selectedIds.length > 0
+              ? "bg-slate-100 hover:bg-slate-200 text-slate-700 cursor-pointer"
+              : "bg-slate-50 text-slate-400 cursor-not-allowed"
+              }`}
           >
             Đánh dấu đã đọc
           </button>
 
           <button
             type="button"
+            disabled={notifications.length === 0}
+            onClick={handleMarkAllAsRead}
+            className="px-3 py-1.5 rounded-xl text-xs font-bold transition-colors bg-blue-50 hover:bg-blue-100 text-blue-600 cursor-pointer"
+          >
+            Đọc tất cả
+          </button>
+
+
+          <button
+            type="button"
             disabled={selectedIds.length === 0}
             onClick={handleDeleteSelected}
-            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors flex items-center gap-1 ${
-              selectedIds.length > 0
-                ? "bg-rose-50 hover:bg-rose-100 text-rose-600 cursor-pointer"
-                : "bg-slate-50 text-slate-400 cursor-not-allowed"
-            }`}
+            className={`px-3 py-1.5 rounded-xl text-xs font-bold transition-colors flex items-center gap-1 ${selectedIds.length > 0
+              ? "bg-rose-50 hover:bg-rose-100 text-rose-600 cursor-pointer"
+              : "bg-slate-50 text-slate-400 cursor-not-allowed"
+              }`}
           >
             <Trash2 className="w-3.5 h-3.5" />
             <span>Xóa</span>
@@ -577,241 +676,221 @@ export default function CandidateNotificationsPage() {
         </div>
       </div>
 
-      {/* ======================================================== */}
-      {/* 4. MAIN LAYOUT: NOTIFICATION FEED (70%) | DETAIL (30%)   */}
-      {/* ======================================================== */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
-        {/* ==================== CỘT TRÁI: DANH SÁCH THÔNG BÁO (8/12 cols ~ 68-70%) ==================== */}
-        <div className="lg:col-span-8 space-y-4">
-          {filteredNotifications.length > 0 ? (
-            <>
-              {/* Group: Hôm nay */}
-              {groupedNotifications.today.length > 0 && (
-                <div className="space-y-2.5">
-                  <div className="text-xs font-black text-slate-500 tracking-wider uppercase pl-1">
-                    Hôm nay
-                  </div>
-                  <div className="space-y-2">
-                    {groupedNotifications.today.map((notif) => {
-                      const isSelected = selectedNotifId === notif.id;
-                      const isChecked = selectedIds.includes(notif.id);
-                      return (
-                        <div
-                          key={notif.id}
-                          onClick={() => handleSelectNotif(notif)}
-                          className={`p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 group ${
-                            isSelected
-                              ? "bg-blue-50/70 border-blue-300 shadow-2xs"
-                              : !notif.isRead
-                              ? "bg-[#f8faff] hover:bg-blue-50/40 border-blue-100"
-                              : "bg-white hover:bg-slate-50/80 border-[#E6EDF7]"
-                          }`}
-                        >
-                          {/* Checkbox */}
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onClick={(e) => handleToggleSelect(notif.id, e)}
-                            onChange={() => {}}
-                            className="w-4 h-4 rounded text-[#0062ff] focus:ring-0 cursor-pointer accent-[#0062ff] shrink-0"
-                          />
-
-                          {/* Category Icon */}
-                          {renderCategoryIcon(notif.category)}
-
-                          {/* Nội dung thông báo */}
-                          <div className="flex-1 min-w-0">
-                            <h4
-                              className={`text-xs sm:text-[13.5px] leading-snug m-0 truncate ${
-                                !notif.isRead ? "font-bold text-slate-900" : "font-semibold text-slate-700"
-                              }`}
-                            >
-                              {notif.title}
-                            </h4>
-                            <p className="text-[11.5px] sm:text-xs text-slate-500 m-0 truncate mt-0.5 font-normal">
-                              {notif.description}
-                            </p>
-                          </div>
-
-                          {/* Thời gian + Unread dot + Arrow */}
-                          <div className="flex items-center gap-3 shrink-0">
-                            <span className="text-xs text-slate-400 font-medium">
-                              {notif.time}
-                            </span>
-                            {!notif.isRead && (
-                              <span className="w-2 h-2 rounded-full bg-[#0062ff]" />
-                            )}
-                            <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-[#0062ff] transition-colors" />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Group: Hôm qua */}
-              {groupedNotifications.yesterday.length > 0 && (
-                <div className="space-y-2.5 pt-2">
-                  <div className="text-xs font-black text-slate-500 tracking-wider uppercase pl-1">
-                    Hôm qua
-                  </div>
-                  <div className="space-y-2">
-                    {groupedNotifications.yesterday.map((notif) => {
-                      const isSelected = selectedNotifId === notif.id;
-                      const isChecked = selectedIds.includes(notif.id);
-                      return (
-                        <div
-                          key={notif.id}
-                          onClick={() => handleSelectNotif(notif)}
-                          className={`p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 group ${
-                            isSelected
-                              ? "bg-blue-50/70 border-blue-300 shadow-2xs"
-                              : !notif.isRead
-                              ? "bg-[#f8faff] hover:bg-blue-50/40 border-blue-100"
-                              : "bg-white hover:bg-slate-50/80 border-[#E6EDF7]"
-                          }`}
-                        >
-                          {/* Checkbox */}
-                          <input
-                            type="checkbox"
-                            checked={isChecked}
-                            onClick={(e) => handleToggleSelect(notif.id, e)}
-                            onChange={() => {}}
-                            className="w-4 h-4 rounded text-[#0062ff] focus:ring-0 cursor-pointer accent-[#0062ff] shrink-0"
-                          />
-
-                          {/* Category Icon */}
-                          {renderCategoryIcon(notif.category)}
-
-                          {/* Nội dung thông báo */}
-                          <div className="flex-1 min-w-0">
-                            <h4
-                              className={`text-xs sm:text-[13.5px] leading-snug m-0 truncate ${
-                                !notif.isRead ? "font-bold text-slate-900" : "font-semibold text-slate-700"
-                              }`}
-                            >
-                              {notif.title}
-                            </h4>
-                            <p className="text-[11.5px] sm:text-xs text-slate-500 m-0 truncate mt-0.5 font-normal">
-                              {notif.description}
-                            </p>
-                          </div>
-
-                          {/* Thời gian + Unread dot + Arrow */}
-                          <div className="flex items-center gap-3 shrink-0">
-                            <span className="text-xs text-slate-400 font-medium">
-                              {notif.time}
-                            </span>
-                            {!notif.isRead && (
-                              <span className="w-2 h-2 rounded-full bg-[#0062ff]" />
-                            )}
-                            <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-[#0062ff] transition-colors" />
-                          </div>
-                        </div>
-                      );
-                    })}
-                  </div>
-                </div>
-              )}
-
-              {/* Phân trang bên dưới */}
-              <div className="flex items-center justify-between pt-4 border-t border-slate-200/80 text-xs text-slate-500">
-                <span>Hiển thị {filteredNotifications.length}/{notifications.length} thông báo</span>
-                <div className="flex items-center gap-1.5">
-                  <span className="w-7 h-7 rounded-lg bg-[#0062ff] text-white flex items-center justify-center font-bold">
-                    1
-                  </span>
-                  <span className="w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 cursor-pointer">
-                    2
-                  </span>
-                  <span className="w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 cursor-pointer">
-                    3
-                  </span>
-                </div>
-              </div>
-            </>
-          ) : (
-            <div className="bg-white rounded-2xl p-12 text-center border border-[#E6EDF7] space-y-2">
-              <Bell className="w-10 h-10 mx-auto text-slate-300" />
-              <h4 className="text-sm font-bold text-slate-800 m-0">Bạn chưa có thông báo nào</h4>
-              <p className="text-xs text-slate-500 m-0">
-                Các cập nhật về việc làm, hồ sơ và phỏng vấn sẽ xuất hiện tại đây.
-              </p>
-            </div>
-          )}
+      {error && (
+        <div className="bg-rose-50 border border-rose-200 rounded-2xl p-5 flex flex-col sm:flex-row items-center justify-between gap-3 text-rose-700 shadow-2xs">
+          <p className="font-semibold text-xs sm:text-sm m-0">{error}</p>
+          <button
+            type="button"
+            onClick={fetchNotifications}
+            className="px-4 py-1.5 rounded-xl bg-rose-600 text-white font-bold text-xs hover:bg-rose-700 transition-colors cursor-pointer shrink-0"
+          >
+            Tải lại trang
+          </button>
         </div>
+      )}
 
-        {/* ==================== CỘT PHẢI: DETAIL PANEL (4/12 cols ~ 30-32%) ==================== */}
-        <div className="hidden lg:block lg:col-span-4 sticky top-20 space-y-4">
-          <div className="bg-white rounded-2xl p-5 border border-[#E6EDF7] shadow-2xs space-y-4">
-            <div className="flex items-center justify-between pb-2 border-b border-slate-100">
-              <h3 className="text-sm font-black text-slate-900 m-0">
-                Chi tiết thông báo
-              </h3>
-              {activeNotification && (
-                <button
-                  type="button"
-                  onClick={() => setSelectedNotifId("")}
-                  className="text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
-                >
-                  <X className="w-4 h-4" />
-                </button>
-              )}
-            </div>
+      {isLoading ? (
+        <div className="py-24 text-center bg-white rounded-2xl border border-slate-100 shadow-2xs space-y-3">
+          <Spin size="large" />
+          <p className="text-xs sm:text-sm text-slate-500 font-medium m-0">Đang tải danh sách thông báo...</p>
+        </div>
+      ) : (
+        /* ======================================================== */
+        /* 4. MAIN LAYOUT: NOTIFICATION FEED (70%) | DETAIL (30%)   */
+        /* ======================================================== */
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-5 items-start">
+          {/* ==================== CỘT TRÁI: DANH SÁCH THÔNG BÁO (8/12 cols ~ 68-70%) ==================== */}
+          <div className="lg:col-span-8 space-y-4">
+            {filteredNotifications.length > 0 ? (
+              <>
+                {/* Group: Hôm nay */}
+                {groupedNotifications.today.length > 0 && (
+                  <div className="space-y-2.5">
+                    <div className="text-xs font-black text-slate-500 tracking-wider uppercase pl-1">
+                      Hôm nay
+                    </div>
+                    <div className="space-y-2">
+                      {groupedNotifications.today.map((notif) => {
+                        const isSelected = selectedNotifId === notif.id;
+                        const isChecked = selectedIds.includes(notif.id);
+                        return (
+                          <div
+                            key={notif.id}
+                            onClick={() => handleSelectNotif(notif)}
+                            className={`p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 group ${isSelected
+                              ? "bg-blue-50/70 border-blue-300 shadow-2xs"
+                              : !notif.isRead
+                                ? "bg-[#f8faff] hover:bg-blue-50/40 border-blue-100"
+                                : "bg-white hover:bg-slate-50/80 border-[#E6EDF7]"
+                              }`}
+                          >
+                            {/* Checkbox */}
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onClick={(e) => handleToggleSelect(notif.id, e)}
+                              onChange={() => { }}
+                              className="w-4 h-4 rounded text-[#0062ff] focus:ring-0 cursor-pointer accent-[#0062ff] shrink-0"
+                            />
 
-            {activeNotification ? (
-              renderDetailPanelContent(activeNotification)
+                            {/* Category Icon */}
+                            {renderCategoryIcon(notif.category)}
+
+                            {/* Nội dung thông báo */}
+                            <div className="flex-1 min-w-0">
+                              <h4
+                                className={`text-xs sm:text-[13.5px] leading-snug m-0 truncate ${!notif.isRead ? "font-bold text-slate-900" : "font-semibold text-slate-700"
+                                  }`}
+                              >
+                                {notif.title}
+                              </h4>
+                              <p className="text-[11.5px] sm:text-xs text-slate-500 m-0 truncate mt-0.5 font-normal">
+                                {notif.description}
+                              </p>
+                            </div>
+
+                            {/* Thời gian + Unread dot + Arrow */}
+                            <div className="flex items-center gap-3 shrink-0">
+                              <span className="text-xs text-slate-400 font-medium">
+                                {notif.time}
+                              </span>
+                              {!notif.isRead && (
+                                <span className="w-2 h-2 rounded-full bg-[#0062ff]" />
+                              )}
+                              <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-[#0062ff] transition-colors" />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Group: Hôm qua */}
+                {groupedNotifications.yesterday.length > 0 && (
+                  <div className="space-y-2.5 pt-2">
+                    <div className="text-xs font-black text-slate-500 tracking-wider uppercase pl-1">
+                      Hôm qua
+                    </div>
+                    <div className="space-y-2">
+                      {groupedNotifications.yesterday.map((notif) => {
+                        const isSelected = selectedNotifId === notif.id;
+                        const isChecked = selectedIds.includes(notif.id);
+                        return (
+                          <div
+                            key={notif.id}
+                            onClick={() => handleSelectNotif(notif)}
+                            className={`p-3.5 sm:p-4 rounded-2xl border transition-all cursor-pointer flex items-center justify-between gap-3 group ${isSelected
+                              ? "bg-blue-50/70 border-blue-300 shadow-2xs"
+                              : !notif.isRead
+                                ? "bg-[#f8faff] hover:bg-blue-50/40 border-blue-100"
+                                : "bg-white hover:bg-slate-50/80 border-[#E6EDF7]"
+                              }`}
+                          >
+                            {/* Checkbox */}
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              onClick={(e) => handleToggleSelect(notif.id, e)}
+                              onChange={() => { }}
+                              className="w-4 h-4 rounded text-[#0062ff] focus:ring-0 cursor-pointer accent-[#0062ff] shrink-0"
+                            />
+
+                            {/* Category Icon */}
+                            {renderCategoryIcon(notif.category)}
+
+                            {/* Nội dung thông báo */}
+                            <div className="flex-1 min-w-0">
+                              <h4
+                                className={`text-xs sm:text-[13.5px] leading-snug m-0 truncate ${!notif.isRead ? "font-bold text-slate-900" : "font-semibold text-slate-700"
+                                  }`}
+                              >
+                                {notif.title}
+                              </h4>
+                              <p className="text-[11.5px] sm:text-xs text-slate-500 m-0 truncate mt-0.5 font-normal">
+                                {notif.description}
+                              </p>
+                            </div>
+
+                            {/* Thời gian + Unread dot + Arrow */}
+                            <div className="flex items-center gap-3 shrink-0">
+                              <span className="text-xs text-slate-400 font-medium">
+                                {notif.time}
+                              </span>
+                              {!notif.isRead && (
+                                <span className="w-2 h-2 rounded-full bg-[#0062ff]" />
+                              )}
+                              <ChevronRight className="w-4 h-4 text-slate-300 group-hover:text-[#0062ff] transition-colors" />
+                            </div>
+                          </div>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
+
+                {/* Phân trang bên dưới */}
+                <div className="flex items-center justify-between pt-4 border-t border-slate-200/80 text-xs text-slate-500">
+                  <span>Hiển thị {filteredNotifications.length}/{notifications.length} thông báo</span>
+                  <div className="flex items-center gap-1.5">
+                    <span className="w-7 h-7 rounded-lg bg-[#0062ff] text-white flex items-center justify-center font-bold">
+                      1
+                    </span>
+                    <span className="w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 cursor-pointer">
+                      2
+                    </span>
+                    <span className="w-7 h-7 rounded-lg border border-slate-200 flex items-center justify-center text-slate-600 hover:bg-slate-50 cursor-pointer">
+                      3
+                    </span>
+                  </div>
+                </div>
+              </>
             ) : (
-              <div className="py-12 text-center text-slate-400 space-y-2">
-                <Bell className="w-8 h-8 mx-auto text-slate-300" />
-                <p className="text-xs font-semibold text-slate-600 m-0">
-                  Chọn một thông báo để xem chi tiết
+              <div className="bg-white rounded-2xl p-12 text-center border border-[#E6EDF7] space-y-2">
+                <Bell className="w-10 h-10 mx-auto text-slate-300" />
+                <h4 className="text-sm font-bold text-slate-800 m-0">Bạn chưa có thông báo nào</h4>
+                <p className="text-xs text-slate-500 m-0">
+                  Các cập nhật về việc làm, hồ sơ và phỏng vấn sẽ xuất hiện tại đây.
                 </p>
               </div>
             )}
           </div>
+
+          {/* ==================== CỘT PHẢI: DETAIL PANEL (4/12 cols ~ 30-32%) ==================== */}
+          <div className="hidden lg:block lg:col-span-4 sticky top-20 space-y-4">
+            <div className="bg-white rounded-2xl p-5 border border-[#E6EDF7] shadow-2xs space-y-4">
+              <div className="flex items-center justify-between pb-2 border-b border-slate-100">
+                <h3 className="text-sm font-black text-slate-900 m-0">
+                  Chi tiết thông báo
+                </h3>
+                {activeNotification && (
+                  <button
+                    type="button"
+                    onClick={() => setSelectedNotifId("")}
+                    className="text-slate-400 hover:text-slate-600 p-1 cursor-pointer"
+                  >
+                    <X className="w-4 h-4" />
+                  </button>
+                )}
+              </div>
+
+              {activeNotification ? (
+                renderDetailPanelContent(activeNotification)
+              ) : (
+                <div className="py-12 text-center text-slate-400 space-y-2">
+                  <Bell className="w-8 h-8 mx-auto text-slate-300" />
+                  <p className="text-xs font-semibold text-slate-600 m-0">
+                    Chọn một thông báo để xem chi tiết
+                  </p>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
+      )}
 
       {/* ======================================================== */}
-      {/* 5. BOTTOM CTA BANNER SỬ DỤNG /images/thongbao.png        */}
-      {/* ======================================================== */}
-      <div
-        className="relative w-full rounded-[22px] overflow-hidden min-h-[115px] sm:min-h-[130px] p-5 sm:p-6 flex flex-col sm:flex-row items-center justify-between gap-4 border border-blue-400/30 shadow-sm text-white"
-        style={{
-          backgroundImage: "url('/images/thongbao.png')",
-          backgroundSize: "cover",
-          backgroundPosition: "center left",
-          backgroundRepeat: "no-repeat",
-        }}
-      >
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0047ba]/95 via-[#0052cc]/85 to-[#0062ff]/80 pointer-events-none" />
-
-        <div className="relative z-10 space-y-1 text-center sm:text-left">
-          <h3 className="text-base sm:text-lg lg:text-xl font-black text-white m-0 tracking-tight">
-            Bật thông báo, nắm bắt cơ hội sớm hơn
-          </h3>
-          <p className="text-xs sm:text-[13px] text-blue-100 font-medium m-0">
-            Đừng bỏ lỡ những thông tin quan trọng trong hành trình phát triển sự nghiệp.
-          </p>
-        </div>
-
-        <div className="relative z-10 shrink-0">
-          <Link href="/ung-vien/cai-dat">
-            <button
-              type="button"
-              className="bg-white hover:bg-blue-50 text-[#0062ff] font-extrabold text-xs sm:text-[13px] px-5 py-2.5 rounded-xl shadow-xs transition-all cursor-pointer flex items-center gap-1.5"
-            >
-              <span>Quản lý cài đặt thông báo</span>
-              <ArrowRight className="w-3.5 h-3.5" />
-            </button>
-          </Link>
-        </div>
-      </div>
-
-      {/* ======================================================== */}
-      {/* 6. MOBILE DRAWER CHI TIẾT THÔNG BÁO                      */}
+      {/* 5. MOBILE DRAWER CHI TIẾT THÔNG BÁO                      */}
       {/* ======================================================== */}
       <Drawer
         title="Chi tiết thông báo"
@@ -823,6 +902,7 @@ export default function CandidateNotificationsPage() {
       >
         {activeNotification && renderDetailPanelContent(activeNotification)}
       </Drawer>
+      </div>
     </div>
   );
 }

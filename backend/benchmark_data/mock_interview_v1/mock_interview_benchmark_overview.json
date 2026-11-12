@@ -1,0 +1,54 @@
+{
+  "metadata": {
+    "benchmark_name": "CAREZA AI Mock Interview Benchmark Dataset V1",
+    "version": "1.0.0",
+    "generator_service": "MockInterviewService.generate_interview_questions",
+    "rubric_code": "rubric_interview_standard",
+    "criteria_weights": {
+      "relevance": 0.35,
+      "technical_depth": 0.35,
+      "structure_clarity": 0.15,
+      "practical_experience": 0.15
+    },
+    "total_scenarios": 18,
+    "total_questions": 90,
+    "total_answers": 360,
+    "total_positions": 6,
+    "total_levels": 3
+  },
+  "distribution": {
+    "by_position": {
+      "Backend Python/Django": 3,
+      "Backend Golang": 3,
+      "Frontend React": 3,
+      "Mobile Flutter": 3,
+      "DevOps/Cloud": 3,
+      "Fullstack Web": 3
+    },
+    "by_level": {
+      "junior": 6,
+      "middle": 6,
+      "senior": 6
+    },
+    "by_category": {
+      "introductory": 18,
+      "technical_core": 18,
+      "architecture_database": 18,
+      "problem_solving": 18,
+      "behavioral_teamwork": 18
+    },
+    "by_response_type": {
+      "good": 90,
+      "average": 90,
+      "poor": 90,
+      "adversarial": 68,
+      "short_correct": 22
+    },
+    "adversarial_subtypes": {
+      "negation": 22,
+      "repeat_question": 23,
+      "long_gibberish": 23,
+      "short_correct": 22
+    }
+  }
+}

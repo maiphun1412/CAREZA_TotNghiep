@@ -4,6 +4,7 @@ import { use, useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { candidateService } from "@/services/candidate.service";
+import { useAuthStore } from "@/store/auth-store";
 import { Card, Steps, Tag, Button, Modal, Input, Typography, Row, Col, Space, Divider, Alert, Spin, message, List } from "antd";
 import {
   LeftOutlined,
@@ -18,47 +19,14 @@ import {
   EnvironmentOutlined,
 } from "@ant-design/icons";
 
-const { Title, Text, Paragraph } = Typography;
+const { Title, Text } = Typography;
 const { TextArea } = Input;
-
-// Mock chi tiết đơn ứng tuyển fallback
-const MOCK_APP_DETAIL = {
-  applicationId: "app-1",
-  jobPostId: "job-1",
-  jobTitle: "Senior Fullstack Engineer (React / NestJS)",
-  companyName: "VNG Corporation",
-  companyLogo: "https://images.unsplash.com/photo-1549923746-c502d488b3ea?auto=format&fit=crop&w=80&h=80&q=80",
-  location: "TP. Hồ Chí Minh",
-  salaryText: "35 - 50 triệu VNĐ",
-  appliedAt: new Date().toISOString(),
-  currentStage: 1, // 1 = Applied, 2 = Test, 3 = Interview, 4 = Offer, 5 = Hired
-  applicationStatus: 1, // 1 = Active, 2 = Withdrawn, 3 = Rejected, 4 = Hired
-  coverLetter: "Kính gửi quý công ty, tôi là một nhà phát triển phần mềm với hơn 4 năm kinh nghiệm làm việc với React và Node.js. Tôi rất mong muốn được đóng góp năng lực và kinh nghiệm của mình để cùng VNG phát triển các sản phẩm công nghệ xuất sắc.",
-  candidateName: "Nguyễn Văn A",
-  candidateEmail: "nguyenvana@gmail.com",
-  candidatePhone: "0987654321",
-  cvName: "Nguyen_Van_A_CV_Senior_Fullstack.pdf",
-  cvFileUrl: "https://example.com/cv.pdf",
-  withdrawReason: null,
-  withdrawnAt: null,
-};
-
-const MOCK_HISTORY = [
-  {
-    stageHistoryId: "hist-1",
-    fromStage: null,
-    toStage: 1,
-    fromStatus: null,
-    toStatus: 1,
-    note: "Ứng viên nộp hồ sơ thành công.",
-    changedAt: new Date().toISOString(),
-  },
-];
 
 export default function CandidateApplicationDetailPage({ params }: { params: Promise<{ id: string }> }) {
   const router = useRouter();
   const resolvedParams = use(params);
   const applicationId = resolvedParams.id;
+  const { user } = useAuthStore();
 
   const [loading, setLoading] = useState(true);
   const [application, setApplication] = useState<any>(null);
@@ -72,13 +40,13 @@ export default function CandidateApplicationDetailPage({ params }: { params: Pro
     try {
       const appResponse = await candidateService.getApplicationById(applicationId);
       const histResponse = await candidateService.getApplicationHistory(applicationId);
-      
-      setApplication(appResponse.data.application);
-      setHistory(histResponse.data.histories || []);
+
+      setApplication(appResponse?.data?.application || null);
+      setHistory(histResponse?.data?.histories || []);
     } catch (error) {
-      // Fallback
-      setApplication(MOCK_APP_DETAIL);
-      setHistory(MOCK_HISTORY);
+      setApplication(null);
+      setHistory([]);
+      message.error("Không thể tải chi tiết hồ sơ ứng tuyển.");
     } finally {
       setLoading(false);
     }
@@ -110,7 +78,7 @@ export default function CandidateApplicationDetailPage({ params }: { params: Pro
   if (loading) {
     return (
       <div className="flex justify-center items-center py-40 flex-1">
-        <Spin size="large" description="Đang tải chi tiết hồ sơ ứng tuyển..." />
+        <Spin size="large" />
       </div>
     );
   }
@@ -127,17 +95,31 @@ export default function CandidateApplicationDetailPage({ params }: { params: Pro
     );
   }
 
+  // Chuẩn hóa dữ liệu tương thích API
+  const jobTitle = application.job?.title || application.jobTitle || "Vị trí tuyển dụng";
+  const companyName = application.job?.company_name || application.companyName || "Doanh nghiệp tuyển dụng";
+  const companyLogo = application.job?.logo_url || application.companyLogo || null;
+  const appliedDate = application.applied_at || application.appliedAt;
+  const cvTitle = application.cv?.title || application.cvName || "CV_Ung_Vien.pdf";
+  const cvFileUrl = application.cv?.file_url || application.cvFileUrl;
+  const coverLetter = application.cover_letter || application.coverLetter;
+  const appStatus = String(application.status || application.applicationStatus || "submitted").toLowerCase();
+
+  const candidateName = user?.fullName || application.candidateName || "Ứng viên";
+  const candidateEmail = user?.email || application.candidateEmail || "";
+  const candidatePhone = user?.phoneNumber || (user as any)?.phone || application.candidatePhone || "";
+
   const getStatusAlert = () => {
-    if (application.applicationStatus === 2) {
+    if (appStatus === "withdrawn" || appStatus === "2") {
       return (
         <Alert
           title="Hồ sơ ứng tuyển đã được rút"
           description={
             <div className="space-y-1 mt-1 text-xs">
-              <div><Text strong>Lý do:</Text> {application.withdrawReason || "Không có lý do"}</div>
-              {application.withdrawnAt && (
+              <div><Text strong>Trạng thái:</Text> Ứng viên đã chủ động rút đơn ứng tuyển.</div>
+              {application.withdrawn_at && (
                 <div>
-                  <Text strong>Thời gian rút đơn:</Text> {new Date(application.withdrawnAt).toLocaleString("vi-VN")}
+                  <Text strong>Thời gian rút đơn:</Text> {new Date(application.withdrawn_at).toLocaleString("vi-VN")}
                 </div>
               )}
             </div>
@@ -148,23 +130,45 @@ export default function CandidateApplicationDetailPage({ params }: { params: Pro
         />
       );
     }
-    if (application.applicationStatus === 3) {
+    if (appStatus === "rejected" || appStatus === "3") {
       return (
         <Alert
-          title="Hồ sơ ứng tuyển không được chấp nhận"
-          description="Nhà tuyển dụng đã xem xét hồ sơ và quyết định không tiếp tục vòng tiếp theo. Chúc bạn may mắn ở các cơ hội khác."
+          title="Hồ sơ ứng tuyển chưa phù hợp"
+          description="Nhà tuyển dụng đã xem xét hồ sơ và quyết định chưa tiếp tục ở đợt này. Chúc bạn thành công ở các cơ hội phù hợp tiếp theo!"
           type="error"
           showIcon
           className="rounded-xl"
         />
       );
     }
-    if (application.applicationStatus === 4) {
+    if (appStatus === "hired" || appStatus === "accepted" || appStatus === "4") {
       return (
         <Alert
-          title="Chúc mừng! Bạn đã được nhận việc"
-          description="Nhà tuyển dụng đã xác nhận bạn vượt qua tất cả các vòng và nhận việc thành công. Hãy chuẩn bị hành trình hội nhập sắp tới!"
+          title="Chúc mừng! Bạn đã trúng tuyển nhận việc"
+          description="Nhà tuyển dụng đã xác nhận bạn vượt qua các vòng tuyển dụng và chính thức tiếp nhận. Doanh nghiệp sẽ sớm liên hệ hướng dẫn các bước tiếp theo."
           type="success"
+          showIcon
+          className="rounded-xl"
+        />
+      );
+    }
+    if (appStatus === "offered" || appStatus === "offer") {
+      return (
+        <Alert
+          title="Bạn đã nhận được Đề nghị nhận việc (Offer)"
+          description="Doanh nghiệp đã gửi thư mời nhận việc. Vui lòng kiểm tra email hoặc mục Offer để xác nhận phản hồi."
+          type="warning"
+          showIcon
+          className="rounded-xl"
+        />
+      );
+    }
+    if (appStatus === "interview") {
+      return (
+        <Alert
+          title="Hồ sơ được mời vào vòng Phỏng vấn"
+          description="Nhà tuyển dụng đã đánh giá cao hồ sơ và chuyển sang vòng phỏng vấn. Vui lòng theo dõi lịch phỏng vấn và giữ liên lạc qua email/điện thoại."
+          type="info"
           showIcon
           className="rounded-xl"
         />
@@ -173,18 +177,26 @@ export default function CandidateApplicationDetailPage({ params }: { params: Pro
     return null;
   };
 
-  // Các bước trong quy trình ứng tuyển
+  // Các bước trong quy trình tuyển dụng chuẩn Careza
   const stepsItems = [
-    { title: "Nộp hồ sơ", description: "Hồ sơ ứng tuyển thành công" },
-    { title: "Bài test", description: "Đánh giá năng lực chuyên môn" },
-    { title: "Phỏng vấn", description: "Trao đổi cùng nhà tuyển dụng" },
-    { title: "Đề nghị nhận việc", description: "Thư mời nhận việc (Offer)" },
-    { title: "Hội nhập", description: "Onboarding gia nhập công ty" },
+    { title: "Nộp hồ sơ", description: "Đã nộp thành công" },
+    { title: "Sàng lọc", description: "Đánh giá hồ sơ" },
+    { title: "Bài test / Khảo sát", description: "Đánh giá chuyên môn" },
+    { title: "Phỏng vấn", description: "Trao đổi với doanh nghiệp" },
+    { title: "Đề nghị (Offer)", description: "Thư mời nhận việc" },
+    { title: "Trúng tuyển", description: "Tiếp nhận nhân sự" },
   ];
 
   // Tính index bước hiện tại của Steps (0-indexed)
-  // currentStage: 1 = Applied, 2 = Test, 3 = Interview, 4 = Offer, 5 = Onboarding
-  const currentStepIndex = application.applicationStatus === 1 ? application.currentStage - 1 : -1;
+  let currentStepIndex = 0;
+  if (appStatus === "submitted" || appStatus === "new") currentStepIndex = 0;
+  else if (appStatus === "screening" || appStatus === "reviewing") currentStepIndex = 1;
+  else if (appStatus === "shortlisted" || appStatus === "test" || appStatus === "matched") currentStepIndex = 2;
+  else if (appStatus === "interview") currentStepIndex = 3;
+  else if (appStatus === "offered" || appStatus === "offer") currentStepIndex = 4;
+  else if (appStatus === "hired" || appStatus === "accepted") currentStepIndex = 5;
+
+  const canWithdraw = !["hired", "rejected", "withdrawn"].includes(appStatus);
 
   return (
     <div className="space-y-6 flex-1">
@@ -197,19 +209,22 @@ export default function CandidateApplicationDetailPage({ params }: { params: Pro
       <Card className="border-slate-100 shadow-sm" style={{ borderRadius: 12 }}>
         <div className="flex flex-col sm:flex-row justify-between items-start gap-4">
           <div className="flex items-start gap-4 flex-1 min-w-0">
-            <img src={companyLogoFallback(application.companyLogo)} alt={application.companyName} className="w-16 h-16 rounded-xl border border-slate-100 object-cover" />
+            <img src={companyLogoFallback(companyLogo)} alt={companyName} className="w-16 h-16 rounded-xl border border-slate-100 object-cover" />
             <div className="min-w-0">
-              <Title level={4} className="m-0 text-slate-800 font-extrabold truncate text-lg sm:text-xl">{application.jobTitle}</Title>
-              <span className="text-sm text-blue-600 font-semibold block mt-1">{application.companyName}</span>
+              <Title level={4} className="m-0 text-slate-800 font-extrabold truncate text-lg sm:text-xl">{jobTitle}</Title>
+              <span className="text-sm text-blue-600 font-semibold block mt-1">{companyName}</span>
               <div className="flex items-center gap-4 text-xs text-slate-500 mt-2 flex-wrap">
-                <span><EnvironmentOutlined /> {application.location}</span>
-                <span><DollarOutlined /> {application.salaryText}</span>
-                <span><CalendarOutlined /> Ngày nộp: {new Date(application.appliedAt).toLocaleDateString("vi-VN")}</span>
+                {application.job?.id && (
+                  <Link href={`/viec-lam/${application.job.id}`} className="text-blue-600 hover:underline">
+                    Xem chi tiết JD tuyển dụng
+                  </Link>
+                )}
+                <span><CalendarOutlined /> Ngày nộp: {appliedDate ? new Date(appliedDate).toLocaleDateString("vi-VN") : "Gần đây"}</span>
               </div>
             </div>
           </div>
-          
-          {application.applicationStatus === 1 && (
+
+          {canWithdraw && (
             <Button danger type="dashed" onClick={() => setIsWithdrawModalOpen(true)} className="h-9 font-semibold text-xs rounded-lg w-full sm:w-auto">
               Rút đơn ứng tuyển
             </Button>
@@ -221,32 +236,40 @@ export default function CandidateApplicationDetailPage({ params }: { params: Pro
       {getStatusAlert()}
 
       <Row gutter={[24, 24]}>
-        {/* Cột trái: Timeline */}
+        {/* Cột trái: Timeline tiến trình tuyển dụng */}
         <Col xs={24} lg={16} className="space-y-6">
           <Card title="Tiến trình tuyển dụng" className="border-slate-100 shadow-sm" style={{ borderRadius: 12 }}>
             <div className="py-4 overflow-x-auto">
               <Steps
                 current={currentStepIndex}
                 items={stepsItems}
-                status={application.applicationStatus === 3 ? "error" : "process"}
+                status={appStatus === "rejected" ? "error" : "process"}
                 className="custom-steps"
               />
             </div>
-            
+
             {/* Lịch sử hoạt động chi tiết */}
             <Divider />
-            <Title level={5} className="text-slate-800 font-bold mb-4">Lịch sử tương tác</Title>
-            <List
-              dataSource={history}
-              renderItem={(item: any) => (
-                <div className="py-3 flex justify-between items-start border-b border-slate-50 last:border-b-0 text-xs sm:text-sm">
-                  <div className="space-y-1 flex-1">
-                    <span className="font-semibold text-slate-700 block">{item.note}</span>
-                    <Text type="secondary" className="text-[11px] block">{new Date(item.changedAt).toLocaleString("vi-VN")}</Text>
+            <Title level={5} className="text-slate-800 font-bold mb-4">Lịch sử xử lý từ Nhà tuyển dụng</Title>
+            {history.length > 0 ? (
+              <List
+                dataSource={history}
+                renderItem={(item: any) => (
+                  <div className="py-3 flex justify-between items-start border-b border-slate-50 last:border-b-0 text-xs sm:text-sm">
+                    <div className="space-y-1 flex-1">
+                      <span className="font-semibold text-slate-700 block">
+                        {item.note || (item.to_status ? `Chuyển trạng thái sang: ${item.to_status}` : "Cập nhật đơn")}
+                      </span>
+                      <Text type="secondary" className="text-[11px] block">
+                        {item.created_at || item.changedAt ? new Date(item.created_at || item.changedAt).toLocaleString("vi-VN") : ""}
+                      </Text>
+                    </div>
                   </div>
-                </div>
-              )}
-            />
+                )}
+              />
+            ) : (
+              <p className="text-xs text-slate-400">Chưa có bản ghi lịch sử xử lý.</p>
+            )}
           </Card>
         </Col>
 
@@ -258,7 +281,7 @@ export default function CandidateApplicationDetailPage({ params }: { params: Pro
                 <UserOutlined className="text-slate-400 mt-1" />
                 <div>
                   <Text type="secondary" className="text-[10px] block">Họ tên ứng viên</Text>
-                  <Text strong className="text-slate-700">{application.candidateName}</Text>
+                  <Text strong className="text-slate-700">{candidateName}</Text>
                 </div>
               </div>
 
@@ -266,7 +289,7 @@ export default function CandidateApplicationDetailPage({ params }: { params: Pro
                 <MailOutlined className="text-slate-400 mt-1" />
                 <div>
                   <Text type="secondary" className="text-[10px] block">Email liên hệ</Text>
-                  <Text strong className="text-slate-700">{application.candidateEmail}</Text>
+                  <Text strong className="text-slate-700">{candidateEmail || "Chưa cập nhật"}</Text>
                 </div>
               </div>
 
@@ -274,32 +297,36 @@ export default function CandidateApplicationDetailPage({ params }: { params: Pro
                 <PhoneOutlined className="text-slate-400 mt-1" />
                 <div>
                   <Text type="secondary" className="text-[10px] block">Số điện thoại</Text>
-                  <Text strong className="text-slate-700">{application.candidatePhone}</Text>
+                  <Text strong className="text-slate-700">{candidatePhone || "Chưa cập nhật"}</Text>
                 </div>
               </div>
 
               <Divider className="my-2" />
 
               <div className="space-y-2">
-                <span className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">CV đã nộp</span>
+                <span className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">CV snapshot đã nộp</span>
                 <div className="p-3 bg-slate-50 border border-slate-100 rounded-xl flex items-center justify-between gap-3">
                   <div className="flex items-center gap-2 min-w-0">
                     <FilePdfOutlined className="text-red-500 text-lg" />
-                    <span className="text-xs text-slate-700 truncate font-medium">{application.cvName}</span>
+                    <span className="text-xs text-slate-700 truncate font-medium">{cvTitle}</span>
                   </div>
-                  <Link href={application.cvFileUrl} target="_blank" className="text-xs text-blue-600 hover:underline shrink-0">
-                    Xem file
-                  </Link>
+                  {cvFileUrl ? (
+                    <a href={cvFileUrl} target="_blank" rel="noreferrer" className="text-xs text-blue-600 hover:underline shrink-0">
+                      Xem file
+                    </a>
+                  ) : (
+                    <span className="text-xs text-slate-400">Đã lưu hồ sơ</span>
+                  )}
                 </div>
               </div>
 
-              {application.coverLetter && (
+              {coverLetter && (
                 <>
                   <Divider className="my-2" />
                   <div className="space-y-1">
                     <span className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Thư giới thiệu đã gửi</span>
                     <p className="text-slate-600 text-xs leading-relaxed bg-slate-50/50 p-3 rounded-lg border border-slate-50 whitespace-pre-line m-0">
-                      {application.coverLetter}
+                      {coverLetter}
                     </p>
                   </div>
                 </>
@@ -350,3 +377,4 @@ export default function CandidateApplicationDetailPage({ params }: { params: Pro
 function companyLogoFallback(url: string | null): string {
   return url || "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=80&h=80&q=80";
 }
+

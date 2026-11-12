@@ -1,0 +1,340 @@
+{
+  "metadata": {
+    "benchmark_name": "CAREZA AI CV Parsing Evaluation V1",
+    "description": "Đánh giá chất lượng trích xuất thực thể và thông tin cấu trúc của CvParserService trên 50 file (25 PDF + 25 DOCX) thuộc 5 nhóm kịch bản",
+    "total_files": 50,
+    "total_pdf": 25,
+    "total_docx": 25,
+    "parser_model": "careza-nlp-parser-v1 (Rule-based NLP & Heuristics)"
+  },
+  "macro_average": {
+    "sample_count": 50,
+    "name_exact_match": 0.4,
+    "email_exact_match": 1.0,
+    "phone_exact_match": 1.0,
+    "skill_precision": 0.8923,
+    "skill_recall": 0.9687,
+    "skill_f1": 0.9222,
+    "exp_mae": 0.16,
+    "exp_accuracy_tol_0_5": 0.96,
+    "section_detection": {
+      "education": 0.96,
+      "experience": 0.5,
+      "projects": 0.3,
+      "certificates": 0.96
+    }
+  },
+  "by_format": {
+    "PDF": {
+      "sample_count": 25,
+      "name_exact_match": 0.76,
+      "email_exact_match": 1.0,
+      "phone_exact_match": 1.0,
+      "skill_precision": 0.8889,
+      "skill_recall": 0.9571,
+      "skill_f1": 0.9141,
+      "exp_mae": 0.16,
+      "exp_accuracy_tol_0_5": 0.96,
+      "section_detection": {
+        "education": 0.96,
+        "experience": 1.0,
+        "projects": 0.6,
+        "certificates": 0.96
+      }
+    },
+    "DOCX": {
+      "sample_count": 25,
+      "name_exact_match": 0.04,
+      "email_exact_match": 1.0,
+      "phone_exact_match": 1.0,
+      "skill_precision": 0.8956,
+      "skill_recall": 0.9804,
+      "skill_f1": 0.9304,
+      "exp_mae": 0.16,
+      "exp_accuracy_tol_0_5": 0.96,
+      "section_detection": {
+        "education": 0.96,
+        "experience": 0.0,
+        "projects": 0.0,
+        "certificates": 0.96
+      }
+    }
+  },
+  "by_group": {
+    "GROUP_1_STANDARD": {
+      "group_name": "Bố cục một cột chuẩn",
+      "combined": {
+        "sample_count": 10,
+        "name_exact_match": 0.5,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.7542,
+        "skill_recall": 1.0,
+        "skill_f1": 0.8501,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 0.5,
+          "projects": 0.3,
+          "certificates": 1.0
+        }
+      },
+      "pdf": {
+        "sample_count": 5,
+        "name_exact_match": 1.0,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.7542,
+        "skill_recall": 1.0,
+        "skill_f1": 0.8501,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 1.0,
+          "projects": 0.6,
+          "certificates": 1.0
+        }
+      },
+      "docx": {
+        "sample_count": 5,
+        "name_exact_match": 0.0,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.7542,
+        "skill_recall": 1.0,
+        "skill_f1": 0.8501,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 0.0,
+          "projects": 0.0,
+          "certificates": 1.0
+        }
+      }
+    },
+    "GROUP_2_MULTIPAGE": {
+      "group_name": "Nhiều kinh nghiệm và dài trang",
+      "combined": {
+        "sample_count": 10,
+        "name_exact_match": 0.5,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.8666,
+        "skill_recall": 0.9636,
+        "skill_f1": 0.9097,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 0.5,
+          "projects": 0.3,
+          "certificates": 1.0
+        }
+      },
+      "pdf": {
+        "sample_count": 5,
+        "name_exact_match": 1.0,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.8632,
+        "skill_recall": 0.9455,
+        "skill_f1": 0.8989,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 1.0,
+          "projects": 0.6,
+          "certificates": 1.0
+        }
+      },
+      "docx": {
+        "sample_count": 5,
+        "name_exact_match": 0.0,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.8699,
+        "skill_recall": 0.9818,
+        "skill_f1": 0.9204,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 0.0,
+          "projects": 0.0,
+          "certificates": 1.0
+        }
+      }
+    },
+    "GROUP_3_SKILL_HEAVY": {
+      "group_name": "Nhiều kỹ năng và dày đặc từ khóa",
+      "combined": {
+        "sample_count": 10,
+        "name_exact_match": 0.5,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.9438,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9703,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 0.5,
+          "projects": 0.3,
+          "certificates": 1.0
+        }
+      },
+      "pdf": {
+        "sample_count": 5,
+        "name_exact_match": 1.0,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.9438,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9703,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 1.0,
+          "projects": 0.6,
+          "certificates": 1.0
+        }
+      },
+      "docx": {
+        "sample_count": 5,
+        "name_exact_match": 0.0,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.9438,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9703,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 0.0,
+          "projects": 0.0,
+          "certificates": 1.0
+        }
+      }
+    },
+    "GROUP_4_INCOMPLETE": {
+      "group_name": "Thiếu thông tin và ca biên",
+      "combined": {
+        "sample_count": 10,
+        "name_exact_match": 0.5,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.9467,
+        "skill_recall": 0.88,
+        "skill_f1": 0.9078,
+        "exp_mae": 0.8,
+        "exp_accuracy_tol_0_5": 0.8,
+        "section_detection": {
+          "education": 0.8,
+          "experience": 0.5,
+          "projects": 0.3,
+          "certificates": 1.0
+        }
+      },
+      "pdf": {
+        "sample_count": 5,
+        "name_exact_match": 0.8,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.9333,
+        "skill_recall": 0.84,
+        "skill_f1": 0.8778,
+        "exp_mae": 0.8,
+        "exp_accuracy_tol_0_5": 0.8,
+        "section_detection": {
+          "education": 0.8,
+          "experience": 1.0,
+          "projects": 0.6,
+          "certificates": 1.0
+        }
+      },
+      "docx": {
+        "sample_count": 5,
+        "name_exact_match": 0.2,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.96,
+        "skill_recall": 0.92,
+        "skill_f1": 0.9378,
+        "exp_mae": 0.8,
+        "exp_accuracy_tol_0_5": 0.8,
+        "section_detection": {
+          "education": 0.8,
+          "experience": 0.0,
+          "projects": 0.0,
+          "certificates": 1.0
+        }
+      }
+    },
+    "GROUP_5_TWO_COLUMN": {
+      "group_name": "Bố cục hai cột (Sidebar)",
+      "combined": {
+        "sample_count": 10,
+        "name_exact_match": 0.0,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.95,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9733,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 0.5,
+          "projects": 0.3,
+          "certificates": 0.8
+        }
+      },
+      "pdf": {
+        "sample_count": 5,
+        "name_exact_match": 0.0,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.95,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9733,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 1.0,
+          "projects": 0.6,
+          "certificates": 0.8
+        }
+      },
+      "docx": {
+        "sample_count": 5,
+        "name_exact_match": 0.0,
+        "email_exact_match": 1.0,
+        "phone_exact_match": 1.0,
+        "skill_precision": 0.95,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9733,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "section_detection": {
+          "education": 1.0,
+          "experience": 0.0,
+          "projects": 0.0,
+          "certificates": 0.8
+        }
+      }
+    }
+  },
+  "format_comparison": {
+    "name_em_difference": 0.72,
+    "skill_f1_difference": -0.0163,
+    "exp_acc_difference": 0.0
+  }
+}

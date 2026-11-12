@@ -7,28 +7,32 @@ import { RoleCode } from "@/enums/role.enum";
 
 export default function RecruiterCTA() {
   const { user, isAuthenticated } = useAuthStore();
+  const userRoles: RoleCode[] = Array.isArray(user?.roles)
+    ? user.roles
+    : (user as any)?.role
+      ? [(user as any).role]
+      : [];
+
   const isRecruiter =
     isAuthenticated &&
-    user &&
-    (user.roles.includes(RoleCode.COMPANY_OWNER) || user.roles.includes(RoleCode.RECRUITER));
+    Boolean(user) &&
+    (userRoles.includes(RoleCode.COMPANY_OWNER) || userRoles.includes(RoleCode.RECRUITER));
 
   return (
-    <section className="py-14 md:py-16 bg-[#eef3ff]/50 w-full border-b border-outline-variant/15 relative overflow-hidden">
+    <section className="py-5 md:py-7 bg-[#eef3ff]/50 w-full border-b border-outline-variant/15 relative overflow-hidden">
       <MouseSpotlight size={600} color="rgba(15, 82, 186, 0.04)" />
       <div className="max-w-container-max mx-auto px-4 sm:px-6 md:px-8 xl:px-margin-desktop relative z-10">
-        <div className="bg-white rounded-[40px] p-8 sm:p-10 md:p-12 lg:p-14 border border-blue-100/70 shadow-sm relative overflow-hidden flex flex-col lg:flex-row items-center gap-10 lg:gap-14">
+        <div className="bg-white rounded-[32px] lg:rounded-[36px] p-6 sm:p-8 lg:p-9 border border-blue-100/70 shadow-sm relative overflow-hidden flex flex-col lg:flex-row items-center gap-7 lg:gap-10">
           {/* Cột trái: Nội dung */}
           <div className="relative z-10 w-full lg:w-3/5 flex flex-col items-start">
-            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-4 leading-tight text-slate-800 tracking-tight">
+            <h2 className="text-2xl sm:text-3xl md:text-4xl font-black mb-3 leading-tight text-slate-800 tracking-tight">
               Dành riêng cho <span className="text-primary">Nhà Tuyển Dụng</span>
             </h2>
 
-            <p className="text-sm sm:text-base text-slate-600 mb-6 leading-relaxed max-w-xl">
-              Đăng tin tuyển dụng, tiếp cận ứng viên phù hợp và quản lý toàn bộ quy trình tuyển dụng trên một nền tảng duy nhất.
-            </p>
+
 
             {/* 3 Benefits */}
-            <div className="flex flex-col gap-4 mb-8 w-full">
+            <div className="flex flex-col gap-3 mb-6 w-full">
               {/* Benefit 1 */}
               <div className="flex items-start gap-3.5">
                 <span

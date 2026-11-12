@@ -3,7 +3,7 @@
 import React, { useState, useEffect, useMemo, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams, useRouter } from "next/navigation";
-import { Tag, Select, Spin, App, Drawer, Popover, Dropdown } from "antd";
+import { Tag, Select, Spin, App, Popover, Dropdown } from "antd";
 import {
   HeartFilled,
   HeartOutlined,
@@ -48,154 +48,6 @@ import { apiClient } from "@/services/api-client";
 import { candidateService } from "@/services/candidate.service";
 import { useAuthStore } from "@/store/auth-store";
 
-// ==================== MOCK DATA CHUẨN THEO ẢNH THAM CHIẾU ====================
-const MOCK_JOBS = [
-  {
-    id: "job-1",
-    title: "Frontend Developer",
-    company: "FPT Software",
-    isVerified: true,
-    logo: "https://upload.wikimedia.org/wikipedia/commons/1/11/FPT_logo_2010.svg",
-    salary: "15 - 25 triệu",
-    location: "TP. Hồ Chí Minh",
-    experience: "1 - 3 năm",
-    type: "Toàn thời gian",
-    workMode: "Tại văn phòng",
-    category: "Công nghệ thông tin",
-    badge: "featured", // 'featured' | 'suggested' | 'hot'
-    badgeText: "Nổi bật",
-    skills: ["React", "TypeScript", "Next.js"],
-    moreSkillsCount: 2,
-    postedAt: "Đăng 2 ngày trước",
-  },
-  {
-    id: "job-2",
-    title: "Business Analyst",
-    company: "Viettel",
-    isVerified: true,
-    logo: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Viettel_logo_2021.svg",
-    salary: "18 - 30 triệu",
-    location: "Hà Nội",
-    experience: "2 - 4 năm",
-    type: "Toàn thời gian",
-    workMode: "Tại văn phòng",
-    category: "Kinh doanh",
-    badge: "suggested",
-    badgeText: "Gợi ý cho bạn",
-    skills: ["BA", "SQL", "Communication"],
-    moreSkillsCount: 2,
-    postedAt: "Đăng 3 ngày trước",
-  },
-  {
-    id: "job-3",
-    title: "Product Manager",
-    company: "Grab Việt Nam",
-    isVerified: true,
-    logo: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Grab_Logo.svg",
-    salary: "25 - 40 triệu",
-    location: "TP. Hồ Chí Minh",
-    experience: "3 - 5 năm",
-    type: "Toàn thời gian",
-    workMode: "Hybrid",
-    category: "Công nghệ thông tin",
-    badge: "hot",
-    badgeText: "Hot",
-    skills: ["Product", "Strategy", "Analytics"],
-    moreSkillsCount: 2,
-    postedAt: "Đăng 5 ngày trước",
-  },
-  {
-    id: "job-4",
-    title: "Marketing Executive",
-    company: "Shopee",
-    isVerified: true,
-    logo: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopee_logo.svg",
-    salary: "12 - 20 triệu",
-    location: "TP. Hồ Chí Minh",
-    experience: "1 - 3 năm",
-    type: "Toàn thời gian",
-    workMode: "Tại văn phòng",
-    category: "Marketing",
-    badge: "suggested",
-    badgeText: "Gợi ý cho bạn",
-    skills: ["Marketing", "Content", "Campaign"],
-    moreSkillsCount: 2,
-    postedAt: "Đăng 6 ngày trước",
-  },
-  {
-    id: "job-5",
-    title: "Data Analyst",
-    company: "Zalo Group",
-    isVerified: true,
-    logo: "https://upload.wikimedia.org/wikipedia/commons/9/91/Icon_of_Zalo.svg",
-    salary: "20 - 35 triệu",
-    location: "Hà Nội",
-    experience: "2 - 4 năm",
-    type: "Toàn thời gian",
-    workMode: "Tại văn phòng",
-    category: "Công nghệ thông tin",
-    badge: "featured",
-    badgeText: "Nổi bật",
-    skills: ["SQL", "Python", "Data Visualization"],
-    moreSkillsCount: 2,
-    postedAt: "Đăng 1 ngày trước",
-  },
-  {
-    id: "job-6",
-    title: "UI/UX Designer",
-    company: "VNG Corporation",
-    isVerified: true,
-    logo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/VNG_Corp._logo.svg",
-    salary: "25 - 40 triệu",
-    location: "TP. Hồ Chí Minh",
-    experience: "2 - 4 năm",
-    type: "Toàn thời gian",
-    workMode: "Tại văn phòng",
-    category: "Thiết kế",
-    badge: "hot",
-    badgeText: "Hot",
-    skills: ["Figma", "UI Design", "User Research"],
-    moreSkillsCount: 2,
-    postedAt: "Đăng 4 ngày trước",
-  },
-  {
-    id: "job-7",
-    title: "Backend Developer",
-    company: "MoMo",
-    isVerified: true,
-    logo: "https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png",
-    salary: "30 - 50 triệu",
-    location: "Hà Nội",
-    experience: "3 - 5 năm",
-    type: "Toàn thời gian",
-    workMode: "Hybrid",
-    category: "Công nghệ thông tin",
-    badge: "suggested",
-    badgeText: "Gợi ý cho bạn",
-    skills: ["Java", "Spring Boot", "Microservices"],
-    moreSkillsCount: 2,
-    postedAt: "Đăng 3 ngày trước",
-  },
-  {
-    id: "job-8",
-    title: "AI Engineer",
-    company: "VinAI",
-    isVerified: true,
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/VinAI_Logo.png/640px-VinAI_Logo.png",
-    salary: "40 - 70 triệu",
-    location: "Hà Nội",
-    experience: "3 - 5 năm",
-    type: "Toàn thời gian",
-    workMode: "Tại văn phòng",
-    category: "Công nghệ thông tin",
-    badge: "featured",
-    badgeText: "Nổi bật",
-    skills: ["Python", "Machine Learning", "LLM"],
-    moreSkillsCount: 2,
-    postedAt: "Đăng 1 ngày trước",
-  },
-];
-
 // Danh mục bộ lọc tiếng Việt
 const CATEGORIES = ["Tất cả ngành", "Công nghệ thông tin", "Kinh doanh", "Marketing", "Tài chính – Ngân hàng", "Nhân sự", "Thiết kế"];
 const LOCATIONS = ["Toàn quốc", "TP. Hồ Chí Minh", "Hà Nội", "Đà Nẵng", "Bình Dương", "Đồng Nai"];
@@ -207,79 +59,6 @@ const JOB_TYPES = ["Tất cả", "Toàn thời gian", "Bán thời gian", "Thự
 // Popular search tags
 const POPULAR_SEARCHES = ["IT", "Marketing", "Kinh doanh", "Nhân sự", "Thiết kế", "Data Analyst", "Content"];
 
-// Top Recruiter / Employer Banners
-const FEATURED_EMPLOYER_BANNERS = [
-  {
-    id: "fpt-software",
-    name: "FPT Software",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/1/11/FPT_logo_2010.svg",
-    cover: "https://images.unsplash.com/photo-1522071820081-009f0129c71c?auto=format&fit=crop&w=600&q=80",
-    slogan: "Tiên phong chuyển đổi số & AI toàn cầu",
-    industry: "Công nghệ thông tin",
-    openJobs: 45,
-    location: "Hà Nội, TP.HCM, Đà Nẵng",
-  },
-  {
-    id: "viettel",
-    name: "Viettel Group",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/f/fe/Viettel_logo_2021.svg",
-    cover: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?auto=format&fit=crop&w=600&q=80",
-    slogan: "Theo cách của bạn – Kiến tạo xã hội số",
-    industry: "Viễn thông & Công nghệ",
-    openJobs: 62,
-    location: "Hà Nội, Toàn quốc",
-  },
-  {
-    id: "grab",
-    name: "Grab Việt Nam",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/4/4b/Grab_Logo.svg",
-    cover: "https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&w=600&q=80",
-    slogan: "Siêu ứng dụng hàng đầu Đông Nam Á",
-    industry: "Công nghệ & Vận tải",
-    openJobs: 28,
-    location: "TP. Hồ Chí Minh",
-  },
-  {
-    id: "shopee",
-    name: "Shopee Việt Nam",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/0/0e/Shopee_logo.svg",
-    cover: "https://images.unsplash.com/photo-1556742049-0a67e5572273?auto=format&fit=crop&w=600&q=80",
-    slogan: "Nền tảng TMĐT số 1 khu vực",
-    industry: "Thương mại điện tử",
-    openJobs: 54,
-    location: "TP. Hồ Chí Minh",
-  },
-  {
-    id: "vng",
-    name: "VNG Corporation",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/2/2f/VNG_Corp._logo.svg",
-    cover: "https://images.unsplash.com/photo-1517245386807-bb43f82c33c4?auto=format&fit=crop&w=600&q=80",
-    slogan: "Kỳ lân công nghệ đầu tiên tại Việt Nam",
-    industry: "Game & Cloud Service",
-    openJobs: 38,
-    location: "TP. Hồ Chí Minh",
-  },
-  {
-    id: "momo",
-    name: "MoMo (M_Service)",
-    logo: "https://upload.wikimedia.org/wikipedia/vi/f/fe/MoMo_Logo.png",
-    cover: "https://images.unsplash.com/photo-1559526324-4b87b5e36e44?auto=format&fit=crop&w=600&q=80",
-    slogan: "Hệ sinh thái tài chính số cho người Việt",
-    industry: "Fintech",
-    openJobs: 31,
-    location: "TP. Hồ Chí Minh, Hà Nội",
-  },
-  {
-    id: "vinai",
-    name: "VinAI Research",
-    logo: "https://upload.wikimedia.org/wikipedia/commons/thumb/c/cd/VinAI_Logo.png/640px-VinAI_Logo.png",
-    cover: "https://images.unsplash.com/photo-1531482615713-2afd69097998?auto=format&fit=crop&w=600&q=80",
-    slogan: "Nghiên cứu & phát triển AI đẳng cấp thế giới",
-    industry: "Trí tuệ nhân tạo (AI)",
-    openJobs: 19,
-    location: "Hà Nội",
-  },
-];
 
 // ==================== MAIN COMPONENT ====================
 function JobSearchForm() {
@@ -309,14 +88,94 @@ function JobSearchForm() {
   const [currentPage, setCurrentPage] = useState(1);
 
   // API & Data state
-  const [jobs, setJobs] = useState<any[]>(MOCK_JOBS);
-  const [loading, setLoading] = useState(false);
-  const [totalCount, setTotalCount] = useState(6120);
+  const [jobs, setJobs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [totalCount, setTotalCount] = useState(0);
 
   // Bookmark state
   const isAuthenticated = useAuthStore((state) => state.isAuthenticated);
   const [bookmarkedJobIds, setBookmarkedJobIds] = useState<string[]>([]);
   const [bookmarkingId, setBookmarkingId] = useState<string | null>(null);
+
+  // Fetch Jobs from PostgreSQL Backend
+  const fetchJobs = async () => {
+    setLoading(true);
+    try {
+      const res = await apiClient.get<{
+        success: boolean;
+        data: {
+          items: any[];
+          pagination: { total: number; page: number; pageSize: number };
+        };
+      }>("/jobs/", {
+        params: {
+          q: keyword.trim() || undefined,
+          location: location !== "Toàn quốc" ? location : undefined,
+          work_mode: workMode !== "Tất cả" ? workMode : undefined,
+          employment_type: jobType !== "Tất cả" ? jobType : undefined,
+          sort_by: sortBy !== "relevance" ? sortBy : undefined,
+          page: currentPage,
+          page_size: pageSize,
+        },
+      });
+      const items = res.data?.data?.items || [];
+      const total = res.data?.data?.pagination?.total || 0;
+      setTotalCount(total);
+      if (items.length > 0) {
+        setJobs(
+          items.map((j: any) => {
+            let salaryStr = "Thỏa thuận";
+            if (j.salary_min && j.salary_max) {
+              salaryStr = `${Math.round(j.salary_min / 1000000)} - ${Math.round(j.salary_max / 1000000)} triệu`;
+            } else if (j.salary_min) {
+              salaryStr = `Từ ${Math.round(j.salary_min / 1000000)} triệu`;
+            } else if (j.salary_max) {
+              salaryStr = `Đến ${Math.round(j.salary_max / 1000000)} triệu`;
+            }
+
+            let workModeStr = "Tại văn phòng";
+            if (j.work_mode === "hybrid") workModeStr = "Hybrid";
+            else if (j.work_mode === "remote") workModeStr = "Remote";
+
+            let empTypeStr = "Toàn thời gian";
+            if (j.employment_type === "part_time") empTypeStr = "Bán thời gian";
+            else if (j.employment_type === "internship") empTypeStr = "Thực tập";
+            else if (j.employment_type === "contract") empTypeStr = "Hợp đồng";
+            else if (j.employment_type === "freelance") empTypeStr = "Freelance";
+
+            return {
+              id: String(j.id),
+              title: j.title || "Vị trí tuyển dụng",
+              company: j.company?.name || "Doanh nghiệp",
+              isVerified: j.company?.is_verified ?? false,
+              logo: j.company?.logo_url || "https://images.unsplash.com/photo-1549923746-c502d488b3ea?auto=format&fit=crop&w=120&h=120&q=80",
+              salary: salaryStr,
+              location: j.location || "Toàn quốc",
+              experience: j.experience_min ? `${j.experience_min} năm` : "Không yêu cầu",
+              type: empTypeStr,
+              workMode: workModeStr,
+              category: j.category?.name || "Công nghệ thông tin",
+              badge: "featured",
+              badgeText: "Tuyển gấp",
+              skills: Array.isArray(j.skills) && j.skills.length > 0 ? j.skills : ["Chuyên môn"],
+              moreSkillsCount: 0,
+              postedAt: j.created_at ? new Date(j.created_at).toLocaleDateString("vi-VN") : "Gần đây",
+            };
+          })
+        );
+      } else {
+        setJobs([]);
+      }
+    } catch {
+      setJobs([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchJobs();
+  }, [keyword, location, workMode, jobType, sortBy, currentPage, pageSize]);
 
   // Fetch bookmarks
   useEffect(() => {
@@ -328,7 +187,7 @@ function JobSearchForm() {
             setBookmarkedJobIds(res.data.ids);
           }
         })
-        .catch(() => {});
+        .catch(() => { });
     } else {
       setBookmarkedJobIds([]);
     }
@@ -368,28 +227,12 @@ function JobSearchForm() {
   // Handle Search Trigger
   const handleSearch = (e?: React.FormEvent) => {
     if (e) e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-    }, 300);
+    setCurrentPage(1);
+    fetchJobs();
   };
 
-  // Filter jobs locally or through API
-  const filteredJobs = useMemo(() => {
-    return jobs.filter((j) => {
-      if (keyword.trim()) {
-        const matchTitle = j.title.toLowerCase().includes(keyword.toLowerCase());
-        const matchComp = j.company.toLowerCase().includes(keyword.toLowerCase());
-        const matchSkill = j.skills.some((s: string) => s.toLowerCase().includes(keyword.toLowerCase()));
-        if (!matchTitle && !matchComp && !matchSkill) return false;
-      }
-      if (category !== "Tất cả ngành" && j.category !== category) return false;
-      if (location !== "Toàn quốc" && j.location !== location) return false;
-      if (workMode !== "Tất cả" && j.workMode !== workMode) return false;
-      if (jobType !== "Tất cả" && j.type !== jobType) return false;
-      return true;
-    });
-  }, [jobs, keyword, category, location, workMode, jobType]);
+  // Filter jobs directly from backend response
+  const filteredJobs = jobs;
 
   // Helper render Badge color
   const renderBadge = (badge: string, text: string) => {
@@ -416,9 +259,9 @@ function JobSearchForm() {
 
   return (
     <div className="w-full bg-[#f8fafc] min-h-screen flex flex-col font-sans pb-16">
-      
+
       {/* 1. HERO / BANNER SECTION */}
-      <div className="relative overflow-hidden bg-[#0047cc] text-white min-h-[360px] lg:min-h-[420px] flex items-center">
+      <div className="relative overflow-hidden bg-[#0047cc] text-white min-h-[300px] lg:min-h-[345px] flex items-center">
         {/* Background Image vieclam.png */}
         <div
           className="absolute inset-0 bg-no-repeat bg-cover bg-right lg:bg-center pointer-events-none"
@@ -427,20 +270,20 @@ function JobSearchForm() {
           }}
         />
 
-        <div className="max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-12 pt-8 pb-20 lg:pt-12 lg:pb-24 relative z-10 w-full">
+        <div className="max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-12 pt-6 pb-16 lg:pt-8 lg:pb-18 relative z-10 w-full">
           <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 items-center">
-            
+
             {/* Cột trái: Tiêu đề & Chỉ số */}
-            <div className="lg:col-span-7 space-y-6">
+            <div className="lg:col-span-7 flex flex-col justify-center">
               {/* Badge nhỏ */}
-              <div className="inline-block">
+              <div className="inline-block mb-3">
                 <span className="bg-white/15 backdrop-blur-md text-white text-[11px] font-extrabold uppercase px-3.5 py-1 rounded-full tracking-wider border border-white/20">
                   HƠN CẢ MỘT CÔNG VIỆC
                 </span>
               </div>
 
               {/* Tiêu đề lớn */}
-              <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-[1.15] m-0">
+              <h1 className="text-3xl sm:text-5xl font-black text-white tracking-tight leading-[1.24] sm:leading-[1.26] m-0">
                 Tìm việc tốt,
                 <br />
                 chạm đến{" "}
@@ -450,12 +293,12 @@ function JobSearchForm() {
               </h1>
 
               {/* Mô tả */}
-              <p className="text-slate-100 text-sm sm:text-base font-medium max-w-lg leading-relaxed m-0 drop-shadow-sm">
-                Hàng ngàn cơ hội việc làm từ các doanh nghiệp hàng đầu đang chờ bạn.
+              <p className="text-slate-100 text-sm sm:text-base font-medium max-w-lg leading-relaxed m-0 mt-3.5 sm:mt-4 drop-shadow-sm">
+                Hàng ngàn cơ hội từ các doanh nghiệp hàng đầu đang chờ bạn.
               </p>
 
               {/* 3 chỉ số nhỏ */}
-              <div className="grid grid-cols-3 gap-3 sm:gap-6 pt-2 max-w-md">
+              <div className="grid grid-cols-3 gap-3 sm:gap-6 mt-5 sm:mt-6 max-w-md">
                 {/* 1. 58K+ Việc làm */}
                 <div className="flex items-center gap-2.5">
                   <div className="w-10 h-10 rounded-xl bg-white/15 backdrop-blur-sm border border-white/20 flex items-center justify-center text-cyan-300 shrink-0">
@@ -492,7 +335,7 @@ function JobSearchForm() {
             </div>
 
             {/* Cột phải: Để trống để lộ 3D graphic của ảnh nền */}
-            <div className="hidden lg:block lg:col-span-5 h-[260px]" />
+            <div className="hidden lg:block lg:col-span-5 h-[200px] lg:h-[220px]" />
 
           </div>
         </div>
@@ -501,10 +344,10 @@ function JobSearchForm() {
       {/* 2. SEARCH & FILTER CONTAINER (Khung trắng nổi bám sát 100% ảnh tham chiếu) */}
       <div className="max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-12 w-full -mt-10 sm:-mt-12 relative z-30">
         <div className="bg-white rounded-[28px] p-5 sm:p-6 shadow-[0_16px_40px_rgba(0,18,50,0.08)] border border-slate-100/80 space-y-4">
-          
+
           {/* Main Filter Row (8 widgets with expanded search bar) */}
           <form onSubmit={handleSearch} className="flex flex-col sm:grid sm:grid-cols-2 md:grid-cols-4 xl:flex xl:flex-row xl:items-center gap-2.5">
-            
+
             {/* 1. Keyword search input (rộng rãi, không bị mất chữ) */}
             <div className="w-full xl:flex-[2.2] xl:min-w-[250px] relative flex items-center bg-white rounded-2xl border border-slate-200/90 px-3.5 py-2 hover:border-[#0062ff] focus-within:border-[#0062ff] focus-within:shadow-[0_0_0_2px_rgba(0,98,255,0.1)] transition-all h-[56px]">
               <Search className="text-[#0062ff] w-5 h-5 mr-2 shrink-0 stroke-[2.2]" />
@@ -694,14 +537,93 @@ function JobSearchForm() {
             {/* Advanced filter toggle button */}
             <button
               type="button"
-              onClick={() => setIsAdvancedFilterOpen(true)}
+              onClick={() => setIsAdvancedFilterOpen(!isAdvancedFilterOpen)}
               className="inline-flex items-center gap-1.5 font-bold text-slate-700 hover:text-[#0062ff] transition-colors cursor-pointer bg-transparent border-none p-0 shrink-0 self-end sm:self-auto"
             >
               <SlidersHorizontal className="text-[#0062ff] w-4 h-4 shrink-0 stroke-[2.2]" />
               <span>Bộ lọc nâng cao</span>
-              <ChevronDown className="w-3.5 h-3.5 text-slate-400 stroke-[2]" />
+              <ChevronDown className={`w-3.5 h-3.5 text-slate-400 stroke-[2] transition-transform duration-200 ${isAdvancedFilterOpen ? "rotate-180 text-[#0062ff]" : ""}`} />
             </button>
           </div>
+
+          {/* Khung mở rộng bộ lọc nâng cao xổ xuống ngay bên dưới */}
+          {isAdvancedFilterOpen && (
+            <div className="pt-2.5 sm:pt-3 border-t border-slate-100/90 transition-all duration-200">
+              <div className="bg-[#f8fafc] rounded-2xl py-3 px-3.5 sm:px-4.5 border border-slate-200/80 shadow-2xs">
+                {/* 3 dropdown + nhóm 2 nút trên cùng 1 hàng desktop, căn thẳng hàng theo đáy dropdown */}
+                <div className="flex flex-col lg:flex-row lg:items-end gap-3 sm:gap-3.5">
+                  {/* 1. Cấp bậc */}
+                  <div className="flex-1 min-w-[150px] space-y-1">
+                    <label className="text-[11.5px] font-bold text-slate-700 block">
+                      Cấp bậc
+                    </label>
+                    <Select
+                      value={advancedLevel}
+                      onChange={setAdvancedLevel}
+                      className="w-full [&_.ant-select-selector]:!rounded-xl [&_.ant-select-selector]:!border-slate-200 [&_.ant-select-selector]:!bg-white [&_.ant-select-selector]:!h-[36px] [&_.ant-select-selection-item]:!leading-[34px]"
+                      options={["Tất cả", "Thực tập sinh", "Nhân viên", "Trưởng nhóm / Leader", "Trưởng phòng / Manager", "Giám đốc / Director"].map(
+                        (val) => ({ value: val, label: val })
+                      )}
+                    />
+                  </div>
+
+                  {/* 2. Quy mô doanh nghiệp */}
+                  <div className="flex-1 min-w-[150px] space-y-1">
+                    <label className="text-[11.5px] font-bold text-slate-700 block">
+                      Quy mô doanh nghiệp
+                    </label>
+                    <Select
+                      value={advancedCompanySize}
+                      onChange={setAdvancedCompanySize}
+                      className="w-full [&_.ant-select-selector]:!rounded-xl [&_.ant-select-selector]:!border-slate-200 [&_.ant-select-selector]:!bg-white [&_.ant-select-selector]:!h-[36px] [&_.ant-select-selection-item]:!leading-[34px]"
+                      options={["Tất cả", "Dưới 50 nhân viên", "50 - 200 nhân viên", "200 - 500 nhân viên", "500+ nhân viên"].map(
+                        (val) => ({ value: val, label: val })
+                      )}
+                    />
+                  </div>
+
+                  {/* 3. Thời gian đăng tin */}
+                  <div className="flex-1 min-w-[150px] space-y-1">
+                    <label className="text-[11.5px] font-bold text-slate-700 block">
+                      Thời gian đăng tin
+                    </label>
+                    <Select
+                      value={advancedPostedDate}
+                      onChange={setAdvancedPostedDate}
+                      className="w-full [&_.ant-select-selector]:!rounded-xl [&_.ant-select-selector]:!border-slate-200 [&_.ant-select-selector]:!bg-white [&_.ant-select-selector]:!h-[36px] [&_.ant-select-selection-item]:!leading-[34px]"
+                      options={["Tất cả", "24 giờ qua", "3 ngày qua", "7 ngày qua", "1 tháng qua"].map(
+                        (val) => ({ value: val, label: val })
+                      )}
+                    />
+                  </div>
+
+                  {/* Nhóm 2 nút: Đặt lại và Áp dụng (cùng hàng, thẳng đáy với dropdown) */}
+                  <div className="flex items-center justify-end gap-2 shrink-0 pt-1 lg:pt-0">
+                    <button
+                      type="button"
+                      onClick={() => {
+                        setAdvancedLevel("Tất cả");
+                        setAdvancedCompanySize("Tất cả");
+                        setAdvancedPostedDate("Tất cả");
+                      }}
+                      className="h-[36px] px-3.5 rounded-xl border border-slate-200 bg-white text-slate-600 font-bold text-xs hover:bg-slate-50 hover:text-slate-800 transition-colors cursor-pointer flex items-center justify-center whitespace-nowrap"
+                    >
+                      Đặt lại
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => {
+                        handleSearch();
+                      }}
+                      className="h-[36px] px-4.5 rounded-xl bg-[#0062ff] text-white font-bold text-xs hover:bg-blue-700 transition-colors cursor-pointer shadow-2xs flex items-center justify-center whitespace-nowrap"
+                    >
+                      Áp dụng
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          )}
 
         </div>
       </div>
@@ -709,7 +631,7 @@ function JobSearchForm() {
       {/* 3. RESULTS HEADER & CONTROLS */}
       <div className="max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-12 w-full pt-8 pb-4">
         <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
-          
+
           {/* Total Count */}
           <div>
             <h2 className="text-sm sm:text-base font-extrabold text-slate-800 m-0">
@@ -739,9 +661,8 @@ function JobSearchForm() {
               <button
                 type="button"
                 onClick={() => setViewMode("grid")}
-                className={`p-1.5 rounded-lg flex items-center justify-center transition-all cursor-pointer border-none ${
-                  viewMode === "grid" ? "bg-white text-primary shadow-xs font-bold" : "text-slate-400 hover:text-slate-600 bg-transparent"
-                }`}
+                className={`p-1.5 rounded-lg flex items-center justify-center transition-all cursor-pointer border-none ${viewMode === "grid" ? "bg-white text-primary shadow-xs font-bold" : "text-slate-400 hover:text-slate-600 bg-transparent"
+                  }`}
                 title="Dạng lưới"
               >
                 <AppstoreOutlined className="text-base" />
@@ -749,9 +670,8 @@ function JobSearchForm() {
               <button
                 type="button"
                 onClick={() => setViewMode("list")}
-                className={`p-1.5 rounded-lg flex items-center justify-center transition-all cursor-pointer border-none ${
-                  viewMode === "list" ? "bg-white text-primary shadow-xs font-bold" : "text-slate-400 hover:text-slate-600 bg-transparent"
-                }`}
+                className={`p-1.5 rounded-lg flex items-center justify-center transition-all cursor-pointer border-none ${viewMode === "list" ? "bg-white text-primary shadow-xs font-bold" : "text-slate-400 hover:text-slate-600 bg-transparent"
+                  }`}
                 title="Dạng danh sách"
               >
                 <BarsOutlined className="text-base" />
@@ -811,9 +731,8 @@ function JobSearchForm() {
                         title={isSaved ? "Bỏ lưu" : "Lưu việc làm"}
                       >
                         <Heart
-                          className={`w-[18px] h-[18px] transition-colors ${
-                            isSaved ? "fill-rose-500 text-rose-500" : "text-slate-400 hover:text-slate-600 stroke-[1.8]"
-                          }`}
+                          className={`w-[18px] h-[18px] transition-colors ${isSaved ? "fill-rose-500 text-rose-500" : "text-slate-400 hover:text-slate-600 stroke-[1.8]"
+                            }`}
                         />
                       </button>
                     </div>
@@ -905,53 +824,64 @@ function JobSearchForm() {
       </div>
 
       {/* 5. PAGINATION SECTION */}
-      <div className="max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-12 w-full pt-10 pb-6">
+      <div className="max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-12 w-full pt-8 pb-1 sm:pb-2">
         <div className="flex flex-col sm:flex-row items-center justify-center sm:justify-between gap-4">
-          
+
           {/* Pagination buttons */}
-          <div className="flex items-center gap-1.5">
-            <button
-              type="button"
-              disabled={currentPage === 1}
-              onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
-              className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors cursor-pointer disabled:opacity-40"
-            >
-              <ChevronLeft className="w-4 h-4 stroke-[2]" />
-            </button>
+          {(() => {
+            const totalPages = Math.max(1, Math.ceil(totalCount / pageSize));
+            const pagesToShow = Array.from({ length: Math.min(5, totalPages) }, (_, i) => i + 1);
 
-            {[1, 2, 3, 4, 5].map((pageNum) => (
-              <button
-                key={pageNum}
-                type="button"
-                onClick={() => setCurrentPage(pageNum)}
-                className={`w-8 h-8 rounded-full font-bold text-xs transition-all cursor-pointer border-none ${
-                  currentPage === pageNum
-                    ? "bg-[#0062ff] text-white shadow-sm"
-                    : "bg-transparent text-slate-600 hover:bg-slate-100 font-semibold"
-                }`}
-              >
-                {pageNum}
-              </button>
-            ))}
+            return (
+              <div className="flex items-center gap-1.5">
+                <button
+                  type="button"
+                  disabled={currentPage <= 1}
+                  onClick={() => setCurrentPage((p) => Math.max(1, p - 1))}
+                  className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors cursor-pointer disabled:opacity-40"
+                >
+                  <ChevronLeft className="w-4 h-4 stroke-[2]" />
+                </button>
 
-            <span className="text-slate-400 px-1 text-xs font-bold">...</span>
+                {pagesToShow.map((pageNum) => (
+                  <button
+                    key={pageNum}
+                    type="button"
+                    onClick={() => setCurrentPage(pageNum)}
+                    className={`w-8 h-8 rounded-full font-bold text-xs transition-all cursor-pointer border-none ${currentPage === pageNum
+                        ? "bg-[#0062ff] text-white shadow-sm"
+                        : "bg-transparent text-slate-600 hover:bg-slate-100 font-semibold"
+                      }`}
+                  >
+                    {pageNum}
+                  </button>
+                ))}
 
-            <button
-              type="button"
-              onClick={() => setCurrentPage(1021)}
-              className="w-8 h-8 rounded-full bg-transparent text-slate-600 hover:bg-slate-100 font-semibold text-xs transition-colors cursor-pointer border-none"
-            >
-              1021
-            </button>
+                {totalPages > 5 && (
+                  <>
+                    <span className="text-slate-400 px-1 text-xs font-bold">...</span>
+                    <button
+                      type="button"
+                      onClick={() => setCurrentPage(totalPages)}
+                      className={`w-8 h-8 rounded-full text-slate-600 hover:bg-slate-100 font-semibold text-xs transition-colors cursor-pointer border-none ${currentPage === totalPages ? "bg-[#0062ff] text-white font-bold" : "bg-transparent"
+                        }`}
+                    >
+                      {totalPages}
+                    </button>
+                  </>
+                )}
 
-            <button
-              type="button"
-              onClick={() => setCurrentPage((p) => p + 1)}
-              className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors cursor-pointer"
-            >
-              <ChevronRight className="w-4 h-4 stroke-[2]" />
-            </button>
-          </div>
+                <button
+                  type="button"
+                  disabled={currentPage >= totalPages}
+                  onClick={() => setCurrentPage((p) => Math.min(totalPages, p + 1))}
+                  className="w-8 h-8 rounded-full border border-slate-200 bg-white hover:bg-slate-50 flex items-center justify-center text-slate-600 transition-colors cursor-pointer disabled:opacity-40"
+                >
+                  <ChevronRight className="w-4 h-4 stroke-[2]" />
+                </button>
+              </div>
+            );
+          })()}
 
           {/* Page size dropdown */}
           <div className="flex items-center gap-2 text-xs text-slate-500 font-medium">
@@ -975,7 +905,7 @@ function JobSearchForm() {
       {/* ========================================================================= */}
       {/* SECTION 1: HÀNH TRANG SỰ NGHIỆP - TĂNG CƠ HỘI ĐƯỢC TUYỂN DỤNG */}
       {/* ========================================================================= */}
-      <div className="max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-12 w-full pt-8 pb-4">
+      <div className="max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-12 w-full pt-3 sm:pt-4 pb-4">
         {/* Banner phía trên */}
         <div className="relative w-full rounded-3xl overflow-hidden bg-[#f8fbff] border border-blue-100/80 shadow-xs min-h-[180px] sm:min-h-[200px] md:min-h-[220px] flex items-center">
           {/* Background Image: congty2.png covers the full banner container */}
@@ -1002,37 +932,37 @@ function JobSearchForm() {
         {/* 3 Career Preparation Cards: Giảm chiều cao gọn gàng, đè nhẹ lên mép dưới của banner */}
         <div className="grid grid-cols-1 md:grid-cols-3 gap-4 sm:gap-5 relative z-20 -mt-4 sm:-mt-5 px-2 sm:px-3">
           {/* Card 1: Hồ sơ nghề nghiệp (Soft Mint Green) */}
-          <div className="bg-[#effcf7] rounded-[20px] p-4 sm:py-4 sm:px-5 border border-[#a7f3d0] shadow-[0_8px_20px_-4px_rgba(16,185,129,0.08),0_6px_8px_-4px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-md transition-all duration-300">
+          <div className="bg-[#effcf7] rounded-[18px] py-2.5 sm:py-3 px-3.5 sm:px-4 border border-[#a7f3d0] shadow-[0_4px_16px_-4px_rgba(16,185,129,0.08)] relative overflow-hidden flex flex-col justify-between group hover:shadow-md transition-all duration-300">
             {/* Background Shape Accent */}
-            <div className="absolute top-0 right-0 w-28 h-28 bg-emerald-200/25 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-20 h-20 bg-emerald-200/25 rounded-full blur-2xl pointer-events-none" />
 
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-2">
-                <div className="w-9 h-9 rounded-xl bg-emerald-500 text-white flex items-center justify-center shadow-2xs">
-                  <UserCheck className="w-4.5 h-4.5 stroke-[2.5]" />
+              <div className="flex items-center justify-between mb-1">
+                <div className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg bg-emerald-500 text-white flex items-center justify-center shadow-2xs">
+                  <UserCheck className="w-4 h-4 stroke-[2.5]" />
                 </div>
               </div>
 
-              <h3 className="text-[15px] font-black text-slate-900 m-0 leading-tight">
+              <h3 className="text-[14px] sm:text-[14.5px] font-black text-slate-900 m-0 leading-tight">
                 Hồ sơ nghề nghiệp
               </h3>
-              <p className="text-[11.5px] text-slate-600 font-medium mt-0.5 leading-snug m-0 max-w-[210px]">
-                Hoàn thiện thông tin để nhà tuyển dụng hiểu rõ hơn về bạn.
+              <p className="text-[11px] sm:text-[11.5px] text-slate-600 font-medium mt-0.5 leading-snug m-0 max-w-[210px]">
+                Hoàn thiện hồ sơ để thu hút nhà tuyển dụng.
               </p>
 
               {/* Progress bar */}
-              <div className="mt-2.5 flex items-center gap-2.5">
+              <div className="mt-1.5 flex items-center gap-2">
                 <div className="flex-1 h-1.5 bg-white rounded-full overflow-hidden border border-emerald-200/80 p-0.5 shadow-2xs">
                   <div className="h-full bg-emerald-500 rounded-full w-[70%]" />
                 </div>
-                <span className="text-[11px] font-black text-slate-800 shrink-0">70%</span>
+                <span className="text-[10.5px] sm:text-[11px] font-black text-slate-800 shrink-0">70%</span>
               </div>
             </div>
 
-            <div className="pt-3 relative z-10 flex items-center justify-between">
+            <div className="pt-1.5 sm:pt-2 mt-auto relative z-10 flex items-center justify-between">
               <Link
                 href="/ung-vien/ho-so"
-                className="bg-white hover:bg-emerald-50/80 text-[#0062ff] font-extrabold text-[11.5px] px-3.5 py-1.5 rounded-xl shadow-2xs border border-emerald-200/90 inline-flex items-center gap-1 transition-all hover:scale-[1.02]"
+                className="bg-white hover:bg-emerald-50/80 text-[#0062ff] font-extrabold text-[11px] px-3 py-1.5 rounded-lg shadow-2xs border border-emerald-200/90 inline-flex items-center gap-1 transition-all hover:scale-[1.02]"
               >
                 <span>Cập nhật hồ sơ</span>
                 <ArrowRight className="w-3 h-3 stroke-[2.5]" />
@@ -1040,7 +970,7 @@ function JobSearchForm() {
             </div>
 
             {/* Bottom Right Illustration (SVG Profile Card) */}
-            <div className="absolute -bottom-1 -right-1 w-22 h-18 pointer-events-none group-hover:scale-105 transition-transform duration-300">
+            <div className="absolute bottom-1 right-2 w-13 h-11 sm:w-14 sm:h-12 pointer-events-none group-hover:scale-105 transition-transform duration-300">
               <svg viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-sm">
                 <rect x="18" y="12" width="70" height="62" rx="10" fill="white" stroke="#6ee7b7" strokeWidth="1.5" />
                 <circle cx="36" cy="30" r="9" fill="#10b981" />
@@ -1055,36 +985,36 @@ function JobSearchForm() {
           </div>
 
           {/* Card 2: CV của tôi (Soft Lavender / Purple) */}
-          <div className="bg-[#f5f3ff] rounded-[20px] p-4 sm:py-4 sm:px-5 border border-[#c4b5fd] shadow-[0_8px_20px_-4px_rgba(139,92,246,0.08),0_6px_8px_-4px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-md transition-all duration-300">
+          <div className="bg-[#f5f3ff] rounded-[18px] py-2.5 sm:py-3 px-3.5 sm:px-4 border border-[#c4b5fd] shadow-[0_4px_16px_-4px_rgba(139,92,246,0.08)] relative overflow-hidden flex flex-col justify-between group hover:shadow-md transition-all duration-300">
             {/* Background Shape Accent */}
-            <div className="absolute top-0 right-0 w-28 h-28 bg-purple-200/25 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-20 h-20 bg-purple-200/25 rounded-full blur-2xl pointer-events-none" />
 
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-2">
-                <div className="w-9 h-9 rounded-xl bg-purple-600 text-white flex items-center justify-center shadow-2xs font-black text-[11px]">
+              <div className="flex items-center justify-between mb-1">
+                <div className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg bg-purple-600 text-white flex items-center justify-center shadow-2xs font-black text-[10px]">
                   <span>CV</span>
                 </div>
               </div>
 
-              <h3 className="text-[15px] font-black text-slate-900 m-0 leading-tight">
+              <h3 className="text-[14px] sm:text-[14.5px] font-black text-slate-900 m-0 leading-tight">
                 CV của tôi
               </h3>
-              <p className="text-[11.5px] text-slate-600 font-medium mt-0.5 leading-snug m-0 max-w-[210px]">
-                Quản lý các CV đang sử dụng cho từng vị trí ứng tuyển.
+              <p className="text-[11px] sm:text-[11.5px] text-slate-600 font-medium mt-0.5 leading-snug m-0 max-w-[210px]">
+                Quản lý CV cho từng vị trí ứng tuyển.
               </p>
 
               {/* Badge CV */}
-              <div className="mt-2.5">
-                <span className="bg-white text-purple-700 text-[10.5px] font-bold px-2.5 py-0.5 rounded-md border border-purple-200/90 shadow-2xs inline-block">
+              <div className="mt-1.5">
+                <span className="bg-white text-purple-700 text-[10px] font-bold px-2 py-0.5 rounded-md border border-purple-200/90 shadow-2xs inline-block">
                   3 CV đã lưu
                 </span>
               </div>
             </div>
 
-            <div className="pt-3 relative z-10 flex items-center justify-between">
+            <div className="pt-1.5 sm:pt-2 mt-auto relative z-10 flex items-center justify-between">
               <Link
                 href="/ung-vien/quan-ly-cv"
-                className="bg-white hover:bg-purple-50/80 text-[#0062ff] font-extrabold text-[11.5px] px-3.5 py-1.5 rounded-xl shadow-2xs border border-purple-200/90 inline-flex items-center gap-1 transition-all hover:scale-[1.02]"
+                className="bg-white hover:bg-purple-50/80 text-[#0062ff] font-extrabold text-[11px] px-3 py-1.5 rounded-lg shadow-2xs border border-purple-200/90 inline-flex items-center gap-1 transition-all hover:scale-[1.02]"
               >
                 <span>Quản lý CV</span>
                 <ArrowRight className="w-3 h-3 stroke-[2.5]" />
@@ -1092,7 +1022,7 @@ function JobSearchForm() {
             </div>
 
             {/* Bottom Right Illustration (SVG CV Stack) */}
-            <div className="absolute -bottom-1 -right-1 w-22 h-18 pointer-events-none group-hover:scale-105 transition-transform duration-300">
+            <div className="absolute bottom-1 right-2 w-13 h-11 sm:w-14 sm:h-12 pointer-events-none group-hover:scale-105 transition-transform duration-300">
               <svg viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-sm">
                 <rect x="25" y="16" width="55" height="60" rx="8" fill="#ddd6fe" transform="rotate(5 25 16)" />
                 <rect x="20" y="12" width="56" height="62" rx="8" fill="white" stroke="#a78bfa" strokeWidth="1.5" />
@@ -1106,29 +1036,29 @@ function JobSearchForm() {
           </div>
 
           {/* Card 3: Tạo CV online (Soft Cream / Orange) */}
-          <div className="bg-[#fffbeb] rounded-[20px] p-4 sm:py-4 sm:px-5 border border-[#fcd34d] shadow-[0_8px_20px_-4px_rgba(245,158,11,0.08),0_6px_8px_-4px_rgba(0,0,0,0.04)] relative overflow-hidden flex flex-col justify-between group hover:shadow-md transition-all duration-300">
+          <div className="bg-[#fffbeb] rounded-[18px] py-2.5 sm:py-3 px-3.5 sm:px-4 border border-[#fcd34d] shadow-[0_4px_16px_-4px_rgba(245,158,11,0.08)] relative overflow-hidden flex flex-col justify-between group hover:shadow-md transition-all duration-300">
             {/* Background Shape Accent */}
-            <div className="absolute top-0 right-0 w-28 h-28 bg-amber-200/25 rounded-full blur-2xl pointer-events-none" />
+            <div className="absolute top-0 right-0 w-20 h-20 bg-amber-200/25 rounded-full blur-2xl pointer-events-none" />
 
             <div className="relative z-10">
-              <div className="flex items-center justify-between mb-2">
-                <div className="w-9 h-9 rounded-xl bg-amber-500 text-white flex items-center justify-center shadow-2xs">
-                  <FilePlus className="w-4.5 h-4.5 stroke-[2.5]" />
+              <div className="flex items-center justify-between mb-1">
+                <div className="w-7.5 h-7.5 sm:w-8 sm:h-8 rounded-lg bg-amber-500 text-white flex items-center justify-center shadow-2xs">
+                  <FilePlus className="w-4 h-4 stroke-[2.5]" />
                 </div>
               </div>
 
-              <h3 className="text-[15px] font-black text-slate-900 m-0 leading-tight">
+              <h3 className="text-[14px] sm:text-[14.5px] font-black text-slate-900 m-0 leading-tight">
                 Tạo CV online
               </h3>
-              <p className="text-[11.5px] text-slate-600 font-medium mt-0.5 leading-snug m-0 max-w-[210px]">
-                Tạo CV chuyên nghiệp ngay trên Careza với nhiều mẫu đẹp.
+              <p className="text-[11px] sm:text-[11.5px] text-slate-600 font-medium mt-0.5 leading-snug m-0 max-w-[210px]">
+                Tạo CV chuyên nghiệp với mẫu đẹp.
               </p>
             </div>
 
-            <div className="pt-3 relative z-10 flex items-center gap-2">
+            <div className="pt-1.5 sm:pt-2 mt-auto relative z-10 flex items-center gap-2">
               <Link
                 href="/cv-builder"
-                className="bg-[#0062ff] hover:bg-[#0052cc] text-white font-extrabold text-[11.5px] px-3.5 py-1.5 rounded-xl shadow-sm inline-flex items-center gap-1 transition-all hover:scale-[1.02]"
+                className="bg-[#0062ff] hover:bg-[#0052cc] text-white font-extrabold text-[11px] px-3 py-1.5 rounded-lg shadow-sm inline-flex items-center gap-1 transition-all hover:scale-[1.02]"
               >
                 <span>Tạo CV</span>
                 <ArrowRight className="w-3 h-3 stroke-[2.5]" />
@@ -1136,14 +1066,14 @@ function JobSearchForm() {
 
               <Link
                 href="/ung-vien/quan-ly-cv?action=upload"
-                className="bg-white hover:bg-amber-50/50 text-slate-700 font-bold text-[11.5px] px-3 py-1.5 rounded-xl border border-amber-200/90 shadow-2xs inline-flex items-center transition-all hover:scale-[1.02]"
+                className="bg-white hover:bg-amber-50/50 text-slate-700 font-bold text-[11px] px-2.5 py-1.5 rounded-lg border border-amber-200/90 shadow-2xs inline-flex items-center transition-all hover:scale-[1.02]"
               >
                 Tải CV lên
               </Link>
             </div>
 
             {/* Bottom Right Illustration (SVG Document + Star) */}
-            <div className="absolute -bottom-1 -right-1 w-22 h-18 pointer-events-none group-hover:scale-105 transition-transform duration-300">
+            <div className="absolute bottom-1 right-2 w-13 h-11 sm:w-14 sm:h-12 pointer-events-none group-hover:scale-105 transition-transform duration-300">
               <svg viewBox="0 0 100 80" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full drop-shadow-sm">
                 <rect x="22" y="12" width="56" height="62" rx="8" fill="white" stroke="#fbbf24" strokeWidth="1.5" />
                 <rect x="30" y="22" width="22" height="4" rx="2" fill="#f59e0b" />
@@ -1199,7 +1129,7 @@ function JobSearchForm() {
           {/* Card 1: Viết CV hiệu quả */}
           <Link
             href="/cam-nang?category=viet-cv"
-            className="bg-[#eff6ff] hover:bg-[#e0f2fe] rounded-[20px] p-5 border border-[#dbeafe] shadow-2xs transition-all flex flex-col justify-between group relative overflow-hidden h-36"
+            className="bg-[#eff6ff] hover:bg-[#e0f2fe] rounded-[20px] p-5 border border-[#93c5fd] shadow-2xs transition-all flex flex-col justify-between group relative overflow-hidden h-36"
           >
             <div>
               <div className="flex items-center gap-3 mb-2.5">
@@ -1225,7 +1155,7 @@ function JobSearchForm() {
           {/* Card 2: Chuẩn bị phỏng vấn */}
           <Link
             href="/cam-nang?category=phong-van"
-            className="bg-[#fff0f3] hover:bg-[#ffe4e6] rounded-[20px] p-5 border border-[#ffe4e6] shadow-2xs transition-all flex flex-col justify-between group relative overflow-hidden h-36"
+            className="bg-[#fff0f3] hover:bg-[#ffe4e6] rounded-[20px] p-5 border border-[#fda4af] shadow-2xs transition-all flex flex-col justify-between group relative overflow-hidden h-36"
           >
             <div>
               <div className="flex items-center gap-3 mb-2.5">
@@ -1251,7 +1181,7 @@ function JobSearchForm() {
           {/* Card 3: Lương & chế độ */}
           <Link
             href="/cam-nang?category=luong-thuong"
-            className="bg-[#fffbeb] hover:bg-[#fef3c7] rounded-[20px] p-5 border border-[#fef3c7] shadow-2xs transition-all flex flex-col justify-between group relative overflow-hidden h-36"
+            className="bg-[#fffbeb] hover:bg-[#fef3c7] rounded-[20px] p-5 border border-[#fcd34d] shadow-2xs transition-all flex flex-col justify-between group relative overflow-hidden h-36"
           >
             <div>
               <div className="flex items-center gap-3 mb-2.5">
@@ -1277,7 +1207,7 @@ function JobSearchForm() {
           {/* Card 4: Kỹ năng nghề nghiệp */}
           <Link
             href="/cam-nang?category=ky-nang"
-            className="bg-[#effcf4] hover:bg-[#dcfce7] rounded-[20px] p-5 border border-[#dcfce7] shadow-2xs transition-all flex flex-col justify-between group relative overflow-hidden h-36"
+            className="bg-[#effcf4] hover:bg-[#dcfce7] rounded-[20px] p-5 border border-[#86efac] shadow-2xs transition-all flex flex-col justify-between group relative overflow-hidden h-36"
           >
             <div>
               <div className="flex items-center gap-3 mb-2.5">
@@ -1325,17 +1255,17 @@ function JobSearchForm() {
             <div className="flex flex-col sm:flex-row items-center gap-3 pt-2">
               <Link
                 href="/ung-vien/ho-so"
-                className="w-full sm:w-auto bg-white hover:bg-blue-50 text-[#0062ff] font-black text-xs sm:text-sm px-6 py-2.5 rounded-xl transition-all shadow-md flex items-center justify-center gap-1.5"
+                className="w-full sm:w-auto bg-blue-600 hover:bg-blue-500 text-white !text-white font-bold text-xs sm:text-sm px-6 py-2.5 rounded-xl transition-all border border-blue-400/40 shadow-sm flex items-center justify-center gap-1.5"
               >
-                <span>Hoàn thiện hồ sơ</span>
-                <ArrowRight className="w-4 h-4 stroke-[2.5]" />
+                <span className="text-white !text-white">Hoàn thiện hồ sơ</span>
+                <ArrowRight className="w-4 h-4 stroke-[2.5] text-white !text-white" />
               </Link>
 
               <Link
                 href="/ung-vien/quan-ly-cv"
-                className="w-full sm:w-auto bg-white/20 hover:bg-white/30 text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all border border-white/40 flex items-center justify-center backdrop-blur-sm"
+                className="w-full sm:w-auto bg-white/15 hover:bg-white/25 text-white !text-white font-bold text-xs sm:text-sm px-5 py-2.5 rounded-xl transition-all border border-white/30 flex items-center justify-center backdrop-blur-sm"
               >
-                Quản lý CV
+                <span className="text-white !text-white">Quản lý CV</span>
               </Link>
             </div>
           </div>
@@ -1399,83 +1329,7 @@ function JobSearchForm() {
         </div>
       </div>
 
-      {/* 7. ADVANCED FILTER DRAWER */}
-      <Drawer
-        title={
-          <div className="flex items-center gap-2">
-            <SlidersHorizontal className="text-[#0062ff] w-4 h-4 stroke-[2.2]" />
-            <span className="font-bold text-slate-800 text-sm">Bộ lọc nâng cao</span>
-          </div>
-        }
-        placement="right"
-        onClose={() => setIsAdvancedFilterOpen(false)}
-        open={isAdvancedFilterOpen}
-        size={320}
-      >
-        <div className="flex flex-col justify-between h-full space-y-6">
-          <div className="space-y-5">
-            {/* Cấp bậc */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 uppercase">Cấp bậc</label>
-              <Select
-                value={advancedLevel}
-                onChange={setAdvancedLevel}
-                className="w-full"
-                options={["Tất cả", "Thực tập sinh", "Nhân viên", "Trưởng nhóm / Leader", "Trưởng phòng / Manager", "Giám đốc / Director"].map(
-                  (val) => ({ value: val, label: val })
-                )}
-              />
-            </div>
 
-            {/* Quy mô công ty */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 uppercase">Quy mô doanh nghiệp</label>
-              <Select
-                value={advancedCompanySize}
-                onChange={setAdvancedCompanySize}
-                className="w-full"
-                options={["Tất cả", "Dưới 50 nhân viên", "50 - 200 nhân viên", "200 - 500 nhân viên", "500+ nhân viên"].map(
-                  (val) => ({ value: val, label: val })
-                )}
-              />
-            </div>
-
-            {/* Ngày đăng */}
-            <div className="space-y-1.5">
-              <label className="text-xs font-bold text-slate-700 uppercase">Thời gian đăng tin</label>
-              <Select
-                value={advancedPostedDate}
-                onChange={setAdvancedPostedDate}
-                className="w-full"
-                options={["Tất cả", "24 giờ qua", "3 ngày qua", "7 ngày qua", "1 tháng qua"].map(
-                  (val) => ({ value: val, label: val })
-                )}
-              />
-            </div>
-          </div>
-
-          <div className="pt-4 border-t border-slate-100 flex gap-2">
-            <button
-              type="button"
-              onClick={() => {
-                setAdvancedLevel("Tất cả");
-                setAdvancedCompanySize("Tất cả");
-                setAdvancedPostedDate("Tất cả");
-              }}
-              className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-bold text-xs hover:bg-slate-50 cursor-pointer"
-            >
-              Đặt lại
-            </button>
-            <button
-              type="button"
-              onClick={() => setIsAdvancedFilterOpen(false)}
-              className="flex-1 py-2.5 rounded-xl bg-primary text-white font-bold text-xs hover:bg-blue-700 cursor-pointer shadow-md shadow-primary/20"
-            >
-              Áp dụng
-            </button>
-          </div>
-        </div>
-      </Drawer>
 
       {/* Global Filter Style Overrides for Clean Modern UI */}
       <style

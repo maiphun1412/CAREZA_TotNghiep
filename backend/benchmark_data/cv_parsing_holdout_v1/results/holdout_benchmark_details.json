@@ -1,0 +1,1270 @@
+{
+  "total_records": 30,
+  "records": [
+    {
+      "cv_id": "HOLDOUT_CV_01",
+      "format": "PDF",
+      "category": "standard_backend_golang",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.875,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9333,
+        "exp_years_extracted": 3.0,
+        "exp_years_expected": 3.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Trần Tuấn Anh",
+        "email": "tuananh.golang@example.com",
+        "phone": "0913579001",
+        "skills": [
+          "docker",
+          "git",
+          "go",
+          "golang",
+          "microservices",
+          "postgresql",
+          "redis",
+          "rest api"
+        ],
+        "total_experience_years": 3.0,
+        "educations_count": 3,
+        "experiences_count": 3,
+        "projects_count": 3,
+        "certificates_count": 2
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_02",
+      "format": "PDF",
+      "category": "standard_frontend_vue",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 2.5,
+        "exp_years_expected": 2.5,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Brian Smith",
+        "email": "brian.smith.vue@example.com",
+        "phone": "0924681002",
+        "skills": [
+          "git",
+          "javascript",
+          "rest api",
+          "typescript",
+          "vue",
+          "vuejs"
+        ],
+        "total_experience_years": 2.5,
+        "educations_count": 2,
+        "experiences_count": 4,
+        "projects_count": 0,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_03",
+      "format": "PDF",
+      "category": "twocolumn_frontend",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 3.0,
+        "exp_years_expected": 3.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Nguyễn Bích Ngọc",
+        "email": "bichngoc.fe@example.com",
+        "phone": "0935792003",
+        "skills": [
+          "git",
+          "react",
+          "reactjs",
+          "rest api",
+          "typescript"
+        ],
+        "total_experience_years": 3.0,
+        "educations_count": 5,
+        "experiences_count": 1,
+        "projects_count": 2,
+        "certificates_count": 2
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_04",
+      "format": "PDF",
+      "category": "twocolumn_devops",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 5.0,
+        "exp_years_expected": 5.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Alexander Wang",
+        "email": "alex.wang.devops@example.com",
+        "phone": "0946803004",
+        "skills": [
+          "aws",
+          "ci/cd",
+          "docker",
+          "git",
+          "k8s",
+          "kubernetes",
+          "linux",
+          "terraform"
+        ],
+        "total_experience_years": 5.0,
+        "educations_count": 2,
+        "experiences_count": 2,
+        "projects_count": 0,
+        "certificates_count": 1
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_05",
+      "format": "PDF",
+      "category": "multipage_architect",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.8182,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9,
+        "exp_years_extracted": 8.0,
+        "exp_years_expected": 8.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Đỗ Văn Hùng",
+        "email": "hungdo.architect@example.com",
+        "phone": "0957914005",
+        "skills": [
+          "clean code",
+          "git",
+          "java",
+          "kubernetes",
+          "microservices",
+          "mysql",
+          "oracle",
+          "redis",
+          "spring",
+          "spring boot",
+          "system design"
+        ],
+        "total_experience_years": 8.0,
+        "educations_count": 3,
+        "experiences_count": 4,
+        "projects_count": 4,
+        "certificates_count": 2
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_06",
+      "format": "PDF",
+      "category": "multipage_ai_ml",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.9091,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9524,
+        "exp_years_extracted": 6.0,
+        "exp_years_expected": 6.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 0.0
+      },
+      "extracted_data": {
+        "name": "Jennifer Taylor",
+        "email": "jennifer.ml@example.com",
+        "phone": "0968025006",
+        "skills": [
+          "deep learning",
+          "docker",
+          "git",
+          "machine learning",
+          "nlp",
+          "numpy",
+          "pandas",
+          "python",
+          "pytorch",
+          "scikit-learn",
+          "tensorflow"
+        ],
+        "total_experience_years": 6.0,
+        "educations_count": 2,
+        "experiences_count": 1,
+        "projects_count": 0,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_07",
+      "format": "PDF",
+      "category": "skill_heavy_fullstack",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.8462,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9167,
+        "exp_years_extracted": 3.5,
+        "exp_years_expected": 3.5,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Lâm Thế Vinh",
+        "email": "thevinh.polyglot@example.com",
+        "phone": "0979136007",
+        "skills": [
+          "aws",
+          "ci/cd",
+          "django",
+          "docker",
+          "fastapi",
+          "git",
+          "mongodb",
+          "nextjs",
+          "nodejs",
+          "postgresql",
+          "python",
+          "react",
+          "rest api"
+        ],
+        "total_experience_years": 3.5,
+        "educations_count": 4,
+        "experiences_count": 3,
+        "projects_count": 3,
+        "certificates_count": 2
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_08",
+      "format": "PDF",
+      "category": "skill_special_chars_dotnet",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.8889,
+        "skill_recall": 0.8889,
+        "skill_f1": 0.8889,
+        "exp_years_extracted": 4.0,
+        "exp_years_expected": 4.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 0.0
+      },
+      "extracted_data": {
+        "name": "Samuel Green",
+        "email": "samuel.green.net@example.com",
+        "phone": "0980247008",
+        "skills": [
+          ".net",
+          "azure",
+          "c#",
+          "clean code",
+          "docker",
+          "git",
+          "microservices",
+          "sql",
+          "unit test"
+        ],
+        "total_experience_years": 4.0,
+        "educations_count": 2,
+        "experiences_count": 5,
+        "projects_count": 0,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_09",
+      "format": "PDF",
+      "category": "incomplete_missing_phone",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 2.0,
+        "exp_years_expected": 2.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Cao Thị Diệu Linh",
+        "email": "dieulinh.data@example.com",
+        "phone": "",
+        "skills": [
+          "data analysis",
+          "pandas",
+          "python",
+          "sql"
+        ],
+        "total_experience_years": 2.0,
+        "educations_count": 2,
+        "experiences_count": 4,
+        "projects_count": 2,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_10",
+      "format": "PDF",
+      "category": "incomplete_missing_email",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 3.0,
+        "exp_years_expected": 3.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 0.0,
+        "proj_detection": 0.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Robert Brown",
+        "email": "",
+        "phone": "0945678910",
+        "skills": [
+          "docker",
+          "git",
+          "linux",
+          "nginx"
+        ],
+        "total_experience_years": 3.0,
+        "educations_count": 2,
+        "experiences_count": 0,
+        "projects_count": 0,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_11",
+      "format": "PDF",
+      "category": "incomplete_missing_education",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 2.5,
+        "exp_years_expected": 2.5,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Mai Văn Đạt",
+        "email": "datmai.mobile@example.com",
+        "phone": "0912233411",
+        "skills": [
+          "git",
+          "rest api",
+          "sqlite"
+        ],
+        "total_experience_years": 2.5,
+        "educations_count": 0,
+        "experiences_count": 4,
+        "projects_count": 2,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_12",
+      "format": "PDF",
+      "category": "incomplete_anonymous",
+      "language": "en",
+      "metrics": {
+        "name_em": 0.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.7143,
+        "skill_recall": 1.0,
+        "skill_f1": 0.8333,
+        "exp_years_extracted": 3.0,
+        "exp_years_expected": 3.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "TECHNICAL EXPERTISE",
+        "email": "anonymous.dev12@example.com",
+        "phone": "0978901212",
+        "skills": [
+          "docker",
+          "flask",
+          "git",
+          "microservices",
+          "postgresql",
+          "python",
+          "sql"
+        ],
+        "total_experience_years": 3.0,
+        "educations_count": 2,
+        "experiences_count": 2,
+        "projects_count": 0,
+        "certificates_count": 0
+      },
+      "error_notes": [
+        "Tên lệch: trích xuất 'TECHNICAL EXPERTISE' != kỳ vọng 'None'"
+      ]
+    },
+    {
+      "cv_id": "HOLDOUT_CV_13",
+      "format": "PDF",
+      "category": "timeline_overlapping",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 3.0,
+        "exp_years_expected": 3.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Phan Thanh Tùng",
+        "email": "thanhtung.php@example.com",
+        "phone": "0987654313",
+        "skills": [
+          "git",
+          "laravel",
+          "mysql",
+          "php",
+          "rest api"
+        ],
+        "total_experience_years": 3.0,
+        "educations_count": 2,
+        "experiences_count": 5,
+        "projects_count": 2,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_14",
+      "format": "PDF",
+      "category": "twocolumn_qa",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 2.0,
+        "exp_years_expected": 2.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Chloe Bennett",
+        "email": "chloe.bennett.qa@example.com",
+        "phone": "0918273614",
+        "skills": [
+          "automation test",
+          "ci/cd",
+          "git",
+          "python",
+          "unit test"
+        ],
+        "total_experience_years": 2.0,
+        "educations_count": 2,
+        "experiences_count": 2,
+        "projects_count": 0,
+        "certificates_count": 1
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_15",
+      "format": "PDF",
+      "category": "intern_no_experience",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 1.0,
+        "exp_years_expected": 0.0,
+        "exp_mae": 1.0,
+        "exp_accuracy_tol_0_5": 0.0,
+        "edu_detection": 1.0,
+        "work_detection": 0.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Trịnh Minh Quang",
+        "email": "quang.trinh.ai@example.com",
+        "phone": "0934567815",
+        "skills": [
+          "git",
+          "machine learning",
+          "nlp",
+          "python"
+        ],
+        "total_experience_years": 1.0,
+        "educations_count": 2,
+        "experiences_count": 0,
+        "projects_count": 2,
+        "certificates_count": 0
+      },
+      "error_notes": [
+        "Kinh nghiệm lệch: trích xuất 1.0n != kỳ vọng 0.0n (MAE=1.0)"
+      ]
+    },
+    {
+      "cv_id": "HOLDOUT_CV_01",
+      "format": "DOCX",
+      "category": "standard_backend_golang",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.875,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9333,
+        "exp_years_extracted": 3.0,
+        "exp_years_expected": 3.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Trần Tuấn Anh",
+        "email": "tuananh.golang@example.com",
+        "phone": "0913579001",
+        "skills": [
+          "docker",
+          "git",
+          "go",
+          "golang",
+          "microservices",
+          "postgresql",
+          "redis",
+          "rest api"
+        ],
+        "total_experience_years": 3.0,
+        "educations_count": 3,
+        "experiences_count": 3,
+        "projects_count": 3,
+        "certificates_count": 2
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_02",
+      "format": "DOCX",
+      "category": "standard_frontend_vue",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 2.5,
+        "exp_years_expected": 2.5,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Brian Smith",
+        "email": "brian.smith.vue@example.com",
+        "phone": "0924681002",
+        "skills": [
+          "git",
+          "javascript",
+          "rest api",
+          "typescript",
+          "vue",
+          "vuejs"
+        ],
+        "total_experience_years": 2.5,
+        "educations_count": 2,
+        "experiences_count": 4,
+        "projects_count": 0,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_03",
+      "format": "DOCX",
+      "category": "twocolumn_frontend",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 3.0,
+        "exp_years_expected": 3.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Nguyễn Bích Ngọc",
+        "email": "bichngoc.fe@example.com",
+        "phone": "0935792003",
+        "skills": [
+          "git",
+          "react",
+          "reactjs",
+          "rest api",
+          "typescript"
+        ],
+        "total_experience_years": 3.0,
+        "educations_count": 5,
+        "experiences_count": 1,
+        "projects_count": 2,
+        "certificates_count": 2
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_04",
+      "format": "DOCX",
+      "category": "twocolumn_devops",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 5.0,
+        "exp_years_expected": 5.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Alexander Wang",
+        "email": "alex.wang.devops@example.com",
+        "phone": "0946803004",
+        "skills": [
+          "aws",
+          "ci/cd",
+          "docker",
+          "git",
+          "k8s",
+          "kubernetes",
+          "linux",
+          "terraform"
+        ],
+        "total_experience_years": 5.0,
+        "educations_count": 2,
+        "experiences_count": 2,
+        "projects_count": 0,
+        "certificates_count": 1
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_05",
+      "format": "DOCX",
+      "category": "multipage_architect",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.8182,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9,
+        "exp_years_extracted": 8.0,
+        "exp_years_expected": 8.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Đỗ Văn Hùng",
+        "email": "hungdo.architect@example.com",
+        "phone": "0957914005",
+        "skills": [
+          "clean code",
+          "git",
+          "java",
+          "kubernetes",
+          "microservices",
+          "mysql",
+          "oracle",
+          "redis",
+          "spring",
+          "spring boot",
+          "system design"
+        ],
+        "total_experience_years": 8.0,
+        "educations_count": 3,
+        "experiences_count": 4,
+        "projects_count": 4,
+        "certificates_count": 2
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_06",
+      "format": "DOCX",
+      "category": "multipage_ai_ml",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.9091,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9524,
+        "exp_years_extracted": 6.0,
+        "exp_years_expected": 6.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 0.0
+      },
+      "extracted_data": {
+        "name": "Jennifer Taylor",
+        "email": "jennifer.ml@example.com",
+        "phone": "0968025006",
+        "skills": [
+          "deep learning",
+          "docker",
+          "git",
+          "machine learning",
+          "nlp",
+          "numpy",
+          "pandas",
+          "python",
+          "pytorch",
+          "scikit-learn",
+          "tensorflow"
+        ],
+        "total_experience_years": 6.0,
+        "educations_count": 2,
+        "experiences_count": 1,
+        "projects_count": 0,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_07",
+      "format": "DOCX",
+      "category": "skill_heavy_fullstack",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.8462,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9167,
+        "exp_years_extracted": 3.5,
+        "exp_years_expected": 3.5,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Lâm Thế Vinh",
+        "email": "thevinh.polyglot@example.com",
+        "phone": "0979136007",
+        "skills": [
+          "aws",
+          "ci/cd",
+          "django",
+          "docker",
+          "fastapi",
+          "git",
+          "mongodb",
+          "nextjs",
+          "nodejs",
+          "postgresql",
+          "python",
+          "react",
+          "rest api"
+        ],
+        "total_experience_years": 3.5,
+        "educations_count": 4,
+        "experiences_count": 3,
+        "projects_count": 3,
+        "certificates_count": 2
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_08",
+      "format": "DOCX",
+      "category": "skill_special_chars_dotnet",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.9,
+        "skill_recall": 1.0,
+        "skill_f1": 0.9474,
+        "exp_years_extracted": 4.0,
+        "exp_years_expected": 4.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 0.0
+      },
+      "extracted_data": {
+        "name": "Samuel Green",
+        "email": "samuel.green.net@example.com",
+        "phone": "0980247008",
+        "skills": [
+          ".net",
+          "asp.net",
+          "azure",
+          "c#",
+          "clean code",
+          "docker",
+          "git",
+          "microservices",
+          "sql",
+          "unit test"
+        ],
+        "total_experience_years": 4.0,
+        "educations_count": 2,
+        "experiences_count": 5,
+        "projects_count": 0,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_09",
+      "format": "DOCX",
+      "category": "incomplete_missing_phone",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 2.0,
+        "exp_years_expected": 2.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Cao Thị Diệu Linh",
+        "email": "dieulinh.data@example.com",
+        "phone": "",
+        "skills": [
+          "data analysis",
+          "pandas",
+          "python",
+          "sql"
+        ],
+        "total_experience_years": 2.0,
+        "educations_count": 2,
+        "experiences_count": 4,
+        "projects_count": 2,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_10",
+      "format": "DOCX",
+      "category": "incomplete_missing_email",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 3.0,
+        "exp_years_expected": 3.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 0.0,
+        "proj_detection": 0.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Robert Brown",
+        "email": "",
+        "phone": "0945678910",
+        "skills": [
+          "docker",
+          "git",
+          "linux",
+          "nginx"
+        ],
+        "total_experience_years": 3.0,
+        "educations_count": 2,
+        "experiences_count": 0,
+        "projects_count": 0,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_11",
+      "format": "DOCX",
+      "category": "incomplete_missing_education",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 2.5,
+        "exp_years_expected": 2.5,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Mai Văn Đạt",
+        "email": "datmai.mobile@example.com",
+        "phone": "0912233411",
+        "skills": [
+          "git",
+          "rest api",
+          "sqlite"
+        ],
+        "total_experience_years": 2.5,
+        "educations_count": 0,
+        "experiences_count": 4,
+        "projects_count": 2,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_12",
+      "format": "DOCX",
+      "category": "incomplete_anonymous",
+      "language": "en",
+      "metrics": {
+        "name_em": 0.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 0.7143,
+        "skill_recall": 1.0,
+        "skill_f1": 0.8333,
+        "exp_years_extracted": 3.0,
+        "exp_years_expected": 3.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "TECHNICAL EXPERTISE",
+        "email": "anonymous.dev12@example.com",
+        "phone": "0978901212",
+        "skills": [
+          "docker",
+          "flask",
+          "git",
+          "microservices",
+          "postgresql",
+          "python",
+          "sql"
+        ],
+        "total_experience_years": 3.0,
+        "educations_count": 2,
+        "experiences_count": 2,
+        "projects_count": 0,
+        "certificates_count": 0
+      },
+      "error_notes": [
+        "Tên lệch: trích xuất 'TECHNICAL EXPERTISE' != kỳ vọng 'None'"
+      ]
+    },
+    {
+      "cv_id": "HOLDOUT_CV_13",
+      "format": "DOCX",
+      "category": "timeline_overlapping",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 3.0,
+        "exp_years_expected": 3.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Phan Thanh Tùng",
+        "email": "thanhtung.php@example.com",
+        "phone": "0987654313",
+        "skills": [
+          "git",
+          "laravel",
+          "mysql",
+          "php",
+          "rest api"
+        ],
+        "total_experience_years": 3.0,
+        "educations_count": 2,
+        "experiences_count": 5,
+        "projects_count": 2,
+        "certificates_count": 0
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_14",
+      "format": "DOCX",
+      "category": "twocolumn_qa",
+      "language": "en",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 2.0,
+        "exp_years_expected": 2.0,
+        "exp_mae": 0.0,
+        "exp_accuracy_tol_0_5": 1.0,
+        "edu_detection": 1.0,
+        "work_detection": 1.0,
+        "proj_detection": 0.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Chloe Bennett",
+        "email": "chloe.bennett.qa@example.com",
+        "phone": "0918273614",
+        "skills": [
+          "automation test",
+          "ci/cd",
+          "git",
+          "python",
+          "unit test"
+        ],
+        "total_experience_years": 2.0,
+        "educations_count": 2,
+        "experiences_count": 2,
+        "projects_count": 0,
+        "certificates_count": 1
+      },
+      "error_notes": []
+    },
+    {
+      "cv_id": "HOLDOUT_CV_15",
+      "format": "DOCX",
+      "category": "intern_no_experience",
+      "language": "vi",
+      "metrics": {
+        "name_em": 1.0,
+        "email_em": 1.0,
+        "phone_em": 1.0,
+        "skill_precision": 1.0,
+        "skill_recall": 1.0,
+        "skill_f1": 1.0,
+        "exp_years_extracted": 1.0,
+        "exp_years_expected": 0.0,
+        "exp_mae": 1.0,
+        "exp_accuracy_tol_0_5": 0.0,
+        "edu_detection": 1.0,
+        "work_detection": 0.0,
+        "proj_detection": 1.0,
+        "cert_detection": 1.0
+      },
+      "extracted_data": {
+        "name": "Trịnh Minh Quang",
+        "email": "quang.trinh.ai@example.com",
+        "phone": "0934567815",
+        "skills": [
+          "git",
+          "machine learning",
+          "nlp",
+          "python"
+        ],
+        "total_experience_years": 1.0,
+        "educations_count": 2,
+        "experiences_count": 0,
+        "projects_count": 2,
+        "certificates_count": 0
+      },
+      "error_notes": [
+        "Kinh nghiệm lệch: trích xuất 1.0n != kỳ vọng 0.0n (MAE=1.0)"
+      ]
+    }
+  ]
+}

@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect, useMemo } from "react";
 import {
   Modal,
   Radio,
@@ -10,6 +10,9 @@ import {
   Tag,
   Tooltip,
   App,
+  Spin,
+  Alert,
+  Empty,
 } from "antd";
 import {
   Crown,
@@ -40,6 +43,7 @@ import {
   Percent,
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth-store";
+import { billingService } from "@/services/billing.service";
 
 // =====================================================================
 // DATA TYPES & INTERFACES
@@ -69,7 +73,7 @@ export interface InvoiceItem {
   amount: string;
   planName: string;
   cycle: string;
-  status: "paid" | "pending" | "failed";
+  status: "paid" | "pending" | "failed" | "cancelled";
 }
 
 export interface TransactionItem {
@@ -80,7 +84,7 @@ export interface TransactionItem {
   date: string;
   method: string;
   amount: string;
-  status: "success" | "pending" | "failed";
+  status: "paid" | "pending" | "failed" | "cancelled";
 }
 
 // =====================================================================
@@ -179,19 +183,6 @@ const COMPARISON_ROWS = [
   { feature: "Hỗ trợ", starter: "Email", pro: "Ưu tiên", premium: "24/7", enterprise: "24/7 + AM riêng" },
 ];
 
-const RECENT_INVOICES: InvoiceItem[] = [
-  { id: "inv-1", code: "HD-2024-12-001", date: "12/12/2024", amount: "6.990.000đ", planName: "Premium", cycle: "Theo tháng", status: "paid" },
-  { id: "inv-2", code: "HD-2024-11-001", date: "12/11/2024", amount: "6.990.000đ", planName: "Premium", cycle: "Theo tháng", status: "paid" },
-  { id: "inv-3", code: "HD-2024-10-001", date: "12/10/2024", amount: "6.990.000đ", planName: "Premium", cycle: "Theo tháng", status: "paid" },
-];
-
-const ALL_TRANSACTIONS: TransactionItem[] = [
-  { id: "tx-1", code: "GD-884921", content: "Gia hạn gói Premium (1 tháng)", planName: "Premium", date: "12/12/2024 09:30", method: "Thẻ VISA (..4242)", amount: "6.990.000đ", status: "success" },
-  { id: "tx-2", code: "GD-771203", content: "Gia hạn gói Premium (1 tháng)", planName: "Premium", date: "12/11/2024 08:45", method: "Thẻ VISA (..4242)", amount: "6.990.000đ", status: "success" },
-  { id: "tx-3", code: "GD-660142", content: "Nâng cấp gói Professional -> Premium", planName: "Premium", date: "12/10/2024 14:15", method: "Chuyển khoản VNPay", amount: "6.990.000đ", status: "success" },
-  { id: "tx-4", code: "GD-554219", content: "Đăng ký gói Professional (1 tháng)", planName: "Professional", date: "12/09/2024 10:00", method: "Ví MoMo", amount: "3.490.000đ", status: "success" },
-];
-
 // =====================================================================
 // MAIN COMPONENT
 // =====================================================================
@@ -217,10 +208,79 @@ export default function EmployerBillingPage() {
   // Add Payment Method Modal
   const [isAddPaymentModalOpen, setIsAddPaymentModalOpen] = useState(false);
 
+  // Orders & Payment Instruction State
+  const [orders, setOrders] = useState<any[]>([]);
+  const [loadingOrders, setLoadingOrders] = useState<boolean>(true);
+  const [errorOrders, setErrorOrders] = useState<string | null>(null);
+  const [paymentInstruction, setPaymentInstruction] = useState<any>(null);
+  const [isProcessingPayment, setIsProcessingPayment] = useState(false);
+  const [currentSubscription, setCurrentSubscription] = useState<any>(null);
+  const [currentQuota, setCurrentQuota] = useState<any>(null);
+
+  const fetchBillingData = async () => {
+    setLoadingOrders(true);
+    setErrorOrders(null);
+    try {
+      const [subRes, ordersRes] = await Promise.all([
+        billingService.getCurrentSubscription().catch(() => null),
+        billingService.getOrders().catch(() => null),
+      ]);
+
+      if (subRes?.data) {
+        setCurrentSubscription(subRes.data.subscription || null);
+        setCurrentQuota((subRes.data as any).quota || subRes.data.quotas || null);
+      }
+      const orderItems = (ordersRes?.data as any)?.items || ordersRes?.data?.orders || [];
+      setOrders(orderItems);
+    } catch (err: any) {
+      console.warn("Lỗi nạp dữ liệu thanh toán:", err);
+      setErrorOrders(err?.message || "Không thể tải dữ liệu thanh toán.");
+    } finally {
+      setLoadingOrders(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchBillingData();
+  }, []);
+
   // Format Currency
   const formatPrice = (price: number) => {
-    return price.toLocaleString("vi-VN") + "đ";
+    return (price || 0).toLocaleString("vi-VN") + "đ";
   };
+
+  const normalizeOrderStatus = (rawStatus?: string): "paid" | "pending" | "failed" | "cancelled" => {
+    const s = (rawStatus || "").toLowerCase();
+    if (s === "paid") return "paid";
+    if (s === "cancelled") return "cancelled";
+    if (s === "failed") return "failed";
+    return "pending";
+  };
+
+  const invoicesList: InvoiceItem[] = useMemo(() => {
+    return orders.map((o: any) => ({
+      id: String(o.id),
+      code: o.order_code || `HD-${o.id}`,
+      date: o.created_at ? new Date(o.created_at).toLocaleDateString("vi-VN") : "Gần đây",
+      amount: formatPrice(o.total_vnd ?? o.final_amount ?? o.total_amount ?? 0),
+      planName: o.plan_name || o.plan?.name || "Gói dịch vụ",
+      cycle: o.billing_cycle === "yearly" ? "Theo năm" : "Theo tháng",
+      status: normalizeOrderStatus(o.status),
+    }));
+  }, [orders]);
+
+  const transactionsList: TransactionItem[] = useMemo(() => {
+    return orders.map((o: any) => ({
+      id: String(o.id),
+      code: o.payment?.transaction_code || o.order_code || `GD-${o.id}`,
+      content: `Đơn hàng gói ${o.plan_name || o.plan?.name || "dịch vụ"}`,
+      planName: o.plan_name || o.plan?.name || "Gói dịch vụ",
+      date: o.created_at ? new Date(o.created_at).toLocaleString("vi-VN") : "Gần đây",
+      method: o.payment?.provider === "vnpay" ? "VNPay" : o.payment?.provider === "momo" ? "MoMo" : "Chuyển khoản đối soát",
+      amount: formatPrice(o.total_vnd ?? o.final_amount ?? o.total_amount ?? 0),
+      status: normalizeOrderStatus(o.status),
+    }));
+  }, [orders]);
 
   const handleSelectPlan = (plan: PricingPlan) => {
     if (plan.isCurrent) return;
@@ -230,6 +290,36 @@ export default function EmployerBillingPage() {
     }
     setSelectedPlanForUpgrade(plan);
     setIsUpgradeModalOpen(true);
+  };
+
+  const handleCheckoutOrder = async () => {
+    if (!selectedPlanForUpgrade) return;
+    setIsProcessingPayment(true);
+    try {
+      let planId = Number(selectedPlanForUpgrade.id);
+      if (isNaN(planId) || planId <= 0) {
+        if (selectedPlanForUpgrade.id === "professional") planId = 2;
+        else if (selectedPlanForUpgrade.id === "enterprise") planId = 3;
+        else planId = 1;
+      }
+
+      const orderRes = await billingService.createOrder({
+        plan_id: planId,
+      });
+      const orderId = orderRes?.data?.order?.id;
+      if (!orderId) throw new Error("Không thể tạo đơn hàng");
+
+      const payRes = await billingService.payOrder(orderId, "bank_transfer");
+      setPaymentInstruction(payRes?.data || { order_id: orderId });
+      setIsUpgradeModalOpen(false);
+      fetchBillingData();
+      message.info("Đã tạo đơn hàng thành công! Vui lòng thực hiện thanh toán theo hướng dẫn.");
+    } catch (err: any) {
+      const msg = err.response?.data?.errors?.plan_id?.[0] || err.response?.data?.message || err.message || "Tạo đơn hàng thất bại. Vui lòng thử lại!";
+      message.error(msg);
+    } finally {
+      setIsProcessingPayment(false);
+    }
   };
 
   return (
@@ -634,79 +724,100 @@ export default function EmployerBillingPage() {
                   <div className="w-5 h-5 rounded-md bg-purple-100 text-purple-700 flex items-center justify-center font-bold">
                     <Star className="w-3 h-3" />
                   </div>
-                  <span className="text-sm font-black text-slate-900">Premium</span>
+                  <span className="text-sm font-black text-slate-900">
+                    {currentSubscription?.plan_name || "Chưa kích hoạt gói"}
+                  </span>
                 </div>
-                <span className="px-2 py-0.5 rounded-full bg-purple-50 text-purple-700 font-bold text-[10px]">
-                  Đang sử dụng
+                <span
+                  className={`px-2 py-0.5 rounded-full font-bold text-[10px] ${
+                    currentSubscription && !currentSubscription.is_expired
+                      ? "bg-emerald-50 text-emerald-700"
+                      : "bg-slate-100 text-slate-600"
+                  }`}
+                >
+                  {currentSubscription
+                    ? currentSubscription.is_expired
+                      ? "Đã hết hạn"
+                      : "Đang sử dụng"
+                    : "Chưa có gói"}
                 </span>
               </div>
 
               <div className="space-y-1">
                 <span className="text-[11px] text-slate-400 font-medium block">
-                  Hiệu lực đến: 12/12/2026 (còn 245 ngày)
-                </span>
-                <span className="text-lg font-black text-slate-900 block leading-tight">
-                  6.990.000đ<span className="text-xs text-slate-400 font-medium">/tháng</span>
+                  {currentSubscription?.ends_at
+                    ? `Hiệu lực đến: ${new Date(currentSubscription.ends_at).toLocaleDateString("vi-VN")} (còn ${currentSubscription.days_left ?? 0} ngày)`
+                    : "Quyền lợi gói dịch vụ sẽ được kích hoạt sau khi đơn hàng được đối soát thanh toán."}
                 </span>
               </div>
-
-              <button
-                type="button"
-                onClick={() => message.info("Mở trang quản lý tài khoản gói dịch vụ")}
-                className="w-full py-2 bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold text-xs rounded-xl shadow-xs transition-colors cursor-pointer block text-center"
-              >
-                Quản lý gói dịch vụ
-              </button>
 
               {/* Monthly Quota Progress */}
               <div className="pt-2 border-t border-slate-100 space-y-2 text-xs">
                 <span className="text-[11px] font-bold text-slate-700 block">
-                  Sử dụng trong tháng <span className="text-slate-400 font-normal">(01/12 - 31/12)</span>
+                  Quyền lợi &amp; Hạn mức đã kích hoạt
                 </span>
 
-                {/* Quota 1 */}
+                {/* Quota 1: Job Posts */}
                 <div className="space-y-1">
                   <div className="flex justify-between text-[10.5px] font-bold">
                     <span className="text-slate-600">Tin tuyển dụng</span>
-                    <span className="text-emerald-600">32 / Không giới hạn</span>
+                    <span className="text-emerald-600">
+                      {currentQuota?.job_posts?.used ?? 0} / {currentQuota?.job_posts?.total_granted ?? 0} (Còn lại: {currentQuota?.job_posts?.remaining ?? 0})
+                    </span>
                   </div>
-                  <Progress percent={100} strokeColor="#10b981" showInfo={false} size="small" />
+                  <Progress
+                    percent={
+                      currentQuota?.job_posts?.total_granted > 0
+                        ? Math.min(
+                            100,
+                            Math.round(
+                              ((currentQuota?.job_posts?.used ?? 0) /
+                                currentQuota.job_posts.total_granted) *
+                                100
+                            )
+                          )
+                        : 0
+                    }
+                    strokeColor="#10b981"
+                    showInfo={false}
+                    size="small"
+                  />
                 </div>
 
-                {/* Quota 2 */}
+                {/* Quota 2: AI Interviews */}
                 <div className="space-y-1">
                   <div className="flex justify-between text-[10.5px] font-bold">
-                    <span className="text-slate-600">Hồ sơ ứng viên</span>
-                    <span className="text-blue-600">2.450 / Không giới hạn</span>
+                    <span className="text-slate-600">Phỏng vấn / Chấm điểm AI</span>
+                    <span className="text-blue-600">
+                      {currentQuota?.ai_interviews?.used ?? 0} / {currentQuota?.ai_interviews?.total_granted ?? 0} (Còn lại: {currentQuota?.ai_interviews?.remaining ?? 0})
+                    </span>
                   </div>
-                  <Progress percent={65} strokeColor="#0062ff" showInfo={false} size="small" />
-                </div>
-
-                {/* Quota 3 */}
-                <div className="space-y-1">
-                  <div className="flex justify-between text-[10.5px] font-bold">
-                    <span className="text-slate-600">Tìm kiếm nâng cao</span>
-                    <span className="text-purple-600">156 / Không giới hạn</span>
-                  </div>
-                  <Progress percent={40} strokeColor="#a855f7" showInfo={false} size="small" />
-                </div>
-
-                {/* Quota 4 */}
-                <div className="space-y-1">
-                  <div className="flex justify-between text-[10.5px] font-bold">
-                    <span className="text-slate-600">Dung lượng lưu trữ</span>
-                    <span className="text-amber-600">12.4 GB / Không giới hạn</span>
-                  </div>
-                  <Progress percent={25} strokeColor="#f59e0b" showInfo={false} size="small" />
+                  <Progress
+                    percent={
+                      currentQuota?.ai_interviews?.total_granted > 0
+                        ? Math.min(
+                            100,
+                            Math.round(
+                              ((currentQuota?.ai_interviews?.used ?? 0) /
+                                currentQuota.ai_interviews.total_granted) *
+                                100
+                            )
+                          )
+                        : 0
+                    }
+                    strokeColor="#0062ff"
+                    showInfo={false}
+                    size="small"
+                  />
                 </div>
               </div>
             </div>
 
-            {/* ---------------- 2. HÓA ĐƠN GẦN NHẤT --------------- */}
+            {/* ---------------- 2. ĐƠN HÀNG / HÓA ĐƠN GẦN NHẤT --------------- */}
             <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
               <div className="flex items-center justify-between pb-1 border-b border-slate-100">
                 <span className="font-extrabold text-xs text-slate-900 uppercase tracking-wider">
-                  HÓA ĐƠN GẦN NHẤT
+                  ĐƠN HÀNG GẦN NHẤT
                 </span>
                 <button
                   type="button"
@@ -718,39 +829,62 @@ export default function EmployerBillingPage() {
               </div>
 
               <div className="space-y-2.5 text-xs">
-                {RECENT_INVOICES.map((inv) => (
-                  <div
-                    key={inv.id}
-                    onClick={() => {
-                      setSelectedInvoice(inv);
-                      setIsInvoiceModalOpen(true);
-                    }}
-                    className="p-2 rounded-xl bg-slate-50 hover:bg-blue-50/60 border border-slate-100 transition-colors cursor-pointer flex items-center justify-between"
-                  >
-                    <div className="flex items-center gap-2">
-                      <div className="w-6 h-6 rounded-md bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
-                        <FileText className="w-3.5 h-3.5" />
-                      </div>
-                      <div>
-                        <span className="font-bold text-slate-900 text-[11px] block leading-tight">
-                          {inv.code}
-                        </span>
-                        <span className="text-[10px] text-slate-400 block">
-                          {inv.date}
-                        </span>
-                      </div>
-                    </div>
-
-                    <div className="text-right">
-                      <span className="font-black text-slate-900 text-xs block">
-                        {inv.amount}
-                      </span>
-                      <span className="text-[10px] text-emerald-600 font-bold block">
-                        ● Đã thanh toán
-                      </span>
-                    </div>
+                {invoicesList.length === 0 ? (
+                  <div className="text-xs text-slate-400 py-2 text-center">
+                    Chưa có đơn hàng nào
                   </div>
-                ))}
+                ) : (
+                  invoicesList.slice(0, 3).map((inv) => (
+                    <div
+                      key={inv.id}
+                      onClick={() => {
+                        setSelectedInvoice(inv);
+                        setIsInvoiceModalOpen(true);
+                      }}
+                      className="p-2 rounded-xl bg-slate-50 hover:bg-blue-50/60 border border-slate-100 transition-colors cursor-pointer flex items-center justify-between"
+                    >
+                      <div className="flex items-center gap-2">
+                        <div className="w-6 h-6 rounded-md bg-blue-100 text-blue-700 flex items-center justify-center shrink-0">
+                          <FileText className="w-3.5 h-3.5" />
+                        </div>
+                        <div>
+                          <span className="font-bold text-slate-900 text-[11px] block leading-tight">
+                            {inv.code}
+                          </span>
+                          <span className="text-[10px] text-slate-400 block">
+                            {inv.date}
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="text-right">
+                        <span className="font-black text-slate-900 text-xs block">
+                          {inv.amount}
+                        </span>
+                        <span
+                          className={`text-[10px] font-bold block ${
+                            inv.status === "paid"
+                              ? "text-emerald-600"
+                              : inv.status === "cancelled"
+                              ? "text-slate-500"
+                              : inv.status === "failed"
+                              ? "text-rose-600"
+                              : "text-amber-600"
+                          }`}
+                        >
+                          ●{" "}
+                          {inv.status === "paid"
+                            ? "Đã thanh toán (Paid)"
+                            : inv.status === "cancelled"
+                            ? "Đã hủy (Cancelled)"
+                            : inv.status === "failed"
+                            ? "Thất bại (Failed)"
+                            : "Chờ đối soát (Pending)"}
+                        </span>
+                      </div>
+                    </div>
+                  ))
+                )}
               </div>
             </div>
 
@@ -871,23 +1005,51 @@ export default function EmployerBillingPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                {ALL_TRANSACTIONS.map((tx) => (
-                  <tr key={tx.id} className="hover:bg-slate-50">
-                    <td className="py-3 font-mono font-bold text-[#0062ff]">{tx.code}</td>
-                    <td className="py-3 font-bold text-slate-900">{tx.content}</td>
-                    <td className="py-3">
-                      <Tag color="purple">{tx.planName}</Tag>
-                    </td>
-                    <td className="py-3 text-slate-500">{tx.date}</td>
-                    <td className="py-3 text-slate-600">{tx.method}</td>
-                    <td className="py-3 text-right font-black text-slate-900">{tx.amount}</td>
-                    <td className="py-3 text-right">
-                      <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-bold text-[11px]">
-                        Thành công
-                      </span>
+                {loadingOrders ? (
+                  <tr>
+                    <td colSpan={7} className="py-10 text-center">
+                      <Spin tip="Đang tải lịch sử giao dịch..." />
                     </td>
                   </tr>
-                ))}
+                ) : transactionsList.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-10 text-center">
+                      <Empty description="Chưa có giao dịch nào" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    </td>
+                  </tr>
+                ) : (
+                  transactionsList.map((tx) => (
+                    <tr key={tx.id} className="hover:bg-slate-50">
+                      <td className="py-3 font-mono font-bold text-[#0062ff]">{tx.code}</td>
+                      <td className="py-3 font-bold text-slate-900">{tx.content}</td>
+                      <td className="py-3">
+                        <Tag color="purple">{tx.planName}</Tag>
+                      </td>
+                      <td className="py-3 text-slate-500">{tx.date}</td>
+                      <td className="py-3 text-slate-600">{tx.method}</td>
+                      <td className="py-3 text-right font-black text-slate-900">{tx.amount}</td>
+                      <td className="py-3 text-right">
+                        <span className={`px-2 py-0.5 rounded-md font-bold text-[11px] ${
+                          tx.status === "paid"
+                            ? "bg-emerald-50 text-emerald-700"
+                            : tx.status === "cancelled"
+                            ? "bg-slate-100 text-slate-600"
+                            : tx.status === "failed"
+                            ? "bg-rose-50 text-rose-700"
+                            : "bg-amber-50 text-amber-700"
+                        }`}>
+                          {tx.status === "paid"
+                            ? "Đã thanh toán (Paid)"
+                            : tx.status === "cancelled"
+                            ? "Đã hủy (Cancelled)"
+                            : tx.status === "failed"
+                            ? "Thất bại (Failed)"
+                            : "Chờ đối soát (Pending)"}
+                        </span>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -924,43 +1086,71 @@ export default function EmployerBillingPage() {
                 </tr>
               </thead>
               <tbody className="divide-y divide-slate-100 font-medium text-slate-700">
-                {RECENT_INVOICES.map((inv) => (
-                  <tr key={inv.id} className="hover:bg-slate-50">
-                    <td className="py-3 font-mono font-bold text-[#0062ff]">{inv.code}</td>
-                    <td className="py-3 font-bold text-slate-800">{inv.cycle}</td>
-                    <td className="py-3 text-slate-500">{inv.date}</td>
-                    <td className="py-3">
-                      <Tag color="purple">{inv.planName}</Tag>
-                    </td>
-                    <td className="py-3 text-right font-black text-slate-900">{inv.amount}</td>
-                    <td className="py-3 text-right">
-                      <span className="px-2 py-0.5 rounded-md bg-emerald-50 text-emerald-700 font-bold text-[11px]">
-                        Đã thanh toán
-                      </span>
-                    </td>
-                    <td className="py-3 text-right">
-                      <div className="flex items-center justify-end gap-1.5">
-                        <button
-                          type="button"
-                          onClick={() => {
-                            setSelectedInvoice(inv);
-                            setIsInvoiceModalOpen(true);
-                          }}
-                          className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-lg transition-colors cursor-pointer"
-                        >
-                          Xem
-                        </button>
-                        <button
-                          type="button"
-                          onClick={() => message.success(`Đang tải hóa đơn ${inv.code} định dạng PDF...`)}
-                          className="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-[#0062ff] font-bold text-[11px] rounded-lg transition-colors cursor-pointer"
-                        >
-                          Tải PDF
-                        </button>
-                      </div>
+                {loadingOrders ? (
+                  <tr>
+                    <td colSpan={7} className="py-10 text-center">
+                      <Spin tip="Đang tải danh sách hóa đơn..." />
                     </td>
                   </tr>
-                ))}
+                ) : invoicesList.length === 0 ? (
+                  <tr>
+                    <td colSpan={7} className="py-10 text-center">
+                      <Empty description="Chưa có hóa đơn nào" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                    </td>
+                  </tr>
+                ) : (
+                  invoicesList.map((inv) => (
+                    <tr key={inv.id} className="hover:bg-slate-50">
+                      <td className="py-3 font-mono font-bold text-[#0062ff]">{inv.code}</td>
+                      <td className="py-3 font-bold text-slate-800">{inv.cycle}</td>
+                      <td className="py-3 text-slate-500">{inv.date}</td>
+                      <td className="py-3">
+                        <Tag color="purple">{inv.planName}</Tag>
+                      </td>
+                      <td className="py-3 text-right font-black text-slate-900">{inv.amount}</td>
+                      <td className="py-3 text-right">
+                        <span className={`px-2 py-0.5 rounded-md font-bold text-[11px] ${
+                          inv.status === "paid"
+                            ? "bg-emerald-50 text-emerald-700"
+                            : inv.status === "cancelled"
+                            ? "bg-slate-100 text-slate-600"
+                            : inv.status === "failed"
+                            ? "bg-rose-50 text-rose-700"
+                            : "bg-amber-50 text-amber-700"
+                        }`}>
+                          {inv.status === "paid"
+                            ? "Đã thanh toán (Paid)"
+                            : inv.status === "cancelled"
+                            ? "Đã hủy (Cancelled)"
+                            : inv.status === "failed"
+                            ? "Thất bại (Failed)"
+                            : "Chờ đối soát (Pending)"}
+                        </span>
+                      </td>
+                      <td className="py-3 text-right">
+                        <div className="flex items-center justify-end gap-1.5">
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setSelectedInvoice(inv);
+                              setIsInvoiceModalOpen(true);
+                            }}
+                            className="px-2 py-1 bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-[11px] rounded-lg transition-colors cursor-pointer"
+                          >
+                            Xem
+                          </button>
+                          <button
+                            type="button"
+                            onClick={() => message.success(`Đang tải hóa đơn ${inv.code} định dạng PDF...`)}
+                            className="px-2 py-1 bg-blue-50 hover:bg-blue-100 text-[#0062ff] font-bold text-[11px] rounded-lg transition-colors cursor-pointer"
+                          >
+                            Tải PDF
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))
+                )}
               </tbody>
             </table>
           </div>
@@ -1103,14 +1293,75 @@ export default function EmployerBillingPage() {
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setIsUpgradeModalOpen(false);
-                  message.success(`Đã đăng ký chuyển sang gói ${selectedPlanForUpgrade.name} thành công!`);
-                }}
-                className="px-4 py-2 rounded-xl bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold shadow-sm cursor-pointer"
+                disabled={isProcessingPayment}
+                onClick={handleCheckoutOrder}
+                className="px-4 py-2 rounded-xl bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold shadow-sm cursor-pointer disabled:opacity-50"
               >
-                Tiếp tục thanh toán
+                {isProcessingPayment ? "Đang xử lý..." : "Tiếp tục thanh toán"}
               </button>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* Modal Trạng thái đơn hàng chờ đối soát (CHỜ XÁC NHẬN) */}
+      <Modal
+        title={
+          <div className="flex items-center gap-2 text-slate-900 font-bold text-base">
+            <CreditCard className="w-5 h-5 text-[#0062ff]" />
+            <span>Thông tin đơn hàng chờ đối soát</span>
+          </div>
+        }
+        open={!!paymentInstruction}
+        onCancel={() => setPaymentInstruction(null)}
+        footer={[
+          <button
+            key="close"
+            type="button"
+            onClick={() => setPaymentInstruction(null)}
+            className="px-4 py-2 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs"
+          >
+            Đóng
+          </button>,
+        ]}
+        width={480}
+        centered
+      >
+        {paymentInstruction && (
+          <div className="space-y-4 pt-2 text-xs">
+            <div className="p-3 bg-blue-50 rounded-xl border border-blue-100 space-y-2">
+              <div className="flex justify-between">
+                <span className="text-slate-500">Mã đơn hàng:</span>
+                <span className="font-mono font-bold text-[#0062ff]">
+                  {paymentInstruction.order_code || `DH-${paymentInstruction.order_id}`}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Số tiền đơn hàng:</span>
+                <span className="font-bold text-slate-800 text-sm">
+                  {formatPrice(paymentInstruction.amount_vnd || paymentInstruction.amount || 0)}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Mã đối soát đơn hàng:</span>
+                <span className="font-mono font-bold text-slate-900">
+                  {paymentInstruction.payment_instructions?.transfer_content || paymentInstruction.order_code || `CAREZA-${paymentInstruction.order_id}`}
+                </span>
+              </div>
+              <div className="flex justify-between">
+                <span className="text-slate-500">Trạng thái:</span>
+                <Tag color="orange" className="font-bold">Chờ đối soát (Pending)</Tag>
+              </div>
+            </div>
+
+            <div className="p-3.5 bg-amber-50 rounded-xl border border-amber-200 text-amber-900 text-xs leading-relaxed space-y-1.5">
+              <div className="font-bold text-amber-950">
+                Thông báo cấu hình thanh toán
+              </div>
+              <p className="m-0 text-[11.5px]">
+                {paymentInstruction.payment_instructions?.notice ||
+                  "Hệ thống thanh toán trực tuyến và tài khoản ngân hàng thụ hưởng tự động chưa được cấu hình. Đơn hàng đã được ghi nhận ở trạng thái chờ xác nhận (pending). Bộ phận Quản trị CAREZA sẽ liên hệ đối soát và chỉ kích hoạt gói sau khi xác minh giao dịch thực tế."}
+              </p>
             </div>
           </div>
         )}
@@ -1238,7 +1489,7 @@ export default function EmployerBillingPage() {
               type="button"
               onClick={() => {
                 setIsAddPaymentModalOpen(false);
-                message.success("Đã liên kết phương thức thanh toán mới thành công!");
+                message.warning("Cổng liên kết thẻ/ví điện tử trực tuyến chưa được tích hợp trong giai đoạn này.");
               }}
               className="px-4 py-2 rounded-xl bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold shadow-sm cursor-pointer"
             >

@@ -1,6 +1,7 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
+import { employerService } from "@/services/employer.service";
 import {
   Modal,
   Select,
@@ -79,89 +80,7 @@ export interface PermissionGroupItem {
 // INITIAL DATA DEFINITIONS
 // =====================================================================
 
-const INITIAL_MEMBERS: CompanyMemberItem[] = [
-  {
-    id: "mem-1",
-    fullName: "Mai Phương",
-    email: "maiphuong@gmail.com",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=80",
-    role: "owner",
-    department: "Ban Giám đốc",
-    status: "active",
-    joinedAt: "12/12/2023",
-    isOwner: true,
-  },
-  {
-    id: "mem-2",
-    fullName: "Trần Minh Quân",
-    email: "admin.tran@gmail.com",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=160&q=80",
-    role: "admin",
-    department: "Nhân sự",
-    status: "active",
-    joinedAt: "10/01/2024",
-  },
-  {
-    id: "mem-3",
-    fullName: "Nguyễn Thị Thanh Hương",
-    email: "huong.nguyen@gmail.com",
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=160&q=80",
-    role: "admin",
-    department: "Tuyển dụng",
-    status: "active",
-    joinedAt: "15/02/2024",
-  },
-  {
-    id: "mem-4",
-    fullName: "Lê Hoàng Nam",
-    email: "nam.le@gmail.com",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=160&q=80",
-    role: "recruiter",
-    department: "Tuyển dụng",
-    status: "active",
-    joinedAt: "20/03/2024",
-  },
-  {
-    id: "mem-5",
-    fullName: "Phạm Anh Dương",
-    email: "duong.pham@gmail.com",
-    avatar: "https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?auto=format&fit=crop&w=160&q=80",
-    role: "recruiter",
-    department: "Tuyển dụng",
-    status: "active",
-    joinedAt: "05/04/2024",
-  },
-  {
-    id: "mem-6",
-    fullName: "Vũ Quốc Bảo",
-    email: "bao.vu@gmail.com",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=160&q=80",
-    role: "viewer",
-    department: "Marketing",
-    status: "active",
-    joinedAt: "18/04/2024",
-  },
-  {
-    id: "mem-7",
-    fullName: "Trần Thu Hà",
-    email: "ha.tran@gmail.com",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=160&q=80",
-    role: "viewer",
-    department: "Marketing",
-    status: "disabled",
-    joinedAt: "22/05/2024",
-  },
-  {
-    id: "mem-8",
-    fullName: "Đặng Minh Anh",
-    email: "minhanh.dang@gmail.com",
-    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=160&q=80",
-    role: "recruiter",
-    department: "Nhân sự",
-    status: "pending",
-    joinedAt: "28/05/2024",
-  },
-];
+const INITIAL_MEMBERS: CompanyMemberItem[] = [];
 
 const PERMISSION_GROUPS: PermissionGroupItem[] = [
   {
@@ -228,8 +147,9 @@ export default function EmployerMembersAndRolesPage() {
   const { user } = useAuthStore();
 
   // State Management
-  const [members, setMembers] = useState<CompanyMemberItem[]>(INITIAL_MEMBERS);
-  const [selectedMember, setSelectedMember] = useState<CompanyMemberItem>(INITIAL_MEMBERS[0]);
+  // State Management
+  const [members, setMembers] = useState<CompanyMemberItem[]>([]);
+  const [selectedMember, setSelectedMember] = useState<CompanyMemberItem | null>(null);
   const [activeTab, setActiveTab] = useState<"all" | "pending" | "disabled">("all");
   const [rightPanelTab, setRightPanelTab] = useState<"info" | "permissions">("permissions");
 
@@ -250,6 +170,7 @@ export default function EmployerMembersAndRolesPage() {
   const [inviteRole, setInviteRole] = useState<MemberRole>("recruiter");
   const [inviteDepartment, setInviteDepartment] = useState("Tuyển dụng");
   const [sendEmailInvite, setSendEmailInvite] = useState(true);
+  const [fetchError, setFetchError] = useState<string | null>(null);
 
   // Filtered members list
   const filteredMembers = useMemo(() => {
@@ -281,80 +202,139 @@ export default function EmployerMembersAndRolesPage() {
   // KPI Calculations
   const totalCount = members.length;
   const activeCount = members.filter((m) => m.status === "active").length;
-  const activePercent = Math.round((activeCount / totalCount) * 100);
+  const activePercent = totalCount > 0 ? Math.round((activeCount / totalCount) * 100) : 100;
   const pendingCount = members.filter((m) => m.status === "pending").length;
 
+  // Map backend member sang frontend item
+  const mapBackendMember = (m: any): CompanyMemberItem => ({
+    id: String(m.id),
+    fullName: m.full_name || m.email,
+    email: m.email,
+    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=160&q=80",
+    role: (m.member_role || "recruiter") as MemberRole,
+    department: m.member_role === "owner" ? "Ban Giám đốc" : "Tuyển dụng",
+    status: (m.status || "active") as MemberStatus,
+    joinedAt: m.joined_at ? new Date(m.joined_at).toLocaleDateString("vi-VN") : "—",
+    isOwner: m.member_role === "owner",
+  });
+
+  // Nạp danh sách thành viên từ API
+  const [isLoadingMembers, setIsLoadingMembers] = useState(false);
+  const fetchMembers = useCallback(async () => {
+    setIsLoadingMembers(true);
+    setFetchError(null);
+    try {
+      const res = await employerService.getMembers();
+      const list = res?.data?.members || [];
+      const mapped = list.map(mapBackendMember);
+      setMembers(mapped);
+      if (mapped.length > 0) {
+        setSelectedMember((prev) => {
+          if (!prev) return mapped[0];
+          const found = mapped.find((m) => m.id === prev.id);
+          return found || mapped[0];
+        });
+      } else {
+        setSelectedMember(null);
+      }
+    } catch (err: any) {
+      setFetchError(err?.response?.data?.message || err?.message || "Không thể tải danh sách thành viên.");
+    } finally {
+      setIsLoadingMembers(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchMembers();
+  }, [fetchMembers]);
+
   // Handler: Invite Member
-  const handleSendInvitation = () => {
+  const handleSendInvitation = async () => {
     if (!inviteEmail || !inviteEmail.includes("@")) {
       message.error("Vui lòng nhập địa chỉ email hợp lệ!");
       return;
     }
 
-    const newMember: CompanyMemberItem = {
-      id: `mem-${Date.now()}`,
-      fullName: inviteName.trim() || inviteEmail.split("@")[0],
-      email: inviteEmail.trim(),
-      avatar: "https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?auto=format&fit=crop&w=160&q=80",
-      role: inviteRole,
-      department: inviteDepartment,
-      status: "pending",
-      joinedAt: new Date().toLocaleDateString("vi-VN"),
-    };
-
-    setMembers((prev) => [newMember, ...prev]);
-    setIsInviteModalOpen(false);
-    setInviteEmail("");
-    setInviteName("");
-    message.success("Đã gửi lời mời tham gia thành công!");
+    try {
+      await employerService.inviteMember({
+        email: inviteEmail.trim(),
+        role: inviteRole,
+      });
+      message.success("Đã gửi lời mời tham gia thành công!");
+      setIsInviteModalOpen(false);
+      setInviteEmail("");
+      setInviteName("");
+      fetchMembers();
+    } catch (err: any) {
+      message.error(err?.response?.data?.message || err?.response?.data?.errors?.email?.[0] || "Gửi lời mời thất bại.");
+    }
   };
 
   // Handler: Change Role
-  const handleSaveRoleChange = () => {
+  const handleSaveRoleChange = async () => {
     if (!editingTargetMember) return;
-    setMembers((prev) =>
-      prev.map((m) =>
-        m.id === editingTargetMember.id ? { ...m, role: selectedNewRole } : m
-      )
-    );
-    if (selectedMember.id === editingTargetMember.id) {
-      setSelectedMember((prev) => ({ ...prev, role: selectedNewRole }));
+    try {
+      await employerService.updateMember(editingTargetMember.id, {
+        member_role: selectedNewRole,
+      });
+      setMembers((prev) =>
+        prev.map((m) =>
+          m.id === editingTargetMember.id ? { ...m, role: selectedNewRole } : m
+        )
+      );
+      if (selectedMember && selectedMember.id === editingTargetMember.id) {
+        setSelectedMember((prev) => (prev ? { ...prev, role: selectedNewRole } : null));
+      }
+      setIsEditRoleModalOpen(false);
+      message.success(`Đã cập nhật vai trò thành ${selectedNewRole.toUpperCase()}!`);
+    } catch (err: any) {
+      message.error(err?.response?.data?.message || "Cập nhật vai trò thất bại.");
     }
-    setIsEditRoleModalOpen(false);
-    message.success(`Đã cập nhật vai trò thành ${selectedNewRole.toUpperCase()}!`);
   };
 
   // Handler: Disable / Activate Member
-  const handleToggleMemberStatus = (member: CompanyMemberItem) => {
+  const handleToggleMemberStatus = async (member: CompanyMemberItem) => {
     if (member.isOwner) {
       message.warning("Không thể vô hiệu hóa tài khoản Owner!");
       return;
     }
     const newStatus: MemberStatus = member.status === "disabled" ? "active" : "disabled";
-    setMembers((prev) =>
-      prev.map((m) => (m.id === member.id ? { ...m, status: newStatus } : m))
-    );
-    if (selectedMember.id === member.id) {
-      setSelectedMember((prev) => ({ ...prev, status: newStatus }));
+    try {
+      await employerService.updateMember(member.id, {
+        status: newStatus,
+      });
+      setMembers((prev) =>
+        prev.map((m) => (m.id === member.id ? { ...m, status: newStatus } : m))
+      );
+      if (selectedMember && selectedMember.id === member.id) {
+        setSelectedMember((prev) => (prev ? { ...prev, status: newStatus } : null));
+      }
+      message.success(
+        newStatus === "active"
+          ? "Đã kích hoạt lại tài khoản thành viên!"
+          : "Đã vô hiệu hóa tài khoản thành viên!"
+      );
+    } catch (err: any) {
+      message.error(err?.response?.data?.message || "Cập nhật trạng thái thất bại.");
     }
-    message.success(
-      newStatus === "active"
-        ? "Đã kích hoạt lại tài khoản thành viên!"
-        : "Đã vô hiệu hóa tài khoản thành viên!"
-    );
   };
 
   // Handler: Delete Member
-  const handleDeleteMember = (member: CompanyMemberItem) => {
+  const handleDeleteMember = async (member: CompanyMemberItem) => {
     if (member.isOwner) {
       message.warning("Không thể xóa tài khoản Owner khỏi doanh nghiệp!");
       return;
     }
-    setMembers((prev) => prev.filter((m) => m.id !== member.id));
-    if (selectedMember.id === member.id) {
-      setSelectedMember(members[0]);
+    try {
+      await employerService.deleteMember(member.id);
+      setMembers((prev) => prev.filter((m) => m.id !== member.id));
+      if (selectedMember && selectedMember.id === member.id) {
+        setSelectedMember(members.find((m) => m.id !== member.id) || null);
+      }
+      message.success("Đã xóa thành viên khỏi công ty!");
+    } catch (err: any) {
+      message.error(err?.response?.data?.message || "Xóa thành viên thất bại.");
     }
-    message.success("Đã xóa thành viên khỏi công ty!");
   };
 
   // Helper: Role Badge

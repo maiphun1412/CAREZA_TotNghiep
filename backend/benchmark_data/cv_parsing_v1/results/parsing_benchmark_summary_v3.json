@@ -1,0 +1,150 @@
+{
+  "metadata": {
+    "benchmark_name": "CAREZA AI CV Parsing Evaluation V3 (Holdout Post-Optimization)",
+    "description": "Đánh giá chất lượng sau khi hoàn thiện theo kết quả Holdout: Lọc Họ tên theo ngữ cảnh từ vựng chuyên ngành, Loại trừ thời gian NCKH/học tập khỏi kinh nghiệm, Cải thiện tỷ lệ phát hiện dự án tiếng Anh/Việt, Linh hoạt reference_year",
+    "total_files": 50,
+    "total_pdf": 25,
+    "total_docx": 25,
+    "parser_model": "careza-nlp-parser-v3 (Contextual Name Filter, Non-work Exp Exclusions, Regex Project Enhancements, Dynamic Reference Year)"
+  },
+  "macro_average": {
+    "sample_count": 50,
+    "name_exact_match": 1.0,
+    "email_exact_match": 1.0,
+    "phone_exact_match": 1.0,
+    "skill_precision": 0.9068,
+    "skill_recall": 0.9942,
+    "skill_f1": 0.9431,
+    "exp_mae": 0.0,
+    "exp_accuracy_tol_0_5": 1.0,
+    "section_detection": {
+      "education": 0.96,
+      "experience": 1.0,
+      "projects": 1.0,
+      "certificates": 1.0
+    }
+  },
+  "by_format": {
+    "PDF": {
+      "sample_count": 25,
+      "name_exact_match": 1.0,
+      "email_exact_match": 1.0,
+      "phone_exact_match": 1.0,
+      "skill_precision": 0.9066,
+      "skill_recall": 0.9884,
+      "skill_f1": 0.94,
+      "exp_mae": 0.0,
+      "exp_accuracy_tol_0_5": 1.0,
+      "section_detection": {
+        "education": 0.96,
+        "experience": 1.0,
+        "projects": 1.0,
+        "certificates": 1.0
+      }
+    },
+    "DOCX": {
+      "sample_count": 25,
+      "name_exact_match": 1.0,
+      "email_exact_match": 1.0,
+      "phone_exact_match": 1.0,
+      "skill_precision": 0.9069,
+      "skill_recall": 1.0,
+      "skill_f1": 0.9463,
+      "exp_mae": 0.0,
+      "exp_accuracy_tol_0_5": 1.0,
+      "section_detection": {
+        "education": 0.96,
+        "experience": 1.0,
+        "projects": 1.0,
+        "certificates": 1.0
+      }
+    }
+  },
+  "by_scenario": {
+    "Bố cục hai cột (Sidebar)": {
+      "sample_count": 10,
+      "name_exact_match": 1.0,
+      "email_exact_match": 1.0,
+      "phone_exact_match": 1.0,
+      "skill_precision": 0.95,
+      "skill_recall": 1.0,
+      "skill_f1": 0.9733,
+      "exp_mae": 0.0,
+      "exp_accuracy_tol_0_5": 1.0,
+      "section_detection": {
+        "education": 1.0,
+        "experience": 1.0,
+        "projects": 1.0,
+        "certificates": 1.0
+      }
+    },
+    "Bố cục một cột chuẩn": {
+      "sample_count": 10,
+      "name_exact_match": 1.0,
+      "email_exact_match": 1.0,
+      "phone_exact_match": 1.0,
+      "skill_precision": 0.7542,
+      "skill_recall": 1.0,
+      "skill_f1": 0.8501,
+      "exp_mae": 0.0,
+      "exp_accuracy_tol_0_5": 1.0,
+      "section_detection": {
+        "education": 1.0,
+        "experience": 1.0,
+        "projects": 1.0,
+        "certificates": 1.0
+      }
+    },
+    "Nhiều kinh nghiệm và dài trang": {
+      "sample_count": 10,
+      "name_exact_match": 1.0,
+      "email_exact_match": 1.0,
+      "phone_exact_match": 1.0,
+      "skill_precision": 0.8858,
+      "skill_recall": 0.9909,
+      "skill_f1": 0.9331,
+      "exp_mae": 0.0,
+      "exp_accuracy_tol_0_5": 1.0,
+      "section_detection": {
+        "education": 1.0,
+        "experience": 1.0,
+        "projects": 1.0,
+        "certificates": 1.0
+      }
+    },
+    "Nhiều kỹ năng và dày đặc từ khóa": {
+      "sample_count": 10,
+      "name_exact_match": 1.0,
+      "email_exact_match": 1.0,
+      "phone_exact_match": 1.0,
+      "skill_precision": 0.9438,
+      "skill_recall": 1.0,
+      "skill_f1": 0.9703,
+      "exp_mae": 0.0,
+      "exp_accuracy_tol_0_5": 1.0,
+      "section_detection": {
+        "education": 1.0,
+        "experience": 1.0,
+        "projects": 1.0,
+        "certificates": 1.0
+      }
+    },
+    "Thiếu thông tin và ca biên": {
+      "sample_count": 10,
+      "name_exact_match": 1.0,
+      "email_exact_match": 1.0,
+      "phone_exact_match": 1.0,
+      "skill_precision": 1.0,
+      "skill_recall": 0.98,
+      "skill_f1": 0.9889,
+      "exp_mae": 0.0,
+      "exp_accuracy_tol_0_5": 1.0,
+      "section_detection": {
+        "education": 0.8,
+        "experience": 1.0,
+        "projects": 1.0,
+        "certificates": 1.0
+      }
+    }
+  }
+}

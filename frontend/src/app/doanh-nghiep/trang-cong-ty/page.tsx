@@ -8,6 +8,7 @@ import {
   Progress,
   Spin,
   App,
+  Empty,
 } from "antd";
 import {
   Building,
@@ -48,6 +49,8 @@ import {
   HelpCircle,
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth-store";
+import { employerService } from "@/services/employer.service";
+import { billingService } from "@/services/billing.service";
 
 // Dynamically import Leaflet Map Component with SSR disabled
 const CompanyLocationMap = dynamic(
@@ -259,92 +262,6 @@ const DEPARTMENTS: DepartmentItem[] = [
   { id: "d-6", name: "Hỗ trợ khách hàng", memberCount: "156 nhân viên", iconBg: "bg-cyan-50", iconColor: "text-cyan-600" },
 ];
 
-const BRANCHES: CompanyBranchItem[] = [
-  {
-    id: "br-1",
-    name: "Hà Nội (Trụ sở chính)",
-    isHeadquarter: true,
-    address: "Tòa nhà FPT, Cầu Giấy, Hà Nội",
-    phone: "(024) 7300 7300",
-    email: "hanoi@google.com",
-    lat: 21.0285,
-    lng: 105.7839,
-  },
-  {
-    id: "br-2",
-    name: "TP. Hồ Chí Minh",
-    isHeadquarter: false,
-    address: "Tòa nhà Bitexco, Quận 1, TP.HCM",
-    phone: "(028) 7300 8888",
-    email: "hcm@google.com",
-    lat: 10.7716,
-    lng: 106.7044,
-  },
-  {
-    id: "br-3",
-    name: "Đà Nẵng",
-    isHeadquarter: false,
-    address: "Tòa nhà Viettel, Hải Châu, Đà Nẵng",
-    phone: "(0236) 7300 999",
-    email: "danang@google.com",
-    lat: 16.0544,
-    lng: 108.2022,
-  },
-  {
-    id: "br-4",
-    name: "Cần Thơ",
-    isHeadquarter: false,
-    address: "Tòa nhà VNPT, Ninh Kiều, Cần Thơ",
-    phone: "(0292) 7300 111",
-    email: "cantho@google.com",
-    lat: 10.0452,
-    lng: 105.7469,
-  },
-];
-
-const JOBS: CompanyJobItem[] = [
-  {
-    id: "j-1",
-    title: "Senior UX Designer",
-    salary: "$2,000 - $3,200",
-    location: "Hà Nội",
-    type: "Hybrid",
-    matchScore: 98,
-  },
-  {
-    id: "j-2",
-    title: "Frontend Developer (React)",
-    salary: "$1,800 - $2,800",
-    location: "Hà Nội",
-    type: "Hybrid",
-    matchScore: 90,
-  },
-  {
-    id: "j-3",
-    title: "Product Manager",
-    salary: "$2,500 - $4,000",
-    location: "TP. Hồ Chí Minh",
-    type: "Hybrid",
-    matchScore: 90,
-  },
-  {
-    id: "j-4",
-    title: "QA Engineer",
-    salary: "$1,200 - $1,800",
-    location: "Đà Nẵng",
-    type: "On-site",
-    matchScore: 93,
-  },
-];
-
-const RECENT_ACTIVITIES = [
-  { id: "act-1", title: "Cập nhật thông tin công ty", time: "2 giờ trước" },
-  { id: "act-2", title: "Đăng tin tuyển dụng mới", sub: "Senior Product Manager", time: "1 ngày trước" },
-  { id: "act-3", title: "Cập nhật hình ảnh văn phòng", time: "2 ngày trước" },
-  { id: "act-4", title: "Bổ sung phúc lợi mới", time: "3 ngày trước" },
-  { id: "act-5", title: "Cập nhật tài liệu công ty", time: "5 ngày trước" },
-];
-
 // =====================================================================
 // MAIN COMPONENT: TRANG CÔNG TY (EXACT CLONE OF REFERENCE)
 // =====================================================================
@@ -354,14 +271,81 @@ export default function EmployerCompanyPage() {
   const { user, companyInfo } = useAuthStore();
 
   const [company, setCompany] = useState(DEFAULT_COMPANY_DATA);
-  const [selectedBranch, setSelectedBranch] = useState<CompanyBranchItem>(BRANCHES[0]);
+  const [branches, setBranches] = useState<CompanyBranchItem[]>([]);
+  const [selectedBranch, setSelectedBranch] = useState<CompanyBranchItem | null>(null);
+  const [jobs, setJobs] = useState<any[]>([]);
+  const [activities, setActivities] = useState<any[]>([]);
+  const [currentPlan, setCurrentPlan] = useState<any>(null);
   const [lightboxImage, setLightboxImage] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Sync recruiter or company name from auth store if available
   useEffect(() => {
-    if (companyInfo?.companyName) {
-      setCompany((prev) => ({ ...prev, name: companyInfo.companyName }));
+    async function loadAllCompanyData() {
+      try {
+        setLoading(true);
+        const [profileRes, branchRes, jobsRes, actRes, subRes] = await Promise.allSettled([
+          employerService.getCompanyProfile(),
+          employerService.getBranches(),
+          employerService.getJobs({ page: 1, status: "published" }),
+          employerService.getActivities(),
+          billingService.getCurrentSubscription(),
+        ]);
+
+        if (profileRes.status === "fulfilled" && profileRes.value.data?.company) {
+          const c = profileRes.value.data.company;
+          setCompany((prev) => ({
+            ...prev,
+            name: c.name || prev.name,
+            slug: c.slug || prev.slug,
+            logo: c.logo_url || prev.logo,
+            coverImage: c.branding?.banner_url || prev.coverImage,
+            slogan: c.branding?.slogan || prev.slogan,
+            description: c.description || prev.description,
+            website: c.website || prev.website,
+            isVerified: c.verification_status === "verified",
+            stats: {
+              ...prev.stats,
+              size: c.company_size || prev.stats.size,
+              branchesCount: c.branches?.length ?? prev.stats.branchesCount,
+            },
+            socials: c.branding?.social_links ? { ...prev.socials, ...c.branding.social_links } : prev.socials,
+          }));
+        }
+
+        if (branchRes.status === "fulfilled" && branchRes.value.data?.branches) {
+          const bList = branchRes.value.data.branches.map((b: any, idx: number) => ({
+            id: String(b.id),
+            name: b.name,
+            isHeadquarter: idx === 0,
+            address: b.address || "",
+            phone: b.phone || "",
+            email: b.email || "",
+            lat: b.latitude || 21.0285,
+            lng: b.longitude || 105.7839,
+          }));
+          setBranches(bList);
+          setSelectedBranch(bList.length > 0 ? bList[0] : null);
+        }
+
+        if (jobsRes.status === "fulfilled" && jobsRes.value.data?.items) {
+          setJobs(jobsRes.value.data.items);
+        }
+
+        if (actRes.status === "fulfilled" && actRes.value.data?.activities) {
+          setActivities(actRes.value.data.activities);
+        }
+
+        if (subRes.status === "fulfilled" && subRes.value.data?.subscription) {
+          setCurrentPlan(subRes.value.data.subscription);
+        }
+      } catch {
+        // Fallback gracefully
+      } finally {
+        setLoading(false);
+      }
     }
+    loadAllCompanyData();
   }, [companyInfo]);
 
   const recruiterName = user?.fullName || "Mai Phương";
@@ -476,7 +460,7 @@ export default function EmployerCompanyPage() {
 
           {/* Right Action: Edit Button */}
           <Link
-            href="/doanh-nghiep/thiet-lap"
+            href="/doanh-nghiep/cai-dat-cong-ty"
             className="px-3.5 py-1.5 rounded-xl bg-white/90 hover:bg-white text-slate-800 font-bold text-xs shadow-md flex items-center gap-1.5 transition-colors cursor-pointer shrink-0"
           >
             <Edit3 className="w-3.5 h-3.5 text-slate-600" />
@@ -500,7 +484,7 @@ export default function EmployerCompanyPage() {
 
           <div className="flex justify-end">
             <Link
-              href="/doanh-nghiep/thiet-lap"
+              href="/doanh-nghiep/cai-dat-cong-ty"
               className="text-[#0062ff] hover:underline font-bold text-[11px] flex items-center gap-0.5"
             >
               <span>Hoàn thiện ngay</span>
@@ -686,7 +670,7 @@ export default function EmployerCompanyPage() {
                 Văn hóa & Giá trị cốt lõi
               </h3>
               <Link
-                href="/doanh-nghiep/thiet-lap"
+                href="/doanh-nghiep/cai-dat-cong-ty"
                 className="text-[#0062ff] hover:underline font-bold text-xs flex items-center gap-0.5"
               >
                 <span>Xem tất cả</span>
@@ -723,7 +707,7 @@ export default function EmployerCompanyPage() {
                 Môi trường làm việc
               </h3>
               <Link
-                href="/doanh-nghiep/thiet-lap"
+                href="/doanh-nghiep/cai-dat-cong-ty"
                 className="text-[#0062ff] hover:underline font-bold text-xs flex items-center gap-0.5"
               >
                 <span>Xem tất cả</span>
@@ -771,7 +755,7 @@ export default function EmployerCompanyPage() {
                 Phúc lợi nổi bật
               </h3>
               <Link
-                href="/doanh-nghiep/thiet-lap"
+                href="/doanh-nghiep/cai-dat-cong-ty"
                 className="text-[#0062ff] hover:underline font-bold text-xs flex items-center gap-0.5"
               >
                 <span>Xem tất cả</span>
@@ -811,7 +795,7 @@ export default function EmployerCompanyPage() {
                     Phòng ban & đội ngũ
                   </h3>
                   <Link
-                    href="/doanh-nghiep/thiet-lap"
+                    href="/doanh-nghiep/cai-dat-cong-ty"
                     className="text-[#0062ff] hover:underline font-bold text-xs"
                   >
                     Xem tất cả (48)
@@ -843,52 +827,64 @@ export default function EmployerCompanyPage() {
                   Chi nhánh & địa điểm
                 </h3>
                 <Link
-                  href="/doanh-nghiep/thiet-lap"
+                  href="/doanh-nghiep/chi-nhanh"
                   className="text-[#0062ff] hover:underline font-bold text-xs"
                 >
                   Xem tất cả
                 </Link>
               </div>
 
-              <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-start">
-                {/* Branch list (5 cols) */}
-                <div className="sm:col-span-6 space-y-2">
-                  {BRANCHES.map((br) => {
-                    const isSelected = selectedBranch.id === br.id;
-                    return (
-                      <div
-                        key={br.id}
-                        onClick={() => setSelectedBranch(br)}
-                        className={`p-2.5 rounded-xl border transition-all cursor-pointer space-y-0.5 ${
-                          isSelected
-                            ? "border-blue-300 bg-blue-50/60 shadow-2xs"
-                            : "border-slate-200/80 bg-white hover:bg-slate-50"
-                        }`}
-                      >
-                        <div className="flex items-center justify-between">
-                          <span className="font-bold text-slate-900 text-xs">
-                            {br.name}
+              {branches.length === 0 ? (
+                <div className="py-6 text-center w-full">
+                  <Empty description="Chưa có thông tin chi nhánh" image={Empty.PRESENTED_IMAGE_SIMPLE} />
+                </div>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-12 gap-3 items-start">
+                  {/* Branch list (6 cols) */}
+                  <div className="sm:col-span-6 space-y-2">
+                    {branches.map((br) => {
+                      const isSelected = selectedBranch?.id === br.id;
+                      return (
+                        <div
+                          key={br.id}
+                          onClick={() => setSelectedBranch(br)}
+                          className={`p-2.5 rounded-xl border transition-all cursor-pointer space-y-0.5 ${
+                            isSelected
+                              ? "border-blue-300 bg-blue-50/60 shadow-2xs"
+                              : "border-slate-200/80 bg-white hover:bg-slate-50"
+                          }`}
+                        >
+                          <div className="flex items-center justify-between">
+                            <span className="font-bold text-slate-900 text-xs">
+                              {br.name}
+                            </span>
+                            <span className="text-slate-400 font-bold text-xs">›</span>
+                          </div>
+                          <span className="text-[10.5px] text-slate-500 block truncate">
+                            {br.address}
                           </span>
-                          <span className="text-slate-400 font-bold text-xs">›</span>
                         </div>
-                        <span className="text-[10.5px] text-slate-500 block truncate">
-                          {br.address}
-                        </span>
-                      </div>
-                    );
-                  })}
-                </div>
+                      );
+                    })}
+                  </div>
 
-                {/* Leaflet Map (6 cols) */}
-                <div className="sm:col-span-6 h-52 rounded-xl overflow-hidden border border-slate-200 shadow-2xs">
-                  <CompanyLocationMap
-                    companyName={company.name}
-                    address={selectedBranch.address}
-                    latitude={selectedBranch.lat}
-                    longitude={selectedBranch.lng}
-                  />
+                  {/* Leaflet Map (6 cols) */}
+                  <div className="sm:col-span-6 h-52 rounded-xl overflow-hidden border border-slate-200 shadow-2xs">
+                    {selectedBranch ? (
+                      <CompanyLocationMap
+                        companyName={company.name}
+                        address={selectedBranch.address}
+                        latitude={selectedBranch.lat}
+                        longitude={selectedBranch.lng}
+                      />
+                    ) : (
+                      <div className="w-full h-full flex items-center justify-center text-slate-400 text-xs">
+                        Chưa có thông tin vị trí
+                      </div>
+                    )}
+                  </div>
                 </div>
-              </div>
+              )}
             </div>
           </div>
 
@@ -907,30 +903,38 @@ export default function EmployerCompanyPage() {
             </div>
 
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3">
-              {JOBS.map((job) => (
-                <div
-                  key={job.id}
-                  className="p-3.5 rounded-xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-xs transition-all space-y-2 flex flex-col justify-between"
-                >
-                  <div className="space-y-1">
-                    <span className="font-black text-slate-900 text-xs block truncate">
-                      {job.title}
-                    </span>
-                    <span className="text-xs font-black text-[#0062ff] block">
-                      {job.salary}
-                    </span>
-                    <span className="text-[10.5px] text-slate-500 block">
-                      {job.location} • {job.type}
-                    </span>
-                  </div>
+              {jobs.length > 0 ? (
+                jobs.slice(0, 4).map((job) => (
+                  <div
+                    key={job.id}
+                    className="p-3.5 rounded-xl border border-slate-200 bg-white hover:border-blue-300 hover:shadow-xs transition-all space-y-2 flex flex-col justify-between"
+                  >
+                    <div className="space-y-1">
+                      <span className="font-black text-slate-900 text-xs block truncate">
+                        {job.title}
+                      </span>
+                      <span className="text-xs font-black text-[#0062ff] block">
+                        {job.salary_min || job.salary_max
+                          ? `${job.salary_min?.toLocaleString() || 0} - ${job.salary_max?.toLocaleString() || "Thỏa thuận"} ${job.salary_currency || "VND"}`
+                          : "Lương thỏa thuận"}
+                      </span>
+                      <span className="text-[10.5px] text-slate-500 block">
+                        {job.location || "Toàn quốc"} • {job.job_type || "Toàn thời gian"}
+                      </span>
+                    </div>
 
-                  <div className="flex items-center justify-between pt-1 border-t border-slate-100">
-                    <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-bold text-[10px]">
-                      {job.matchScore}% Match
-                    </span>
+                    <div className="flex items-center justify-between pt-1 border-t border-slate-100">
+                      <span className="px-2 py-0.5 rounded-full bg-emerald-50 text-emerald-600 font-bold text-[10px]">
+                        {job.applications_count || 0} ứng viên
+                      </span>
+                    </div>
                   </div>
+                ))
+              ) : (
+                <div className="col-span-full py-6 text-center">
+                  <Empty description="Chưa có tin tuyển dụng nào đang đăng" image={Empty.PRESENTED_IMAGE_SIMPLE} />
                 </div>
-              ))}
+              )}
             </div>
           </div>
         </div>
@@ -991,7 +995,7 @@ export default function EmployerCompanyPage() {
             </div>
 
             <Link
-              href="/doanh-nghiep/thiet-lap"
+              href="/doanh-nghiep/cai-dat-cong-ty"
               className="w-full py-2 bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold text-xs rounded-xl shadow-xs flex items-center justify-center gap-1 transition-colors cursor-pointer block text-center"
             >
               <span>Hoàn thiện ngay</span>
@@ -1006,7 +1010,7 @@ export default function EmployerCompanyPage() {
                 Hoạt động gần đây
               </h4>
               <Link
-                href="/doanh-nghiep/nhat-ky"
+                href="/doanh-nghiep/nhat-ky-hoat-dong"
                 className="text-[#0062ff] hover:underline font-bold text-[11px]"
               >
                 Xem tất cả
@@ -1014,26 +1018,32 @@ export default function EmployerCompanyPage() {
             </div>
 
             <div className="space-y-2.5 text-xs">
-              {RECENT_ACTIVITIES.map((act) => (
-                <div key={act.id} className="flex items-start gap-2.5">
-                  <div className="w-6 h-6 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0 mt-0.5">
-                    <FileText className="w-3 h-3" />
-                  </div>
-                  <div className="min-w-0 flex-1">
-                    <span className="font-bold text-slate-800 block text-xs truncate">
-                      {act.title}
-                    </span>
-                    {act.sub && (
-                      <span className="text-[11px] text-blue-600 font-semibold block">
-                        {act.sub}
-                      </span>
-                    )}
-                    <span className="text-[10.5px] text-slate-400 font-medium block">
-                      {act.time}
-                    </span>
-                  </div>
+              {activities.length === 0 ? (
+                <div className="py-4 text-center text-slate-400 text-xs">
+                  Chưa có hoạt động gần đây
                 </div>
-              ))}
+              ) : (
+                activities.slice(0, 5).map((act, index) => (
+                  <div key={act.id || index} className="flex items-start gap-2.5">
+                    <div className="w-6 h-6 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0 mt-0.5">
+                      <FileText className="w-3 h-3" />
+                    </div>
+                    <div className="min-w-0 flex-1">
+                      <span className="font-bold text-slate-800 block text-xs truncate">
+                        {act.action || act.title || "Hoạt động công ty"}
+                      </span>
+                      {act.sub && (
+                        <span className="text-[11px] text-blue-600 font-semibold block">
+                          {act.sub}
+                        </span>
+                      )}
+                      <span className="text-[10.5px] text-slate-400 font-medium block">
+                        {act.created_at ? new Date(act.created_at).toLocaleString("vi-VN") : (act.time || "Gần đây")}
+                      </span>
+                    </div>
+                  </div>
+                ))
+              )}
             </div>
           </div>
 
@@ -1116,7 +1126,7 @@ export default function EmployerCompanyPage() {
 
             <div className="grid grid-cols-3 gap-2">
               <Link
-                href="/doanh-nghiep/thiet-lap"
+                href="/doanh-nghiep/cai-dat-cong-ty"
                 className="p-2.5 rounded-xl bg-slate-50 hover:bg-blue-50 hover:border-blue-200 border border-slate-100 text-center space-y-1 transition-all flex flex-col items-center justify-center cursor-pointer group"
               >
                 <Edit3 className="w-4 h-4 text-blue-600 group-hover:scale-110 transition-transform" />
@@ -1136,7 +1146,7 @@ export default function EmployerCompanyPage() {
               </Link>
 
               <Link
-                href="/doanh-nghiep/thiet-lap"
+                href="/doanh-nghiep/chi-nhanh"
                 className="p-2.5 rounded-xl bg-slate-50 hover:bg-emerald-50 hover:border-emerald-200 border border-slate-100 text-center space-y-1 transition-all flex flex-col items-center justify-center cursor-pointer group"
               >
                 <Building className="w-4 h-4 text-emerald-600 group-hover:scale-110 transition-transform" />
@@ -1146,7 +1156,7 @@ export default function EmployerCompanyPage() {
               </Link>
 
               <Link
-                href="/doanh-nghiep/thiet-lap"
+                href="/doanh-nghiep/cai-dat-cong-ty"
                 className="p-2.5 rounded-xl bg-slate-50 hover:bg-amber-50 hover:border-amber-200 border border-slate-100 text-center space-y-1 transition-all flex flex-col items-center justify-center cursor-pointer group"
               >
                 <Award className="w-4 h-4 text-amber-600 group-hover:scale-110 transition-transform" />
@@ -1156,7 +1166,7 @@ export default function EmployerCompanyPage() {
               </Link>
 
               <Link
-                href="/doanh-nghiep/thiet-lap"
+                href="/doanh-nghiep/cai-dat-cong-ty"
                 className="p-2.5 rounded-xl bg-slate-50 hover:bg-cyan-50 hover:border-cyan-200 border border-slate-100 text-center space-y-1 transition-all flex flex-col items-center justify-center cursor-pointer group"
               >
                 <FileText className="w-4 h-4 text-cyan-600 group-hover:scale-110 transition-transform" />

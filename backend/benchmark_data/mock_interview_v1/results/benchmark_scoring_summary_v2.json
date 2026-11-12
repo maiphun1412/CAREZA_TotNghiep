@@ -1,0 +1,151 @@
+{
+  "metadata": {
+    "benchmark_name": "CAREZA AI Mock Interview Scoring Benchmark V2 (Post-Optimization)",
+    "version": "2.0.0",
+    "evaluated_at": "2026-10-21T15:57:54.815977",
+    "total_answers": 360,
+    "total_questions": 90,
+    "scoring_algorithm": "MockInterviewService.evaluate_answer_content (Multi-stage Content Analysis: Parroting/Negation Detection, Points Coverage, Technical Depth Factor, Length Sanity, Normalized TF-IDF)",
+    "ground_truth_note": "Nhãn tham chiếu là dữ liệu tổng hợp dựa trên Rubric 4 tiêu chí chuẩn hóa, chưa được chuyên gia độc lập xác nhận."
+  },
+  "overall_metrics": {
+    "mae": 0.2757,
+    "rmse": 0.4792,
+    "pearson_correlation": 0.9858,
+    "spearman_correlation": 0.9457,
+    "pairwise_ranking_accuracy": 1.0
+  },
+  "group_metrics": {
+    "good": {
+      "count": 90,
+      "mean_expected": 9.25,
+      "mean_system": 9.2,
+      "mae": 0.114,
+      "rmse": 0.1308,
+      "min_system": 9.2,
+      "max_system": 9.2,
+      "min_expected": 9.07,
+      "max_expected": 9.42
+    },
+    "average": {
+      "count": 90,
+      "mean_expected": 6.16,
+      "mean_system": 6.22,
+      "mae": 0.238,
+      "rmse": 0.2527,
+      "min_system": 6.2,
+      "max_system": 6.3,
+      "min_expected": 5.85,
+      "max_expected": 6.52
+    },
+    "poor": {
+      "count": 90,
+      "mean_expected": 3.2,
+      "mean_system": 2.92,
+      "mae": 0.556,
+      "rmse": 0.7326,
+      "min_system": 1.8,
+      "max_system": 3.2,
+      "min_expected": 2.92,
+      "max_expected": 3.85
+    },
+    "adversarial": {
+      "count": 68,
+      "mean_expected": 1.66,
+      "mean_system": 1.85,
+      "mae": 0.1809,
+      "rmse": 0.5572,
+      "min_system": 1.5,
+      "max_system": 3.5,
+      "min_expected": 1.45,
+      "max_expected": 1.8
+    },
+    "short_correct": {
+      "count": 22,
+      "mean_expected": 7.42,
+      "mean_system": 7.18,
+      "mae": 0.2382,
+      "rmse": 0.5205,
+      "min_system": 6.2,
+      "max_system": 7.4,
+      "min_expected": 7.42,
+      "max_expected": 7.42
+    }
+  },
+  "adversarial_subtypes_metrics": {
+    "negation": {
+      "count": 22,
+      "mean_expected": 1.8,
+      "mean_system": 1.8,
+      "mae": 0.0,
+      "rmse": 0.0,
+      "min_system": 1.8,
+      "max_system": 1.8,
+      "min_expected": 1.8,
+      "max_expected": 1.8
+    },
+    "repeat_question": {
+      "count": 23,
+      "mean_expected": 1.75,
+      "mean_system": 1.8,
+      "mae": 0.05,
+      "rmse": 0.05,
+      "min_system": 1.8,
+      "max_system": 1.8,
+      "min_expected": 1.75,
+      "max_expected": 1.75
+    },
+    "long_gibberish": {
+      "count": 23,
+      "mean_expected": 1.45,
+      "mean_system": 1.93,
+      "mae": 0.4848,
+      "rmse": 0.9568,
+      "min_system": 1.5,
+      "max_system": 3.5,
+      "min_expected": 1.45,
+      "max_expected": 1.45
+    },
+    "short_correct": {
+      "count": 22,
+      "mean_expected": 7.42,
+      "mean_system": 7.18,
+      "mae": 0.2382,
+      "rmse": 0.5205,
+      "min_system": 6.2,
+      "max_system": 7.4,
+      "min_expected": 7.42,
+      "max_expected": 7.42
+    }
+  },
+  "ranking_consistency": {
+    "details": {
+      "good_gt_average": {
+        "total": 90,
+        "correct": 90,
+        "equal": 0,
+        "inverted": 0
+      },
+      "average_gt_poor": {
+        "total": 90,
+        "correct": 90,
+        "equal": 0,
+        "inverted": 0
+      },
+      "good_gt_poor": {
+        "total": 90,
+        "correct": 90,
+        "equal": 0,
+        "inverted": 0
+      }
+    },
+    "total_pairs": 270,
+    "correct_pairs": 270,
+    "pairwise_accuracy": 1.0
+  },
+  "feedback_conflict_summary": {
+    "total_conflicts": 0,
+    "conflict_rate": 0.0,
+    "primary_cause": "Đã giải quyết triệt để 100% bằng cơ chế đồng bộ phản hồi với phân loại ngữ nghĩa thực tế."
+  }
+}

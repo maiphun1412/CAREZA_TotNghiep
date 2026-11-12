@@ -1,0 +1,31 @@
+﻿cv_id,format,category,language,name_em,email_em,phone_em,skill_precision,skill_recall,skill_f1,exp_years_extracted,exp_years_expected,exp_mae,exp_accuracy_tol_0_5,edu_detection,work_detection,proj_detection,cert_detection,error_notes
+HOLDOUT_CV_01,PDF,standard_backend_golang,vi,1.0,1.0,1.0,0.875,1.0,0.9333,3.0,3.0,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_02,PDF,standard_frontend_vue,en,1.0,1.0,1.0,1.0,1.0,1.0,2.5,2.5,0.0,1.0,1.0,1.0,0.0,1.0,
+HOLDOUT_CV_03,PDF,twocolumn_frontend,vi,1.0,1.0,1.0,1.0,1.0,1.0,3.0,3.0,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_04,PDF,twocolumn_devops,en,1.0,1.0,1.0,1.0,1.0,1.0,5.0,5.0,0.0,1.0,1.0,1.0,0.0,1.0,
+HOLDOUT_CV_05,PDF,multipage_architect,vi,1.0,1.0,1.0,0.8182,1.0,0.9,8.0,8.0,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_06,PDF,multipage_ai_ml,en,1.0,1.0,1.0,0.9091,1.0,0.9524,6.0,6.0,0.0,1.0,1.0,1.0,0.0,0.0,
+HOLDOUT_CV_07,PDF,skill_heavy_fullstack,vi,1.0,1.0,1.0,0.8462,1.0,0.9167,3.5,3.5,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_08,PDF,skill_special_chars_dotnet,en,1.0,1.0,1.0,0.8889,0.8889,0.8889,4.0,4.0,0.0,1.0,1.0,1.0,0.0,0.0,
+HOLDOUT_CV_09,PDF,incomplete_missing_phone,vi,1.0,1.0,1.0,1.0,1.0,1.0,2.0,2.0,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_10,PDF,incomplete_missing_email,en,1.0,1.0,1.0,1.0,1.0,1.0,3.0,3.0,0.0,1.0,1.0,0.0,0.0,1.0,
+HOLDOUT_CV_11,PDF,incomplete_missing_education,vi,1.0,1.0,1.0,1.0,1.0,1.0,2.5,2.5,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_12,PDF,incomplete_anonymous,en,0.0,1.0,1.0,0.7143,1.0,0.8333,3.0,3.0,0.0,1.0,1.0,1.0,0.0,1.0,Tên lệch: trích xuất 'TECHNICAL EXPERTISE' != kỳ vọng 'None'
+HOLDOUT_CV_13,PDF,timeline_overlapping,vi,1.0,1.0,1.0,1.0,1.0,1.0,3.0,3.0,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_14,PDF,twocolumn_qa,en,1.0,1.0,1.0,1.0,1.0,1.0,2.0,2.0,0.0,1.0,1.0,1.0,0.0,1.0,
+HOLDOUT_CV_15,PDF,intern_no_experience,vi,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,1.0,Kinh nghiệm lệch: trích xuất 1.0n != kỳ vọng 0.0n (MAE=1.0)
+HOLDOUT_CV_01,DOCX,standard_backend_golang,vi,1.0,1.0,1.0,0.875,1.0,0.9333,3.0,3.0,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_02,DOCX,standard_frontend_vue,en,1.0,1.0,1.0,1.0,1.0,1.0,2.5,2.5,0.0,1.0,1.0,1.0,0.0,1.0,
+HOLDOUT_CV_03,DOCX,twocolumn_frontend,vi,1.0,1.0,1.0,1.0,1.0,1.0,3.0,3.0,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_04,DOCX,twocolumn_devops,en,1.0,1.0,1.0,1.0,1.0,1.0,5.0,5.0,0.0,1.0,1.0,1.0,0.0,1.0,
+HOLDOUT_CV_05,DOCX,multipage_architect,vi,1.0,1.0,1.0,0.8182,1.0,0.9,8.0,8.0,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_06,DOCX,multipage_ai_ml,en,1.0,1.0,1.0,0.9091,1.0,0.9524,6.0,6.0,0.0,1.0,1.0,1.0,0.0,0.0,
+HOLDOUT_CV_07,DOCX,skill_heavy_fullstack,vi,1.0,1.0,1.0,0.8462,1.0,0.9167,3.5,3.5,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_08,DOCX,skill_special_chars_dotnet,en,1.0,1.0,1.0,0.9,1.0,0.9474,4.0,4.0,0.0,1.0,1.0,1.0,0.0,0.0,
+HOLDOUT_CV_09,DOCX,incomplete_missing_phone,vi,1.0,1.0,1.0,1.0,1.0,1.0,2.0,2.0,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_10,DOCX,incomplete_missing_email,en,1.0,1.0,1.0,1.0,1.0,1.0,3.0,3.0,0.0,1.0,1.0,0.0,0.0,1.0,
+HOLDOUT_CV_11,DOCX,incomplete_missing_education,vi,1.0,1.0,1.0,1.0,1.0,1.0,2.5,2.5,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_12,DOCX,incomplete_anonymous,en,0.0,1.0,1.0,0.7143,1.0,0.8333,3.0,3.0,0.0,1.0,1.0,1.0,0.0,1.0,Tên lệch: trích xuất 'TECHNICAL EXPERTISE' != kỳ vọng 'None'
+HOLDOUT_CV_13,DOCX,timeline_overlapping,vi,1.0,1.0,1.0,1.0,1.0,1.0,3.0,3.0,0.0,1.0,1.0,1.0,1.0,1.0,
+HOLDOUT_CV_14,DOCX,twocolumn_qa,en,1.0,1.0,1.0,1.0,1.0,1.0,2.0,2.0,0.0,1.0,1.0,1.0,0.0,1.0,
+HOLDOUT_CV_15,DOCX,intern_no_experience,vi,1.0,1.0,1.0,1.0,1.0,1.0,1.0,0.0,1.0,0.0,1.0,0.0,1.0,1.0,Kinh nghiệm lệch: trích xuất 1.0n != kỳ vọng 0.0n (MAE=1.0)

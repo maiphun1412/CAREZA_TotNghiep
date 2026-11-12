@@ -1,0 +1,91 @@
+query_id,query,query_type,language,relevance_count,retrieved_total,top1_chunk,top1_score,top1_is_relevant,hit@1,hit@3,hit@5,p@1,p@3,p@5,r@1,r@3,r@5,reciprocal_rank
+query_01,Các trường thông tin cốt lõi bắt buộc phải có trong một CV chuyên nghiệp là gì?,direct,vi,2,19,doc_01_c00,0.2186,True,1.0,1.0,1.0,1.0,0.3333,0.2,0.5,0.5,0.5,1.0
+query_02,Dung lượng tối đa cho phép tải lên file CV trên hệ thống CAREZA là bao nhiêu?,direct,vi,1,25,doc_01_c02,0.1942,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_03,Kinh nghiệm làm việc trong CV nên được sắp xếp theo thứ tự thời gian như thế nào?,direct,vi,1,6,doc_01_c01,0.162,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_04,Tính năng Match Score giữa CV và JD của CAREZA hoạt động dựa trên nguyên lý nào?,direct,vi,1,22,doc_02_c00,0.1664,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.5
+query_05,AI của CAREZA hỗ trợ phát hiện những thông tin gì từ CV của ứng viên?,direct,vi,2,39,doc_01_c00,0.2089,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,0.5,0.5,0.5
+query_06,Một hồ sơ ứng tuyển trên CAREZA trải qua những trạng thái xét duyệt nào?,direct,vi,3,39,doc_03_c00,0.4995,True,1.0,1.0,1.0,1.0,0.6667,0.6,0.3333,0.6667,1.0,1.0
+query_07,Khi nào thì ứng viên được phép rút hồ sơ đã nộp trên hệ thống?,direct,vi,2,41,doc_03_c00,0.3672,True,1.0,1.0,1.0,1.0,0.6667,0.4,0.5,1.0,1.0,1.0
+query_08,Hai chế độ hiển thị hồ sơ cá nhân của ứng viên gồm những lựa chọn nào?,direct,vi,1,37,doc_04_c01,0.2211,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_09,Cần cung cấp những thông tin gì khi cập nhật mục Học vấn và Chứng chỉ trong hồ sơ cá nhân?,direct,vi,1,35,doc_01_c00,0.2771,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.5
+query_10,AI Mock Interview trên CAREZA hỗ trợ mô phỏng phỏng vấn cho những đối tượng và vị trí nào?,direct,vi,1,23,doc_12_c00,0.2511,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.5
+query_11,Báo cáo kết quả sau buổi phỏng vấn thử AI Mock Interview cung cấp những nội dung gì?,direct,vi,1,23,doc_12_c00,0.1821,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.5
+query_12,Rubric chấm điểm của AI Mock Interview gồm những tiêu chí cốt lõi nào?,direct,vi,2,10,doc_06_c00,0.2265,True,1.0,1.0,1.0,1.0,0.3333,0.2,0.5,0.5,0.5,1.0
+query_13,Những hành vi trả lời nào sẽ bị hệ thống AI Mock Interview trừ điểm tiêu cực?,direct,vi,1,22,doc_06_c01,0.1757,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_14,Tỷ trọng phần trăm các yếu tố tạo nên điểm gợi ý việc làm thông minh là bao nhiêu?,direct,vi,1,11,doc_07_c00,0.1488,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_15,Tin tuyển dụng đạt mức tương đồng bao nhiêu phần trăm thì được gắn nhãn Phù hợp cao?,direct,vi,1,31,doc_07_c01,0.2148,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_16,Ứng viên có thể lọc tìm kiếm việc làm theo những tiêu chí nâng cao nào?,direct,vi,1,33,doc_08_c00,0.2602,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_17,Hệ thống sẽ gửi cảnh báo việc làm đã lưu sắp hết hạn trước bao nhiêu ngày?,direct,vi,1,23,doc_08_c01,0.284,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_18,Một tin tuyển dụng chuẩn mực trên CAREZA cần có những cấu trúc nội dung nào?,direct,vi,1,39,doc_09_c00,0.3012,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_19,Thời hạn hiển thị tiêu chuẩn của một tin tuyển dụng sau khi được duyệt là bao lâu?,direct,vi,1,30,doc_09_c01,0.4119,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_20,Bảng Kanban quản lý quy trình ứng viên (Hiring Pipeline) gồm những cột trạng thái nào?,direct,vi,1,25,doc_10_c00,0.1919,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_21,Nhà tuyển dụng có thể thực hiện những thao tác hàng loạt nào trên bảng quản lý ứng viên?,direct,vi,1,44,doc_10_c00,0.2783,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.5
+query_22,Phân quyền thành viên doanh nghiệp trên CAREZA gồm 4 vai trò nào và quyền hạn khác nhau ra sao?,direct,vi,2,22,doc_11_c00,0.297,True,1.0,1.0,1.0,1.0,0.6667,0.4,0.5,1.0,1.0,1.0
+query_23,Vai trò Reviewer trong công ty có những quyền hạn và giới hạn gì?,direct,vi,1,5,doc_16_c01,0.1322,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.3333333333333333
+query_24,Biểu mẫu lên lịch phỏng vấn cho ứng viên yêu cầu những thông tin bắt buộc nào?,direct,vi,1,41,doc_12_c00,0.3692,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_25,Ứng viên có thể phản hồi những lựa chọn nào khi nhận được lời mời phỏng vấn?,direct,vi,1,34,doc_12_c01,0.278,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_26,Tính năng Talent Pool cho phép nhà tuyển dụng tìm kiếm hồ sơ theo những tiêu chí gì?,direct,vi,1,38,doc_13_c00,0.3936,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_27,Làm thế nào để nhà tuyển dụng xem được thông tin liên hệ đầy đủ của ứng viên trong Talent Pool?,direct,vi,2,43,doc_13_c01,0.4249,True,1.0,1.0,1.0,1.0,0.6667,0.4,0.5,1.0,1.0,1.0
+query_28,Báo cáo tuyển dụng trên CAREZA cung cấp những chỉ số đo lường hiệu quả then chốt nào?,direct,vi,1,39,doc_14_c00,0.33,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_29,Hồ sơ xác minh doanh nghiệp (Verified Badge) cần nộp những giấy tờ pháp lý nào?,direct,vi,1,22,doc_15_c00,0.4341,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_30,Thời gian xác thực hồ sơ công ty của đội ngũ kiểm duyệt CAREZA là bao lâu?,direct,vi,1,23,doc_15_c01,0.2527,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_31,"Sự khác biệt về số lượng tin đăng và tài khoản giữa gói Basic, Pro và Enterprise là gì?",direct,vi,2,14,doc_16_c00,0.1573,True,1.0,1.0,1.0,1.0,0.3333,0.4,0.5,0.5,1.0,1.0
+query_32,Quy định trừ điểm tín dụng khi mở lại một hồ sơ ứng viên đã từng mở trong Talent Pool là gì?,direct,vi,1,40,doc_17_c01,0.3052,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_33,Điều gì xảy ra với hạn mức đăng tin nếu tin tuyển dụng bị từ chối phê duyệt do lỗi kỹ thuật?,direct,vi,1,35,doc_17_c01,0.2971,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_34,Những hành vi nào bị nghiêm cấm trong tính năng nhắn tin trực tiếp In-app Chat?,direct,vi,1,17,doc_18_c00,0.2149,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.5
+query_35,Chính sách của CAREZA về việc bảo mật và chia sẻ dữ liệu cá nhân của ứng viên như thế nào?,direct,vi,1,35,doc_19_c00,0.3065,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_36,Các hành vi vi phạm tiêu chuẩn cộng đồng nào sẽ khiến tài khoản nhà tuyển dụng bị khóa vĩnh viễn?,direct,vi,2,26,doc_20_c01,0.3832,True,1.0,1.0,1.0,1.0,0.3333,0.2,0.5,0.5,0.5,1.0
+query_37,Quy trình 3 bước xử lý khiếu nại giữa ứng viên và nhà tuyển dụng gồm những gì?,direct,vi,2,40,doc_21_c00,0.3905,True,1.0,1.0,1.0,1.0,0.3333,0.2,0.5,0.5,0.5,1.0
+query_38,Quy định về độ phức tạp của mật khẩu và tính năng xác thực hai yếu tố 2FA trên CAREZA ra sao?,direct,vi,2,18,doc_22_c00,0.2211,True,1.0,1.0,1.0,1.0,0.6667,0.4,0.5,1.0,1.0,1.0
+query_39,Nguyên tắc xử lý tình huống khi gặp câu hỏi khó trong buổi phỏng vấn kỹ thuật là gì?,direct,vi,1,16,doc_05_c01,0.3211,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.5
+query_40,Thời gian lý tưởng để gửi thư cảm ơn sau phỏng vấn là khi nào và nội dung nên có gì?,direct,vi,2,18,doc_24_c01,0.3026,True,1.0,1.0,1.0,1.0,0.6667,0.4,0.5,1.0,1.0,1.0
+query_41,Quy định dung lượng tối đa cho tệp sơ yếu lý lịch tải lên web là bao nhiêu MB?,synonym_acronym,vi,2,11,doc_01_c02,0.0978,True,1.0,1.0,1.0,1.0,0.3333,0.2,0.5,0.5,0.5,1.0
+query_42,Làm sao để hệ thống ATS chấm điểm khớp hồ sơ với bản mô tả công việc JD đạt kết quả cao?,synonym_acronym,vi,1,29,doc_07_c00,0.1662,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.05
+query_43,Trạng thái nộp đơn 'screening' và 'offered' trên sàn tuyển dụng nghĩa là gì?,synonym_acronym,vi,2,23,doc_03_c00,0.2504,True,1.0,1.0,1.0,1.0,0.3333,0.2,0.5,0.5,0.5,1.0
+query_44,Bật chế độ riêng tư ẩn danh profile người tìm việc để headhunter không thấy ở đâu?,synonym_acronym,vi,2,6,doc_13_c00,0.0907,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,0.5,0.5,0.5
+query_45,Thử làm bài phỏng vấn ảo mô phỏng bằng bot AI vị trí Backend và Frontend thế nào?,synonym_acronym,vi,1,14,doc_12_c00,0.2223,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.5
+query_46,Nói dông dài spam từ khóa keyword stuffing trong phỏng vấn có bị trừ điểm bài test không?,synonym_acronym,vi,1,13,doc_12_c00,0.1509,False,0.0,0.0,1.0,0.0,0.0,0.2,0.0,0.0,1.0,0.2
+query_47,Gắn nhãn job High Match yêu cầu độ tương thích skill bao nhiêu %?,synonym_acronym,vi,2,5,doc_07_c01,0.163,True,1.0,1.0,1.0,1.0,0.6667,0.4,0.5,1.0,1.0,1.0
+query_48,Bookmark việc làm yêu thích để lưu tin tuyển dụng xem lại ở trang nào?,synonym_acronym,vi,1,34,doc_08_c01,0.2355,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_49,Thời gian hết hạn của một bài post tuyển dụng sau khi public là mấy tuần?,synonym_acronym,vi,2,22,doc_09_c01,0.1592,True,1.0,1.0,1.0,1.0,0.3333,0.4,0.5,0.5,1.0,1.0
+query_50,Bảng tiến trình ứng viên dạng Kanban board có những bước chuyển nào?,synonym_acronym,vi,1,23,doc_10_c00,0.1612,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_51,Tài khoản nhân sự Recruiter và Người thẩm định Reviewer khác nhau ra sao về quyền xem CV?,synonym_acronym,vi,1,10,doc_19_c01,0.1671,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+query_52,Setup cuộc hẹn phỏng vấn online qua link Google Meet hoặc Zoom trên hệ thống thế nào?,synonym_acronym,vi,2,17,doc_12_c00,0.2015,True,1.0,1.0,1.0,1.0,0.6667,0.4,0.5,1.0,1.0,1.0
+query_53,Cần bao nhiêu credit unlock hồ sơ để xem số điện thoại và email ứng viên trong kho CV?,synonym_acronym,vi,2,31,doc_01_c00,0.2451,False,0.0,1.0,1.0,0.0,0.3333,0.4,0.0,0.5,1.0,0.5
+query_54,Chỉ số Time-to-Hire và View-to-Apply trong dashboard đo lường cái gì?,synonym_acronym,vi,1,2,doc_14_c00,0.1477,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_55,Làm thế nào để nhận tích xanh Verified Badge chứng nhận doanh nghiệp uy tín?,synonym_acronym,vi,2,7,doc_15_c00,0.1281,True,1.0,1.0,1.0,1.0,0.3333,0.2,0.5,0.5,0.5,1.0
+query_56,Số lượt post bài tuyển dụng và add member tối đa của subscription Pro là bao nhiêu?,synonym_acronym,vi,1,19,doc_14_c00,0.1933,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.16666666666666666
+query_57,Nếu lỡ unlock 1 CV rồi bấm mở lại trong vòng 3 tháng có mất thêm token quota không?,synonym_acronym,vi,2,4,doc_17_c01,0.1402,True,1.0,1.0,1.0,1.0,0.3333,0.4,0.5,0.5,1.0,1.0
+query_58,Làm sao kích hoạt mã bảo mật xác minh hai bước 2FA Authenticator app cho tài khoản?,synonym_acronym,vi,1,12,doc_22_c00,0.3315,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_59,Làm sao để trình bày những việc mình từng làm trước đây một cách thuyết phục nhất?,indirect,vi,2,5,doc_01_c01,0.1403,True,1.0,1.0,1.0,1.0,0.3333,0.2,0.5,0.5,0.5,1.0
+query_60,Tại sao tôi nộp hồ sơ mà hệ thống báo tỷ lệ phù hợp với công việc còn thấp?,indirect,vi,1,28,doc_03_c02,0.2542,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+query_61,Nếu tôi đổi ý không muốn ứng tuyển vào công ty đó nữa thì có hủy đơn được không?,indirect,vi,2,27,doc_08_c01,0.1606,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,0.5,0.5,0.5
+query_62,Tôi không muốn công ty hiện tại nhìn thấy hồ sơ của tôi trên web tuyển dụng thì phải làm sao?,indirect,vi,2,38,doc_03_c00,0.2171,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,0.5,0.5,0.3333333333333333
+query_63,"Tôi sắp phỏng vấn vị trí lập trình nhưng rất run, có chỗ nào để luyện nói trước không?",indirect,vi,1,9,doc_12_c00,0.163,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.14285714285714285
+query_64,Nếu trong lúc trả lời câu hỏi mà tôi lặp lại y nguyên câu của người phỏng vấn thì kết quả thế nào?,indirect,vi,1,10,doc_05_c01,0.3279,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.3333333333333333
+query_65,Tin tuyển dụng nào tôi thấy hứng thú nhưng chưa kịp ứng tuyển thì có sợ bị trôi mất không?,indirect,vi,1,38,doc_10_c00,0.2302,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.3333333333333333
+query_66,"Tôi là chủ doanh nghiệp, muốn cấp quyền cho nhân viên vào xem CV nhưng cấm không cho họ nhắn tin riêng thì chọn quyền gì?",indirect,vi,1,25,doc_11_c00,0.2332,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.125
+query_67,Ứng viên bận việc đột xuất vào giờ phỏng vấn thì có thể xin dời sang khung giờ khác trên web được không?,indirect,vi,1,33,doc_12_c00,0.2116,False,0.0,1.0,1.0,0.0,0.3333,0.2,0.0,1.0,1.0,0.5
+query_68,Công ty muốn tìm ứng viên lập trình viên nhưng không muốn đăng tin chờ đợi thì làm cách nào?,indirect,vi,1,38,doc_08_c01,0.2647,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.16666666666666666
+query_69,Làm sao để biết tin tuyển dụng của công ty mình có đủ sức hút hay ứng viên bỏ qua ngay từ đầu?,indirect,vi,1,41,doc_13_c01,0.2442,False,0.0,0.0,1.0,0.0,0.0,0.2,0.0,0.0,1.0,0.2
+query_70,Ứng viên phát hiện một công ty bắt đóng tiền đặt cọc trước khi nhận việc thì cần làm gì?,indirect,vi,2,33,doc_08_c01,0.1635,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.037037037037037035
+query_71,Tôi bị nhà tuyển dụng hủy hẹn đột ngột và có lời lẽ xúc phạm thì gửi khiếu nại ở đâu?,indirect,vi,2,25,doc_21_c00,0.1952,True,1.0,1.0,1.0,1.0,0.6667,0.4,0.5,1.0,1.0,1.0
+query_72,Trong buổi phỏng vấn mà gặp câu hỏi quá khó không biết giải quyết ra sao thì nên làm gì?,indirect,vi,1,13,doc_23_c01,0.3246,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_73,What are the core required sections to include in a standard resume on CAREZA?,english,en,3,0,,0.0,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+query_74,How does the AI calculate the Match Score between an applicant CV and the job description?,english,en,1,2,doc_02_c01,0.0576,True,1.0,1.0,1.0,1.0,0.3333,0.2,1.0,1.0,1.0,1.0
+query_75,What are the lifecycle status stages of an application on the platform?,english,en,3,0,,0.0,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+query_76,What are the 4 core criteria evaluated in the AI Mock Interview scoring rubric?,english,en,2,2,doc_06_c00,0.0591,True,1.0,1.0,1.0,1.0,0.3333,0.2,0.5,0.5,0.5,1.0
+query_77,What are the different member roles and permissions within an enterprise employer account?,english,en,2,0,,0.0,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+query_78,How can an employer search for anonymous candidates and unlock full profiles in the Talent Pool?,english,en,2,0,,0.0,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+query_79,What documents are required for a company to obtain the Verified Badge?,english,en,1,0,,0.0,False,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0
+query_80,What are the password requirements and how to setup Two-Factor Authentication 2FA?,english,en,2,1,doc_22_c00,0.0606,True,1.0,1.0,1.0,1.0,0.3333,0.2,0.5,0.5,0.5,1.0
+query_81,Thủ tục xin visa kỹ sư đi làm việc tại Nhật Bản năm nay cần những giấy tờ gì?,unanswerable,vi,0,5,doc_07_c00,0.083,False,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+query_82,Chính sách đổi trả hàng hóa và hoàn tiền trong 7 ngày của sàn Shopee quy định thế nào?,unanswerable,vi,0,6,doc_10_c01,0.0904,False,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+query_83,CAREZA có chương trình cho người tìm việc vay vốn trả góp mua xe máy không?,unanswerable,vi,0,5,doc_23_c01,0.0691,False,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+query_84,Giá vé máy bay khứ hồi từ Hà Nội đi Đà Nẵng của Vietnam Airlines tháng sau là bao nhiêu?,unanswerable,vi,0,1,doc_04_c00,0.0657,False,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+query_85,Cách nấu món phở bò truyền thống chuẩn vị Bắc cần những gia vị thảo mộc nào?,unanswerable,vi,0,0,,0.0,False,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+query_86,Đội bóng nào đã vô địch cúp C1 Champions League mùa giải 2023-2024?,unanswerable,vi,0,0,,0.0,False,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+query_87,Thời tiết ngày mai tại Thành phố Hồ Chí Minh có mưa dông vào buổi chiều không?,unanswerable,vi,0,8,doc_15_c00,0.0896,False,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+query_88,Làm thế nào để cài đặt bộ phát wifi Mesh cho nhà 3 tầng không bị giật lag?,unanswerable,vi,0,8,doc_07_c01,0.0779,False,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+query_89,What is the recommended stock portfolio allocation for retirement in 2026?,unanswerable,en,0,0,,0.0,False,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A
+query_90,How to repair a flat bicycle tire using a patch kit on the roadside?,unanswerable,en,0,0,,0.0,False,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A

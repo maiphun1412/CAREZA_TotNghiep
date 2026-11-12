@@ -1,0 +1,1867 @@
+{
+  "overall_answerable": {
+    "count": 46,
+    "mrr": 0.663,
+    "precision@1": 0.6522,
+    "recall@1": 0.4565,
+    "hit_rate@1": 0.6522,
+    "precision@3": 0.2609,
+    "recall@3": 0.5326,
+    "hit_rate@3": 0.6739,
+    "precision@5": 0.1609,
+    "recall@5": 0.5435,
+    "hit_rate@5": 0.6739,
+    "false_negative_count": 12,
+    "false_negative_rate": 0.2609
+  },
+  "group_metrics": {
+    "direct": {
+      "count": 18,
+      "mrr": 0.9444,
+      "precision@1": 0.9444,
+      "recall@1": 0.6944,
+      "hit_rate@1": 0.9444,
+      "precision@3": 0.3889,
+      "recall@3": 0.8056,
+      "hit_rate@3": 0.9444,
+      "precision@5": 0.2333,
+      "recall@5": 0.8056,
+      "hit_rate@5": 0.9444
+    },
+    "synonym_acronym": {
+      "count": 12,
+      "mrr": 0.7917,
+      "precision@1": 0.75,
+      "recall@1": 0.5,
+      "hit_rate@1": 0.75,
+      "precision@3": 0.2777,
+      "recall@3": 0.5833,
+      "hit_rate@3": 0.8333,
+      "precision@5": 0.1833,
+      "recall@5": 0.625,
+      "hit_rate@5": 0.8333
+    },
+    "indirect": {
+      "count": 10,
+      "mrr": 0.3,
+      "precision@1": 0.3,
+      "recall@1": 0.2,
+      "hit_rate@1": 0.3,
+      "precision@3": 0.1333,
+      "recall@3": 0.25,
+      "hit_rate@3": 0.3,
+      "precision@5": 0.08,
+      "recall@5": 0.25,
+      "hit_rate@5": 0.3
+    },
+    "english": {
+      "count": 6,
+      "mrr": 0.1667,
+      "precision@1": 0.1667,
+      "recall@1": 0.0833,
+      "hit_rate@1": 0.1667,
+      "precision@3": 0.0555,
+      "recall@3": 0.0833,
+      "hit_rate@3": 0.1667,
+      "precision@5": 0.0333,
+      "recall@5": 0.0833,
+      "hit_rate@5": 0.1667
+    }
+  },
+  "unanswerable": {
+    "count": 6,
+    "correct_rejections": 6,
+    "correct_rejection_rate": 1.0,
+    "false_retrievals": 0,
+    "false_retrieval_rate": 0.0
+  },
+  "details": [
+    {
+      "query_id": "fq_01",
+      "query": "Tệp bản ghi video và âm thanh phỏng vấn trực tuyến trên CAREZA được mã hóa theo tiêu chuẩn nào?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_01_c00",
+        "fdoc_01_c01"
+      ],
+      "retrieved_total": 6,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_01_c00",
+          "score": 0.6835,
+          "document_title": "Cơ chế mã hóa và phân quyền truy cập video ghi hình phỏng vấn trực tuyến",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_01_c01",
+          "score": 0.562,
+          "document_title": "Cơ chế mã hóa và phân quyền truy cập video ghi hình phỏng vấn trực tuyến",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_010_c00",
+          "score": 0.4902,
+          "document_title": "Chính sách hỗ trợ chuyển đổi dữ liệu và di chuyển tài khoản doanh nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_012_c00",
+          "score": 0.4878,
+          "document_title": "Quy định về thỏa thuận bảo mật thông tin dự án trong phỏng vấn kỹ thuật",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_012_c01",
+          "score": 0.4739,
+          "document_title": "Quy định về thỏa thuận bảo mật thông tin dự án trong phỏng vấn kỹ thuật",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_02",
+      "query": "Ứng viên có quyền yêu cầu trích xuất bản sao video phỏng vấn của mình trong thời hạn bao nhiêu ngày?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_01_c01"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_01_c01",
+          "score": 0.3824,
+          "document_title": "Cơ chế mã hóa và phân quyền truy cập video ghi hình phỏng vấn trực tuyến",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_08_c00",
+          "score": 0.1998,
+          "document_title": "Hướng dẫn ứng viên chuẩn bị phỏng vấn hội đồng và thuyết trình chuyên môn",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_03",
+      "query": "Thời gian phản hồi lần đầu của bộ phận chăm sóc khách hàng đối với một khiếu nại là bao lâu?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_02_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_02_c00",
+          "score": 0.2425,
+          "document_title": "Quy định về thời hạn phản hồi khiếu nại và quy trình bồi hoàn điểm dịch vụ",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_04",
+      "query": "Trường hợp mở hồ sơ Talent Pool chứa số điện thoại hoặc email sai thì chính sách bồi hoàn điểm dịch vụ ra sao?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_02_c01"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_02_c01",
+          "score": 0.6219,
+          "document_title": "Quy định về thời hạn phản hồi khiếu nại và quy trình bồi hoàn điểm dịch vụ",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_05",
+      "query": "Cộng tác viên tuyển dụng tự do (Freelance Headhunter) có quyền truy cập những thông tin gì trong hệ thống?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_03_c01"
+      ],
+      "retrieved_total": 4,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_03_c00",
+          "score": 0.6097,
+          "document_title": "Hướng dẫn quản lý cộng tác viên tuyển dụng tự do trong doanh nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_06_c00",
+          "score": 0.4955,
+          "document_title": "Quy trình đối soát tự động và thanh quyết toán hoa hồng tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_05_c01",
+          "score": 0.4706,
+          "document_title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_05_c00",
+          "score": 0.4572,
+          "document_title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_06",
+      "query": "Thời gian bảo lưu hồ sơ ứng viên đã nộp trong tài khoản doanh nghiệp tối đa là bao nhiêu tháng?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_04_c01",
+        "fdoc_04_c00"
+      ],
+      "retrieved_total": 7,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_04_c00",
+          "score": 0.6613,
+          "document_title": "Chính sách bảo lưu hồ sơ và quy định về thời hiệu lưu trữ dữ liệu ứng viên",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_02_c01",
+          "score": 0.2915,
+          "document_title": "Quy định về thời hạn phản hồi khiếu nại và quy trình bồi hoàn điểm dịch vụ",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_013_c00",
+          "score": 0.2873,
+          "document_title": "Hướng dẫn tối ưu từ khóa kỹ năng cho ứng viên chuyển dịch ngành nghề",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_013_c01",
+          "score": 0.2794,
+          "document_title": "Hướng dẫn tối ưu từ khóa kỹ năng cho ứng viên chuyển dịch ngành nghề",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_08_c00",
+          "score": 0.2693,
+          "document_title": "Hướng dẫn ứng viên chuẩn bị phỏng vấn hội đồng và thuyết trình chuyên môn",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_07",
+      "query": "Dung lượng tối đa và độ phân giải khuyến nghị cho tệp chứng chỉ đính kèm hồ sơ là bao nhiêu?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_05_c01",
+        "fdoc_05_c00"
+      ],
+      "retrieved_total": 4,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_05_c00",
+          "score": 0.617,
+          "document_title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_05_c01",
+          "score": 0.5571,
+          "document_title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_03_c00",
+          "score": 0.4565,
+          "document_title": "Hướng dẫn quản lý cộng tác viên tuyển dụng tự do trong doanh nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_06_c00",
+          "score": 0.45,
+          "document_title": "Quy trình đối soát tự động và thanh quyết toán hoa hồng tuyển dụng",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_08",
+      "query": "Kỳ đối soát và thanh toán hoa hồng cho chương trình giới thiệu nhân tài diễn ra vào ngày nào hàng tháng?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_06_c00",
+        "fdoc_06_c01"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_06_c00",
+          "score": 0.3923,
+          "document_title": "Quy trình đối soát tự động và thanh quyết toán hoa hồng tuyển dụng",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_09",
+      "query": "Ngưỡng số lượng nộp hồ sơ từ một địa chỉ IP sẽ kích hoạt cơ chế chống spam là bao nhiêu đơn trong mấy phút?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_07_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_07_c00",
+          "score": 0.212,
+          "document_title": "Cơ chế phát hiện gian lận IP và ngăn chặn hành vi spam hồ sơ ứng tuyển",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_10",
+      "query": "Phân bổ thời gian khuyến nghị cho phần thuyết trình giải pháp và phần hỏi đáp trong phỏng vấn hội đồng ra sao?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_08_c00",
+        "fdoc_08_c01"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_08_c01",
+          "score": 0.2167,
+          "document_title": "Hướng dẫn ứng viên chuẩn bị phỏng vấn hội đồng và thuyết trình chuyên môn",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_08_c00",
+          "score": 0.1948,
+          "document_title": "Hướng dẫn ứng viên chuẩn bị phỏng vấn hội đồng và thuyết trình chuyên môn",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_11",
+      "query": "Thư xác nhận kinh nghiệm làm việc chuẩn mực bắt buộc phải có những thông tin pháp lý nào?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_09_c00",
+        "fdoc_09_c01"
+      ],
+      "retrieved_total": 5,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_09_c00",
+          "score": 0.6074,
+          "document_title": "Quy chuẩn nội dung thư xác nhận hoàn thành công tác và chứng nhận kinh nghiệm",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_013_c01",
+          "score": 0.4908,
+          "document_title": "Hướng dẫn tối ưu từ khóa kỹ năng cho ứng viên chuyển dịch ngành nghề",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_04_c00",
+          "score": 0.4732,
+          "document_title": "Chính sách bảo lưu hồ sơ và quy định về thời hiệu lưu trữ dữ liệu ứng viên",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_02_c01",
+          "score": 0.4716,
+          "document_title": "Quy định về thời hạn phản hồi khiếu nại và quy trình bồi hoàn điểm dịch vụ",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_013_c00",
+          "score": 0.4695,
+          "document_title": "Hướng dẫn tối ưu từ khóa kỹ năng cho ứng viên chuyển dịch ngành nghề",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_12",
+      "query": "Thời gian hoàn tất quá trình di chuyển dữ liệu tuyển dụng lịch sử sang hệ thống CAREZA mất bao lâu?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_010_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_010_c00",
+          "score": 0.4207,
+          "document_title": "Chính sách hỗ trợ chuyển đổi dữ liệu và di chuyển tài khoản doanh nghiệp",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_13",
+      "query": "Bộ hồ sơ pháp lý yêu cầu để xác thực doanh nghiệp có vốn đầu tư nước ngoài FDI gồm những giấy tờ gì?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_011_c01",
+        "fdoc_011_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_011_c00",
+          "score": 0.4288,
+          "document_title": "Tiêu chí thẩm định hồ sơ doanh nghiệp có vốn đầu tư nước ngoài",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_14",
+      "query": "Thỏa thuận bảo mật thông tin dự án NDA trong phỏng vấn kỹ thuật nghiêm cấm ứng viên thực hiện hành vi nào?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_012_c00",
+        "fdoc_012_c01"
+      ],
+      "retrieved_total": 8,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_012_c00",
+          "score": 0.6191,
+          "document_title": "Quy định về thỏa thuận bảo mật thông tin dự án trong phỏng vấn kỹ thuật",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_012_c01",
+          "score": 0.6134,
+          "document_title": "Quy định về thỏa thuận bảo mật thông tin dự án trong phỏng vấn kỹ thuật",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_08_c00",
+          "score": 0.3178,
+          "document_title": "Hướng dẫn ứng viên chuẩn bị phỏng vấn hội đồng và thuyết trình chuyên môn",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_010_c00",
+          "score": 0.3022,
+          "document_title": "Chính sách hỗ trợ chuyển đổi dữ liệu và di chuyển tài khoản doanh nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_08_c01",
+          "score": 0.2894,
+          "document_title": "Hướng dẫn ứng viên chuẩn bị phỏng vấn hội đồng và thuyết trình chuyên môn",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_15",
+      "query": "Ứng viên chuyển ngành sang công nghệ thông tin nên nhấn mạnh những kỹ năng chuyển đổi nào trên CV?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_013_c00"
+      ],
+      "retrieved_total": 5,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_013_c00",
+          "score": 0.6663,
+          "document_title": "Hướng dẫn tối ưu từ khóa kỹ năng cho ứng viên chuyển dịch ngành nghề",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_013_c01",
+          "score": 0.5219,
+          "document_title": "Hướng dẫn tối ưu từ khóa kỹ năng cho ứng viên chuyển dịch ngành nghề",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_04_c00",
+          "score": 0.4837,
+          "document_title": "Chính sách bảo lưu hồ sơ và quy định về thời hiệu lưu trữ dữ liệu ứng viên",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_02_c01",
+          "score": 0.4682,
+          "document_title": "Quy định về thời hạn phản hồi khiếu nại và quy trình bồi hoàn điểm dịch vụ",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_09_c00",
+          "score": 0.4556,
+          "document_title": "Quy chuẩn nội dung thư xác nhận hoàn thành công tác và chứng nhận kinh nghiệm",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_16",
+      "query": "Một tài khoản người dùng trên CAREZA được phép đăng nhập đồng thời trên tối đa bao nhiêu thiết bị?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_014_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_014_c00",
+          "score": 0.3003,
+          "document_title": "Cơ chế quản lý phiên làm việc đa thiết bị và xử lý cảnh báo đăng nhập song song",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_17",
+      "query": "Các định dạng tệp chuẩn nào được hỗ trợ khi doanh nghiệp nhập khẩu dữ liệu tuyển dụng lịch sử?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_010_c00"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_010_c00",
+          "score": 0.3687,
+          "document_title": "Chính sách hỗ trợ chuyển đổi dữ liệu và di chuyển tài khoản doanh nghiệp",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_05_c00",
+          "score": 0.1677,
+          "document_title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_04_c00",
+          "score": 0.1624,
+          "document_title": "Chính sách bảo lưu hồ sơ và quy định về thời hiệu lưu trữ dữ liệu ứng viên",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_18",
+      "query": "Hệ thống sẽ kích hoạt cảnh báo an ninh phiên đăng nhập song song khi phát hiện điều kiện bất thường gì?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "fdoc_014_c01",
+        "fdoc_014_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_014_c00",
+          "score": 0.269,
+          "document_title": "Cơ chế quản lý phiên làm việc đa thiết bị và xử lý cảnh báo đăng nhập song song",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_19",
+      "query": "Thuật toán mã hóa file video call phỏng vấn trực tiếp là chuẩn gì?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_01_c00"
+      ],
+      "retrieved_total": 6,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_01_c00",
+          "score": 0.5744,
+          "document_title": "Cơ chế mã hóa và phân quyền truy cập video ghi hình phỏng vấn trực tuyến",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_01_c01",
+          "score": 0.5559,
+          "document_title": "Cơ chế mã hóa và phân quyền truy cập video ghi hình phỏng vấn trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_012_c00",
+          "score": 0.5095,
+          "document_title": "Quy định về thỏa thuận bảo mật thông tin dự án trong phỏng vấn kỹ thuật",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_012_c01",
+          "score": 0.4934,
+          "document_title": "Quy định về thỏa thuận bảo mật thông tin dự án trong phỏng vấn kỹ thuật",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_010_c00",
+          "score": 0.4807,
+          "document_title": "Chính sách hỗ trợ chuyển đổi dữ liệu và di chuyển tài khoản doanh nghiệp",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_20",
+      "query": "Chính sách refund hoàn trả credit khi unlock phải hồ sơ ứng viên ảo không liên lạc được ra sao?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_02_c01"
+      ],
+      "retrieved_total": 5,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_04_c00",
+          "score": 0.5397,
+          "document_title": "Chính sách bảo lưu hồ sơ và quy định về thời hiệu lưu trữ dữ liệu ứng viên",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_02_c01",
+          "score": 0.5252,
+          "document_title": "Quy định về thời hạn phản hồi khiếu nại và quy trình bồi hoàn điểm dịch vụ",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_013_c00",
+          "score": 0.4867,
+          "document_title": "Hướng dẫn tối ưu từ khóa kỹ năng cho ứng viên chuyển dịch ngành nghề",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_013_c01",
+          "score": 0.4866,
+          "document_title": "Hướng dẫn tối ưu từ khóa kỹ năng cho ứng viên chuyển dịch ngành nghề",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_09_c00",
+          "score": 0.468,
+          "document_title": "Quy chuẩn nội dung thư xác nhận hoàn thành công tác và chứng nhận kinh nghiệm",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 2,
+        "reciprocal_rank": 0.5,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_21",
+      "query": "Cộng tác viên headhunter tự do gửi ứng viên qua referral link có xem được data nội bộ không?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_03_c01",
+        "fdoc_03_c00"
+      ],
+      "retrieved_total": 5,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_03_c00",
+          "score": 0.5819,
+          "document_title": "Hướng dẫn quản lý cộng tác viên tuyển dụng tự do trong doanh nghiệp",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_06_c00",
+          "score": 0.4925,
+          "document_title": "Quy trình đối soát tự động và thanh quyết toán hoa hồng tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_05_c01",
+          "score": 0.4758,
+          "document_title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_05_c00",
+          "score": 0.4565,
+          "document_title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_03_c01",
+          "score": 0.1493,
+          "document_title": "Hướng dẫn quản lý cộng tác viên tuyển dụng tự do trong doanh nghiệp",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_22",
+      "query": "Hạn định lưu trữ dữ liệu cá nhân PII của ứng viên bị loại sau mấy năm thì bị ẩn danh?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_04_c01",
+        "fdoc_04_c00"
+      ],
+      "retrieved_total": 6,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_04_c00",
+          "score": 0.574,
+          "document_title": "Chính sách bảo lưu hồ sơ và quy định về thời hiệu lưu trữ dữ liệu ứng viên",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_012_c01",
+          "score": 0.5162,
+          "document_title": "Quy định về thỏa thuận bảo mật thông tin dự án trong phỏng vấn kỹ thuật",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_010_c00",
+          "score": 0.508,
+          "document_title": "Chính sách hỗ trợ chuyển đổi dữ liệu và di chuyển tài khoản doanh nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_012_c00",
+          "score": 0.4792,
+          "document_title": "Quy định về thỏa thuận bảo mật thông tin dự án trong phỏng vấn kỹ thuật",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_01_c00",
+          "score": 0.4745,
+          "document_title": "Cơ chế mã hóa và phân quyền truy cập video ghi hình phỏng vấn trực tuyến",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_23",
+      "query": "Link huy hiệu số Digital Badge chứng chỉ quốc tế được kiểm tra tính xác thực thế nào?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_05_c01"
+      ],
+      "retrieved_total": 4,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_05_c01",
+          "score": 0.5993,
+          "document_title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_05_c00",
+          "score": 0.5122,
+          "document_title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_06_c00",
+          "score": 0.4556,
+          "document_title": "Quy trình đối soát tự động và thanh quyết toán hoa hồng tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_03_c00",
+          "score": 0.45,
+          "document_title": "Hướng dẫn quản lý cộng tác viên tuyển dụng tự do trong doanh nghiệp",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_24",
+      "query": "Lịch thanh toán hoa hồng commission giới thiệu nhân tài diễn ra vào ngày mùng mấy hàng tháng?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_06_c00",
+        "fdoc_06_c01"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_06_c00",
+          "score": 0.1909,
+          "document_title": "Quy trình đối soát tự động và thanh quyết toán hoa hồng tuyển dụng",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_25",
+      "query": "Tường lửa WAF chặn bot spam nộp đơn tự động qua địa chỉ IP sau bao nhiêu lượt submit?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_07_c01",
+        "fdoc_07_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_07_c00",
+          "score": 0.1767,
+          "document_title": "Cơ chế phát hiện gian lận IP và ngăn chặn hành vi spam hồ sơ ứng tuyển",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_26",
+      "query": "Buổi phỏng vấn dạng panel interview với ban giám đốc cần chuẩn bị slide thuyết trình mấy trang?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_08_c00",
+        "fdoc_08_c01"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_08_c00",
+          "score": 0.5553,
+          "document_title": "Hướng dẫn ứng viên chuẩn bị phỏng vấn hội đồng và thuyết trình chuyên môn",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_01_c01",
+          "score": 0.4901,
+          "document_title": "Cơ chế mã hóa và phân quyền truy cập video ghi hình phỏng vấn trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_04_c00",
+          "score": 0.45,
+          "document_title": "Chính sách bảo lưu hồ sơ và quy định về thời hiệu lưu trữ dữ liệu ứng viên",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_27",
+      "query": "Giấy chứng nhận công tác Experience Letter của công ty cũ cần mộc đỏ và chữ ký của ai?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_09_c00",
+        "fdoc_09_c01"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_28",
+      "query": "Thời gian migrate dữ liệu data cũ từ phần mềm ATS khác sang web Careza mất mấy ngày?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_010_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_010_c00",
+          "score": 0.5524,
+          "document_title": "Chính sách hỗ trợ chuyển đổi dữ liệu và di chuyển tài khoản doanh nghiệp",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_29",
+      "query": "Thủ tục verify tài khoản công ty có vốn nước ngoài FDI cần giấy phép IRC và ERC gì?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_011_c01",
+        "fdoc_011_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_30",
+      "query": "Ký hợp đồng bảo mật bí mật công nghệ NDA trước buổi phỏng vấn có hiệu lực bằng chữ ký điện tử không?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "fdoc_012_c00",
+        "fdoc_012_c01"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_012_c00",
+          "score": 0.2618,
+          "document_title": "Quy định về thỏa thuận bảo mật thông tin dự án trong phỏng vấn kỹ thuật",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_31",
+      "query": "Tôi không đỗ phỏng vấn và không muốn video mặt của mình bị lưu trên mạng thì có xóa được không?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "fdoc_01_c01"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_01_c00",
+          "score": 0.1794,
+          "document_title": "Cơ chế mã hóa và phân quyền truy cập video ghi hình phỏng vấn trực tuyến",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_32",
+      "query": "Công ty mất tiền mở hồ sơ ứng viên nhưng gọi điện toàn thuê bao không liên lạc được thì có được hoàn tiền không?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "fdoc_02_c01"
+      ],
+      "retrieved_total": 5,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_02_c01",
+          "score": 0.5255,
+          "document_title": "Quy định về thời hạn phản hồi khiếu nại và quy trình bồi hoàn điểm dịch vụ",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_04_c00",
+          "score": 0.2872,
+          "document_title": "Chính sách bảo lưu hồ sơ và quy định về thời hiệu lưu trữ dữ liệu ứng viên",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_013_c00",
+          "score": 0.2583,
+          "document_title": "Hướng dẫn tối ưu từ khóa kỹ năng cho ứng viên chuyển dịch ngành nghề",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_013_c01",
+          "score": 0.2523,
+          "document_title": "Hướng dẫn tối ưu từ khóa kỹ năng cho ứng viên chuyển dịch ngành nghề",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_09_c00",
+          "score": 0.2354,
+          "document_title": "Quy chuẩn nội dung thư xác nhận hoàn thành công tác và chứng nhận kinh nghiệm",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_33",
+      "query": "Làm thế nào để thuê môi giới bên ngoài tìm người mà họ không thể xem trộm danh sách ứng viên khác của công ty?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "fdoc_03_c01",
+        "fdoc_03_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_34",
+      "query": "Tôi nộp đơn vào công ty hai năm trước, giờ không muốn họ tiếp tục giữ số điện thoại và địa chỉ nhà của tôi thì sao?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "fdoc_04_c01",
+        "fdoc_04_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_35",
+      "query": "Tải chứng chỉ học trực tuyến lên hệ thống mà ảnh chụp bị mờ thì có bị từ chối phê duyệt không?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "fdoc_05_c01",
+        "fdoc_05_c00"
+      ],
+      "retrieved_total": 7,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_05_c01",
+          "score": 0.3122,
+          "document_title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_05_c00",
+          "score": 0.255,
+          "document_title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_01_c01",
+          "score": 0.2467,
+          "document_title": "Cơ chế mã hóa và phân quyền truy cập video ghi hình phỏng vấn trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_08_c00",
+          "score": 0.2409,
+          "document_title": "Hướng dẫn ứng viên chuẩn bị phỏng vấn hội đồng và thuyết trình chuyên môn",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_03_c00",
+          "score": 0.225,
+          "document_title": "Hướng dẫn quản lý cộng tác viên tuyển dụng tự do trong doanh nghiệp",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_36",
+      "query": "Có kẻ xấu dùng phần mềm tự động nộp hàng loạt đơn rác vào tin tuyển dụng thì hệ thống chặn thế nào?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "fdoc_07_c01",
+        "fdoc_07_c00"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_010_c00",
+          "score": 0.4989,
+          "document_title": "Chính sách hỗ trợ chuyển đổi dữ liệu và di chuyển tài khoản doanh nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_04_c00",
+          "score": 0.4891,
+          "document_title": "Chính sách bảo lưu hồ sơ và quy định về thời hiệu lưu trữ dữ liệu ứng viên",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_37",
+      "query": "Phỏng vấn cùng một lúc với 3 sếp thì nên nhìn vào ai để trả lời không bị mất điểm tự tin?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "fdoc_08_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_38",
+      "query": "Công ty trước đây giải thể hoặc sếp cũ không chịu ký giấy xác nhận kinh nghiệm thì hồ sơ cần gì?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "fdoc_09_c00",
+        "fdoc_09_c01"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_09_c00",
+          "score": 0.2017,
+          "document_title": "Quy chuẩn nội dung thư xác nhận hoàn thành công tác và chứng nhận kinh nghiệm",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_39",
+      "query": "Tôi làm kế toán muốn chuyển sang làm lập trình viên thì làm sao viết hồ sơ để người ta không loại?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "fdoc_013_c00",
+        "fdoc_013_c01"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_40",
+      "query": "Tôi nghi ngờ có người khác đang đăng nhập lén vào tài khoản tuyển dụng của tôi thì kiểm tra ở đâu?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "fdoc_014_c01",
+        "fdoc_014_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_41",
+      "query": "What encryption standard is used to secure video interview recordings on the CAREZA platform?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "fdoc_01_c00",
+        "fdoc_01_c01"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "fdoc_01_c01",
+          "score": 0.4715,
+          "document_title": "Cơ chế mã hóa và phân quyền truy cập video ghi hình phỏng vấn trực tuyến",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "fdoc_08_c00",
+          "score": 0.457,
+          "document_title": "Hướng dẫn ứng viên chuẩn bị phỏng vấn hội đồng và thuyết trình chuyên môn",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "fdoc_04_c00",
+          "score": 0.4566,
+          "document_title": "Chính sách bảo lưu hồ sơ và quy định về thời hiệu lưu trữ dữ liệu ứng viên",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "fq_42",
+      "query": "What is the maximum data retention period for candidate application records before anonymization?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "fdoc_04_c01",
+        "fdoc_04_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_43",
+      "query": "What are the allowed file formats and maximum upload size for digital certificate attachments?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "fdoc_05_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_44",
+      "query": "How does the system prevent automated bot scripts from submitting spam applications?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "fdoc_07_c01",
+        "fdoc_07_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_45",
+      "query": "What legal documents are required for a foreign invested enterprise FDI to verify an employer account?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "fdoc_011_c01",
+        "fdoc_011_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_46",
+      "query": "How many concurrent device logins are permitted per user account before security alerts are triggered?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "fdoc_014_c01",
+        "fdoc_014_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "fq_47",
+      "query": "Mức đóng bảo hiểm xã hội bắt buộc theo mức lương cơ sở mới áp dụng từ năm nay quy định tỷ lệ bao nhiêu?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "correct_rejection": true,
+        "false_retrieval": false,
+        "retrieved_count": 0,
+        "top_score": 0.0,
+        "top_chunk": null
+      }
+    },
+    {
+      "query_id": "fq_48",
+      "query": "Hồ sơ thủ tục xin cấp visa lao động diện E-9 đi làm việc tại Hàn Quốc gồm những điều kiện gì?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "correct_rejection": true,
+        "false_retrieval": false,
+        "retrieved_count": 0,
+        "top_score": 0.0,
+        "top_chunk": null
+      }
+    },
+    {
+      "query_id": "fq_49",
+      "query": "Quy định về thời giờ làm thêm giờ tối đa trong một năm theo Bộ luật Lao động hiện hành là bao nhiêu tiếng?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "correct_rejection": true,
+        "false_retrieval": false,
+        "retrieved_count": 0,
+        "top_score": 0.0,
+        "top_chunk": null
+      }
+    },
+    {
+      "query_id": "fq_50",
+      "query": "Cách đấu dây và cài đặt phần mềm máy chấm công nhận diện khuôn mặt Face ID ZKTeco?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "correct_rejection": true,
+        "false_retrieval": false,
+        "retrieved_count": 0,
+        "top_score": 0.0,
+        "top_chunk": null
+      }
+    },
+    {
+      "query_id": "fq_51",
+      "query": "What are the petition requirements and lottery process for an H-1B specialty occupation visa in the United States?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "correct_rejection": true,
+        "false_retrieval": false,
+        "retrieved_count": 0,
+        "top_score": 0.0,
+        "top_chunk": null
+      }
+    },
+    {
+      "query_id": "fq_52",
+      "query": "How to file a claim for maternity leave benefits directly on the national social security online portal?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "correct_rejection": true,
+        "false_retrieval": false,
+        "retrieved_count": 0,
+        "top_score": 0.0,
+        "top_chunk": null
+      }
+    }
+  ]
+}

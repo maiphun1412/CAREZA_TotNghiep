@@ -1,0 +1,53 @@
+query_id,query,query_type,relevance_count,base_hit@1,base_hit@5,base_mrr,v1_hit@1,v1_hit@5,v1_mrr,v2_hit@1,v2_hit@5,v2_mrr,v2_retrieved_total
+fq_01,Tệp bản ghi video và âm thanh phỏng vấn trực tuyến trên CAREZA được mã hóa theo tiêu chuẩn nào?,direct,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,6
+fq_02,Ứng viên có quyền yêu cầu trích xuất bản sao video phỏng vấn của mình trong thời hạn bao nhiêu ngày?,direct,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,8
+fq_03,Thời gian phản hồi lần đầu của bộ phận chăm sóc khách hàng đối với một khiếu nại là bao lâu?,direct,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1
+fq_04,Trường hợp mở hồ sơ Talent Pool chứa số điện thoại hoặc email sai thì chính sách bồi hoàn điểm dịch vụ ra sao?,direct,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1
+fq_05,Cộng tác viên tuyển dụng tự do (Freelance Headhunter) có quyền truy cập những thông tin gì trong hệ thống?,direct,1,1.0,1.0,1.0,0.0,0.0,0.0,0.0,1.0,0.2,5
+fq_06,Thời gian bảo lưu hồ sơ ứng viên đã nộp trong tài khoản doanh nghiệp tối đa là bao nhiêu tháng?,direct,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,8
+fq_07,Dung lượng tối đa và độ phân giải khuyến nghị cho tệp chứng chỉ đính kèm hồ sơ là bao nhiêu?,direct,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,4
+fq_08,Kỳ đối soát và thanh toán hoa hồng cho chương trình giới thiệu nhân tài diễn ra vào ngày nào hàng tháng?,direct,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,2
+fq_09,Ngưỡng số lượng nộp hồ sơ từ một địa chỉ IP sẽ kích hoạt cơ chế chống spam là bao nhiêu đơn trong mấy phút?,direct,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,3
+fq_10,Phân bổ thời gian khuyến nghị cho phần thuyết trình giải pháp và phần hỏi đáp trong phỏng vấn hội đồng ra sao?,direct,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,3
+fq_11,Thư xác nhận kinh nghiệm làm việc chuẩn mực bắt buộc phải có những thông tin pháp lý nào?,direct,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,5
+fq_12,Thời gian hoàn tất quá trình di chuyển dữ liệu tuyển dụng lịch sử sang hệ thống CAREZA mất bao lâu?,direct,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,3
+fq_13,Bộ hồ sơ pháp lý yêu cầu để xác thực doanh nghiệp có vốn đầu tư nước ngoài FDI gồm những giấy tờ gì?,direct,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,3
+fq_14,Thỏa thuận bảo mật thông tin dự án NDA trong phỏng vấn kỹ thuật nghiêm cấm ứng viên thực hiện hành vi nào?,direct,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,8
+fq_15,Ứng viên chuyển ngành sang công nghệ thông tin nên nhấn mạnh những kỹ năng chuyển đổi nào trên CV?,direct,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,5
+fq_16,Một tài khoản người dùng trên CAREZA được phép đăng nhập đồng thời trên tối đa bao nhiêu thiết bị?,direct,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,2
+fq_17,Các định dạng tệp chuẩn nào được hỗ trợ khi doanh nghiệp nhập khẩu dữ liệu tuyển dụng lịch sử?,direct,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,7
+fq_18,Hệ thống sẽ kích hoạt cảnh báo an ninh phiên đăng nhập song song khi phát hiện điều kiện bất thường gì?,direct,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,2
+fq_19,Thuật toán mã hóa file video call phỏng vấn trực tiếp là chuẩn gì?,synonym_acronym,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,6
+fq_20,Chính sách refund hoàn trả credit khi unlock phải hồ sơ ứng viên ảo không liên lạc được ra sao?,synonym_acronym,1,0.0,1.0,0.5,0.0,1.0,0.5,0.0,1.0,0.5,6
+fq_21,Cộng tác viên headhunter tự do gửi ứng viên qua referral link có xem được data nội bộ không?,synonym_acronym,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,5
+fq_22,Hạn định lưu trữ dữ liệu cá nhân PII của ứng viên bị loại sau mấy năm thì bị ẩn danh?,synonym_acronym,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,7
+fq_23,Link huy hiệu số Digital Badge chứng chỉ quốc tế được kiểm tra tính xác thực thế nào?,synonym_acronym,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,4
+fq_24,Lịch thanh toán hoa hồng commission giới thiệu nhân tài diễn ra vào ngày mùng mấy hàng tháng?,synonym_acronym,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,2
+fq_25,Tường lửa WAF chặn bot spam nộp đơn tự động qua địa chỉ IP sau bao nhiêu lượt submit?,synonym_acronym,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,2
+fq_26,Buổi phỏng vấn dạng panel interview với ban giám đốc cần chuẩn bị slide thuyết trình mấy trang?,synonym_acronym,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,4
+fq_27,Giấy chứng nhận công tác Experience Letter của công ty cũ cần mộc đỏ và chữ ký của ai?,synonym_acronym,2,1.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,1
+fq_28,Thời gian migrate dữ liệu data cũ từ phần mềm ATS khác sang web Careza mất mấy ngày?,synonym_acronym,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1
+fq_29,Thủ tục verify tài khoản công ty có vốn nước ngoài FDI cần giấy phép IRC và ERC gì?,synonym_acronym,2,1.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,2
+fq_30,Ký hợp đồng bảo mật bí mật công nghệ NDA trước buổi phỏng vấn có hiệu lực bằng chữ ký điện tử không?,synonym_acronym,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,3
+fq_31,Tôi không đỗ phỏng vấn và không muốn video mặt của mình bị lưu trên mạng thì có xóa được không?,indirect,1,1.0,1.0,1.0,0.0,0.0,0.0,0.0,1.0,0.5,5
+fq_32,Công ty mất tiền mở hồ sơ ứng viên nhưng gọi điện toàn thuê bao không liên lạc được thì có được hoàn tiền không?,indirect,1,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,6
+fq_33,Làm thế nào để thuê môi giới bên ngoài tìm người mà họ không thể xem trộm danh sách ứng viên khác của công ty?,indirect,2,1.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,3
+fq_34,"Tôi nộp đơn vào công ty hai năm trước, giờ không muốn họ tiếp tục giữ số điện thoại và địa chỉ nhà của tôi thì sao?",indirect,2,1.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,1
+fq_35,Tải chứng chỉ học trực tuyến lên hệ thống mà ảnh chụp bị mờ thì có bị từ chối phê duyệt không?,indirect,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,7
+fq_36,Có kẻ xấu dùng phần mềm tự động nộp hàng loạt đơn rác vào tin tuyển dụng thì hệ thống chặn thế nào?,indirect,2,1.0,1.0,1.0,0.0,0.0,0.0,0.0,0.0,0.0,2
+fq_37,Phỏng vấn cùng một lúc với 3 sếp thì nên nhìn vào ai để trả lời không bị mất điểm tự tin?,indirect,1,0.0,1.0,0.5,0.0,0.0,0.0,0.0,1.0,0.5,3
+fq_38,Công ty trước đây giải thể hoặc sếp cũ không chịu ký giấy xác nhận kinh nghiệm thì hồ sơ cần gì?,indirect,2,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,1.0,4
+fq_39,Tôi làm kế toán muốn chuyển sang làm lập trình viên thì làm sao viết hồ sơ để người ta không loại?,indirect,2,1.0,1.0,1.0,0.0,0.0,0.0,0.0,1.0,0.3333333333333333,8
+fq_40,Tôi nghi ngờ có người khác đang đăng nhập lén vào tài khoản tuyển dụng của tôi thì kiểm tra ở đâu?,indirect,2,1.0,1.0,1.0,0.0,0.0,0.0,1.0,1.0,1.0,5
+fq_41,What encryption standard is used to secure video interview recordings on the CAREZA platform?,english,2,0.0,0.0,0.0,1.0,1.0,1.0,1.0,1.0,1.0,3
+fq_42,What is the maximum data retention period for candidate application records before anonymization?,english,2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0
+fq_43,What are the allowed file formats and maximum upload size for digital certificate attachments?,english,1,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0
+fq_44,How does the system prevent automated bot scripts from submitting spam applications?,english,2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0
+fq_45,What legal documents are required for a foreign invested enterprise FDI to verify an employer account?,english,2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0
+fq_46,How many concurrent device logins are permitted per user account before security alerts are triggered?,english,2,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0.0,0
+fq_47,Mức đóng bảo hiểm xã hội bắt buộc theo mức lương cơ sở mới áp dụng từ năm nay quy định tỷ lệ bao nhiêu?,unanswerable,0,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,1
+fq_48,Hồ sơ thủ tục xin cấp visa lao động diện E-9 đi làm việc tại Hàn Quốc gồm những điều kiện gì?,unanswerable,0,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0
+fq_49,Quy định về thời giờ làm thêm giờ tối đa trong một năm theo Bộ luật Lao động hiện hành là bao nhiêu tiếng?,unanswerable,0,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,1
+fq_50,Cách đấu dây và cài đặt phần mềm máy chấm công nhận diện khuôn mặt Face ID ZKTeco?,unanswerable,0,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0
+fq_51,What are the petition requirements and lottery process for an H-1B specialty occupation visa in the United States?,unanswerable,0,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0
+fq_52,How to file a claim for maternity leave benefits directly on the national social security online portal?,unanswerable,0,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,N/A,0

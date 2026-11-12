@@ -1,0 +1,100 @@
+[
+  {
+    "id": "fdoc_01",
+    "title": "Cơ chế mã hóa và phân quyền truy cập video ghi hình phỏng vấn trực tuyến",
+    "category": "platform_video_recording",
+    "content": "Tính năng ghi hình buổi phỏng vấn trực tuyến trên CAREZA chỉ được kích hoạt khi có sự đồng thuận rõ ràng từ cả ứng viên và nhà tuyển dụng trước khi bắt đầu cuộc gọi. Toàn bộ tệp bản ghi video và âm thanh đều được tự động mã hóa bằng chuẩn AES-256 ngay sau khi kết thúc phiên phỏng vấn và lưu trữ trên hệ thống máy chủ bảo mật.\n\nChỉ những tài khoản nội bộ công ty có vai trò 'Owner', 'Admin' hoặc người trực tiếp thực hiện phỏng vấn (Interviewer) mới có quyền phát lại hoặc xem tóm tắt biên bản cuộc họp. Ứng viên có quyền yêu cầu trích xuất một bản sao video phỏng vấn của mình trong vòng 14 ngày kể từ buổi gặp hoặc gửi yêu cầu xóa vĩnh viễn video khỏi máy chủ nếu không trúng tuyển.",
+    "disclaimer": false
+  },
+  {
+    "id": "fdoc_02",
+    "title": "Quy định về thời hạn phản hồi khiếu nại và quy trình bồi hoàn điểm dịch vụ",
+    "category": "policy_complaint_sla",
+    "content": "[Lưu ý: Dữ liệu tổng hợp phục vụ mục đích Final Evaluation cho RAG Retrieval, nhãn tham chiếu chưa được chuyên gia độc lập bên ngoài xác nhận.]\n\nBộ phận chăm sóc khách hàng của CAREZA cam kết phản hồi lần đầu đối với mọi yêu cầu khiếu nại của nhà tuyển dụng hoặc ứng viên trong vòng 24 giờ làm việc. Thời gian điều tra và giải quyết dứt điểm các tranh chấp liên quan đến chất lượng dịch vụ hoặc sai sót kỹ thuật tối đa không quá 5 ngày làm việc.\n\nTrường hợp nhà tuyển dụng sử dụng lượt mở hồ sơ (CV Unlock Quota) trong Talent Pool nhưng gặp phải hồ sơ chứa số điện thoại sai, email không tồn tại hoặc ứng viên xác nhận không hề đăng ký tìm việc, hệ thống sẽ thực hiện bồi hoàn 100% điểm tín dụng đã trừ vào tài khoản trong vòng 48 giờ sau khi đối soát thành công.",
+    "disclaimer": true
+  },
+  {
+    "id": "fdoc_03",
+    "title": "Hướng dẫn quản lý cộng tác viên tuyển dụng tự do trong doanh nghiệp",
+    "category": "employer_freelance_recruiter",
+    "content": "Doanh nghiệp trên CAREZA có thể mở rộng quy mô tìm kiếm ứng viên bằng cách hợp tác với các cộng tác viên tuyển dụng tự do (Freelance Headhunters). Chủ tài khoản doanh nghiệp có thể tạo các liên kết giới thiệu việc làm độc quyền (Referral Links) kèm mã định danh cho từng cộng tác viên.\n\nMỗi khi ứng viên nộp hồ sơ qua liên kết giới thiệu và tiến vào các vòng tiếp theo trong Hiring Pipeline, hệ thống sẽ tự động ghi nhận đóng góp cho cộng tác viên tương ứng. Cộng tác viên chỉ được quyền xem trạng thái tiến độ hồ sơ của những ứng viên do chính mình giới thiệu, hoàn toàn không được tiếp cận các dữ liệu tuyển dụng khác của công ty.",
+    "disclaimer": false
+  },
+  {
+    "id": "fdoc_04",
+    "title": "Chính sách bảo lưu hồ sơ và quy định về thời hiệu lưu trữ dữ liệu ứng viên",
+    "category": "policy_data_retention",
+    "content": "[Lưu ý: Dữ liệu tổng hợp phục vụ mục đích Final Evaluation cho RAG Retrieval, nhãn tham chiếu chưa được chuyên gia độc lập bên ngoài xác nhận.]\n\nNhằm bảo vệ quyền riêng tư dữ liệu cá nhân theo quy định pháp luật, CAREZA áp dụng chính sách thời hiệu lưu trữ đối với toàn bộ hồ sơ ứng tuyển. Hồ sơ ứng viên đã nộp cho một tin tuyển dụng sẽ được bảo lưu trong tài khoản doanh nghiệp trong thời gian tối đa là 24 tháng kể từ ngày đóng tin tuyển dụng.\n\nSau thời hạn 24 tháng, nếu doanh nghiệp không phát sinh thêm bất kỳ tương tác hoặc gia hạn thỏa thuận nào với ứng viên, hệ thống sẽ tự động ẩn danh hóa các thông tin nhận dạng cá nhân (PII) như số CMND/CCCD, địa chỉ nhà riêng và số điện thoại, chỉ giữ lại dữ liệu thống kê tổng hợp phục vụ báo cáo tuyển dụng.",
+    "disclaimer": true
+  },
+  {
+    "id": "fdoc_05",
+    "title": "Tiêu chuẩn kỹ thuật cho tệp chứng chỉ số và tài liệu đính kèm hồ sơ",
+    "category": "candidate_certificate_standards",
+    "content": "Khi bổ sung các văn bằng, chứng chỉ nghề nghiệp quốc tế vào hồ sơ cá nhân trên CAREZA, người dùng cần tuân thủ các quy chuẩn định dạng tệp để hệ thống tự động kiểm tra. Các định dạng tệp đính kèm được chấp nhận bao gồm PDF, PNG và JPG với dung lượng tối đa không vượt quá 3MB cho mỗi tệp chứng chỉ.\n\nHình ảnh chứng chỉ phải bảo đảm độ phân giải tối thiểu 300 DPI, rõ nét, không bị lóa sáng hoặc mất góc. Đối với các chứng chỉ có mã xác thực trực tuyến (như AWS, Microsoft, Cisco, Coursera), ứng viên nên cung cấp trực tiếp đường link huy hiệu số (Digital Badge URL) để nhà tuyển dụng có thể xác thực tính nguyên bản chỉ bằng một cú nhấp chuột.",
+    "disclaimer": false
+  },
+  {
+    "id": "fdoc_06",
+    "title": "Quy trình đối soát tự động và thanh quyết toán hoa hồng tuyển dụng",
+    "category": "billing_commission_settlement",
+    "content": "[Lưu ý: Dữ liệu tổng hợp phục vụ mục đích Final Evaluation cho RAG Retrieval, nhãn tham chiếu chưa được chuyên gia độc lập bên ngoài xác nhận.]\n\nHệ thống CAREZA tích hợp công cụ kế toán tự động hỗ trợ đối soát các khoản hoa hồng tuyển dụng dành cho chương trình giới thiệu nhân tài nội bộ và mạng lưới headhunter. Kỳ đối soát hoa hồng diễn ra định kỳ vào ngày 10 hàng tháng đối với tất cả các ứng viên đã hoàn thành giai đoạn thử việc thành công trong tháng trước đó.\n\nBảng tổng hợp thanh toán chi tiết sẽ được tự động kết xuất dưới dạng bảng tính và gửi thông báo đến người thụ hưởng. Khoản hoa hồng sẽ được chuyển khoản trực tiếp vào tài khoản ngân hàng đã đăng ký sau khi trừ thuế thu nhập cá nhân (TNCN) theo quy định hiện hành.",
+    "disclaimer": true
+  },
+  {
+    "id": "fdoc_07",
+    "title": "Cơ chế phát hiện gian lận IP và ngăn chặn hành vi spam hồ sơ ứng tuyển",
+    "category": "security_fraud_detection",
+    "content": "Để bảo vệ các nhà tuyển dụng khỏi vấn nạn tin tặc quấy rối và hồ sơ ảo hàng loạt, CAREZA triển khai hệ thống tường lửa ứng dụng (WAF) và thuật toán phát hiện gian lận dựa trên địa chỉ IP. Nếu một địa chỉ IP thực hiện nộp hơn 20 hồ sơ ứng tuyển vào các vị trí khác nhau trong vòng 10 phút, hệ thống sẽ tự động kích hoạt mã bảo vệ reCAPTCHA và tạm khóa quyền ứng tuyển của IP đó trong 1 giờ.\n\nNgoài ra, các tài khoản có hành vi sử dụng công cụ tự động (Bot script) để quét và nộp hồ sơ đồng loạt sẽ bị hệ thống AI nhận diện hành vi bất thường, đưa vào danh sách đen (Blacklist) và hủy bỏ toàn bộ các đơn ứng tuyển vừa gửi.",
+    "disclaimer": false
+  },
+  {
+    "id": "fdoc_08",
+    "title": "Hướng dẫn ứng viên chuẩn bị phỏng vấn hội đồng và thuyết trình chuyên môn",
+    "category": "career_panel_interview",
+    "content": "Phỏng vấn hội đồng (Panel Interview) là hình thức phỏng vấn trong đó ứng viên đối thoại đồng thời với nhiều người phỏng vấn đại diện cho phòng nhân sự, quản lý kỹ thuật và ban giám đốc. Ứng viên cần duy trì giao tiếp mắt (Eye contact) đồng đều với tất cả các thành viên trong hội đồng, không chỉ tập trung vào người vừa đặt câu hỏi.\n\nĐối với các buổi phỏng vấn yêu cầu thuyết trình giải pháp kỹ thuật (Case Study Presentation), ứng viên nên chuẩn bị slide súc tích tối đa từ 7 đến 10 trang, phân bổ thời gian hợp lý: 15 phút thuyết trình và 15 phút trả lời chất vấn (Q&A). Tập trung nhấn mạnh vào nguyên nhân cốt lõi của bài toán, các phương án kiến trúc được cân nhắc và lý do lựa chọn giải pháp cuối cùng.",
+    "disclaimer": false
+  },
+  {
+    "id": "fdoc_09",
+    "title": "Quy chuẩn nội dung thư xác nhận hoàn thành công tác và chứng nhận kinh nghiệm",
+    "category": "hr_employment_verification",
+    "content": "Thư xác nhận kinh nghiệm làm việc (Experience Letter) là văn bản do bộ phận nhân sự của công ty cũ cấp cho nhân viên khi nghỉ việc nhằm xác thực quá trình công tác. Một thư xác nhận chuẩn mực cần thể hiện rõ: họ tên đầy đủ, ngày tháng năm sinh, số CCCD/hộ chiếu, chức danh công việc chính xác, ngày bắt đầu và ngày chấm dứt hợp đồng lao động.\n\nVăn bản bắt buộc phải có chữ ký của người đại diện có thẩm quyền (Giám đốc nhân sự hoặc Tổng giám đốc) cùng con dấu pháp nhân chính thức của doanh nghiệp. Ứng viên có thể tải bản chụp màu của thư xác nhận lên mục Tài liệu bổ sung trên CAREZA để tăng độ tin cậy của hồ sơ trước các nhà tuyển dụng lớn.",
+    "disclaimer": false
+  },
+  {
+    "id": "fdoc_010",
+    "title": "Chính sách hỗ trợ chuyển đổi dữ liệu và di chuyển tài khoản doanh nghiệp",
+    "category": "platform_data_migration",
+    "content": "Các doanh nghiệp đang sử dụng các phần mềm quản lý tuyển dụng (ATS) khác khi chuyển đổi sang CAREZA sẽ được đội ngũ kỹ thuật hỗ trợ di chuyển dữ liệu hoàn toàn miễn phí. Hệ thống hỗ trợ nhập khẩu hàng loạt dữ liệu lịch sử ứng viên, tin tuyển dụng cũ và ghi chú phỏng vấn từ các định dạng chuẩn như CSV, Excel hoặc tệp nén JSON.\n\nQuá trình di chuyển dữ liệu được thực hiện qua đường truyền mã hóa chuyên biệt và hoàn tất trong vòng 24 đến 72 giờ làm việc tùy thuộc vào quy mô dữ liệu. CAREZA cam kết bảo mật 100% dữ liệu lịch sử và ký thỏa thuận bảo mật thông tin (NDA) trước khi bắt đầu chuyển giao.",
+    "disclaimer": false
+  },
+  {
+    "id": "fdoc_011",
+    "title": "Tiêu chí thẩm định hồ sơ doanh nghiệp có vốn đầu tư nước ngoài",
+    "category": "employer_fdi_verification",
+    "content": "[Lưu ý: Dữ liệu tổng hợp phục vụ mục đích Final Evaluation cho RAG Retrieval, nhãn tham chiếu chưa được chuyên gia độc lập bên ngoài xác nhận.]\n\nĐối với các doanh nghiệp có vốn đầu tư trực tiếp nước ngoài (FDI) hoạt động tại Việt Nam, quy trình xác thực tài khoản tuyển dụng trên CAREZA yêu cầu bộ hồ sơ pháp lý chuyên biệt. Hồ sơ bao gồm: Giấy chứng nhận đăng ký đầu tư (IRC), Giấy chứng nhận đăng ký doanh nghiệp (ERC) do cơ quan chức năng Việt Nam cấp và hộ chiếu còn hạn của người đại diện pháp luật.\n\nTrong trường hợp công ty nước ngoài chưa thành lập pháp nhân tại Việt Nam và hoạt động dưới dạng văn phòng đại diện (Rep Office), công ty cần cung cấp thêm Giấy phép thành lập văn phòng đại diện do Sở Công Thương cấp. Thời gian phê duyệt hồ sơ doanh nghiệp FDI là 3 đến 5 ngày làm việc.",
+    "disclaimer": true
+  },
+  {
+    "id": "fdoc_012",
+    "title": "Quy định về thỏa thuận bảo mật thông tin dự án trong phỏng vấn kỹ thuật",
+    "category": "policy_nda_interview",
+    "content": "[Lưu ý: Dữ liệu tổng hợp phục vụ mục đích Final Evaluation cho RAG Retrieval, nhãn tham chiếu chưa được chuyên gia độc lập bên ngoài xác nhận.]\n\nTrong các buổi phỏng vấn kỹ thuật chuyên sâu liên quan đến sản phẩm cốt lõi hoặc mã nguồn độc quyền, nhà tuyển dụng có thể yêu cầu ứng viên ký Thỏa thuận bảo mật thông tin (Non-Disclosure Agreement - NDA) điện tử trước khi trao đổi chi tiết. Thỏa thuận NDA được gửi trực tiếp qua hệ thống CAREZA và có thể ký kết bằng chữ ký điện tử an toàn.\n\nThỏa thuận NDA quy định ứng viên không được phép sao chép, chia sẻ đề bài thử thách kỹ thuật, hình ảnh sơ đồ kiến trúc hệ thống hoặc dữ liệu kinh doanh của công ty cho bên thứ ba. Mọi hành vi làm rò rỉ đề bài phỏng vấn lên các diễn đàn công nghệ đều bị xem là vi phạm pháp luật và sẽ bị xử lý theo chế tài dân sự.",
+    "disclaimer": true
+  },
+  {
+    "id": "fdoc_013",
+    "title": "Hướng dẫn tối ưu từ khóa kỹ năng cho ứng viên chuyển dịch ngành nghề",
+    "category": "career_skill_switcher",
+    "content": "Đối với những ứng viên muốn chuyển hướng nghề nghiệp sang lĩnh vực Công nghệ thông tin (Career Switcher), việc tối ưu hóa kỹ năng chuyển đổi (Transferable Skills) trên CV là yếu tố quyết định. Ứng viên nên tập trung làm nổi bật các kỹ năng tư duy logic, quản lý dự án (Agile/Scrum), giải quyết vấn đề và kỹ năng giao tiếp phối hợp phòng ban.\n\nỞ mục kinh nghiệm làm việc, hãy khéo léo kết nối các công việc cũ với ứng dụng công nghệ (ví dụ: tự động hóa bảng biểu kế toán bằng Python, tối ưu dữ liệu kinh doanh bằng SQL). Đồng thời, ứng viên bắt buộc phải có mục 'Dự án cá nhân' (Personal Projects) hoặc đường link kho mã nguồn GitHub chứng minh năng lực thực tế để thuyết phục nhà tuyển dụng rằng bạn có nền tảng tự học vững chắc.",
+    "disclaimer": false
+  },
+  {
+    "id": "fdoc_014",
+    "title": "Cơ chế quản lý phiên làm việc đa thiết bị và xử lý cảnh báo đăng nhập song song",
+    "category": "security_concurrent_sessions",
+    "content": "Hệ thống CAREZA cho phép một tài khoản đăng nhập đồng thời trên tối đa 3 thiết bị (ví dụ: 1 máy tính làm việc, 1 máy tính cá nhân và 1 điện thoại di động). Nếu xuất hiện phiên đăng nhập thứ 4 hoặc phát hiện hai phiên đăng nhập cùng lúc từ hai địa chỉ IP thuộc hai tỉnh/thành phố khác nhau trong khoảng thời gian dưới 15 phút, hệ thống sẽ kích hoạt cảnh báo an ninh.\n\nKhi cảnh báo được kích hoạt, hệ thống sẽ gửi mã xác thực khẩn cấp qua SMS/Email và yêu cầu người dùng xác nhận. Người dùng có thể vào mục Cài đặt bảo mật để xem danh sách tất cả các phiên đăng nhập đang hoạt động (kèm tên thiết bị, hệ điều hành, địa chỉ IP) và bấm 'Đăng xuất khỏi tất cả các thiết bị khác' chỉ với một thao tác.",
+    "disclaimer": false
+  }
+]

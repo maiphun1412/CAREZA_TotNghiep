@@ -1,0 +1,452 @@
+[
+  {
+    "chunk_id": "doc_01_c00",
+    "document_id": "doc_01",
+    "chunk_index": 0,
+    "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA",
+    "category": "candidate_cv",
+    "content": "Nền tảng CAREZA cung cấp công cụ xây dựng và tải lên hồ sơ ứng viên (CV) theo các chuẩn định dạng phổ biến như PDF và DOCX. Để tạo một CV đạt điểm cao, ứng viên cần cung cấp đầy đủ các trường thông tin cốt lõi bao gồm: thông tin liên hệ (họ tên, email, số điện thoại), tóm tắt mục tiêu nghề nghiệp, kinh nghiệm làm việc chi tiết, trình độ học vấn, kỹ năng chuyên môn và các chứng chỉ liên quan.",
+    "char_count": 394
+  },
+  {
+    "chunk_id": "doc_01_c01",
+    "document_id": "doc_01",
+    "chunk_index": 1,
+    "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA",
+    "category": "candidate_cv",
+    "content": "Hệ thống khuyến nghị phần kinh nghiệm làm việc nên được trình bày theo thứ tự thời gian đảo ngược (công việc gần nhất đặt lên đầu). Mỗi vị trí công tác cần nêu rõ tên công ty, chức danh, thời gian làm việc, các nhiệm vụ chính và đặc biệt là thành tích định lượng (ví dụ: tối ưu hiệu năng 30%, tăng doanh thu 15%). Tránh sử dụng các mô tả chung chung không có số liệu chứng minh.",
+    "char_count": 378
+  },
+  {
+    "chunk_id": "doc_01_c02",
+    "document_id": "doc_01",
+    "chunk_index": 2,
+    "document_title": "Hướng dẫn tạo và chuẩn hóa CV chuyên nghiệp trên CAREZA",
+    "category": "candidate_cv",
+    "content": "Đối với mục kỹ năng, ứng viên nên phân chia rõ ràng giữa kỹ năng cốt lõi (Hard Skills như Python, React, PostgreSQL) và kỹ năng mềm (Soft Skills như làm việc nhóm, quản lý thời gian). Dung lượng tối đa cho file CV tải lên hệ thống là 5MB. Ứng viên có thể lưu trữ nhiều phiên bản CV khác nhau để ứng tuyển vào các vị trí công việc đặc thù.",
+    "char_count": 338
+  },
+  {
+    "chunk_id": "doc_02_c00",
+    "document_id": "doc_02",
+    "chunk_index": 0,
+    "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD",
+    "category": "ai_intelligence",
+    "content": "Trợ lý AI của CAREZA tích hợp thuật toán phân tích hồ sơ tự động nhằm hỗ trợ ứng viên đánh giá mức độ hoàn thiện của CV trước khi nộp đơn. Hệ thống thực hiện bóc tách nội dung (CV Parsing) thành các thực thể cấu trúc: kỹ năng, số năm kinh nghiệm, học vấn và các dự án tiêu biểu. Dựa trên các thực thể này, AI cung cấp điểm tổng quan (Overall Score) trên thang điểm 100 kèm các khuyến nghị cải thiện cụ thể.",
+    "char_count": 406
+  },
+  {
+    "chunk_id": "doc_02_c01",
+    "document_id": "doc_02",
+    "chunk_index": 1,
+    "document_title": "Tính năng AI Đánh giá CV và phân tích độ phù hợp với JD",
+    "category": "ai_intelligence",
+    "content": "Bên cạnh đánh giá độc lập, CAREZA hỗ trợ tính năng Match Score giữa CV và bản mô tả công việc (Job Description - JD). Thuật toán so khớp đối chiếu các từ khóa kỹ năng bắt buộc, mức độ tương đồng về cấp bậc (Junior, Middle, Senior) và các tiêu chí tuyển dụng do nhà tuyển dụng thiết lập. Ứng viên sẽ nhận được danh sách kỹ năng còn thiếu (missing skills) và gợi ý bổ sung từ khóa phù hợp để vượt qua vòng sàng lọc tự động (ATS). Lưu ý rằng điểm số AI chỉ đóng vai trò tham khảo và hỗ trợ định hướng. Quyết định mời phỏng vấn hoặc tuyển dụng cuối cùng hoàn toàn phụ thuộc vào nhà tuyển dụng thực tế.",
+    "char_count": 597
+  },
+  {
+    "chunk_id": "doc_03_c00",
+    "document_id": "doc_03",
+    "chunk_index": 0,
+    "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt",
+    "category": "candidate_application",
+    "content": "Khi tìm thấy công việc phù hợp trên CAREZA, ứng viên có thể nộp hồ sơ trực tiếp bằng cách chọn phiên bản CV mong muốn kèm thư giới thiệu (Cover Letter). Sau khi nộp đơn, trạng thái hồ sơ được cập nhật tức thì trong mục 'Việc đã ứng tuyển' để ứng viên tiện theo dõi tiến độ. Vòng đời của một hồ sơ ứng tuyển trên hệ thống trải qua các trạng thái chuẩn sau: 1. 'applied' (Đã nộp): Hồ sơ đã gửi thành công đến nhà tuyển dụng và đang chờ tiếp nhận. 2. 'screening' (Đang xét duyệt): Nhà tuyển dụng đang xem xét thông tin chi tiết và chấm điểm hồ sơ.",
+    "char_count": 544
+  },
+  {
+    "chunk_id": "doc_03_c01",
+    "document_id": "doc_03",
+    "chunk_index": 1,
+    "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt",
+    "category": "candidate_application",
+    "content": "2. 'screening' (Đang xét duyệt): Nhà tuyển dụng đang xem xét thông tin chi tiết và chấm điểm hồ sơ. 3. 'interview' (Phỏng vấn): Ứng viên vượt qua vòng hồ sơ và được lên lịch phỏng vấn (online hoặc trực tiếp). 4. 'offered' (Nhận đề nghị): Nhà tuyển dụng gửi thư mời nhận việc chính thức kèm mức lương và đãi ngộ. 5. 'rejected' (Bị từ chối): Hồ sơ không phù hợp ở thời điểm hiện tại.",
+    "char_count": 381
+  },
+  {
+    "chunk_id": "doc_03_c02",
+    "document_id": "doc_03",
+    "chunk_index": 2,
+    "document_title": "Quy trình nộp hồ sơ ứng tuyển và các trạng thái xét duyệt",
+    "category": "candidate_application",
+    "content": "5. 'rejected' (Bị từ chối): Hồ sơ không phù hợp ở thời điểm hiện tại. Mỗi khi trạng thái hồ sơ thay đổi, hệ thống sẽ tự động gửi email thông báo và cập nhật chuông thông báo trên giao diện người dùng. Ứng viên cũng có thể rút hồ sơ đã nộp nếu đơn ứng tuyển vẫn đang ở trạng thái 'applied'.",
+    "char_count": 289
+  },
+  {
+    "chunk_id": "doc_04_c00",
+    "document_id": "doc_04",
+    "chunk_index": 0,
+    "document_title": "Quản lý hồ sơ cá nhân, học vấn và chứng chỉ nghề nghiệp",
+    "category": "candidate_profile",
+    "content": "Trang hồ sơ cá nhân (Candidate Profile) là bộ mặt trực tuyến của ứng viên trên nền tảng CAREZA. Một hồ sơ hoàn chỉnh giúp tăng 60% cơ hội được nhà tuyển dụng chủ động tìm kiếm và liên hệ thông qua tính năng Talent Pool. Người dùng cần cập nhật chính xác tiêu đề nghề nghiệp (Job Title), cấp bậc hiện tại, mức lương mong muốn và địa điểm làm việc ưu tiên (Hà Nội, TP.HCM, Đà Nẵng hoặc Remote).",
+    "char_count": 392
+  },
+  {
+    "chunk_id": "doc_04_c01",
+    "document_id": "doc_04",
+    "chunk_index": 1,
+    "document_title": "Quản lý hồ sơ cá nhân, học vấn và chứng chỉ nghề nghiệp",
+    "category": "candidate_profile",
+    "content": "Phần Học vấn (Education) cho phép thêm trường đại học, chuyên ngành, bằng cấp (Cử nhân, Kỹ sư, Thạc sĩ) và thời gian tốt nghiệp. Mục Chứng chỉ (Certifications) hỗ trợ ứng viên lưu bằng cấp quốc tế (như AWS Certified Solutions Architect, PMP, IELTS) kèm đường link xác thực hoặc mã chứng chỉ. Ứng viên có quyền cài đặt chế độ hiển thị hồ sơ: 'Công khai' (nhà tuyển dụng có thể tìm thấy và gửi lời mời phỏng vấn) hoặc 'Ẩn' (chỉ những nhà tuyển dụng mà ứng viên chủ động nộp đơn mới thấy hồ sơ).",
+    "char_count": 492
+  },
+  {
+    "chunk_id": "doc_05_c00",
+    "document_id": "doc_05",
+    "chunk_index": 0,
+    "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview",
+    "category": "ai_mock_interview",
+    "content": "Tính năng AI Mock Interview trên CAREZA là công cụ mô phỏng phỏng vấn thực tế dành cho ứng viên ngành Công nghệ thông tin và chuyển đổi số. Người dùng có thể lựa chọn vị trí ứng tuyển mong muốn (ví dụ: Frontend Developer, Backend Golang/Java, Data Engineer, DevOps) cùng cấp bậc tương ứng từ Junior đến Senior.",
+    "char_count": 310
+  },
+  {
+    "chunk_id": "doc_05_c01",
+    "document_id": "doc_05",
+    "chunk_index": 1,
+    "document_title": "Luyện phỏng vấn thông minh với AI Mock Interview",
+    "category": "ai_mock_interview",
+    "content": "Phiên phỏng vấn bao gồm các câu hỏi kỹ thuật chuyên sâu và câu hỏi xử lý tình huống thực tế (Behavioral / Situational questions). Ứng viên trả lời từng câu hỏi bằng cách nhập văn bản hoặc ghi âm giọng nói. Hệ thống hỗ trợ đếm thời gian trả lời tương tự áp lực trong buổi phỏng vấn trực tiếp. Sau khi hoàn thành bài phỏng vấn, hệ thống tổng hợp báo cáo chi tiết bao gồm điểm tổng kết, điểm thành phần từng câu hỏi, các điểm sáng trong câu trả lời và những lỗ hổng kiến thức cần củng cố trước buổi phỏng vấn thực tế.",
+    "char_count": 514
+  },
+  {
+    "chunk_id": "doc_06_c00",
+    "document_id": "doc_06",
+    "chunk_index": 0,
+    "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview",
+    "category": "ai_mock_interview",
+    "content": "Thuật toán chấm điểm của AI Mock Interview hoạt động dựa trên Rubric đánh giá đa chiều với 4 tiêu chí cốt lõi: 1. Tính chính xác kỹ thuật (Technical Accuracy): Đánh giá tính đúng đắn của các khái niệm, cơ chế hoạt động và kiến trúc được nêu trong câu trả lời. 2. Độ phủ nội dung trọng tâm (Coverage & Completeness): So sánh các luận điểm của ứng viên với bộ đáp án tham chiếu (Expected Points), kiểm tra xem các ý quan trọng có được giải thích hay không.",
+    "char_count": 454
+  },
+  {
+    "chunk_id": "doc_06_c01",
+    "document_id": "doc_06",
+    "chunk_index": 1,
+    "document_title": "Tiêu chí chấm điểm và phản hồi của trợ lý AI Mock Interview",
+    "category": "ai_mock_interview",
+    "content": "3. Khả năng diễn đạt và cấu trúc (Clarity & Structure): Đo lường sự mạch lạc, logic và cách tổ chức câu trả lời (như mô hình STAR: Situation, Task, Action, Result). 4. Tính thực tế và chiều sâu (Depth & Practical Experience): Đánh giá việc đưa ra ví dụ thực tế từ dự án, các đánh đổi kỹ thuật (trade-offs) và bài học kinh nghiệm. Hệ thống áp dụng cơ chế phát hiện tiêu cực: trừ điểm các trường hợp trả lời đối phó, lặp lại nguyên văn câu hỏi (parroting), spam từ khóa (keyword stuffing) hoặc trả lời phủ định (ví dụ: 'tôi không biết', 'chưa từng làm').",
+    "char_count": 552
+  },
+  {
+    "chunk_id": "doc_07_c00",
+    "document_id": "doc_07",
+    "chunk_index": 0,
+    "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ",
+    "category": "ai_recommendation",
+    "content": "Công cụ gợi ý việc làm của CAREZA liên tục quét các tin tuyển dụng mới và so khớp với hồ sơ ứng viên để đề xuất những vị trí phù hợp nhất. Hệ thống tính toán độ tương đồng giữa các kỹ năng trong CV của người dùng với yêu cầu công việc, kết hợp với các tiêu chí tìm kiếm trước đó. Các yếu tố chính cấu thành điểm gợi ý việc làm bao gồm: độ trùng khớp kỹ năng bắt buộc (40%), sự tương thích về cấp bậc kinh nghiệm (25%), mức lương mong muốn (15%), địa điểm làm việc (10%) và lĩnh vực ngành nghề (10%).",
+    "char_count": 499
+  },
+  {
+    "chunk_id": "doc_07_c01",
+    "document_id": "doc_07",
+    "chunk_index": 1,
+    "document_title": "Cơ chế gợi ý việc làm thông minh dựa trên kỹ năng và hồ sơ",
+    "category": "ai_recommendation",
+    "content": "Ứng viên có thể điều chỉnh sở thích nghề nghiệp trong mục Cài đặt việc làm để nhận thông báo việc làm phù hợp hàng tuần qua email. Nếu một tin đăng có độ tương đồng trên 80%, hệ thống sẽ gắn nhãn 'Phù hợp cao' (High Match) trên danh sách tìm kiếm việc làm.",
+    "char_count": 256
+  },
+  {
+    "chunk_id": "doc_08_c00",
+    "document_id": "doc_08",
+    "chunk_index": 0,
+    "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích",
+    "category": "candidate_job_search",
+    "content": "Trang tìm kiếm việc làm trên CAREZA cung cấp bộ lọc nâng cao giúp ứng viên nhanh chóng thu hẹp danh sách cơ hội nghề nghiệp. Người dùng có thể lọc theo: từ khóa chuyên ngành, địa điểm (Tỉnh/Thành phố), loại hình công việc (Toàn thời gian, Bán thời gian, Thực tập, Remote, Hybrid), mức lương (thỏa thuận hoặc khoảng lương cụ thể) và cấp bậc (Intern, Fresher, Junior, Middle, Senior, Lead).",
+    "char_count": 388
+  },
+  {
+    "chunk_id": "doc_08_c01",
+    "document_id": "doc_08",
+    "chunk_index": 1,
+    "document_title": "Hướng dẫn tìm kiếm và lưu việc làm yêu thích",
+    "category": "candidate_job_search",
+    "content": "Khi tìm thấy công việc tiềm năng nhưng chưa muốn ứng tuyển ngay, ứng viên có thể bấm vào biểu tượng 'Lưu việc làm' (Bookmark). Các công việc đã lưu được quản lý tập trung tại trang 'Việc làm đã lưu' trong bảng điều khiển cá nhân. Hệ thống sẽ gửi cảnh báo nếu tin tuyển dụng mà ứng viên đã lưu sắp hết hạn nộp hồ sơ (thường trước 3 ngày) để ứng viên kịp thời hoàn thiện đơn ứng tuyển.",
+    "char_count": 383
+  },
+  {
+    "chunk_id": "doc_09_c00",
+    "document_id": "doc_09",
+    "chunk_index": 0,
+    "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên",
+    "category": "employer_jobs",
+    "content": "Nhà tuyển dụng trên CAREZA có thể đăng tải các vị trí công việc mới thông qua biểu mẫu tạo tin tuyển dụng trực quan. Một tin tuyển dụng chuẩn mực cần có các phần rõ ràng: Tiêu đề công việc chuẩn xác (không viết tắt khó hiểu), Tóm tắt vị trí, Mô tả công việc (Job Description - JD), Yêu cầu chuyên môn và kỹ năng (Requirements), cùng Chế độ đãi ngộ & Phúc lợi (Benefits).",
+    "char_count": 370
+  },
+  {
+    "chunk_id": "doc_09_c01",
+    "document_id": "doc_09",
+    "chunk_index": 1,
+    "document_title": "Hướng dẫn đăng tin tuyển dụng chuẩn SEO và thu hút ứng viên",
+    "category": "employer_jobs",
+    "content": "Để tin tuyển dụng hiển thị tối ưu và thu hút đúng ứng viên mục tiêu, nhà tuyển dụng nên gắn thẻ các kỹ năng bắt buộc (Must-have Skills) và kỹ năng ưu tiên (Nice-to-have Skills). Các thẻ kỹ năng này sẽ được thuật toán gợi ý sử dụng để phân phối tin đến các ứng viên có kỹ năng phù hợp. Mỗi tin tuyển dụng sau khi tạo sẽ trải qua bước kiểm duyệt nội dung tự động để đảm bảo không vi phạm tiêu chuẩn cộng đồng. Tin tuyển dụng hợp lệ sẽ được kích hoạt công khai và có thời hạn hiển thị tiêu chuẩn là 30 ngày (có thể gia hạn bất kỳ lúc nào).",
+    "char_count": 536
+  },
+  {
+    "chunk_id": "doc_10_c00",
+    "document_id": "doc_10",
+    "chunk_index": 0,
+    "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng",
+    "category": "employer_pipeline",
+    "content": "Bảng Kanban tuyển dụng (Hiring Pipeline) trên CAREZA cung cấp cái nhìn trực quan toàn diện về tất cả ứng viên đang ứng tuyển cho từng vị trí công việc. Các cột tương ứng với từng giai đoạn tuyển dụng: 'Ứng tuyển mới' (Applied), 'Đang xét duyệt' (Screening), 'Phỏng vấn' (Interview), 'Đề nghị việc làm' (Offer), và 'Từ chối' (Rejected). Nhà tuyển dụng có thể kéo thả thẻ ứng viên giữa các cột để cập nhật giai đoạn tuyển dụng. Khi nhấp vào thẻ ứng viên, bảng chi tiết hồ sơ sẽ hiển thị thông tin trích xuất CV, điểm AI Match Score, lịch sử ghi chú nội bộ và nhật ký phỏng vấn.",
+    "char_count": 575
+  },
+  {
+    "chunk_id": "doc_10_c01",
+    "document_id": "doc_10",
+    "chunk_index": 1,
+    "document_title": "Quản lý quy trình ứng viên (Hiring Pipeline) cho nhà tuyển dụng",
+    "category": "employer_pipeline",
+    "content": "Hệ thống cho phép thực hiện thao tác hàng loạt (Bulk Actions) như: gửi email từ chối hàng loạt kèm lý do lịch sự, xuất danh sách ứng viên ra định dạng CSV/Excel hoặc chuyển tiếp hồ sơ cho người phỏng vấn chuyên môn xem trước.",
+    "char_count": 225
+  },
+  {
+    "chunk_id": "doc_11_c00",
+    "document_id": "doc_11",
+    "chunk_index": 0,
+    "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp",
+    "category": "employer_team",
+    "content": "Để hỗ trợ làm việc nhóm trong phòng nhân sự, CAREZA cung cấp mô hình phân quyền dựa trên vai trò (Role-Based Access Control - RBAC) trong doanh nghiệp. Chủ sở hữu tài khoản công ty có thể mời thành viên mới tham gia bằng email và chỉ định một trong các vai trò sau: 1. 'Owner' (Chủ sở hữu): Toàn quyền quản trị tài khoản, thanh toán gói dịch vụ, thay đổi thông tin pháp lý công ty và phân quyền cho mọi thành viên khác. 2. 'Admin' (Quản trị viên): Có quyền đăng/sửa/xóa tin tuyển dụng, xem và xử lý toàn bộ hồ sơ ứng viên, mời thành viên cấp dưới và xem báo cáo tuyển dụng.",
+    "char_count": 573
+  },
+  {
+    "chunk_id": "doc_11_c01",
+    "document_id": "doc_11",
+    "chunk_index": 1,
+    "document_title": "Phân quyền và quản lý thành viên trong doanh nghiệp",
+    "category": "employer_team",
+    "content": "3. 'Recruiter' (Chuyên viên tuyển dụng): Quản lý các tin tuyển dụng được phân công, chấm điểm hồ sơ, gửi lịch phỏng vấn và trao đổi với ứng viên. 4. 'Reviewer' (Người đánh giá chuyên môn): Quyền chỉ đọc đối với hồ sơ ứng viên được gán, có thể để lại bình luận và điểm đánh giá kỹ thuật nhưng không được phép liên hệ trực tiếp hoặc đổi trạng thái tuyển dụng. Bất kỳ thay đổi vai trò nào cũng được ghi lại trong Nhật ký hoạt động (Audit Log) nhằm đảm bảo an toàn thông tin doanh nghiệp.",
+    "char_count": 484
+  },
+  {
+    "chunk_id": "doc_12_c00",
+    "document_id": "doc_12",
+    "chunk_index": 0,
+    "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên",
+    "category": "employer_interview",
+    "content": "Khi hồ sơ ứng viên được chuyển sang vòng phỏng vấn, nhà tuyển dụng có thể sử dụng công cụ 'Lên lịch phỏng vấn' tích hợp sẵn trên CAREZA. Biểu mẫu lên lịch yêu cầu điền: Tiêu đề buổi phỏng vấn, Hình thức phỏng vấn (Trực tuyến qua Google Meet/Zoom hoặc Trực tiếp tại văn phòng), Thời gian bắt đầu và kết thúc, Địa điểm/Link họp và Người phỏng vấn tham gia.",
+    "char_count": 354
+  },
+  {
+    "chunk_id": "doc_12_c01",
+    "document_id": "doc_12",
+    "chunk_index": 1,
+    "document_title": "Tạo và gửi lịch hẹn phỏng vấn cho ứng viên",
+    "category": "employer_interview",
+    "content": "Sau khi nhà tuyển dụng bấm gửi, ứng viên sẽ nhận được thông báo qua hệ thống và email kèm thư mời lịch hẹn. Ứng viên có thể bấm 'Xác nhận tham gia', 'Đề xuất đổi giờ' hoặc 'Từ chối phỏng vấn'. Trạng thái phản hồi của ứng viên sẽ được cập nhật ngay trên giao diện quản lý lịch của nhà tuyển dụng. Hệ thống tự động đồng bộ lịch phỏng vấn vào Google Calendar nếu người dùng kích hoạt liên kết tài khoản và gửi email nhắc nhở trước buổi hẹn 2 tiếng.",
+    "char_count": 445
+  },
+  {
+    "chunk_id": "doc_13_c00",
+    "document_id": "doc_13",
+    "chunk_index": 0,
+    "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)",
+    "category": "employer_talent_pool",
+    "content": "Tính năng Talent Pool cho phép nhà tuyển dụng chủ động tiếp cận nguồn ứng viên chất lượng cao đang tìm việc trên CAREZA mà không cần chờ ứng viên nộp hồ sơ. Nhà tuyển dụng có thể tìm kiếm theo từ khóa kỹ năng, vị trí công việc, số năm kinh nghiệm, học vấn và mức lương kỳ vọng. Kết quả tìm kiếm hiển thị danh sách các hồ sơ ẩn danh (giấu thông tin liên hệ như số điện thoại và email cá nhân). Nhà tuyển dụng có thể xem trước bản tóm tắt năng lực, lịch sử công tác và kỹ năng chuyên môn của ứng viên.",
+    "char_count": 499
+  },
+  {
+    "chunk_id": "doc_13_c01",
+    "document_id": "doc_13",
+    "chunk_index": 1,
+    "document_title": "Tìm kiếm hồ sơ ứng viên trong Talent Pool (CV Search)",
+    "category": "employer_talent_pool",
+    "content": "Để xem đầy đủ thông tin liên hệ và tải file CV gốc, nhà tuyển dụng cần sử dụng quyền mở hồ sơ (CV Unlock Quota). Sau khi mở khóa, ứng viên sẽ được lưu vào danh sách 'Ứng viên tiềm năng' của công ty và nhà tuyển dụng có thể gửi lời mời ứng tuyển trực tiếp.",
+    "char_count": 255
+  },
+  {
+    "chunk_id": "doc_14_c00",
+    "document_id": "doc_14",
+    "chunk_index": 0,
+    "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ",
+    "category": "employer_analytics",
+    "content": "Trang Báo cáo tuyển dụng trên CAREZA cung cấp các biểu đồ và chỉ số phân tích chuyên sâu giúp doanh nghiệp tối ưu hóa chi phí và quy trình tuyển dụng. Các chỉ số phân tích then chốt bao gồm: 1. Lượt xem tin và tỷ lệ nộp đơn (View-to-Apply Conversion Rate): Đánh giá sức hấp dẫn của tiêu đề và nội dung JD. 2. Phễu chuyển đổi tuyển dụng (Hiring Funnel): Thống kê số lượng ứng viên qua từng giai đoạn từ nộp đơn, xét duyệt, phỏng vấn đến nhận việc. 3. Thời gian tuyển dụng trung bình (Time-to-Hire): Đo lường khoảng thời gian từ lúc đăng tin tuyển dụng đến khi ứng viên chấp nhận đề nghị việc làm.",
+    "char_count": 595
+  },
+  {
+    "chunk_id": "doc_14_c01",
+    "document_id": "doc_14",
+    "chunk_index": 1,
+    "document_title": "Báo cáo hiệu quả tuyển dụng và thống kê chuyển đổi hồ sơ",
+    "category": "employer_analytics",
+    "content": "4. Nguồn ứng viên hiệu quả: Thống kê tỷ lệ ứng viên đến từ gợi ý AI, tìm kiếm tự nhiên hoặc tiếp cận qua Talent Pool. Dữ liệu báo cáo có thể được lọc theo khoảng thời gian (7 ngày, 30 ngày, quý, năm) và xuất file báo cáo phục vụ họp nội bộ ban giám đốc.",
+    "char_count": 253
+  },
+  {
+    "chunk_id": "doc_15_c00",
+    "document_id": "doc_15",
+    "chunk_index": 0,
+    "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp",
+    "category": "employer_company",
+    "content": "Trang hồ sơ doanh nghiệp (Company Profile) là không gian để công ty quảng bá thương hiệu nhà tuyển dụng, văn hóa làm việc và môi trường doanh nghiệp. Doanh nghiệp có thể cập nhật logo, ảnh bìa, giới thiệu tổng quan, quy mô nhân sự, địa chỉ các chi nhánh và liên kết mạng xã hội. Để tạo niềm tin cho ứng viên và được cấp huy hiệu 'Doanh nghiệp đã xác minh' (Verified Badge), công ty cần gửi hồ sơ xác minh pháp lý. Hồ sơ xác minh bao gồm: Giấy phép đăng ký kinh doanh (GPKD), giấy tờ tùy thân của người đại diện pháp luật hoặc thư ủy quyền nhân sự chính thức.",
+    "char_count": 558
+  },
+  {
+    "chunk_id": "doc_15_c01",
+    "document_id": "doc_15",
+    "chunk_index": 1,
+    "document_title": "Quản lý thông tin công ty và xác minh hồ sơ doanh nghiệp",
+    "category": "employer_company",
+    "content": "Đội ngũ kiểm duyệt của CAREZA sẽ xác thực thông tin trong vòng 24 đến 48 giờ làm việc. Các công ty đã xác minh sẽ được ưu tiên hiển thị tin tuyển dụng ở vị trí cao hơn và hưởng tỷ lệ phản hồi ứng viên tốt hơn.",
+    "char_count": 209
+  },
+  {
+    "chunk_id": "doc_16_c00",
+    "document_id": "doc_16",
+    "chunk_index": 0,
+    "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota",
+    "category": "billing_packages",
+    "content": "[Lưu ý: Nội dung tổng hợp phục vụ mục đích benchmark và kiểm thử hệ thống CAREZA RAG.] Hệ thống CAREZA hỗ trợ các gói dịch vụ linh hoạt phù hợp với quy mô doanh nghiệp từ startup đến tập đoàn: 1. Gói Khởi đầu (Basic/Free): Cho phép đăng tối đa 3 tin tuyển dụng hoạt động cùng lúc, 1 tài khoản quản lý và không hỗ trợ mở khóa hồ sơ Talent Pool. 2. Gói Chuyên nghiệp (Pro): Cung cấp 15 tin tuyển dụng cùng lúc, 5 tài khoản thành viên, 50 lượt mở hồ sơ ứng viên trong Talent Pool và gắn nhãn nổi bật cho tin đăng.",
+    "char_count": 510
+  },
+  {
+    "chunk_id": "doc_16_c01",
+    "document_id": "doc_16",
+    "chunk_index": 1,
+    "document_title": "Các gói dịch vụ nhà tuyển dụng và hạn mức Quota",
+    "category": "billing_packages",
+    "content": "3. Gói Doanh nghiệp (Enterprise): Không giới hạn số lượng tin đăng, không giới hạn thành viên, 300 lượt mở hồ sơ hàng tháng, hỗ trợ tích hợp API tuyển dụng riêng và chuyên viên hỗ trợ 24/7. Hạn mức Quota được tự động làm mới theo chu kỳ thanh toán (tháng hoặc năm). Khi sử dụng hết quota tin đăng hoặc mở hồ sơ, nhà tuyển dụng có thể mua thêm các gói bổ sung (Add-on Quota) mà không cần nâng cấp toàn bộ gói dịch vụ.",
+    "char_count": 416
+  },
+  {
+    "chunk_id": "doc_17_c00",
+    "document_id": "doc_17",
+    "chunk_index": 0,
+    "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch",
+    "category": "billing_ledger",
+    "content": "[Lưu ý: Nội dung tổng hợp phục vụ mục đích benchmark và kiểm thử hệ thống CAREZA RAG.] Mọi thao tác sử dụng tính năng trả phí trên CAREZA đều được ghi nhận vào Sổ cái hạn mức (Quota Ledger) nhằm đảm bảo tính minh bạch và chính xác tuyệt đối. Mỗi giao dịch ghi nhận rõ: thời gian thực hiện, loại tài nguyên (lượt mở hồ sơ, lượt đẩy tin), số lượng tiêu hao, số dư còn lại và mã tham chiếu nghiệp vụ. Một số quy tắc trừ hạn mức chuẩn của hệ thống: - Xem thông tin liên hệ 1 ứng viên mới trong Talent Pool: trừ 1 điểm mở hồ sơ (CV Unlock Quota).",
+    "char_count": 541
+  },
+  {
+    "chunk_id": "doc_17_c01",
+    "document_id": "doc_17",
+    "chunk_index": 1,
+    "document_title": "Quy định trừ điểm tín dụng dịch vụ và lịch sử giao dịch",
+    "category": "billing_ledger",
+    "content": "- Xem thông tin liên hệ 1 ứng viên mới trong Talent Pool: trừ 1 điểm mở hồ sơ (CV Unlock Quota). - Mở lại hồ sơ ứng viên đã từng mở khóa trong vòng 90 ngày: không trừ thêm điểm. - Đăng tin tuyển dụng mới: tiêu hao 1 lượt đăng tin trong thời hạn 30 ngày. - Nếu tin tuyển dụng bị từ chối phê duyệt do lỗi hệ thống, lượt đăng tin sẽ được tự động hoàn trả vào tài khoản doanh nghiệp. Quản trị viên có thể kiểm tra toàn bộ lịch sử biến động số dư và tải hóa đơn điện tử VAT trong mục Quản lý thanh toán.",
+    "char_count": 498
+  },
+  {
+    "chunk_id": "doc_18_c00",
+    "document_id": "doc_18",
+    "chunk_index": 0,
+    "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp",
+    "category": "platform_communication",
+    "content": "Hệ thống thông báo thời gian thực trên CAREZA giúp người dùng không bỏ lỡ bất kỳ diễn biến quan trọng nào trong quá trình tuyển dụng. Thông báo được phân loại thành: Tin tuyển dụng (cập nhật ứng tuyển, phê duyệt tin), Phỏng vấn (lời mời, dời lịch, nhắc nhở), và Hệ thống (bảo trì, cập nhật tính năng). Tính năng Nhắn tin trực tiếp (In-app Chat) cho phép nhà tuyển dụng và ứng viên trao đổi thông tin nhanh chóng sau khi hồ sơ được tiếp nhận. Các bên có thể thảo luận thêm về yêu cầu công việc, gửi tài liệu bổ sung hoặc xác nhận thời gian phỏng vấn.",
+    "char_count": 549
+  },
+  {
+    "chunk_id": "doc_18_c01",
+    "document_id": "doc_18",
+    "chunk_index": 1,
+    "document_title": "Hệ thống thông báo và trao đổi tin nhắn trực tiếp",
+    "category": "platform_communication",
+    "content": "Hệ thống nghiêm cấm hành vi gửi tin nhắn rác, quấy rối, lừa đảo hoặc gửi đường link chứa mã độc. Người dùng có thể sử dụng nút 'Báo cáo' (Report) tại cửa sổ chat để gửi khiếu nại đến ban quản trị CAREZA khi gặp phải nội dung không phù hợp.",
+    "char_count": 239
+  },
+  {
+    "chunk_id": "doc_19_c00",
+    "document_id": "doc_19",
+    "chunk_index": 0,
+    "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ",
+    "category": "policy_privacy",
+    "content": "[Lưu ý: Nội dung tổng hợp phục vụ mục đích benchmark và kiểm thử hệ thống CAREZA RAG.] CAREZA cam kết bảo vệ dữ liệu cá nhân của mọi ứng viên và doanh nghiệp theo các tiêu chuẩn an toàn thông tin hiện đại. Dữ liệu hồ sơ, mật khẩu và thông tin liên lạc đều được mã hóa trong quá trình truyền tải (SSL/TLS) và lưu trữ an toàn trong cơ sở dữ liệu. Nền tảng cam kết: - Không bán hoặc chia sẻ thông tin cá nhân của ứng viên cho bất kỳ bên thứ ba nào vì mục đích quảng cáo khi chưa có sự đồng ý rõ ràng.",
+    "char_count": 497
+  },
+  {
+    "chunk_id": "doc_19_c01",
+    "document_id": "doc_19",
+    "chunk_index": 1,
+    "document_title": "Chính sách bảo mật thông tin và quyền riêng tư dữ liệu hồ sơ",
+    "category": "policy_privacy",
+    "content": "- Chỉ những nhà tuyển dụng có tài khoản hợp lệ và tuân thủ điều khoản dịch vụ mới được tiếp cận thông tin hồ sơ theo cài đặt quyền riêng tư của ứng viên. - Ứng viên có toàn quyền xem, chỉnh sửa, tải về bản sao dữ liệu hoặc yêu cầu xóa vĩnh viễn tài khoản và toàn bộ dữ liệu cá nhân khỏi hệ thống. Các phiên đăng nhập bất thường hoặc đăng nhập từ thiết bị lạ sẽ kích hoạt cảnh báo bảo mật gửi về email đã đăng ký của chủ tài khoản.",
+    "char_count": 430
+  },
+  {
+    "chunk_id": "doc_20_c00",
+    "document_id": "doc_20",
+    "chunk_index": 0,
+    "document_title": "Quy tắc tiêu chuẩn cộng đồng và chống tin tuyển dụng giả mạo",
+    "category": "policy_community",
+    "content": "[Lưu ý: Nội dung tổng hợp phục vụ mục đích benchmark và kiểm thử hệ thống CAREZA RAG.] Nhằm xây dựng môi trường tuyển dụng minh bạch và lành mạnh, CAREZA ban hành quy định nghiêm ngặt về nội dung tin đăng tuyển dụng. Nghiêm cấm tuyệt đối các hành vi sau trên toàn bộ hệ thống: 1. Đăng tin tuyển dụng lừa đảo, đa cấp bất chính, thu phí ứng viên dưới bất kỳ hình thức nào (phí nộp hồ sơ, phí đào tạo, tiền đặt cọc). 2. Sử dụng nội dung phân biệt đối xử về giới tính, tôn giáo, vùng miền hoặc chủng tộc trong mô tả công việc.",
+    "char_count": 522
+  },
+  {
+    "chunk_id": "doc_20_c01",
+    "document_id": "doc_20",
+    "chunk_index": 1,
+    "document_title": "Quy tắc tiêu chuẩn cộng đồng và chống tin tuyển dụng giả mạo",
+    "category": "policy_community",
+    "content": "3. Tuyển dụng cho các công việc vi phạm pháp luật, vi phạm thuần phong mỹ tục hoặc cờ bạc trực tuyến. 4. Thu thập thông tin cá nhân của ứng viên nhằm mục đích trục lợi hoặc spam tài chính. Tất cả các tài khoản doanh nghiệp vi phạm tiêu chuẩn cộng đồng sẽ bị khóa tài khoản vĩnh viễn, đình chỉ toàn bộ tin đăng và chuyển hồ sơ cho cơ quan chức năng có thẩm quyền nếu có dấu hiệu lừa đảo hình sự.",
+    "char_count": 394
+  },
+  {
+    "chunk_id": "doc_21_c00",
+    "document_id": "doc_21",
+    "chunk_index": 0,
+    "document_title": "Quy trình giải quyết khiếu nại và tranh chấp giữa ứng viên và nhà tuyển dụng",
+    "category": "policy_dispute",
+    "content": "[Lưu ý: Nội dung tổng hợp phục vụ mục đích benchmark và kiểm thử hệ thống CAREZA RAG.] Trong quá trình tham gia tuyển dụng, nếu ứng viên hoặc nhà tuyển dụng gặp phải hành vi vi phạm điều khoản dịch vụ, các bên có thể gửi yêu cầu hỗ trợ qua Trung tâm giải quyết khiếu nại của CAREZA. Quy trình xử lý khiếu nại gồm 3 bước tiêu chuẩn: Bước 1: Tiếp nhận khiếu nại. Người khiếu nại gửi yêu cầu kèm bằng chứng xác thực (ảnh chụp màn hình tin nhắn, email, bản ghi âm hoặc tài liệu liên quan).",
+    "char_count": 485
+  },
+  {
+    "chunk_id": "doc_21_c01",
+    "document_id": "doc_21",
+    "chunk_index": 1,
+    "document_title": "Quy trình giải quyết khiếu nại và tranh chấp giữa ứng viên và nhà tuyển dụng",
+    "category": "policy_dispute",
+    "content": "Bước 2: Xác minh và hòa giải. Ban quản trị liên hệ với bên bị khiếu nại để đối chiếu thông tin trong thời hạn tối đa 3 ngày làm việc. Bước 3: Đưa ra biện pháp xử lý. Tùy theo mức độ vi phạm, CAREZA sẽ áp dụng hình thức cảnh cáo, gỡ bỏ tin tuyển dụng, khóa tạm thời hoặc khóa vĩnh viễn tài khoản vi phạm. Kết quả giải quyết khiếu nại sẽ được thông báo bằng văn bản điện tử gửi đến địa chỉ email của cả hai bên.",
+    "char_count": 409
+  },
+  {
+    "chunk_id": "doc_22_c00",
+    "document_id": "doc_22",
+    "chunk_index": 0,
+    "document_title": "Cài đặt bảo mật tài khoản, xác thực hai lớp và đổi mật khẩu",
+    "category": "platform_security",
+    "content": "Bảo mật tài khoản là ưu tiên hàng đầu trên CAREZA để bảo vệ thông tin hồ sơ và dữ liệu tuyển dụng. Người dùng có thể quản lý cài đặt bảo mật tại mục 'Cài đặt tài khoản'. Hệ thống hỗ trợ tính năng Xác thực hai yếu tố (Two-Factor Authentication - 2FA) qua ứng dụng tạo mã OTP (như Google Authenticator hoặc Microsoft Authenticator). Khi kích hoạt 2FA, mỗi lần đăng nhập từ trình duyệt mới sẽ yêu cầu nhập mã 6 số ngẫu nhiên ngoài mật khẩu thông thường.",
+    "char_count": 450
+  },
+  {
+    "chunk_id": "doc_22_c01",
+    "document_id": "doc_22",
+    "chunk_index": 1,
+    "document_title": "Cài đặt bảo mật tài khoản, xác thực hai lớp và đổi mật khẩu",
+    "category": "platform_security",
+    "content": "Quy định về mật khẩu an toàn trên CAREZA: mật khẩu phải có độ dài tối thiểu 8 ký tự, bao gồm ít nhất một chữ hoa, một chữ thường, một chữ số và một ký tự đặc biệt. Người dùng nên thay đổi mật khẩu định kỳ 6 tháng một lần và tuyệt đối không chia sẻ thông tin đăng nhập với người khác. Nếu nghi ngờ tài khoản bị xâm nhập, người dùng có thể bấm 'Đăng xuất khỏi tất cả các thiết bị khác' ngay trên trang cài đặt.",
+    "char_count": 408
+  },
+  {
+    "chunk_id": "doc_23_c00",
+    "document_id": "doc_23",
+    "chunk_index": 0,
+    "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn",
+    "category": "career_interview_prep",
+    "content": "Phỏng vấn kỹ thuật (Technical Interview) là vòng thi then chốt quyết định cơ hội trúng tuyển của các kỹ sư công nghệ. Để đạt kết quả tốt nhất, ứng viên nên chuẩn bị kỹ 3 trụ cột chính: Kiến thức nền tảng (Cấu trúc dữ liệu & Giải thuật, Thiết kế hệ thống, Cơ sở dữ liệu), Kinh nghiệm thực chiến trong các dự án trước đây, và Khả năng giải quyết vấn đề (Problem-solving).",
+    "char_count": 369
+  },
+  {
+    "chunk_id": "doc_23_c01",
+    "document_id": "doc_23",
+    "chunk_index": 1,
+    "document_title": "Hướng dẫn chuẩn bị phỏng vấn kỹ thuật và xử lý tình huống phỏng vấn",
+    "category": "career_interview_prep",
+    "content": "Khi gặp câu hỏi hóc búa trong buổi phỏng vấn, nguyên tắc vàng là không vội vàng trả lời ngay. Hãy đặt câu hỏi làm rõ đề bài (Clarifying Questions), trao đổi suy nghĩ của mình thành tiếng (Think out loud) để người phỏng vấn nắm được phương pháp tư duy. Nếu chưa biết chính xác câu trả lời, hãy trung thực thừa nhận và chia sẻ hướng tiếp cận logic mà bạn sẽ tìm hiểu để giải quyết vấn đề. Trước buổi phỏng vấn trực tuyến, ứng viên cần kiểm tra kỹ đường truyền Internet, webcam, tai nghe micro và chuẩn bị không gian yên tĩnh.",
+    "char_count": 523
+  },
+  {
+    "chunk_id": "doc_24_c00",
+    "document_id": "doc_24",
+    "chunk_index": 0,
+    "document_title": "Kỹ năng viết cover letter và thư cảm ơn sau phỏng vấn",
+    "category": "career_communication",
+    "content": "Thư ứng tuyển (Cover Letter) và Thư cảm ơn sau phỏng vấn (Thank-you Email) là hai điểm chạm truyền thông giúp ứng viên ghi điểm phong thái chuyên nghiệp trong mắt nhà tuyển dụng. Một Cover Letter ấn tượng không nên lặp lại y nguyên nội dung trong CV. Thay vào đó, thư nên tập trung trả lời 3 câu hỏi lớn: Tại sao bạn quan tâm đến vị trí và công ty này? Điểm mạnh hoặc thành tựu nổi bật nhất nào của bạn phù hợp trực tiếp với nhu cầu hiện tại của dự án? Bạn có thể mang lại giá trị cụ thể gì cho đội ngũ trong 3 đến 6 tháng đầu tiên?",
+    "char_count": 532
+  },
+  {
+    "chunk_id": "doc_24_c01",
+    "document_id": "doc_24",
+    "chunk_index": 1,
+    "document_title": "Kỹ năng viết cover letter và thư cảm ơn sau phỏng vấn",
+    "category": "career_communication",
+    "content": "Sau buổi phỏng vấn, ứng viên nên gửi thư cảm ơn trong vòng 24 giờ. Nội dung thư nên bày tỏ sự cảm kích về thời gian của ban tuyển dụng, nhắc lại một chủ đề thú vị đã thảo luận trong buổi gặp và tái khẳng định sự hào hứng đối với cơ hội gia nhập doanh nghiệp.",
+    "char_count": 258
+  }
+]

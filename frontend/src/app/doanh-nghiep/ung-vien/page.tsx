@@ -1,9 +1,13 @@
 "use client";
 
-import { useState, useMemo, Suspense } from "react";
+import { useState, useMemo, useEffect, useCallback, Suspense, useRef } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
+import { employerService } from "@/services/employer.service";
+import { MoreOutlined } from "@ant-design/icons";
+import { CarezaExportReport } from "@/components/common/CarezaExportReport";
+
 import {
   Dropdown,
   Tooltip,
@@ -45,6 +49,7 @@ import {
   Share2,
   CheckCircle,
   XCircle,
+  X,
   AlertCircle,
   Sparkles,
   ArrowUpRight,
@@ -57,6 +62,7 @@ import {
   FileCheck,
   RefreshCw,
   FolderPlus,
+  Upload,
 } from "lucide-react";
 
 // =====================================================================
@@ -64,6 +70,7 @@ import {
 // =====================================================================
 export interface Candidate {
   id: string;
+  jobId?: string | number;
   name: string;
   email: string;
   phone: string;
@@ -75,8 +82,12 @@ export interface Candidate {
   status: "NEW" | "REVIEWING" | "MATCHED" | "INTERVIEW" | "OFFER" | "REJECTED" | "ARCHIVED";
   rating: number;
   appliedAt: string;
+  appliedAtRaw?: number;
   appliedTimeAgo: string;
   cvName: string;
+  cvFileUrl?: string | null;
+  matchScore?: number | null;
+  coverLetter?: string;
   experienceYears: number;
   skills: string[];
   notes?: string;
@@ -85,141 +96,7 @@ export interface Candidate {
 // =====================================================================
 // MOCK CANDIDATE DATASET (MATCHING REFERENCE EXACTLY)
 // =====================================================================
-const INITIAL_CANDIDATES: Candidate[] = [
-  {
-    id: "cand-1",
-    name: "Nguyễn Minh Anh",
-    email: "minhanh@gmail.com",
-    phone: "0345 678 901",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-    isNew: true,
-    jobTitle: "Product Manager",
-    jobCode: "PM-2408",
-    source: "Website",
-    status: "NEW",
-    rating: 5,
-    appliedAt: "16/08/2026",
-    appliedTimeAgo: "2 giờ trước",
-    cvName: "Nguyen_Minh_Anh_CV_Product_Manager.pdf",
-    experienceYears: 4,
-    skills: ["Product Strategy", "Roadmap", "Scrum", "User Research"],
-    notes: "Ứng viên có kinh nghiệm quản lý sản phẩm SaaS B2B, giao tiếp tiếng Anh lưu loát.",
-  },
-  {
-    id: "cand-2",
-    name: "Trần Hoàng Nam",
-    email: "namth@outlook.com",
-    phone: "0389 123 456",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-    isNew: false,
-    jobTitle: "Senior UX/UI Designer",
-    jobCode: "UX-2408",
-    source: "LinkedIn",
-    status: "REVIEWING",
-    rating: 4,
-    appliedAt: "16/08/2026",
-    appliedTimeAgo: "4 giờ trước",
-    cvName: "Tran_Hoang_Nam_Portfolio_Design.pdf",
-    experienceYears: 5,
-    skills: ["Figma", "Design System", "Mobile App UI", "Prototyping"],
-    notes: "Portfolio thực tế ấn tượng, từng xây dựng Design System cho app tài chính.",
-  },
-  {
-    id: "cand-3",
-    name: "Lê Quang Huy",
-    email: "lequanghuy@gmail.com",
-    phone: "0378 456 789",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-    isNew: false,
-    jobTitle: "Frontend Developer",
-    jobCode: "FE-2407",
-    source: "Referral",
-    status: "INTERVIEW",
-    rating: 4,
-    appliedAt: "15/08/2026",
-    appliedTimeAgo: "1 ngày trước",
-    cvName: "Le_Quang_Huy_Frontend_CV.pdf",
-    experienceYears: 3,
-    skills: ["React", "TypeScript", "Next.js", "TailwindCSS"],
-    notes: "Được nhân viên Tech lead giới thiệu, nắm vững Next.js và performance tuning.",
-  },
-  {
-    id: "cand-4",
-    name: "Phạm Thu Hằng",
-    email: "hangpt@gmail.com",
-    phone: "0367 890 123",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
-    isNew: false,
-    jobTitle: "Data Analyst",
-    jobCode: "DA-2406",
-    source: "VietnamWorks",
-    status: "INTERVIEW",
-    rating: 5,
-    appliedAt: "15/08/2026",
-    appliedTimeAgo: "1 ngày trước",
-    cvName: "Pham_Thu_Hang_Data_Analyst.pdf",
-    experienceYears: 3,
-    skills: ["SQL", "Python", "PowerBI", "Tableau", "Data Modeling"],
-    notes: "Tư duy phân tích số liệu sắc bén, kinh nghiệm tối ưu funnel tuyển dụng.",
-  },
-  {
-    id: "cand-5",
-    name: "Đỗ Thanh Tùng",
-    email: "thanhtung@gmail.com",
-    phone: "0334 567 890",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
-    isNew: false,
-    jobTitle: "DevOps Engineer",
-    jobCode: "DEVOPS-2408",
-    source: "TopCV",
-    status: "OFFER",
-    rating: 4,
-    appliedAt: "14/08/2026",
-    appliedTimeAgo: "2 ngày trước",
-    cvName: "Do_Thanh_Tung_DevOps_CV.pdf",
-    experienceYears: 4,
-    skills: ["AWS", "Docker", "Kubernetes", "CI/CD", "Terraform"],
-    notes: "Vòng phỏng vấn chuyên môn đạt điểm tối đa, đã gửi Offer chính thức.",
-  },
-  {
-    id: "cand-6",
-    name: "Vũ Ngọc Mai",
-    email: "ngocmai@gmail.com",
-    phone: "0356 123 789",
-    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
-    isNew: false,
-    jobTitle: "HR Generalist",
-    jobCode: "HR-2408",
-    source: "Website",
-    status: "REJECTED",
-    rating: 3,
-    appliedAt: "14/08/2026",
-    appliedTimeAgo: "2 ngày trước",
-    cvName: "Vu_Ngoc_Mai_HR_CV.pdf",
-    experienceYears: 1,
-    skills: ["Recruitment", "C&B", "Onboarding", "Labor Law"],
-    notes: "Chưa đủ số năm kinh nghiệm yêu cầu đối với vị trí Senior HR.",
-  },
-  {
-    id: "cand-7",
-    name: "Nguyễn Đức Anh",
-    email: "ducanh@gmail.com",
-    phone: "0399 888 777",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80",
-    isNew: false,
-    jobTitle: "Backend Developer",
-    jobCode: "BE-2407",
-    source: "LinkedIn",
-    status: "MATCHED",
-    rating: 4,
-    appliedAt: "14/08/2026",
-    appliedTimeAgo: "2 ngày trước",
-    cvName: "Nguyen_Duc_Anh_Backend_Golang.pdf",
-    experienceYears: 3,
-    skills: ["Golang", "NestJS", "PostgreSQL", "Redis", "Microservices"],
-    notes: "Hồ sơ độ khớp cao (94%), am hiểu kiến trúc Microservices và Cache.",
-  },
-];
+const INITIAL_CANDIDATES: Candidate[] = [];
 
 // =====================================================================
 // COMPONENT MAIN
@@ -233,7 +110,9 @@ function EmployerCandidatesContent() {
   const jobIdFromQuery = searchParams.get("jobId");
 
   // State
-  const [candidates, setCandidates] = useState<Candidate[]>(INITIAL_CANDIDATES);
+  const [candidates, setCandidates] = useState<Candidate[]>([]);
+  const [jobsList, setJobsList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedJob, setSelectedJob] = useState<string>(jobIdFromQuery || "all");
   const [selectedPosition, setSelectedPosition] = useState<string>("all");
@@ -253,15 +132,107 @@ function EmployerCandidatesContent() {
   const [interviewDate, setInterviewDate] = useState("");
   const [interviewType, setInterviewType] = useState("online");
 
-  // KPI Calculations
-  const totalCount = 1248; // Global pool count matching reference
-  const newCount = 312;
-  const matchedCount = 328;
-  const interviewCount = 192;
-  const offerCount = 48;
-  const reviewingCount = 226;
-  const rejectedCount = 142;
-  const archivedCount = 0;
+  // Modal Thêm ứng viên thủ công
+  const [isAddModalOpen, setIsAddModalOpen] = useState(false);
+  const [isSubmittingAdd, setIsSubmittingAdd] = useState(false);
+  const [addForm, setAddForm] = useState({
+    name: "",
+    email: "",
+    phone: "",
+    jobId: undefined as string | number | undefined,
+    notes: "",
+  });
+  const [addFile, setAddFile] = useState<File | null>(null);
+  const [addErrors, setAddErrors] = useState<Record<string, string>>({});
+  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  // Load danh sách tin tuyển dụng thật của doanh nghiệp
+  useEffect(() => {
+    employerService
+      .getJobs({ page_size: 100 })
+      .then((res) => {
+        const items = res?.data?.items || [];
+        setJobsList(items);
+      })
+      .catch(() => setJobsList([]));
+  }, []);
+
+  const fetchCandidates = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await employerService.getApplications({
+        jobId: selectedJob !== "all" ? selectedJob : undefined,
+        search: searchQuery.trim() || undefined,
+      });
+      const list = res?.data?.applications || [];
+      const mapped = list.map((app: any) => {
+        const s = String(app.status || "").toLowerCase();
+        const mappedStatus =
+          s === "submitted"
+            ? "NEW"
+            : s === "screening"
+              ? "REVIEWING"
+              : s === "shortlisted" || s === "test"
+                ? "MATCHED"
+                : s === "interview"
+                  ? "INTERVIEW"
+                  : s === "offered" || s === "hired"
+                    ? "OFFER"
+                    : s === "rejected"
+                      ? "REJECTED"
+                      : "NEW";
+
+        return {
+          id: String(app.id),
+          jobId: app.job?.id,
+          name: app.candidate?.full_name || app.candidate?.name || "Ứng viên",
+          email: app.candidate?.email || "",
+          phone: app.candidate?.phone || "",
+          avatar:
+            app.candidate?.avatar_url ||
+            app.candidate?.avatar ||
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+          isNew: s === "submitted",
+          jobTitle: app.job?.title || "Vị trí tuyển dụng",
+          jobCode: app.job?.slug || `JD-${app.job?.id || ""}`,
+          source: app.source || "CAREZA Portal",
+          status: mappedStatus as Candidate["status"],
+          rating: app.rating || 4,
+          appliedAt: app.applied_at
+            ? new Date(app.applied_at).toLocaleDateString("vi-VN")
+            : "Hôm nay",
+          appliedAtRaw: app.applied_at ? new Date(app.applied_at).getTime() : 0,
+          appliedTimeAgo: "Gần đây",
+          cvName: app.cv?.title || "CV_Ung_Vien.pdf",
+          cvFileUrl: app.cv?.file_url || null,
+          matchScore: typeof app.match_score === "number" ? app.match_score : null,
+          coverLetter: app.cover_letter || "",
+          experienceYears: app.candidate?.experience_years || 2,
+          skills: app.candidate?.skills || [],
+          notes: app.note || "",
+        };
+      });
+      setCandidates(mapped);
+    } catch {
+      setCandidates([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedJob, searchQuery]);
+
+  useEffect(() => {
+    fetchCandidates();
+  }, [fetchCandidates]);
+
+  // KPI Calculations từ danh sách thực tế
+  const totalCount = candidates.length;
+  const newCount = candidates.filter((c) => c.status === "NEW").length;
+  const matchedCount = candidates.filter((c) => c.status === "MATCHED").length;
+  const interviewCount = candidates.filter((c) => c.status === "INTERVIEW").length;
+  const offerCount = candidates.filter((c) => c.status === "OFFER").length;
+  const reviewingCount = candidates.filter((c) => c.status === "REVIEWING").length;
+  const rejectedCount = candidates.filter((c) => c.status === "REJECTED").length;
+  const archivedCount = candidates.filter((c) => c.status === "ARCHIVED").length;
 
   // Handlers
   const handleSelectAll = (e: any) => {
@@ -287,19 +258,49 @@ function EmployerCandidatesContent() {
     message.success("Đã cập nhật đánh giá ứng viên!");
   };
 
-  const handleChangeStatus = (id: string, newStatus: Candidate["status"]) => {
-    setCandidates((prev) =>
-      prev.map((c) => (c.id === id ? { ...c, status: newStatus } : c))
-    );
-    message.success("Đã cập nhật trạng thái ứng viên!");
+  const handleChangeStatus = async (id: string, newStatus: Candidate["status"]) => {
+    const stageMap: Record<string, string> = {
+      NEW: "submitted",
+      REVIEWING: "screening",
+      MATCHED: "shortlisted",
+      INTERVIEW: "interview",
+      OFFER: "offered",
+      REJECTED: "rejected",
+      ARCHIVED: "withdrawn",
+    };
+    try {
+      await employerService.changeStage(id, stageMap[newStatus] || "submitted");
+      setCandidates((prev) =>
+        prev.map((c) => (c.id === id ? { ...c, status: newStatus } : c))
+      );
+      message.success("Đã cập nhật trạng thái ứng viên!");
+    } catch {
+      message.error("Lỗi cập nhật trạng thái trên hệ thống.");
+    }
   };
 
-  const handleBulkMoveStage = (targetStatus: Candidate["status"]) => {
-    setCandidates((prev) =>
-      prev.map((c) => (selectedIds.includes(c.id) ? { ...c, status: targetStatus } : c))
-    );
-    message.success(`Đã chuyển trạng thái cho ${selectedIds.length} ứng viên!`);
-    setSelectedIds([]);
+  const handleBulkMoveStage = async (targetStatus: Candidate["status"]) => {
+    const stageMap: Record<string, string> = {
+      NEW: "submitted",
+      REVIEWING: "screening",
+      MATCHED: "shortlisted",
+      INTERVIEW: "interview",
+      OFFER: "offered",
+      REJECTED: "rejected",
+      ARCHIVED: "withdrawn",
+    };
+    try {
+      await Promise.all(
+        selectedIds.map((id) => employerService.changeStage(id, stageMap[targetStatus] || "submitted"))
+      );
+      setCandidates((prev) =>
+        prev.map((c) => (selectedIds.includes(c.id) ? { ...c, status: targetStatus } : c))
+      );
+      message.success(`Đã chuyển trạng thái cho ${selectedIds.length} ứng viên!`);
+      setSelectedIds([]);
+    } catch {
+      message.error("Lỗi cập nhật hàng loạt trạng thái.");
+    }
   };
 
   const handleBulkAddToTalentPool = () => {
@@ -307,20 +308,165 @@ function EmployerCandidatesContent() {
     setSelectedIds([]);
   };
 
-  const handleScheduleInterviewConfirm = () => {
+  const handleScheduleInterviewConfirm = async () => {
     if (!interviewCandidate) return;
-    setCandidates((prev) =>
-      prev.map((c) =>
-        c.id === interviewCandidate.id ? { ...c, status: "INTERVIEW" } : c
-      )
-    );
-    message.success(`Đã lên lịch phỏng vấn cho ứng viên "${interviewCandidate.name}" thành công!`);
-    setInterviewCandidate(null);
+    try {
+      await employerService.createInterview({
+        application_id: Number(interviewCandidate.id),
+        interview_type: interviewType,
+        scheduled_at: interviewDate || new Date().toISOString(),
+      });
+      setCandidates((prev) =>
+        prev.map((c) =>
+          c.id === interviewCandidate.id ? { ...c, status: "INTERVIEW" } : c
+        )
+      );
+      message.success(`Đã lên lịch phỏng vấn cho ứng viên "${interviewCandidate.name}" thành công!`);
+      setInterviewCandidate(null);
+    } catch {
+      message.error("Lên lịch phỏng vấn thất bại.");
+    }
   };
+
+  // Handlers cho Thêm ứng viên thủ công
+  const handleOpenAddModal = () => {
+    const defaultJobId =
+      selectedJob && selectedJob !== "all"
+        ? (isNaN(Number(selectedJob)) ? undefined : Number(selectedJob))
+        : jobsList.length > 0
+          ? jobsList[0].id
+          : undefined;
+
+    setAddForm({
+      name: "",
+      email: "",
+      phone: "",
+      jobId: defaultJobId,
+      notes: "",
+    });
+    setAddFile(null);
+    setAddErrors({});
+    setIsAddModalOpen(true);
+  };
+
+  const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    // Giới hạn 10MB
+    const MAX_SIZE = 10 * 1024 * 1024;
+    if (file.size > MAX_SIZE) {
+      setAddErrors((prev) => ({
+        ...prev,
+        file: "Dung lượng file CV không được vượt quá 10MB.",
+      }));
+      return;
+    }
+
+    // Kiểm tra đuôi file: pdf, doc, docx
+    const ext = file.name.split(".").pop()?.toLowerCase();
+    if (!ext || !["pdf", "doc", "docx"].includes(ext)) {
+      setAddErrors((prev) => ({
+        ...prev,
+        file: "Định dạng file không hợp lệ. Vui lòng chọn file PDF, DOC hoặc DOCX.",
+      }));
+      return;
+    }
+
+    setAddErrors((prev) => {
+      const next = { ...prev };
+      delete next.file;
+      return next;
+    });
+    setAddFile(file);
+  };
+
+  const handleRemoveFile = () => {
+    setAddFile(null);
+    if (fileInputRef.current) {
+      fileInputRef.current.value = "";
+    }
+    setAddErrors((prev) => {
+      const next = { ...prev };
+      delete next.file;
+      return next;
+    });
+  };
+
+  const handleSubmitAddCandidate = async () => {
+    const errors: Record<string, string> = {};
+
+    if (!addForm.name.trim()) {
+      errors.name = "Vui lòng nhập họ và tên ứng viên.";
+    }
+
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!addForm.email.trim()) {
+      errors.email = "Vui lòng nhập địa chỉ email.";
+    } else if (!emailRegex.test(addForm.email.trim())) {
+      errors.email = "Email không đúng định dạng.";
+    }
+
+    if (!addForm.phone.trim()) {
+      errors.phone = "Vui lòng nhập số điện thoại.";
+    }
+
+    if (!addForm.jobId) {
+      errors.jobId = "Vui lòng chọn vị trí tuyển dụng.";
+    }
+
+    if (Object.keys(errors).length > 0) {
+      setAddErrors(errors);
+      return;
+    }
+
+    setIsSubmittingAdd(true);
+    try {
+      const formData = new FormData();
+      formData.append("name", addForm.name.trim());
+      formData.append("email", addForm.email.trim());
+      formData.append("phone", addForm.phone.trim());
+      formData.append("job_id", String(addForm.jobId));
+      if (addForm.notes.trim()) {
+        formData.append("notes", addForm.notes.trim());
+      }
+      if (addFile) {
+        formData.append("file", addFile);
+      }
+
+      const res = await employerService.createManualApplication(formData);
+      if (res?.success) {
+        message.success(res?.message || "Thêm ứng viên thành công!");
+        setIsAddModalOpen(false);
+        setAddForm({
+          name: "",
+          email: "",
+          phone: "",
+          jobId: undefined,
+          notes: "",
+        });
+        setAddFile(null);
+        setAddErrors({});
+        await fetchCandidates();
+      } else {
+        message.error(res?.message || "Không thể thêm ứng viên. Vui lòng kiểm tra lại.");
+      }
+    } catch (err: any) {
+      const errMsg =
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err?.message ||
+        "Có lỗi xảy ra khi thêm ứng viên. Vui lòng thử lại.";
+      message.error(errMsg);
+    } finally {
+      setIsSubmittingAdd(false);
+    }
+  };
+
 
   // Filtered dataset
   const filteredCandidates = useMemo(() => {
-    return candidates.filter((c) => {
+    const list = candidates.filter((c) => {
       // Tab filter
       if (activeTab === "NEW" && c.status !== "NEW") return false;
       if (activeTab === "MATCHED" && c.status !== "MATCHED") return false;
@@ -343,8 +489,8 @@ function EmployerCandidatesContent() {
         if (!matches) return false;
       }
 
-      // Job Code
-      if (selectedJob !== "all" && c.jobCode !== selectedJob) return false;
+      // Job Code or Job ID
+      if (selectedJob !== "all" && String(c.jobId) !== selectedJob && c.jobCode !== selectedJob) return false;
 
       // Position
       if (selectedPosition !== "all" && !c.jobTitle.includes(selectedPosition)) return false;
@@ -357,6 +503,18 @@ function EmployerCandidatesContent() {
 
       return true;
     });
+
+    const sorted = [...list];
+    if (selectedSort === "rating-high") {
+      sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    } else if (selectedSort === "match-score") {
+      sorted.sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
+    } else if (selectedSort === "name-az") {
+      sorted.sort((a, b) => a.name.localeCompare(b.name, "vi"));
+    } else {
+      sorted.sort((a, b) => (b.appliedAtRaw || 0) - (a.appliedAtRaw || 0));
+    }
+    return sorted;
   }, [
     candidates,
     activeTab,
@@ -365,6 +523,7 @@ function EmployerCandidatesContent() {
     selectedPosition,
     selectedSource,
     selectedStatus,
+    selectedSort,
   ]);
 
   // Pagination slice
@@ -479,9 +638,9 @@ function EmployerCandidatesContent() {
               e.stopPropagation();
               setDetailCandidate(candidate);
             }}
-            className="flex items-center gap-2 py-0.5 font-medium"
+            className="flex items-center gap-2.5 w-full text-slate-700 hover:text-blue-600 font-medium cursor-pointer"
           >
-            <Eye className="w-3.5 h-3.5 text-blue-600" />
+            <Eye className="w-4 h-4 text-blue-600 shrink-0" />
             <span>Xem hồ sơ chi tiết</span>
           </div>
         ),
@@ -494,9 +653,9 @@ function EmployerCandidatesContent() {
               e.stopPropagation();
               setCvCandidate(candidate);
             }}
-            className="flex items-center gap-2 py-0.5 font-medium text-slate-700"
+            className="flex items-center gap-2.5 w-full text-slate-700 hover:text-emerald-600 font-medium cursor-pointer"
           >
-            <FileText className="w-3.5 h-3.5 text-emerald-600" />
+            <FileText className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>Xem CV đính kèm</span>
           </div>
         ),
@@ -509,9 +668,9 @@ function EmployerCandidatesContent() {
               e.stopPropagation();
               setInterviewCandidate(candidate);
             }}
-            className="flex items-center gap-2 py-0.5 font-medium text-amber-700"
+            className="flex items-center gap-2.5 w-full text-slate-700 hover:text-amber-600 font-medium cursor-pointer"
           >
-            <Calendar className="w-3.5 h-3.5 text-amber-600" />
+            <Calendar className="w-4 h-4 text-amber-600 shrink-0" />
             <span>Lên lịch phỏng vấn</span>
           </div>
         ),
@@ -524,9 +683,9 @@ function EmployerCandidatesContent() {
               e.stopPropagation();
               message.success(`Đã thêm ứng viên "${candidate.name}" vào Talent Pool!`);
             }}
-            className="flex items-center gap-2 py-0.5 font-medium text-purple-700"
+            className="flex items-center gap-2.5 w-full text-slate-700 hover:text-purple-600 font-medium cursor-pointer"
           >
-            <FolderPlus className="w-3.5 h-3.5 text-purple-600" />
+            <FolderPlus className="w-4 h-4 text-purple-600 shrink-0" />
             <span>Lưu vào Talent Pool</span>
           </div>
         ),
@@ -539,14 +698,14 @@ function EmployerCandidatesContent() {
               e.stopPropagation();
               message.info(`Đang mở hội thoại với ứng viên ${candidate.name}...`);
             }}
-            className="flex items-center gap-2 py-0.5 font-medium text-blue-600"
+            className="flex items-center gap-2.5 w-full text-blue-600 font-medium cursor-pointer"
           >
-            <MessageSquare className="w-3.5 h-3.5" />
+            <MessageSquare className="w-4 h-4 shrink-0" />
             <span>Gửi tin nhắn</span>
           </div>
         ),
       },
-      { type: "divider" as const },
+      { type: "divider" as const, style: { margin: "4px 0" } },
     ];
 
     if (candidate.status !== "REJECTED") {
@@ -567,9 +726,9 @@ function EmployerCandidatesContent() {
           >
             <div
               onClick={(e) => e.stopPropagation()}
-              className="flex items-center gap-2 py-0.5 text-rose-600 cursor-pointer"
+              className="flex items-center gap-2.5 w-full text-rose-600 cursor-pointer font-medium"
             >
-              <XCircle className="w-3.5 h-3.5" />
+              <XCircle className="w-4 h-4 shrink-0" />
               <span>Từ chối hồ sơ</span>
             </div>
           </Popconfirm>
@@ -584,9 +743,9 @@ function EmployerCandidatesContent() {
               e.stopPropagation();
               handleChangeStatus(candidate.id, "REVIEWING");
             }}
-            className="flex items-center gap-2 py-0.5 text-emerald-600 font-medium cursor-pointer"
+            className="flex items-center gap-2.5 w-full text-emerald-600 font-medium cursor-pointer"
           >
-            <RefreshCw className="w-3.5 h-3.5" />
+            <RefreshCw className="w-4 h-4 shrink-0" />
             <span>Khôi phục xem xét lại</span>
           </div>
         ),
@@ -597,132 +756,187 @@ function EmployerCandidatesContent() {
   };
 
   return (
-    <div className="space-y-3 max-w-[1680px] mx-auto w-full pb-8">
+    <div className="space-y-4 max-w-[1680px] mx-auto w-full pb-8">
       {/* ======================================================== */}
-      {/* 1. PAGE HEADER (COMPACT)                                 */}
+      {/* 1. PAGE HEADER (TITLE & ACTION BUTTONS)                  */}
       {/* ======================================================== */}
-      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-1">
         <div>
-          <h1 className="text-lg sm:text-xl font-black text-slate-900 m-0 tracking-tight leading-snug">
-            Ứng viên
+          <h1 className="text-[20px] font-bold text-[#17233B] m-0 tracking-tight leading-snug">
+            Quản lý ứng viên
           </h1>
-          <p className="text-[11px] text-slate-400 font-medium mt-0.5 m-0">
-            Quản lý, tìm kiếm và theo dõi toàn bộ ứng viên của bạn.
-          </p>
         </div>
 
         <div className="flex items-center gap-2.5">
-          <button
-            type="button"
-            onClick={() => message.info("Xuất danh sách ứng viên (Excel) đang xử lý...")}
-            className="px-3 py-1.5 rounded-lg bg-white hover:bg-slate-50 border border-slate-200/80 text-slate-700 font-bold text-xs shadow-2xs transition-all flex items-center gap-1.5 cursor-pointer"
-          >
-            <FileSpreadsheet className="w-3.5 h-3.5 text-emerald-600" />
-            <span>Xuất Excel</span>
-          </button>
+          <CarezaExportReport
+            buttonText="Xuất báo cáo"
+            reportTitle="BÁO CÁO QUẢN LÝ ỨNG VIÊN"
+            companyName={(user as any)?.companyName || "Google Vietnam"}
+            recruiterName={recruiterName}
+            data={filteredCandidates}
+            filenamePrefix="careza_ung_vien"
+            columns={[
+              { header: "STT", render: (_, i) => i + 1 },
+              { header: "Họ và tên", key: "name" },
+              { header: "Email", key: "email" },
+              { header: "Số điện thoại", key: "phone" },
+              { header: "Vị trí ứng tuyển", key: "jobTitle" },
+              { header: "Mã tin", key: "jobCode" },
+              { header: "Nguồn", key: "source" },
+              {
+                header: "Trạng thái",
+                render: (c) =>
+                  c.status === "NEW"
+                    ? "Mới"
+                    : c.status === "REVIEWING"
+                      ? "Đánh giá"
+                      : c.status === "MATCHED"
+                        ? "Phù hợp"
+                        : c.status === "INTERVIEW"
+                          ? "Phỏng vấn"
+                          : c.status === "OFFER"
+                            ? "Offer"
+                            : c.status === "REJECTED"
+                              ? "Đã từ chối"
+                              : "Lưu trữ",
+              },
+              { header: "Điểm AI (%)", render: (c) => c.matchScore ?? "-" },
+              { header: "Đánh giá", render: (c) => `${c.rating}/5 sao` },
+              { header: "Kinh nghiệm", render: (c) => `${c.experienceYears} năm` },
+              { header: "Ngày nộp", key: "appliedAt" },
+            ]}
+            extraStats={[
+              { label: "Tổng ứng viên", value: totalCount },
+              { label: "Ứng viên mới", value: newCount },
+              { label: "Phù hợp", value: matchedCount },
+              { label: "Đang phỏng vấn", value: interviewCount },
+              { label: "Đã nhận offer", value: offerCount },
+            ]}
+          />
 
           <button
             type="button"
-            onClick={() => message.info("Tính năng thêm ứng viên thủ công đang phát triển")}
-            className="px-3.5 py-1.5 rounded-lg bg-[#0062ff] hover:bg-[#0052cc] text-white font-black text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer active:scale-98"
+            onClick={handleOpenAddModal}
+            className="h-[34px] px-3.5 rounded-lg bg-[#155EEF] hover:bg-[#1047B8] text-white font-medium text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer active:scale-98"
           >
-            <UserPlus className="w-3.5 h-3.5" />
+            <UserPlus className="w-4 h-4" />
             <span>Thêm ứng viên</span>
           </button>
         </div>
       </div>
 
       {/* ======================================================== */}
-      {/* 2. 5 KPI CARDS (SLEEK & COMPACT)                         */}
+      {/* 2. 5 KPI CARDS                                           */}
       {/* ======================================================== */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-2.5">
+      <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-3">
         {/* Card 1: Tổng ứng viên */}
-        <div className="py-2.5 px-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs flex items-center justify-between hover:shadow-xs transition-all">
-          <div className="flex-1 flex flex-col items-center justify-center text-center">
-            <span className="text-[10.5px] font-bold text-slate-500 block leading-tight">
+        <div
+          onClick={() => setActiveTab("all")}
+          className={`bg-white rounded-xl px-3.5 py-3 border transition-all cursor-pointer shadow-2xs flex items-center gap-3 h-[86px] ${activeTab === "all" ? "border-[#155EEF] bg-[#F8FAFC]" : "border-[#CBD5E1] hover:border-[#155EEF]/50"
+            }`}
+        >
+          <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#155EEF] flex items-center justify-center shrink-0">
+            <Users className="w-5 h-5" />
+          </div>
+          <div className="flex-1 min-w-0 flex flex-col justify-center items-center text-center">
+            <span className="text-[12px] font-semibold text-[#475569] block leading-tight truncate w-full">
               Tổng ứng viên
             </span>
-            <span className="text-lg sm:text-xl font-black text-slate-900 block my-0.5 tracking-tight leading-tight">
+            <span className="text-[22px] font-bold text-[#17233B] block leading-none my-1">
               {totalCount.toLocaleString()}
             </span>
-            <span className="text-[9.5px] font-bold text-emerald-600 block leading-none">
-              ↑ 18% <span className="text-slate-400 font-normal">so với tháng trước</span>
+            <span className="text-[11px] text-[#64748B] font-normal block leading-tight truncate w-full">
+              Toàn bộ hồ sơ
             </span>
-          </div>
-          <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0 shadow-2xs">
-            <Users className="w-4 h-4" />
           </div>
         </div>
 
         {/* Card 2: Ứng viên mới */}
-        <div className="py-2.5 px-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs flex items-center justify-between hover:shadow-xs transition-all">
-          <div className="flex-1 flex flex-col items-center justify-center text-center">
-            <span className="text-[10.5px] font-bold text-slate-500 block leading-tight">
+        <div
+          onClick={() => setActiveTab("NEW")}
+          className={`bg-white rounded-xl px-3.5 py-3 border transition-all cursor-pointer shadow-2xs flex items-center gap-3 h-[86px] ${activeTab === "NEW" ? "border-[#155EEF] bg-[#F8FAFC]" : "border-[#CBD5E1] hover:border-[#155EEF]/50"
+            }`}
+        >
+          <div className="w-10 h-10 rounded-xl bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
+            <UserCheck className="w-5 h-5" />
+          </div>
+          <div className="flex-1 min-w-0 flex flex-col justify-center items-center text-center">
+            <span className="text-[12px] font-semibold text-[#475569] block leading-tight truncate w-full">
               Ứng viên mới
             </span>
-            <span className="text-lg sm:text-xl font-black text-slate-900 block my-0.5 tracking-tight leading-tight">
+            <span className="text-[22px] font-bold text-[#17233B] block leading-none my-1">
               {newCount}
             </span>
-            <span className="text-[9.5px] font-bold text-emerald-600 block leading-none">
-              ↑ 22% <span className="text-slate-400 font-normal">so với tháng trước</span>
+            <span className="text-[11px] text-emerald-600 font-medium flex items-center justify-center gap-0.5 leading-tight truncate w-full">
+              <TrendingUp className="w-3 h-3 shrink-0" />
+              <span>Chưa xử lý</span>
             </span>
-          </div>
-          <div className="w-8 h-8 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 shadow-2xs">
-            <UserCheck className="w-4 h-4" />
           </div>
         </div>
 
-        {/* Card 3: Ứng viên phù hợp */}
-        <div className="py-2.5 px-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs flex items-center justify-between hover:shadow-xs transition-all">
-          <div className="flex-1 flex flex-col items-center justify-center text-center">
-            <span className="text-[10.5px] font-bold text-slate-500 block leading-tight">
-              Ứng viên phù hợp
+        {/* Card 3: Phù hợp */}
+        <div
+          onClick={() => setActiveTab("MATCHED")}
+          className={`bg-white rounded-xl px-3.5 py-3 border transition-all cursor-pointer shadow-2xs flex items-center gap-3 h-[86px] ${activeTab === "MATCHED" ? "border-[#155EEF] bg-[#F8FAFC]" : "border-[#CBD5E1] hover:border-[#155EEF]/50"
+            }`}
+        >
+          <div className="w-10 h-10 rounded-xl bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+            <Star className="w-5 h-5 fill-purple-600" />
+          </div>
+          <div className="flex-1 min-w-0 flex flex-col justify-center items-center text-center">
+            <span className="text-[12px] font-semibold text-[#475569] block leading-tight truncate w-full">
+              Phù hợp
             </span>
-            <span className="text-lg sm:text-xl font-black text-slate-900 block my-0.5 tracking-tight leading-tight">
+            <span className="text-[22px] font-bold text-[#17233B] block leading-none my-1">
               {matchedCount}
             </span>
-            <span className="text-[9.5px] font-bold text-emerald-600 block leading-none">
-              ↑ 16% <span className="text-slate-400 font-normal">so với tháng trước</span>
+            <span className="text-[11px] text-purple-600 font-medium block leading-tight truncate w-full">
+              Điểm AI cao
             </span>
-          </div>
-          <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0 shadow-2xs">
-            <Star className="w-4 h-4 fill-purple-600" />
           </div>
         </div>
 
         {/* Card 4: Đang phỏng vấn */}
-        <div className="py-2.5 px-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs flex items-center justify-between hover:shadow-xs transition-all">
-          <div className="flex-1 flex flex-col items-center justify-center text-center">
-            <span className="text-[10.5px] font-bold text-slate-500 block leading-tight">
+        <div
+          onClick={() => setActiveTab("INTERVIEW")}
+          className={`bg-white rounded-xl px-3.5 py-3 border transition-all cursor-pointer shadow-2xs flex items-center gap-3 h-[86px] ${activeTab === "INTERVIEW" ? "border-[#155EEF] bg-[#F8FAFC]" : "border-[#CBD5E1] hover:border-[#155EEF]/50"
+            }`}
+        >
+          <div className="w-10 h-10 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shrink-0">
+            <Calendar className="w-5 h-5" />
+          </div>
+          <div className="flex-1 min-w-0 flex flex-col justify-center items-center text-center">
+            <span className="text-[12px] font-semibold text-[#475569] block leading-tight truncate w-full">
               Đang phỏng vấn
             </span>
-            <span className="text-lg sm:text-xl font-black text-slate-900 block my-0.5 tracking-tight leading-tight">
+            <span className="text-[22px] font-bold text-[#17233B] block leading-none my-1">
               {interviewCount}
             </span>
-            <span className="text-[9.5px] font-bold text-emerald-600 block leading-none">
-              ↑ 12% <span className="text-slate-400 font-normal">so với tháng trước</span>
+            <span className="text-[11px] text-amber-600 font-medium block leading-tight truncate w-full">
+              Lịch phỏng vấn
             </span>
-          </div>
-          <div className="w-8 h-8 rounded-lg bg-amber-50 text-amber-600 flex items-center justify-center shrink-0 shadow-2xs">
-            <Calendar className="w-4 h-4" />
           </div>
         </div>
 
         {/* Card 5: Đã nhận offer */}
-        <div className="py-2.5 px-3 rounded-xl bg-white border border-[#E2E8F0] shadow-2xs flex items-center justify-between hover:shadow-xs transition-all">
-          <div className="flex-1 flex flex-col items-center justify-center text-center">
-            <span className="text-[10.5px] font-bold text-slate-500 block leading-tight">
+        <div
+          onClick={() => setActiveTab("OFFER")}
+          className={`bg-white rounded-xl px-3.5 py-3 border transition-all cursor-pointer shadow-2xs flex items-center gap-3 h-[86px] ${activeTab === "OFFER" ? "border-[#155EEF] bg-[#F8FAFC]" : "border-[#CBD5E1] hover:border-[#155EEF]/50"
+            }`}
+        >
+          <div className="w-10 h-10 rounded-xl bg-rose-50 text-rose-500 flex items-center justify-center shrink-0">
+            <Award className="w-5 h-5" />
+          </div>
+          <div className="flex-1 min-w-0 flex flex-col justify-center items-center text-center">
+            <span className="text-[12px] font-semibold text-[#475569] block leading-tight truncate w-full">
               Đã nhận offer
             </span>
-            <span className="text-lg sm:text-xl font-black text-slate-900 block my-0.5 tracking-tight leading-tight">
+            <span className="text-[22px] font-bold text-[#17233B] block leading-none my-1">
               {offerCount}
             </span>
-            <span className="text-[9.5px] font-bold text-emerald-600 block leading-none">
-              ↑ 9% <span className="text-slate-400 font-normal">so với tháng trước</span>
+            <span className="text-[11px] text-rose-600 font-medium block leading-tight truncate w-full">
+              Đạt kết quả
             </span>
-          </div>
-          <div className="w-8 h-8 rounded-lg bg-rose-50 text-rose-500 flex items-center justify-center shrink-0 shadow-2xs">
-            <Award className="w-4 h-4" />
           </div>
         </div>
       </div>
@@ -734,47 +948,54 @@ function EmployerCandidatesContent() {
         {/* ====================================================== */}
         {/* LEFT COLUMN: CANDIDATE TABLE (~78% = 9 Cols)           */}
         {/* ====================================================== */}
-        <div className="xl:col-span-8 2xl:col-span-9 bg-white rounded-2xl border border-[#E2E8F0] shadow-2xs overflow-hidden flex flex-col xl:h-full min-h-0">
-          {/* Top Sticky Toolbar: Filters & Tabs */}
-          <div className="p-4 border-b border-slate-100 space-y-3.5 shrink-0 bg-white/95 backdrop-blur-xs z-20">
-            {/* Row 1: Search + 4 Filter Selects + Button */}
-            <div className="flex flex-wrap items-center gap-2.5">
-              {/* Search input */}
-              <div className="relative flex-1 min-w-[200px] max-w-[260px]">
-                <Search className="w-4 h-4 text-slate-400 absolute left-3 top-1/2 -translate-y-1/2" />
+        <div className="xl:col-span-8 2xl:col-span-9 bg-white rounded-2xl border border-[#CBD5E1] shadow-2xs overflow-hidden flex flex-col xl:h-full min-h-0">
+          {/* Top Sticky Toolbar: Filters & Search (Gộp thành 1 hàng duy nhất) */}
+          <div className="p-2.5 sm:p-3 border-b border-[#CBD5E1] bg-white/95 backdrop-blur-xs shrink-0 sticky top-0 z-20 shadow-2xs overflow-x-auto [&::-webkit-scrollbar]:h-1 [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
+            <div className="flex items-center gap-2 text-xs min-w-max">
+              {/* 1. Tìm kiếm ứng viên */}
+              <div className="relative w-[160px] xl:w-[175px] shrink-0">
+                <Search className="w-3.5 h-3.5 text-slate-400 absolute left-2.5 top-1/2 -translate-y-1/2" />
                 <input
                   type="text"
                   value={searchQuery}
                   onChange={(e) => setSearchQuery(e.target.value)}
                   placeholder="Tìm kiếm ứng viên..."
-                  className="w-full pl-9 pr-3 py-1.5 text-xs bg-slate-50/80 hover:bg-slate-100/80 focus:bg-white border border-slate-200/80 rounded-xl outline-none focus:border-[#0062ff] focus:ring-2 focus:ring-blue-50 transition-all font-medium"
+                  className="w-full h-[34px] pl-7.5 pr-7 py-1 bg-white border border-[#CBD5E1] rounded-lg text-xs font-medium text-slate-800 placeholder-slate-400 focus:outline-hidden focus:border-[#155EEF] transition-all shadow-2xs"
                 />
+                {searchQuery && (
+                  <button
+                    type="button"
+                    onClick={() => setSearchQuery("")}
+                    className="absolute right-2 top-1/2 -translate-y-1/2 text-slate-400 hover:text-slate-600 cursor-pointer"
+                  >
+                    <X className="w-3 h-3" />
+                  </button>
+                )}
               </div>
 
-              {/* Filter 1: Tin tuyển dụng */}
+              {/* 2. Tin tuyển dụng */}
               <Select
                 value={selectedJob}
                 onChange={setSelectedJob}
-                className="custom-filter-select text-xs min-w-[150px]"
-                size="middle"
+                className="w-[145px] xl:w-[155px] shrink-0 [&_.ant-select-selector]:!h-[34px] [&_.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!text-xs [&_.ant-select-selector]:!border-[#CBD5E1] [&_.ant-select-selector]:!rounded-lg"
+                style={{ height: 34 }}
                 popupMatchSelectWidth={false}
                 options={[
                   { value: "all", label: "Tất cả tin tuyển dụng" },
-                  { value: "PM-2408", label: "Product Manager (PM-2408)" },
-                  { value: "UX-2408", label: "Senior UX/UI Designer (UX-2408)" },
-                  { value: "FE-2407", label: "Frontend Developer (FE-2407)" },
-                  { value: "DA-2406", label: "Data Analyst (DA-2406)" },
-                  { value: "HR-2408", label: "HR Generalist (HR-2408)" },
-                  { value: "DEVOPS-2408", label: "DevOps Engineer (DEVOPS-2408)" },
+                  ...jobsList.map((j) => ({
+                    value: String(j.id),
+                    label: `${j.title} (${j.slug || 'JD-' + j.id})`,
+                  })),
                 ]}
               />
 
-              {/* Filter 2: Vị trí */}
+              {/* 3. Vị trí */}
               <Select
                 value={selectedPosition}
                 onChange={setSelectedPosition}
-                className="custom-filter-select text-xs min-w-[130px]"
-                size="middle"
+                className="w-[110px] xl:w-[115px] shrink-0 [&_.ant-select-selector]:!h-[34px] [&_.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!text-xs [&_.ant-select-selector]:!border-[#CBD5E1] [&_.ant-select-selector]:!rounded-lg"
+                style={{ height: 34 }}
+                popupMatchSelectWidth={false}
                 options={[
                   { value: "all", label: "Tất cả vị trí" },
                   { value: "Product Manager", label: "Product Manager" },
@@ -786,14 +1007,15 @@ function EmployerCandidatesContent() {
                 ]}
               />
 
-              {/* Filter 3: Nguồn */}
+              {/* 4. Nguồn */}
               <Select
                 value={selectedSource}
                 onChange={setSelectedSource}
-                className="custom-filter-select text-xs min-w-[130px]"
-                size="middle"
+                className="w-[105px] xl:w-[115px] shrink-0 [&_.ant-select-selector]:!h-[34px] [&_.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!text-xs [&_.ant-select-selector]:!border-[#CBD5E1] [&_.ant-select-selector]:!rounded-lg"
+                style={{ height: 34 }}
+                popupMatchSelectWidth={false}
                 options={[
-                  { value: "all", label: "Tất cả nguồn ứng viên" },
+                  { value: "all", label: "Tất cả nguồn" },
                   { value: "Website", label: "Website Careza" },
                   { value: "LinkedIn", label: "LinkedIn" },
                   { value: "Referral", label: "Referral (Giới thiệu)" },
@@ -802,12 +1024,13 @@ function EmployerCandidatesContent() {
                 ]}
               />
 
-              {/* Filter 4: Trạng thái */}
+              {/* 5. Trạng thái */}
               <Select
                 value={selectedStatus}
                 onChange={setSelectedStatus}
-                className="custom-filter-select text-xs min-w-[125px]"
-                size="middle"
+                className="w-[115px] xl:w-[125px] shrink-0 [&_.ant-select-selector]:!h-[34px] [&_.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!text-xs [&_.ant-select-selector]:!border-[#CBD5E1] [&_.ant-select-selector]:!rounded-lg"
+                style={{ height: 34 }}
+                popupMatchSelectWidth={false}
                 options={[
                   { value: "all", label: "Tất cả trạng thái" },
                   { value: "NEW", label: "Mới" },
@@ -819,83 +1042,28 @@ function EmployerCandidatesContent() {
                 ]}
               />
 
-              {/* Button: Bộ lọc nâng cao */}
-              <button
-                type="button"
-                onClick={() => setIsFilterDrawerOpen(true)}
-                className="px-3 py-1.5 rounded-xl border border-slate-200/80 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs flex items-center gap-1.5 transition-all shadow-2xs cursor-pointer ml-auto"
-              >
-                <SlidersHorizontal className="w-3.5 h-3.5 text-slate-500" />
-                <span>Bộ lọc</span>
-              </button>
-            </div>
-
-            {/* Row 2: Status Tabs + Sort (Strictly 1 Single Line) */}
-            <div className="flex items-center justify-between gap-3 pt-2 border-t border-slate-100 w-full min-w-0">
-              {/* Tabs List */}
-              <div className="flex items-center gap-1 overflow-x-auto min-w-0 flex-1 [&::-webkit-scrollbar]:hidden py-0.5">
-                {[
-                  { key: "all", label: "Tất cả", count: totalCount },
-                  { key: "NEW", label: "Mới", count: newCount },
-                  { key: "MATCHED", label: "Phù hợp", count: matchedCount },
-                  { key: "REVIEWING", label: "Đánh giá", count: reviewingCount },
-                  { key: "INTERVIEW", label: "Phỏng vấn", count: interviewCount },
-                  { key: "OFFER", label: "Offer", count: offerCount },
-                  { key: "REJECTED", label: "Đã từ chối", count: rejectedCount },
-                  { key: "ARCHIVED", label: "Lưu trữ", count: archivedCount },
-                ].map((tab) => {
-                  const isActive = activeTab === tab.key;
-                  return (
-                    <button
-                      key={tab.key}
-                      type="button"
-                      onClick={() => setActiveTab(tab.key)}
-                      className={`px-2.5 py-1 rounded-xl text-[11.5px] transition-all flex items-center gap-1.5 whitespace-nowrap cursor-pointer shrink-0 ${
-                        isActive
-                          ? "bg-[#0062ff] text-white font-bold shadow-2xs"
-                          : "text-slate-600 hover:text-slate-900 hover:bg-slate-100 font-semibold"
-                      }`}
-                    >
-                      <span>{tab.label}</span>
-                      <span
-                        className={`text-[9.5px] px-1.5 py-0.2 rounded-full font-black ${
-                          isActive
-                            ? "bg-white/20 text-white"
-                            : "bg-slate-100 text-slate-500"
-                        }`}
-                      >
-                        {tab.count}
-                      </span>
-                    </button>
-                  );
-                })}
-              </div>
-
-              {/* Sort dropdown on right */}
-              <div className="flex items-center gap-1.5 shrink-0 pl-2">
-                <span className="text-[11px] text-slate-400 font-semibold whitespace-nowrap">
-                  Sắp xếp:
-                </span>
-                <Select
-                  value={selectedSort}
-                  onChange={setSelectedSort}
-                  size="small"
-                  className="text-xs min-w-[110px]"
-                  suffixIcon={<ChevronDown className="w-3 h-3 text-slate-400" />}
-                  options={[
-                    { value: "newest", label: "Mới nhất" },
-                    { value: "rating-high", label: "Đánh giá cao nhất" },
-                    { value: "name-az", label: "Tên A - Z" },
-                  ]}
-                />
-              </div>
+              {/* 6. Sắp xếp */}
+              <Select
+                value={selectedSort}
+                onChange={setSelectedSort}
+                className="w-[115px] xl:w-[125px] shrink-0 [&_.ant-select-selector]:!h-[34px] [&_.ant-select-selector]:!items-center [&_.ant-select-selection-item]:!text-xs [&_.ant-select-selector]:!border-[#CBD5E1] [&_.ant-select-selector]:!rounded-lg"
+                style={{ height: 34 }}
+                popupMatchSelectWidth={false}
+                suffixIcon={<ChevronDown className="w-3.5 h-3.5 text-slate-400" />}
+                options={[
+                  { value: "newest", label: "Mới nhất" },
+                  { value: "match-score", label: "Điểm AI Matching" },
+                  { value: "rating-high", label: "Đánh giá cao nhất" },
+                  { value: "name-az", label: "Tên A - Z" },
+                ]}
+              />
             </div>
           </div>
 
           {/* Bulk Action Bar (When >= 1 candidate selected) */}
           {selectedIds.length > 0 && (
             <div className="bg-blue-50/90 border-b border-blue-200 px-4 py-2.5 flex items-center justify-between shrink-0 animate-fadeIn">
-              <div className="flex items-center gap-2 text-xs font-black text-[#0062ff]">
+              <div className="flex items-center gap-2 text-xs font-bold text-[#155EEF]">
                 <CheckCircle className="w-4 h-4" />
                 <span>Đã chọn {selectedIds.length} ứng viên</span>
               </div>
@@ -904,7 +1072,7 @@ function EmployerCandidatesContent() {
                 <button
                   type="button"
                   onClick={() => handleBulkMoveStage("INTERVIEW")}
-                  className="px-3 py-1 bg-[#0062ff] hover:bg-[#0052cc] text-white rounded-lg text-xs font-bold shadow-2xs transition-all cursor-pointer"
+                  className="px-3 py-1 bg-[#155EEF] hover:bg-[#1047B8] text-white rounded-lg text-xs font-bold shadow-2xs transition-all cursor-pointer"
                 >
                   Chuyển sang Phỏng vấn
                 </button>
@@ -929,9 +1097,9 @@ function EmployerCandidatesContent() {
           {/* Scrollable Table Area */}
           <div className="flex-1 min-h-0 overflow-y-auto overflow-x-auto [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
             <table className="w-full text-left text-xs border-collapse min-w-[950px]">
-              <thead className="sticky top-0 z-10 bg-slate-50 border-b border-slate-100 text-[11px] font-black text-slate-500 uppercase tracking-wider shadow-2xs">
-                <tr>
-                  <th className="py-3 px-3 w-10 text-center">
+              <thead className="sticky top-0 z-10 bg-[#EAF2FF] border-b border-[#CBD5E1] shadow-2xs">
+                <tr className="text-[#174EA6] font-semibold text-[12.5px]">
+                  <th className="py-2.5 px-3 w-10 text-center bg-[#EAF2FF]">
                     <Checkbox
                       checked={
                         filteredCandidates.length > 0 &&
@@ -944,13 +1112,14 @@ function EmployerCandidatesContent() {
                       onChange={handleSelectAll}
                     />
                   </th>
-                  <th className="py-3 px-3">ỨNG VIÊN</th>
-                  <th className="py-3 px-3">VỊ TRÍ ỨNG TUYỂN ↕</th>
-                  <th className="py-3 px-3">NGUỒN</th>
-                  <th className="py-3 px-3">TRẠNG THÁI ↕</th>
-                  <th className="py-3 px-3 min-w-[105px]">ĐÁNH GIÁ</th>
-                  <th className="py-3 px-3">NGÀY ỨNG TUYỂN</th>
-                  <th className="py-3 px-3 text-right">THAO TÁC</th>
+                  <th className="py-2.5 px-3 min-w-[200px] text-left bg-[#EAF2FF]">Ứng viên</th>
+                  <th className="py-2.5 px-3 min-w-[140px] text-center bg-[#EAF2FF]">Vị trí ứng tuyển</th>
+                  <th className="py-2.5 px-3 min-w-[130px] text-center bg-[#EAF2FF]">CV đính kèm</th>
+                  <th className="py-2.5 px-3 min-w-[110px] text-center bg-[#EAF2FF]">Điểm phù hợp</th>
+                  <th className="py-2.5 px-3 min-w-[110px] text-center bg-[#EAF2FF]">Trạng thái</th>
+                  <th className="py-2.5 px-3 min-w-[105px] text-center bg-[#EAF2FF]">Đánh giá</th>
+                  <th className="py-2.5 px-3 min-w-[100px] text-center bg-[#EAF2FF]">Ngày nộp</th>
+                  <th className="py-2.5 px-3 min-w-[80px] text-center bg-[#EAF2FF]">Thao tác</th>
                 </tr>
               </thead>
 
@@ -964,13 +1133,12 @@ function EmployerCandidatesContent() {
                       <tr
                         key={candidate.id}
                         onClick={() => setDetailCandidate(candidate)}
-                        className={`hover:bg-slate-50/70 transition-colors group cursor-pointer ${
-                          isSelected ? "bg-blue-50/40" : ""
-                        }`}
+                        className={`hover:bg-slate-50/70 transition-colors group cursor-pointer ${isSelected ? "bg-blue-50/40" : ""
+                          }`}
                       >
                         {/* 1. Checkbox */}
                         <td
-                          className="py-3.5 px-3 text-center"
+                          className="py-3 px-3 text-center"
                           onClick={(e) => e.stopPropagation()}
                         >
                           <Checkbox
@@ -980,7 +1148,7 @@ function EmployerCandidatesContent() {
                         </td>
 
                         {/* 2. Ứng viên (Avatar, Name, Badge, Email, Phone) */}
-                        <td className="py-3.5 px-3">
+                        <td className="py-3 px-3 text-left">
                           <div className="flex items-center gap-3">
                             <Avatar
                               src={candidate.avatar}
@@ -989,16 +1157,20 @@ function EmployerCandidatesContent() {
                             />
                             <div className="min-w-0 space-y-0.5">
                               <div className="flex items-center gap-1.5">
-                                <span className="font-black text-slate-900 text-xs hover:text-[#0062ff] transition-colors truncate">
+                                <Link
+                                  href={`/doanh-nghiep/ung-vien/${candidate.id}`}
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="font-bold text-slate-900 text-xs hover:text-[#155EEF] transition-colors truncate block"
+                                >
                                   {candidate.name}
-                                </span>
+                                </Link>
                                 {candidate.isNew && (
-                                  <span className="px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-600 text-[9px] font-black border border-emerald-200">
+                                  <span className="px-1.5 py-0.2 rounded bg-emerald-50 text-emerald-600 text-[9px] font-bold border border-emerald-200">
                                     Mới
                                   </span>
                                 )}
                               </div>
-                              <div className="text-[11px] text-slate-400 leading-tight truncate">
+                              <div className="text-[11px] text-slate-500 leading-tight truncate">
                                 {candidate.email}
                               </div>
                               <div className="text-[10.5px] text-slate-400 font-mono leading-tight">
@@ -1009,33 +1181,70 @@ function EmployerCandidatesContent() {
                         </td>
 
                         {/* 3. Vị trí ứng tuyển */}
-                        <td className="py-3.5 px-3">
+                        <td className="py-3 px-3 text-center">
                           <div className="space-y-0.5">
-                            <span className="font-bold text-slate-800 text-xs block leading-tight truncate">
+                            <span className="font-semibold text-slate-800 text-xs block leading-tight truncate">
                               {candidate.jobTitle}
                             </span>
-                            <span className="text-[10.5px] font-mono text-slate-400 font-bold block">
+                            <span className="text-[10.5px] font-mono text-slate-400 font-medium block">
                               {candidate.jobCode}
                             </span>
                           </div>
                         </td>
 
-                        {/* 4. Nguồn */}
-                        <td className="py-3.5 px-3">
-                          {renderSourceIcon(candidate.source)}
+                        {/* 4. CV đã nộp */}
+                        <td className="py-3 px-3 text-center">
+                          <div className="flex items-center justify-center gap-1.5">
+                            <FileText className="w-3.5 h-3.5 text-[#155EEF] shrink-0" />
+                            <span className="text-xs font-semibold text-slate-800 truncate max-w-[120px]" title={candidate.cvName}>
+                              {candidate.cvName}
+                            </span>
+                            {candidate.cvFileUrl && (
+                              <button
+                                type="button"
+                                title="Xem file CV"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  window.open(candidate.cvFileUrl!, "_blank");
+                                }}
+                                className="p-1 hover:bg-slate-100 rounded text-slate-400 hover:text-[#155EEF] transition-colors cursor-pointer"
+                              >
+                                <ExternalLink className="w-3 h-3" />
+                              </button>
+                            )}
+                          </div>
                         </td>
 
-                        {/* 5. Trạng thái */}
-                        <td className="py-3.5 px-3">
-                          {renderStatusBadge(candidate.status)}
+                        {/* 5. Điểm AI Matching */}
+                        <td className="py-3 px-3 text-center">
+                          {typeof candidate.matchScore === "number" ? (
+                            <span className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-full text-[10.5px] font-bold border ${candidate.matchScore >= 80
+                              ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                              : candidate.matchScore >= 60
+                                ? "bg-blue-50 text-[#155EEF] border-blue-200"
+                                : "bg-amber-50 text-amber-700 border-amber-200"
+                              }`}>
+                              <Sparkles className="w-3 h-3" />
+                              <span>{candidate.matchScore}%</span>
+                            </span>
+                          ) : (
+                            <span className="text-slate-400 text-xs">-</span>
+                          )}
                         </td>
 
-                        {/* 6. Đánh giá (Star Rating - Strictly 1 Line) */}
+                        {/* 6. Trạng thái */}
+                        <td className="py-3 px-3 text-center">
+                          <div className="flex justify-center">
+                            {renderStatusBadge(candidate.status)}
+                          </div>
+                        </td>
+
+                        {/* 7. Đánh giá (Star Rating - Strictly 1 Line) */}
                         <td
-                          className="py-3.5 px-3 min-w-[105px] whitespace-nowrap"
+                          className="py-3 px-3 min-w-[105px] whitespace-nowrap text-center"
                           onClick={(e) => e.stopPropagation()}
                         >
-                          <div className="flex items-center gap-0.5">
+                          <div className="flex items-center justify-center gap-0.5">
                             {[1, 2, 3, 4, 5].map((starVal) => (
                               <button
                                 key={starVal}
@@ -1045,19 +1254,18 @@ function EmployerCandidatesContent() {
                                 className="p-0.5 hover:scale-125 transition-transform cursor-pointer"
                               >
                                 <Star
-                                  className={`w-3.5 h-3.5 ${
-                                    starVal <= candidate.rating
-                                      ? "text-amber-400 fill-amber-400"
-                                      : "text-slate-200 fill-slate-100"
-                                  }`}
+                                  className={`w-3.5 h-3.5 ${starVal <= candidate.rating
+                                    ? "text-amber-400 fill-amber-400"
+                                    : "text-slate-200 fill-slate-100"
+                                    }`}
                                 />
                               </button>
                             ))}
                           </div>
                         </td>
 
-                        {/* 7. Ngày ứng tuyển */}
-                        <td className="py-3.5 px-3">
+                        {/* 8. Ngày ứng tuyển */}
+                        <td className="py-3 px-3 text-center">
                           <div className="space-y-0.5">
                             <span className="font-semibold text-slate-700 text-xs block">
                               {candidate.appliedAt}
@@ -1068,60 +1276,30 @@ function EmployerCandidatesContent() {
                           </div>
                         </td>
 
-                        {/* 8. Thao tác (3 Icon Buttons) */}
-                        <td className="py-3.5 px-3 text-right">
+                        {/* 9. Thao tác (Single MoreOutlined Dropdown Button) */}
+                        <td className="py-3 px-3 text-center">
                           <div
-                            className="flex items-center justify-end gap-1"
+                            className="flex items-center justify-center"
                             onClick={(e) => e.stopPropagation()}
                           >
-                            {/* 1. Chat button */}
-                            <Tooltip title="Chat với ứng viên">
+                            <Dropdown
+                              menu={{
+                                items: menuItems,
+                                className: "[&_.ant-dropdown-menu-item]:!min-h-[38px] [&_.ant-dropdown-menu-item]:!h-[38px] [&_.ant-dropdown-menu-item]:!py-2 [&_.ant-dropdown-menu-item]:!px-3.5 [&_.ant-dropdown-menu-item-divider]:!my-1 min-w-[190px]",
+                              }}
+                              trigger={["click"]}
+                              placement="bottomRight"
+                              arrow={{ pointAtCenter: true }}
+                            >
                               <button
                                 type="button"
-                                aria-label="Chat với ứng viên"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  message.info(`Đang mở cửa sổ chat với ${candidate.name}...`);
-                                }}
-                                className="w-7 h-7 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-blue-600 flex items-center justify-center transition-colors cursor-pointer border border-slate-200/80 active:scale-95"
+                                aria-label="Thao tác"
+                                onClick={(e) => e.stopPropagation()}
+                                className="w-8 h-8 rounded-lg bg-slate-50 hover:bg-blue-50 text-slate-600 hover:text-[#155EEF] flex items-center justify-center transition-colors cursor-pointer border border-slate-200/80 active:scale-95 mx-auto"
                               >
-                                <MessageSquare className="w-3.5 h-3.5" />
+                                <MoreOutlined className="text-base" />
                               </button>
-                            </Tooltip>
-
-                            {/* 2. Xem hồ sơ button */}
-                            <Tooltip title="Xem hồ sơ & CV">
-                              <button
-                                type="button"
-                                aria-label="Xem hồ sơ"
-                                onClick={(e) => {
-                                  e.stopPropagation();
-                                  setDetailCandidate(candidate);
-                                }}
-                                className="w-7 h-7 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-emerald-600 flex items-center justify-center transition-colors cursor-pointer border border-slate-200/80 active:scale-95"
-                              >
-                                <FileText className="w-3.5 h-3.5" />
-                              </button>
-                            </Tooltip>
-
-                            {/* 3. More button (...) */}
-                            <Tooltip title="Thao tác khác">
-                              <Dropdown
-                                menu={{ items: menuItems }}
-                                trigger={["click"]}
-                                placement="bottomRight"
-                                arrow
-                              >
-                                <button
-                                  type="button"
-                                  aria-label="Thao tác khác"
-                                  onClick={(e) => e.stopPropagation()}
-                                  className="w-7 h-7 rounded-lg bg-slate-50 hover:bg-slate-100 text-slate-600 hover:text-slate-900 flex items-center justify-center transition-colors cursor-pointer border border-slate-200/80 active:scale-95"
-                                >
-                                  <MoreHorizontal className="w-3.5 h-3.5" />
-                                </button>
-                              </Dropdown>
-                            </Tooltip>
+                            </Dropdown>
                           </div>
                         </td>
                       </tr>
@@ -1129,7 +1307,7 @@ function EmployerCandidatesContent() {
                   })
                 ) : (
                   <tr>
-                    <td colSpan={8} className="py-12 text-center text-slate-500">
+                    <td colSpan={9} className="py-12 text-center text-slate-500">
                       <div className="max-w-xs mx-auto space-y-3">
                         <div className="w-12 h-12 rounded-2xl bg-slate-100 text-slate-400 flex items-center justify-center mx-auto">
                           <Search className="w-6 h-6" />
@@ -1152,7 +1330,7 @@ function EmployerCandidatesContent() {
                             setSelectedStatus("all");
                             setActiveTab("all");
                           }}
-                          className="px-4 py-1.5 rounded-xl bg-blue-50 text-[#0062ff] hover:bg-blue-100 text-xs font-bold transition-all cursor-pointer"
+                          className="px-4 py-1.5 rounded-xl bg-blue-50 text-[#155EEF] hover:bg-blue-100 text-xs font-bold transition-all cursor-pointer"
                         >
                           Đặt lại bộ lọc
                         </button>
@@ -1165,10 +1343,10 @@ function EmployerCandidatesContent() {
           </div>
 
           {/* Pagination Footer */}
-          <div className="p-3.5 border-t border-slate-100 flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0 bg-slate-50/60 text-xs">
+          <div className="p-3.5 border-t border-[#CBD5E1] flex flex-col sm:flex-row items-center justify-between gap-3 shrink-0 bg-slate-50/60 text-xs">
             <span className="text-slate-500 font-medium text-[11.5px]">
               Hiển thị 1 - {paginatedCandidates.length} trong tổng số{" "}
-              <strong className="text-slate-800 font-black">{totalCount.toLocaleString()}</strong> ứng viên
+              <strong className="text-slate-800 font-bold">{totalCount.toLocaleString()}</strong> ứng viên
             </span>
 
             <div className="flex items-center gap-3">
@@ -1183,7 +1361,7 @@ function EmployerCandidatesContent() {
               <Select
                 value={10}
                 size="small"
-                className="text-xs"
+                className="text-xs [&_.ant-select-selector]:!border-[#CBD5E1] [&_.ant-select-selector]:!rounded-lg"
                 options={[
                   { value: 10, label: "10 / trang" },
                   { value: 20, label: "20 / trang" },
@@ -1199,13 +1377,13 @@ function EmployerCandidatesContent() {
         {/* ====================================================== */}
         <div className="xl:col-span-4 2xl:col-span-3 xl:h-full min-h-0 xl:overflow-y-auto space-y-4 pr-0.5 xl:pb-2 [&::-webkit-scrollbar]:w-1.5 [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full [&::-webkit-scrollbar-track]:bg-transparent">
           {/* Card 1: Nguồn ứng viên (Donut Chart) */}
-          <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-2xs p-4 space-y-4">
+          <div className="bg-white rounded-2xl border border-[#CBD5E1] shadow-2xs p-4 space-y-4">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-black text-slate-900 m-0">Nguồn ứng viên</h3>
+              <h3 className="text-xs font-bold text-slate-800 m-0">Nguồn ứng viên</h3>
               <Select
                 defaultValue="30days"
                 size="small"
-                className="text-[11px]"
+                className="text-[11px] [&_.ant-select-selector]:!border-[#CBD5E1] [&_.ant-select-selector]:!rounded-lg"
                 options={[
                   { value: "7days", label: "7 ngày" },
                   { value: "30days", label: "30 ngày" },
@@ -1226,7 +1404,7 @@ function EmployerCandidatesContent() {
                     cy="50"
                     r="38"
                     fill="none"
-                    stroke="#0062ff"
+                    stroke="#155EEF"
                     strokeWidth="12"
                     strokeDasharray="119 239"
                     strokeDashoffset="0"
@@ -1271,8 +1449,8 @@ function EmployerCandidatesContent() {
                 </svg>
 
                 <div className="absolute inset-0 flex flex-col items-center justify-center text-center">
-                  <span className="text-base font-black text-slate-900 leading-none">1,248</span>
-                  <span className="text-[9px] text-slate-400 font-semibold mt-0.5">Tổng ứng viên</span>
+                  <span className="text-base font-bold text-[#17233B] leading-none">1,248</span>
+                  <span className="text-[9px] text-slate-500 font-medium mt-0.5">Tổng ứng viên</span>
                 </div>
               </div>
 
@@ -1280,10 +1458,10 @@ function EmployerCandidatesContent() {
               <div className="space-y-1.5 text-[11px] flex-1">
                 <div className="flex items-center justify-between">
                   <span className="flex items-center gap-1.5 text-slate-600">
-                    <span className="w-2 h-2 rounded-full bg-[#0062ff]" />
+                    <span className="w-2 h-2 rounded-full bg-[#155EEF]" />
                     <span>Website</span>
                   </span>
-                  <span className="font-black text-slate-900">620 <span className="text-[10px] font-normal text-slate-400">(49.7%)</span></span>
+                  <span className="font-bold text-slate-800">620 <span className="text-[10px] font-normal text-slate-400">(49.7%)</span></span>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -1291,7 +1469,7 @@ function EmployerCandidatesContent() {
                     <span className="w-2 h-2 rounded-full bg-emerald-500" />
                     <span>LinkedIn</span>
                   </span>
-                  <span className="font-black text-slate-900">328 <span className="text-[10px] font-normal text-slate-400">(26.3%)</span></span>
+                  <span className="font-bold text-slate-800">328 <span className="text-[10px] font-normal text-slate-400">(26.3%)</span></span>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -1299,7 +1477,7 @@ function EmployerCandidatesContent() {
                     <span className="w-2 h-2 rounded-full bg-amber-500" />
                     <span>Referral</span>
                   </span>
-                  <span className="font-black text-slate-900">192 <span className="text-[10px] font-normal text-slate-400">(15.4%)</span></span>
+                  <span className="font-bold text-slate-800">192 <span className="text-[10px] font-normal text-slate-400">(15.4%)</span></span>
                 </div>
 
                 <div className="flex items-center justify-between">
@@ -1307,19 +1485,19 @@ function EmployerCandidatesContent() {
                     <span className="w-2 h-2 rounded-full bg-purple-600" />
                     <span>TopCV</span>
                   </span>
-                  <span className="font-black text-slate-900">108 <span className="text-[10px] font-normal text-slate-400">(8.6%)</span></span>
+                  <span className="font-bold text-slate-800">108 <span className="text-[10px] font-normal text-slate-400">(8.6%)</span></span>
                 </div>
               </div>
             </div>
           </div>
 
           {/* Card 2: Ứng viên theo giai đoạn */}
-          <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-2xs p-4 space-y-3">
+          <div className="bg-white rounded-2xl border border-[#CBD5E1] shadow-2xs p-4 space-y-3">
             <div className="flex items-center justify-between">
-              <h3 className="text-xs font-black text-slate-900 m-0">Ứng viên theo giai đoạn</h3>
+              <h3 className="text-xs font-bold text-slate-800 m-0">Ứng viên theo giai đoạn</h3>
               <Link
                 href="/doanh-nghiep/pipeline"
-                className="text-[11px] font-bold text-[#0062ff] hover:underline"
+                className="text-[11px] font-medium text-[#155EEF] hover:underline"
               >
                 Xem tất cả
               </Link>
@@ -1328,9 +1506,9 @@ function EmployerCandidatesContent() {
             <div className="space-y-2.5 text-xs">
               {/* Mới */}
               <div>
-                <div className="flex justify-between font-bold text-slate-700 pb-1 text-[11px]">
+                <div className="flex justify-between font-medium text-slate-700 pb-1 text-[11px]">
                   <span>Mới</span>
-                  <span className="font-black text-slate-900">312</span>
+                  <span className="font-bold text-slate-900">312</span>
                 </div>
                 <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                   <div className="bg-emerald-500 h-full rounded-full w-[45%]" />
@@ -1339,20 +1517,20 @@ function EmployerCandidatesContent() {
 
               {/* Đánh giá */}
               <div>
-                <div className="flex justify-between font-bold text-slate-700 pb-1 text-[11px]">
+                <div className="flex justify-between font-medium text-slate-700 pb-1 text-[11px]">
                   <span>Đánh giá</span>
-                  <span className="font-black text-slate-900">226</span>
+                  <span className="font-bold text-slate-900">226</span>
                 </div>
                 <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
-                  <div className="bg-[#0062ff] h-full rounded-full w-[35%]" />
+                  <div className="bg-[#155EEF] h-full rounded-full w-[35%]" />
                 </div>
               </div>
 
               {/* Phỏng vấn */}
               <div>
-                <div className="flex justify-between font-bold text-slate-700 pb-1 text-[11px]">
+                <div className="flex justify-between font-medium text-slate-700 pb-1 text-[11px]">
                   <span>Phỏng vấn</span>
-                  <span className="font-black text-slate-900">192</span>
+                  <span className="font-bold text-slate-900">192</span>
                 </div>
                 <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                   <div className="bg-amber-500 h-full rounded-full w-[28%]" />
@@ -1361,9 +1539,9 @@ function EmployerCandidatesContent() {
 
               {/* Offer */}
               <div>
-                <div className="flex justify-between font-bold text-slate-700 pb-1 text-[11px]">
+                <div className="flex justify-between font-medium text-slate-700 pb-1 text-[11px]">
                   <span>Offer</span>
-                  <span className="font-black text-slate-900">48</span>
+                  <span className="font-bold text-slate-900">48</span>
                 </div>
                 <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                   <div className="bg-purple-600 h-full rounded-full w-[12%]" />
@@ -1372,9 +1550,9 @@ function EmployerCandidatesContent() {
 
               {/* Đã từ chối */}
               <div>
-                <div className="flex justify-between font-bold text-slate-700 pb-1 text-[11px]">
+                <div className="flex justify-between font-medium text-slate-700 pb-1 text-[11px]">
                   <span>Đã từ chối</span>
-                  <span className="font-black text-slate-900">142</span>
+                  <span className="font-bold text-slate-900">142</span>
                 </div>
                 <div className="w-full bg-slate-100 h-1.5 rounded-full overflow-hidden">
                   <div className="bg-rose-500 h-full rounded-full w-[20%]" />
@@ -1384,8 +1562,8 @@ function EmployerCandidatesContent() {
           </div>
 
           {/* Card 3: Thao tác nhanh (2x3 Grid) */}
-          <div className="bg-white rounded-2xl border border-[#E2E8F0] shadow-2xs p-4 space-y-3">
-            <h3 className="text-xs font-black text-slate-900 m-0">Thao tác nhanh</h3>
+          <div className="bg-white rounded-2xl border border-[#CBD5E1] shadow-2xs p-4 space-y-3">
+            <h3 className="text-xs font-bold text-slate-800 m-0">Thao tác nhanh</h3>
 
             <div className="grid grid-cols-3 gap-2">
               {/* Action 1 */}
@@ -1406,10 +1584,10 @@ function EmployerCandidatesContent() {
 
               {/* Action 2 */}
               <div
-                onClick={() => message.info("Tính năng Thêm ứng viên đang phát triển")}
+                onClick={handleOpenAddModal}
                 className="p-3 bg-blue-50/70 hover:bg-blue-100 rounded-xl border border-blue-100 text-center space-y-1.5 transition-all h-full flex flex-col items-center justify-center cursor-pointer"
               >
-                <div className="w-7 h-7 rounded-lg bg-[#0062ff] text-white flex items-center justify-center shadow-2xs">
+                <div className="w-7 h-7 rounded-lg bg-[#155EEF] text-white flex items-center justify-center shadow-2xs">
                   <UserPlus className="w-3.5 h-3.5" />
                 </div>
                 <span className="text-[10px] font-bold text-blue-900 block leading-tight">
@@ -1809,6 +1987,258 @@ function EmployerCandidatesContent() {
 
       {/* ======================================================== */}
       {/* 7. DRAWER: BỘ LỌC NÂNG CAO (ADVANCED FILTERS)           */}
+      {/* 7. MODAL: THÊM ỨNG VIÊN THỦ CÔNG                         */}
+      {/* ======================================================== */}
+      <Modal
+        open={isAddModalOpen}
+        onCancel={() => {
+          if (!isSubmittingAdd) {
+            setIsAddModalOpen(false);
+            setAddErrors({});
+          }
+        }}
+        footer={null}
+        width={580}
+        centered
+        destroyOnHidden
+        title={null}
+        className="careza-add-candidate-modal"
+      >
+        <div className="space-y-4 p-1">
+          {/* Header */}
+          <div className="flex items-center gap-3 pb-3 border-b border-slate-100">
+            <div className="w-10 h-10 rounded-xl bg-blue-50 text-[#155EEF] flex items-center justify-center shrink-0 shadow-2xs">
+              <UserPlus className="w-5 h-5" />
+            </div>
+            <div className="flex-1 min-w-0">
+              <h3 className="text-base font-bold text-[#17233B] m-0">
+                Thêm hồ sơ ứng viên
+              </h3>
+
+            </div>
+          </div>
+
+          {/* Form Content */}
+          <div className="space-y-3.5 text-xs">
+            {/* Row: Họ và tên */}
+            <div>
+              <label className="font-semibold text-slate-700 block mb-1">
+                Họ và tên ứng viên <span className="text-rose-500">*</span>
+              </label>
+              <Input
+                placeholder="Ví dụ: Nguyễn Văn An"
+                value={addForm.name}
+                onChange={(e) => {
+                  setAddForm({ ...addForm, name: e.target.value });
+                  if (addErrors.name) setAddErrors((prev) => ({ ...prev, name: "" }));
+                }}
+                status={addErrors.name ? "error" : ""}
+                className="rounded-lg text-xs h-9"
+              />
+              {addErrors.name && (
+                <span className="text-[11px] text-rose-500 mt-1 block">
+                  {addErrors.name}
+                </span>
+              )}
+            </div>
+
+            {/* Row: Email & Số điện thoại */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">
+                  Địa chỉ email <span className="text-rose-500">*</span>
+                </label>
+                <Input
+                  placeholder="ungvien@gmail.com"
+                  value={addForm.email}
+                  onChange={(e) => {
+                    setAddForm({ ...addForm, email: e.target.value });
+                    if (addErrors.email) setAddErrors((prev) => ({ ...prev, email: "" }));
+                  }}
+                  status={addErrors.email ? "error" : ""}
+                  className="rounded-lg text-xs h-9"
+                />
+                {addErrors.email && (
+                  <span className="text-[11px] text-rose-500 mt-1 block">
+                    {addErrors.email}
+                  </span>
+                )}
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">
+                  Số điện thoại <span className="text-rose-500">*</span>
+                </label>
+                <Input
+                  placeholder="0912 345 678"
+                  value={addForm.phone}
+                  onChange={(e) => {
+                    setAddForm({ ...addForm, phone: e.target.value });
+                    if (addErrors.phone) setAddErrors((prev) => ({ ...prev, phone: "" }));
+                  }}
+                  status={addErrors.phone ? "error" : ""}
+                  className="rounded-lg text-xs h-9"
+                />
+                {addErrors.phone && (
+                  <span className="text-[11px] text-rose-500 mt-1 block">
+                    {addErrors.phone}
+                  </span>
+                )}
+              </div>
+            </div>
+
+            {/* Row: Vị trí tuyển dụng */}
+            <div>
+              <label className="font-semibold text-slate-700 block mb-1">
+                Vị trí ứng tuyển <span className="text-rose-500">*</span>
+              </label>
+              <Select
+                placeholder="Chọn tin tuyển dụng..."
+                value={addForm.jobId}
+                onChange={(val) => {
+                  setAddForm({ ...addForm, jobId: val });
+                  if (addErrors.jobId) setAddErrors((prev) => ({ ...prev, jobId: "" }));
+                }}
+                status={addErrors.jobId ? "error" : ""}
+                className="w-full text-xs"
+                options={jobsList.map((j) => ({
+                  value: j.id,
+                  label: `${j.title} ${j.slug ? `(${j.slug})` : `(JD-${j.id})`}`,
+                }))}
+              />
+              {addErrors.jobId && (
+                <span className="text-[11px] text-rose-500 mt-1 block">
+                  {addErrors.jobId}
+                </span>
+              )}
+            </div>
+
+            {/* Row: CV đính kèm */}
+            <div>
+              <label className="font-semibold text-slate-700 block mb-1">
+                Hồ sơ CV đính kèm (PDF, DOC, DOCX - Tối đa 10MB)
+              </label>
+              <input
+                type="file"
+                ref={fileInputRef}
+                accept=".pdf,.doc,.docx"
+                className="hidden"
+                onChange={handleFileChange}
+              />
+
+              {!addFile ? (
+                <div
+                  onClick={() => fileInputRef.current?.click()}
+                  onDragOver={(e) => e.preventDefault()}
+                  onDrop={(e) => {
+                    e.preventDefault();
+                    const file = e.dataTransfer.files?.[0];
+                    if (file) {
+                      const fakeEvent = { target: { files: [file] } } as any;
+                      handleFileChange(fakeEvent);
+                    }
+                  }}
+                  className={`border-2 border-dashed rounded-xl p-4 text-center cursor-pointer transition-colors flex flex-col items-center justify-center gap-1.5 ${addErrors.file
+                    ? "border-rose-300 bg-rose-50/40"
+                    : "border-slate-200 bg-slate-50/50 hover:bg-blue-50/30 hover:border-[#155EEF]/50"
+                    }`}
+                >
+                  <div className="w-8 h-8 rounded-full bg-blue-50 text-[#155EEF] flex items-center justify-center">
+                    <Upload className="w-4 h-4" />
+                  </div>
+                  <div className="text-xs text-slate-600">
+                    <span className="font-semibold text-[#155EEF]">Nhấn để tải lên</span> hoặc kéo thả file vào đây
+                  </div>
+                  <span className="text-[11px] text-slate-400">
+                    Chấp nhận các định dạng PDF, DOC, DOCX (Dung lượng ≤ 10MB)
+                  </span>
+                </div>
+              ) : (
+                <div className="p-3 bg-blue-50/60 rounded-xl border border-blue-200 flex items-center justify-between">
+                  <div className="flex items-center gap-2.5 min-w-0">
+                    <div className="w-8 h-8 rounded-lg bg-blue-500 text-white flex items-center justify-center shrink-0">
+                      <FileText className="w-4 h-4" />
+                    </div>
+                    <div className="min-w-0">
+                      <span className="font-semibold text-slate-800 block text-xs truncate max-w-[340px]">
+                        {addFile.name}
+                      </span>
+                      <span className="text-[11px] text-slate-500">
+                        {(addFile.size / (1024 * 1024)).toFixed(2)} MB
+                      </span>
+                    </div>
+                  </div>
+                  <button
+                    type="button"
+                    onClick={handleRemoveFile}
+                    className="p-1.5 rounded-lg text-slate-400 hover:text-rose-600 hover:bg-rose-50 transition-colors cursor-pointer"
+                    title="Xóa file đã chọn"
+                  >
+                    <Trash2 className="w-4 h-4" />
+                  </button>
+                </div>
+              )}
+
+              {addErrors.file && (
+                <span className="text-[11px] text-rose-500 mt-1 block">
+                  {addErrors.file}
+                </span>
+              )}
+            </div>
+
+            {/* Row: Ghi chú */}
+            <div>
+              <label className="font-semibold text-slate-700 block mb-1">
+                Ghi chú tuyển dụng (Không bắt buộc)
+              </label>
+              <Input.TextArea
+                rows={3}
+                placeholder="Ghi chú thêm về nguồn ứng viên, kinh nghiệm nổi bật hoặc thỏa thuận ban đầu..."
+                value={addForm.notes}
+                onChange={(e) => setAddForm({ ...addForm, notes: e.target.value })}
+                className="rounded-lg text-xs"
+              />
+            </div>
+          </div>
+
+          {/* Footer Actions */}
+          <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+            <button
+              type="button"
+              disabled={isSubmittingAdd}
+              onClick={() => {
+                setIsAddModalOpen(false);
+                setAddErrors({});
+              }}
+              className="px-4 py-2 rounded-lg border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-medium text-xs transition-all cursor-pointer disabled:opacity-50"
+            >
+              Hủy
+            </button>
+
+            <button
+              type="button"
+              disabled={isSubmittingAdd}
+              onClick={handleSubmitAddCandidate}
+              className="px-4 py-2 rounded-lg bg-[#155EEF] hover:bg-[#1047B8] text-white font-medium text-xs shadow-xs transition-all flex items-center gap-1.5 cursor-pointer disabled:opacity-50"
+            >
+              {isSubmittingAdd ? (
+                <>
+                  <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                  <span>Đang lưu...</span>
+                </>
+              ) : (
+                <>
+                  <UserPlus className="w-3.5 h-3.5" />
+                  <span>Lưu hồ sơ</span>
+                </>
+              )}
+            </button>
+          </div>
+        </div>
+      </Modal>
+
+      {/* ======================================================== */}
+      {/* 8. DRAWER: BỘ LỌC NÂNG CAO (ADVANCED FILTERS)           */}
       {/* ======================================================== */}
       <Drawer
         title="Bộ lọc ứng viên nâng cao"

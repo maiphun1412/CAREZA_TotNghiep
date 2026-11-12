@@ -1,0 +1,165 @@
+{
+  "metadata": {
+    "benchmark_name": "CAREZA AI Mock Interview Final Independent Evaluation V1",
+    "version": "1.0.0",
+    "evaluated_at": "2026-10-21T16:24:26.885099",
+    "total_answers": 240,
+    "total_questions": 60,
+    "ground_truth_note": "Nhãn tham chiếu là dữ liệu tổng hợp dựa trên Rubric 4 tiêu chí chuẩn hóa, chưa được chuyên gia xác nhận.",
+    "status": "FROZEN_ALGORITHMS_EVALUATION"
+  },
+  "comparison_metrics": {
+    "baseline": {
+      "name": "MockInterviewService.evaluate_answer_content",
+      "mae": 1.0724,
+      "rmse": 1.8571,
+      "pearson": 0.8483,
+      "spearman": 0.8037,
+      "pairwise_ranking_accuracy": 0.9333,
+      "subgroups": {
+        "good": {
+          "count": 60,
+          "mean_expected": 9.28,
+          "mean_system": 9.26,
+          "mae": 0.108
+        },
+        "average": {
+          "count": 30,
+          "mean_expected": 6.05,
+          "mean_system": 6.3,
+          "mae": 0.25
+        },
+        "poor": {
+          "count": 30,
+          "mean_expected": 3.05,
+          "mean_system": 3.2,
+          "mae": 0.15
+        },
+        "persuasive_incorrect": {
+          "count": 10,
+          "mean_expected": 1.6,
+          "mean_system": 6.22,
+          "mae": 4.62
+        },
+        "average_partial": {
+          "count": 30,
+          "mean_expected": 5.85,
+          "mean_system": 9.21,
+          "mae": 3.3567
+        },
+        "unconventional_structure": {
+          "count": 30,
+          "mean_expected": 2.45,
+          "mean_system": 3.5,
+          "mae": 1.05
+        },
+        "synonym_match": {
+          "count": 10,
+          "mean_expected": 7.85,
+          "mean_system": 9.2,
+          "mae": 1.35
+        },
+        "subtle_parrot": {
+          "count": 10,
+          "mean_expected": 1.8,
+          "mean_system": 1.8,
+          "mae": 0.0
+        },
+        "keyword_stuffing": {
+          "count": 10,
+          "mean_expected": 2.7,
+          "mean_system": 7.4,
+          "mae": 4.7
+        },
+        "short_correct": {
+          "count": 10,
+          "mean_expected": 7.4,
+          "mean_system": 7.4,
+          "mae": 0.0
+        },
+        "indirect_negation": {
+          "count": 10,
+          "mean_expected": 1.8,
+          "mean_system": 1.8,
+          "mae": 0.0
+        }
+      }
+    },
+    "hybrid_nlp": {
+      "name": "MockInterviewService.evaluate_answer_hybrid",
+      "mae": 0.9963,
+      "rmse": 1.637,
+      "pearson": 0.8817,
+      "spearman": 0.846,
+      "pairwise_ranking_accuracy": 0.9333,
+      "subgroups": {
+        "good": {
+          "count": 60,
+          "mean_expected": 9.28,
+          "mean_system": 9.5,
+          "mae": 0.22
+        },
+        "average": {
+          "count": 30,
+          "mean_expected": 6.05,
+          "mean_system": 6.19,
+          "mae": 3.3233
+        },
+        "poor": {
+          "count": 30,
+          "mean_expected": 3.05,
+          "mean_system": 3.0,
+          "mae": 0.05
+        },
+        "persuasive_incorrect": {
+          "count": 10,
+          "mean_expected": 1.6,
+          "mean_system": 1.6,
+          "mae": 0.0
+        },
+        "average_partial": {
+          "count": 30,
+          "mean_expected": 5.85,
+          "mean_system": 8.65,
+          "mae": 2.7967
+        },
+        "unconventional_structure": {
+          "count": 30,
+          "mean_expected": 2.45,
+          "mean_system": 3.5,
+          "mae": 1.05
+        },
+        "synonym_match": {
+          "count": 10,
+          "mean_expected": 7.85,
+          "mean_system": 8.78,
+          "mae": 0.93
+        },
+        "subtle_parrot": {
+          "count": 10,
+          "mean_expected": 1.8,
+          "mean_system": 1.8,
+          "mae": 0.0
+        },
+        "keyword_stuffing": {
+          "count": 10,
+          "mean_expected": 2.7,
+          "mean_system": 2.7,
+          "mae": 0.0
+        },
+        "short_correct": {
+          "count": 10,
+          "mean_expected": 7.4,
+          "mean_system": 7.4,
+          "mae": 0.0
+        },
+        "indirect_negation": {
+          "count": 10,
+          "mean_expected": 1.8,
+          "mean_system": 1.8,
+          "mae": 0.0
+        }
+      }
+    }
+  }
+}

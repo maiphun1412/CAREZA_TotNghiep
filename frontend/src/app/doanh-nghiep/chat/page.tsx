@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef, useEffect, useCallback } from "react";
 import {
   Avatar,
   Modal,
@@ -12,7 +12,12 @@ import {
   App,
   Badge,
   Skeleton,
+  Button,
+  Spin,
+  Alert,
+  Empty,
 } from "antd";
+import { interactionService } from "@/services/interaction.service";
 import type { MenuProps } from "antd";
 import {
   Search,
@@ -112,412 +117,7 @@ export interface CandidateConversation {
 // MOCK DATA (MATCHING REFERENCE EXACTLY)
 // =====================================================================
 
-const INITIAL_CONVERSATIONS: CandidateConversation[] = [
-  {
-    id: "conv-1",
-    candidateName: "Nguyễn Minh Anh",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&h=150&q=80",
-    jobTitle: "Product Manager",
-    department: "Phòng Sản phẩm",
-    location: "Hà Nội, Việt Nam",
-    lastMessage: "Cảm ơn anh/chị, em rất mong chờ...",
-    lastMessageTime: "10:30",
-    unreadCount: 2,
-    isOnline: true,
-    isPriority: true,
-    email: "minhanh@email.com",
-    phone: "0345 678 901",
-    applicationStage: "Phỏng vấn chuyên môn",
-    applicationDate: "10/08/2026",
-    internalNote: "Ứng viên có kinh nghiệm tốt về sản phẩm SaaS. Kỹ năng phân tích và tư duy chiến lược mạnh.",
-    noteAuthor: "Mai Phương",
-    noteDate: "19/08/2026",
-    tags: [
-      { label: "Tiềm năng cao", color: "green" },
-      { label: "Kinh nghiệm tốt", color: "blue" },
-      { label: "Giao tiếp tốt", color: "purple" },
-    ],
-    documents: [
-      {
-        name: "CV_NguyenMinhAnh_PM.pdf",
-        type: "PDF",
-        size: "2.4 MB",
-        date: "10/08/2026",
-        url: "#",
-      },
-      {
-        name: "Portfolio_NguyenMinhAnh.pdf",
-        type: "PDF",
-        size: "8.5 MB",
-        date: "10/08/2026",
-        url: "#",
-      },
-      {
-        name: "CoverLetter_MinhAnh.docx",
-        type: "DOCX",
-        size: "450 KB",
-        date: "10/08/2026",
-        url: "#",
-      },
-    ],
-    historyTimeline: [
-      {
-        title: "Ứng tuyển vị trí Product Manager",
-        date: "10/08/2026 09:15",
-        desc: "Ứng viên nộp hồ sơ trực tuyến qua Careza.",
-      },
-      {
-        title: "Vượt qua vòng Sàng lọc CV",
-        date: "12/08/2026 14:00",
-        desc: "Được chuyển bởi Recruiter Mai Phương.",
-      },
-      {
-        title: "Được đánh giá 4.8/5 sao",
-        date: "14/08/2026 16:30",
-        desc: "Đạt chuẩn yêu cầu kinh nghiệm và kỹ năng sản phẩm.",
-      },
-      {
-        title: "Chuyển sang vòng Phỏng vấn chuyên môn",
-        date: "18/08/2026 10:00",
-        desc: "Lên kế hoạch gặp Trưởng bộ phận Sản phẩm.",
-      },
-      {
-        title: "Đã gửi thư mời phỏng vấn",
-        date: "19/08/2026 09:20",
-        desc: "Lịch phỏng vấn: 09:00 Thứ Sáu, 23/08/2026.",
-      },
-    ],
-    messages: [
-      {
-        id: "m-1",
-        sender: "candidate",
-        text: "Chào anh/chị, em cảm ơn cơ hội được tham gia ứng tuyển vị trí Product Manager tại Google Việt Nam.",
-        time: "09:15",
-      },
-      {
-        id: "m-2",
-        sender: "candidate",
-        text: "Em rất quan tâm đến vị trí này và muốn tìm hiểu thêm về vòng phỏng vấn tiếp theo.",
-        time: "09:16",
-      },
-      {
-        id: "m-3",
-        sender: "recruiter",
-        text: "Chào Minh Anh, cảm ơn bạn đã quan tâm đến vị trí Product Manager. Hiện tại hồ sơ của bạn đã được chuyển sang vòng phỏng vấn.",
-        time: "09:18",
-        status: "read",
-      },
-      {
-        id: "m-4",
-        sender: "recruiter",
-        text: "Mình muốn mời bạn tham gia vòng phỏng vấn chuyên môn với quản lý vào lúc 09:00, thứ Sáu, ngày 23/08/2026. Bạn có thể tham gia buổi phỏng vấn này không?",
-        time: "09:20",
-        status: "read",
-      },
-      {
-        id: "m-5",
-        sender: "candidate",
-        text: "Dạ em xác nhận tham gia được ạ. Em cảm ơn anh/chị!",
-        time: "09:22",
-      },
-      {
-        id: "m-6",
-        sender: "recruiter",
-        text: "Tuyệt vời! Mình đã gửi lịch mời phỏng vấn qua email cho bạn. Hẹn gặp bạn vào thứ Sáu nhé! 😊",
-        time: "09:23",
-        status: "read",
-      },
-    ],
-  },
-  {
-    id: "conv-2",
-    candidateName: "Trần Hoàng Nam",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&q=80",
-    jobTitle: "UX/UI Designer",
-    department: "Phòng Thiết kế",
-    location: "TP. Hồ Chí Minh",
-    lastMessage: "Dạ vâng, em sẽ tham gia buổi phỏng...",
-    lastMessageTime: "10:15",
-    unreadCount: 1,
-    isOnline: true,
-    isPriority: false,
-    email: "namth@outlook.com",
-    phone: "0912 345 678",
-    applicationStage: "Phỏng vấn HR",
-    applicationDate: "12/08/2026",
-    internalNote: "Portfolio Figma có nhiều case study chỉn chu về trải nghiệm người dùng Mobile App.",
-    noteAuthor: "Mai Phương",
-    noteDate: "15/08/2026",
-    tags: [
-      { label: "Design System", color: "purple" },
-      { label: "Figma Pro", color: "blue" },
-    ],
-    documents: [
-      {
-        name: "CV_TranHoangNam_UXUI.pdf",
-        type: "PDF",
-        size: "3.1 MB",
-        date: "12/08/2026",
-        url: "#",
-      },
-    ],
-    historyTimeline: [
-      {
-        title: "Ứng tuyển vị trí UX/UI Designer",
-        date: "12/08/2026 10:00",
-        desc: "Ứng viên nộp hồ sơ qua trang công ty.",
-      },
-    ],
-    messages: [
-      {
-        id: "m-201",
-        sender: "candidate",
-        text: "Chào anh/chị, em gửi bổ sung thêm link Figma Prototype sản phẩm trước đây của em ạ.",
-        time: "10:00",
-      },
-      {
-        id: "m-202",
-        sender: "recruiter",
-        text: "Cảm ơn Nam, mình đã nhận được và xem qua rồi nhé. Thiết kế rất ấn tượng!",
-        time: "10:10",
-        status: "read",
-      },
-      {
-        id: "m-203",
-        sender: "candidate",
-        text: "Dạ vâng, em sẽ tham gia buổi phỏng vấn trực tuyến đúng giờ ạ!",
-        time: "10:15",
-      },
-    ],
-  },
-  {
-    id: "conv-3",
-    candidateName: "Phạm Thu Hằng",
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&h=150&q=80",
-    jobTitle: "Marketing Specialist",
-    department: "Phòng Marketing",
-    location: "Hà Nội, Việt Nam",
-    lastMessage: "Em đã gửi CV và portfolio như yêu...",
-    lastMessageTime: "09:42",
-    unreadCount: 0,
-    isOnline: false,
-    isPriority: true,
-    email: "hangpt@gmail.com",
-    phone: "0987 654 321",
-    applicationStage: "Sàng lọc CV",
-    applicationDate: "14/08/2026",
-    internalNote: "Kinh nghiệm 3 năm Performance Marketing và Content Branding.",
-    noteAuthor: "Mai Phương",
-    noteDate: "16/08/2026",
-    tags: [
-      { label: "Performance", color: "orange" },
-      { label: "SEO/SEM", color: "green" },
-    ],
-    documents: [
-      {
-        name: "CV_PhamThuHang.pdf",
-        type: "PDF",
-        size: "1.8 MB",
-        date: "14/08/2026",
-        url: "#",
-      },
-    ],
-    historyTimeline: [
-      {
-        title: "Ứng tuyển vị trí Marketing Specialist",
-        date: "14/08/2026 09:00",
-        desc: "Ứng viên nộp hồ sơ.",
-      },
-    ],
-    messages: [
-      {
-        id: "m-301",
-        sender: "candidate",
-        text: "Em đã gửi CV và portfolio như yêu cầu của bộ phận tuyển dụng ạ.",
-        time: "09:42",
-      },
-    ],
-  },
-  {
-    id: "conv-4",
-    candidateName: "Lê Quang Huy",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&h=150&q=80",
-    jobTitle: "Frontend Developer",
-    department: "Phòng Kỹ thuật",
-    location: "Đà Nẵng",
-    lastMessage: "Vâng ạ, em xác nhận lịch phỏng vấn...",
-    lastMessageTime: "Hôm qua",
-    unreadCount: 0,
-    isOnline: true,
-    isPriority: false,
-    email: "lequanghuy@gmail.com",
-    phone: "0934 567 890",
-    applicationStage: "Phỏng vấn kỹ thuật",
-    applicationDate: "15/08/2026",
-    internalNote: "Thành thạo React, Next.js, TypeScript, TailwindCSS và Ant Design.",
-    noteAuthor: "Mai Phương",
-    noteDate: "18/08/2026",
-    tags: [
-      { label: "React / Next.js", color: "blue" },
-      { label: "TypeScript", color: "cyan" },
-    ],
-    documents: [
-      {
-        name: "CV_LeQuangHuy_Frontend.pdf",
-        type: "PDF",
-        size: "2.1 MB",
-        date: "15/08/2026",
-        url: "#",
-      },
-    ],
-    historyTimeline: [
-      {
-        title: "Ứng tuyển Frontend Developer",
-        date: "15/08/2026 14:00",
-        desc: "Ứng viên nộp hồ sơ.",
-      },
-    ],
-    messages: [
-      {
-        id: "m-401",
-        sender: "recruiter",
-        text: "Chào Huy, mời bạn tham gia buổi phỏng vấn kỹ thuật vào 14:00 ngày mai nhé.",
-        time: "Hôm qua",
-        status: "read",
-      },
-      {
-        id: "m-402",
-        sender: "candidate",
-        text: "Vâng ạ, em xác nhận lịch phỏng vấn đúng giờ. Cảm ơn anh/chị!",
-        time: "Hôm qua",
-      },
-    ],
-  },
-  {
-    id: "conv-5",
-    candidateName: "Đỗ Thành Tùng",
-    avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=150&h=150&q=80",
-    jobTitle: "DevOps Engineer",
-    department: "Phòng Kỹ thuật",
-    location: "Hà Nội, Việt Nam",
-    lastMessage: "Anh/chị cho em hỏi thêm về yêu cầu...",
-    lastMessageTime: "Hôm qua",
-    unreadCount: 0,
-    isOnline: false,
-    isPriority: false,
-    email: "tungdt@yahoo.com",
-    phone: "0901 234 567",
-    applicationStage: "Bài Test",
-    applicationDate: "16/08/2026",
-    internalNote: "Kinh nghiệm AWS, Kubernetes, Docker, CI/CD Pipeline.",
-    noteAuthor: "Mai Phương",
-    noteDate: "18/08/2026",
-    tags: [{ label: "Kubernetes", color: "blue" }, { label: "AWS", color: "orange" }],
-    documents: [],
-    historyTimeline: [],
-    messages: [
-      {
-        id: "m-501",
-        sender: "candidate",
-        text: "Anh/chị cho em hỏi thêm về yêu cầu bài test kỹ thuật phần infra với ạ.",
-        time: "Hôm qua",
-      },
-    ],
-  },
-  {
-    id: "conv-6",
-    candidateName: "Vũ Ngọc Mai",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&h=150&q=80",
-    jobTitle: "HR Generalist",
-    department: "Phòng Nhân sự",
-    location: "Hà Nội, Việt Nam",
-    lastMessage: "Dạ em cảm ơn anh/chị đã phản hồi...",
-    lastMessageTime: "18/08",
-    unreadCount: 0,
-    isOnline: false,
-    isPriority: false,
-    email: "maivn@email.com",
-    phone: "0978 123 456",
-    applicationStage: "Đã từ chối",
-    applicationDate: "10/08/2026",
-    internalNote: "Chưa phù hợp với quy mô doanh nghiệp hiện tại.",
-    noteAuthor: "Mai Phương",
-    noteDate: "18/08/2026",
-    tags: [{ label: "HR Admin", color: "purple" }],
-    documents: [],
-    historyTimeline: [],
-    messages: [
-      {
-        id: "m-601",
-        sender: "candidate",
-        text: "Dạ em cảm ơn anh/chị đã phản hồi kết quả phỏng vấn ạ.",
-        time: "18/08",
-      },
-    ],
-  },
-  {
-    id: "conv-7",
-    candidateName: "Nguyễn Đức Anh",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?auto=format&fit=crop&w=150&h=150&q=80",
-    jobTitle: "Backend Developer",
-    department: "Phòng Kỹ thuật",
-    location: "Hà Nội, Việt Nam",
-    lastMessage: "Em đã hoàn thành bài test, mong...",
-    lastMessageTime: "18/08",
-    unreadCount: 0,
-    isOnline: true,
-    isPriority: false,
-    email: "ducanh.dev@gmail.com",
-    phone: "0945 678 901",
-    applicationStage: "Đánh giá bài test",
-    applicationDate: "14/08/2026",
-    internalNote: "Golang, Node.js, Microservices, PostgreSQL.",
-    noteAuthor: "Mai Phương",
-    noteDate: "18/08/2026",
-    tags: [{ label: "Golang", color: "cyan" }, { label: "Microservices", color: "blue" }],
-    documents: [],
-    historyTimeline: [],
-    messages: [
-      {
-        id: "m-701",
-        sender: "candidate",
-        text: "Em đã hoàn thành bài test, mong nhận được phản hồi từ anh/chị ạ.",
-        time: "18/08",
-      },
-    ],
-  },
-  {
-    id: "conv-8",
-    candidateName: "Bùi Khánh Linh",
-    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?auto=format&fit=crop&w=150&h=150&q=80",
-    jobTitle: "Data Analyst",
-    department: "Phòng Dữ liệu",
-    location: "Hà Nội, Việt Nam",
-    lastMessage: "Em có thể bắt đầu công việc từ đầu...",
-    lastMessageTime: "17/08",
-    unreadCount: 0,
-    isOnline: false,
-    isPriority: false,
-    email: "linhbk@gmail.com",
-    phone: "0967 890 123",
-    applicationStage: "Đề xuất Offer",
-    applicationDate: "08/08/2026",
-    internalNote: "SQL, PowerBI, Python, Data Modeling xuất sắc.",
-    noteAuthor: "Mai Phương",
-    noteDate: "17/08/2026",
-    tags: [{ label: "PowerBI", color: "yellow" }, { label: "SQL Pro", color: "blue" }],
-    documents: [],
-    historyTimeline: [],
-    messages: [
-      {
-        id: "m-801",
-        sender: "candidate",
-        text: "Em có thể bắt đầu công việc từ đầu tháng sau theo nội dung thư mời nhận việc ạ.",
-        time: "17/08",
-      },
-    ],
-  },
-];
+const INITIAL_CONVERSATIONS: CandidateConversation[] = [];
 
 // Message Templates Categories & Items
 const MESSAGE_TEMPLATES = [
@@ -575,10 +175,10 @@ export default function EmployerChatPage() {
   const recruiterName = user?.fullName || "Mai Phương";
 
   // State Management
-  const [conversations, setConversations] = useState<CandidateConversation[]>(
-    INITIAL_CONVERSATIONS
-  );
-  const [activeConvId, setActiveConvId] = useState<string>("conv-1");
+  const [conversations, setConversations] = useState<CandidateConversation[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [activeConvId, setActiveConvId] = useState<string>("");
   const [activeTab, setActiveTab] = useState<"all" | "unread" | "priority">("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
   const [rightPanelTab, setRightPanelTab] = useState<"info" | "history" | "docs">("info");
@@ -609,6 +209,81 @@ export default function EmployerChatPage() {
   // Refs for scrolling
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+
+  const fetchConversations = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const res = await interactionService.getConversations();
+      if (res && res.length > 0) {
+        const mapped: CandidateConversation[] = res.map((conv: any) => {
+          return {
+            id: String(conv.id),
+            candidateName: conv.partner?.name || "Ứng viên",
+            avatar:
+              conv.partner?.avatar ||
+              "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&h=150&q=80",
+            jobTitle: "Ứng viên ứng tuyển",
+            department: "Bộ phận tuyển dụng",
+            location: "Việt Nam",
+            lastMessage: conv.last_message?.content || "Bắt đầu cuộc trò chuyện...",
+            lastMessageTime: conv.last_message?.created_at
+              ? new Date(conv.last_message.created_at).toLocaleTimeString("vi-VN", {
+                  hour: "2-digit",
+                  minute: "2-digit",
+                })
+              : "Gần đây",
+            unreadCount: conv.unread_count || 0,
+            isOnline: false,
+            isPriority: false,
+            email: conv.partner?.email || "",
+            phone: "",
+            applicationStage: "Đang ứng tuyển",
+            applicationDate: conv.created_at
+              ? new Date(conv.created_at).toLocaleDateString("vi-VN")
+              : "Hôm nay",
+            internalNote: "",
+            noteAuthor: "",
+            noteDate: "",
+            tags: [],
+            documents: [],
+            historyTimeline: [],
+            messages: conv.last_message
+              ? [
+                  {
+                    id: String(conv.last_message.id || "last"),
+                    sender:
+                      conv.last_message.sender_type === "candidate"
+                        ? "candidate"
+                        : "recruiter",
+                    text: conv.last_message.content || "",
+                    time: new Date(conv.last_message.created_at).toLocaleTimeString(
+                      "vi-VN",
+                      { hour: "2-digit", minute: "2-digit" }
+                    ),
+                    status: "delivered",
+                  },
+                ]
+              : [],
+          };
+        });
+        setConversations(mapped);
+        if (mapped.length > 0) {
+          setActiveConvId((prev) => prev || mapped[0].id);
+        }
+      } else {
+        setConversations([]);
+      }
+    } catch {
+      setError("Không thể tải danh sách cuộc trò chuyện. Vui lòng thử lại.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchConversations();
+  }, [fetchConversations]);
 
   // Active conversation object
   const activeConv = conversations.find((c) => c.id === activeConvId) || conversations[0];
@@ -957,7 +632,26 @@ export default function EmployerChatPage() {
 
           {/* Scrollable Conversation List */}
           <div className="flex-1 min-h-0 overflow-y-auto divide-y divide-slate-100">
-            {filteredConversations.length === 0 ? (
+            {error && (
+              <div className="p-3">
+                <Alert
+                  type="error"
+                  message={error}
+                  action={
+                    <Button size="small" onClick={fetchConversations}>
+                      Tải lại
+                    </Button>
+                  }
+                  showIcon
+                />
+              </div>
+            )}
+            {loading ? (
+              <div className="py-12 flex flex-col items-center justify-center gap-2 text-slate-400 text-xs">
+                <Spin />
+                <span>Đang tải hội thoại...</span>
+              </div>
+            ) : filteredConversations.length === 0 ? (
               <div className="p-8 text-center text-slate-400 text-xs">
                 <MessageSquare className="w-8 h-8 mx-auto mb-2 text-slate-300 stroke-1" />
                 <span>Không tìm thấy cuộc trò chuyện nào</span>
@@ -1041,6 +735,16 @@ export default function EmployerChatPage() {
         {/* CENTER COLUMN: MAIN CHAT AREA (~53%)                  */}
         {/* ====================================================== */}
         <div className="flex-1 flex flex-col min-h-0 min-w-0 bg-[#F9FBFC]">
+          {!activeConv ? (
+            <div className="flex-1 flex flex-col items-center justify-center p-8 text-center text-slate-400">
+              <MessageSquare className="w-12 h-12 text-slate-300 mb-3 stroke-1" />
+              <h3 className="text-base font-bold text-slate-700">Chưa có cuộc trò chuyện nào</h3>
+              <p className="text-xs text-slate-400 max-w-sm mt-1">
+                Khi có tin nhắn trao đổi với ứng viên, cuộc trò chuyện sẽ hiển thị tại đây.
+              </p>
+            </div>
+          ) : (
+            <>
           {/* Chat Header */}
           <div className="px-4 py-3 bg-white border-b border-slate-200/80 flex items-center justify-between gap-3 shrink-0">
             <div className="flex items-center gap-3 min-w-0">
@@ -1327,11 +1031,14 @@ export default function EmployerChatPage() {
               </button>
             </div>
           </div>
+          </>
+          )}
         </div>
 
         {/* ====================================================== */}
         {/* RIGHT COLUMN: CANDIDATE DETAIL PANEL (~24%)            */}
         {/* ====================================================== */}
+        {activeConv && (
         <div className="w-full lg:w-[280px] xl:w-[320px] 2xl:w-[340px] shrink-0 flex flex-col min-h-0 bg-white">
           {/* Right Panel Tabs */}
           <div className="flex items-center justify-around px-2 pt-3.5 border-b border-slate-100 text-xs font-bold shrink-0">
@@ -1631,6 +1338,7 @@ export default function EmployerChatPage() {
             )}
           </div>
         </div>
+        )}
       </div>
 
       {/* ======================================================== */}

@@ -1,16 +1,52 @@
 "use client";
 
+import { useState, useEffect } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import MouseSpotlight from "@/components/common/mouse-spotlight";
+import { apiClient } from "@/services/api-client";
 
-const TRENDING_KEYWORDS = [
-  { label: "Python AI Engineer", href: "/viec-lam?q=Python" },
-  { label: "Creative Director", href: "/viec-lam?q=Creative" },
-];
+interface CategoryChip {
+  id: number;
+  name: string;
+  slug: string;
+}
 
 export default function HeroSection() {
+  const router = useRouter();
+  const [keyword, setKeyword] = useState("");
+  const [location, setLocation] = useState("");
+  const [totalJobs, setTotalJobs] = useState<number>(0);
+  const [categories, setCategories] = useState<CategoryChip[]>([]);
+
+  useEffect(() => {
+    apiClient.get("/public/landing/")
+      .then((res) => {
+        if (res.data?.data) {
+          if (res.data.data.stats?.total_jobs !== undefined) {
+            setTotalJobs(res.data.data.stats.total_jobs);
+          }
+          if (Array.isArray(res.data.data.categories) && res.data.data.categories.length > 0) {
+            setCategories(res.data.data.categories.slice(0, 4));
+          }
+        }
+      })
+      .catch((err) => {
+        console.warn("Lỗi nạp dữ liệu landing hero:", err);
+      });
+  }, []);
+
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault();
+    const params = new URLSearchParams();
+    if (keyword.trim()) {
+      params.set("keyword", keyword.trim());
+    }
+    if (location && location !== "Toàn quốc") {
+      params.set("location", location);
+    }
+    const queryStr = params.toString();
+    router.push(queryStr ? `/viec-lam?${queryStr}` : "/viec-lam");
   };
 
   return (
@@ -38,23 +74,23 @@ export default function HeroSection() {
         <MouseSpotlight />
       </div>
 
-      <div className="relative max-w-container-max mx-auto px-margin-desktop pt-16 pb-20">
+      <div className="relative max-w-[1440px] w-full mx-auto px-4 sm:px-6 lg:px-8 pt-4 sm:pt-5 pb-6 sm:pb-8">
         {/* Hero panel */}
-        <div className="relative rounded-[40px] border border-white/80 bg-white/45 backdrop-blur-[2px] overflow-hidden">
+        <div className="relative rounded-[32px] lg:rounded-[36px] border border-white/80 bg-white/45 backdrop-blur-[2px] overflow-hidden">
           {/* accent */}
           <div className="absolute top-0 left-0 w-full h-[3px] bg-gradient-to-r from-blue-600 via-cyan-500 to-transparent" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_.95fr] gap-14 items-center px-10 lg:px-16 py-14 lg:py-16">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.05fr_.95fr] gap-8 lg:gap-10 items-center px-6 sm:px-8 lg:px-11 py-8 sm:py-10 lg:py-11">
             {/* LEFT */}
             <div className="relative z-10">
-              <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-blue-100 shadow-sm text-xs font-bold text-primary mb-7">
+              <div className="inline-flex items-center gap-2 bg-white px-4 py-2 rounded-full border border-blue-100 shadow-sm text-xs font-bold text-primary mb-5">
                 <span className="material-symbols-outlined text-[16px]">
                   verified
                 </span>
-                Nền tảng tuyển dụng hàng đầu 2026
+                Nền tảng tuyển dụng thông minh Careza
               </div>
 
-              <h1 className="text-[40px] lg:text-[52px] font-black text-on-surface leading-[1.08] tracking-[-0.04em] mb-6">
+              <h1 className="text-[38px] lg:text-[50px] font-black text-on-surface leading-[1.08] tracking-[-0.04em] mb-4">
                 Kết nối nhân tài –
                 <br />
                 <span className="bg-gradient-to-r from-[#0756c9] via-[#168cc3] to-[#18b7a7] bg-clip-text text-transparent">
@@ -62,9 +98,8 @@ export default function HeroSection() {
                 </span>
               </h1>
 
-              <p className="text-[16px] lg:text-[17px] text-on-surface-variant max-w-[620px] leading-[1.7] mb-8">
-                Vượt xa việc tìm kiếm hồ sơ thông thường. Ứng dụng AI thế hệ
-                mới để thấu hiểu kỹ năng và tiềm năng thực sự của mọi ứng viên.
+              <p className="text-[15.5px] lg:text-[16.5px] text-on-surface-variant max-w-[620px] leading-[1.65] mb-6">
+                Ứng dụng công nghệ hiện đại để thấu hiểu kỹ năng và tiềm năng của từng ứng viên.
               </p>
 
               {/* Search */}
@@ -78,8 +113,10 @@ export default function HeroSection() {
                   </span>
 
                   <input
+                    value={keyword}
+                    onChange={(e) => setKeyword(e.target.value)}
                     className="w-full border-none focus:ring-0 bg-transparent placeholder:text-slate-400 font-medium py-3 outline-none"
-                    placeholder="Vị trí, kỹ năng..."
+                    placeholder="Vị trí, kỹ năng, công ty..."
                     type="text"
                   />
                 </div>
@@ -89,49 +126,56 @@ export default function HeroSection() {
                     location_on
                   </span>
 
-                  <select className="w-full border-none focus:ring-0 appearance-none bg-transparent font-medium py-3 outline-none">
-                    <option>Toàn quốc</option>
-                    <option>TP. Hồ Chí Minh</option>
-                    <option>Hà Nội</option>
+                  <select
+                    value={location}
+                    onChange={(e) => setLocation(e.target.value)}
+                    className="w-full border-none focus:ring-0 appearance-none bg-transparent font-medium py-3 outline-none"
+                  >
+                    <option value="">Toàn quốc</option>
+                    <option value="Hồ Chí Minh">TP. Hồ Chí Minh</option>
+                    <option value="Hà Nội">Hà Nội</option>
+                    <option value="Đà Nẵng">Đà Nẵng</option>
                   </select>
                 </div>
 
                 <button
                   type="submit"
-                  className="bg-primary text-white px-9 py-4 rounded-2xl font-bold shadow-lg shadow-blue-600/20 hover:-translate-y-0.5 hover:shadow-xl transition-all"
+                  className="bg-primary text-white px-9 py-4 rounded-2xl font-bold shadow-lg shadow-blue-600/20 hover:-translate-y-0.5 hover:shadow-xl transition-all cursor-pointer"
                 >
                   Tìm ngay
                 </button>
               </form>
 
               {/* Trending */}
-              <div className="flex flex-wrap gap-3 items-center mt-6">
-                <span className="text-[11px] text-slate-500 font-bold uppercase tracking-[0.14em]">
-                  Xu hướng:
-                </span>
+              {categories.length > 0 && (
+                <div className="flex flex-wrap gap-2.5 items-center mt-5">
+                  <span className="text-[11px] text-slate-500 font-bold uppercase tracking-[0.14em]">
+                    Ngành nghề:
+                  </span>
 
-                {TRENDING_KEYWORDS.map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="text-xs px-4 py-2 bg-white/80 border border-slate-200 rounded-full hover:border-primary hover:text-primary hover:bg-white transition-all shadow-sm"
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </div>
+                  {categories.map((item) => (
+                    <Link
+                      key={item.id}
+                      href={`/viec-lam?industry_id=${item.id}`}
+                      className="text-xs px-4 py-2 bg-white/80 border border-slate-200 rounded-full hover:border-primary hover:text-primary hover:bg-white transition-all shadow-sm"
+                    >
+                      {item.name}
+                    </Link>
+                  ))}
+                </div>
+              )}
             </div>
 
             {/* RIGHT */}
-            <div className="relative hidden lg:flex min-h-[430px] items-center justify-center">
+            <div className="relative hidden lg:flex min-h-[370px] items-center justify-center">
               {/* back panels */}
-              <div className="absolute w-[86%] h-[78%] rounded-[42px] bg-gradient-to-br from-blue-200/45 to-cyan-100/30 rotate-3" />
-              <div className="absolute w-[86%] h-[78%] rounded-[42px] border border-white/80 bg-white/35 -rotate-2" />
+              <div className="absolute w-[88%] h-[80%] rounded-[42px] bg-gradient-to-br from-blue-200/45 to-cyan-100/30 rotate-3" />
+              <div className="absolute w-[88%] h-[80%] rounded-[42px] border border-white/80 bg-white/35 -rotate-2" />
 
-              <div className="relative z-10 w-[88%] rounded-[36px] bg-white/75 backdrop-blur-xl border border-white p-4 shadow-[0_30px_80px_rgba(15,82,186,0.18)]">
+              <div className="relative z-10 w-[90%] rounded-[36px] bg-white/75 backdrop-blur-xl border border-white p-4 shadow-[0_30px_80px_rgba(15,82,186,0.18)]">
                 <img
                   className="w-full rounded-[26px] object-cover"
-                  alt="Careza AI recruitment dashboard"
+                  alt="Careza recruitment dashboard"
                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuD3GkvC7Zg9l0uBxbR8eiTJm5AYR6cu7jk0Uk-H3pCCwJRWbWX5YFeV2i5-i5v74-V8NvvLGWF-fPkZwEggw4_ja0uK1jbpMgsPDMRc2uVVyQSChO-NMWk9CsQwSkYj3wsvM5mGCCPa3dnOoivpVm1s3Z_lu7IVD5-AjlI32Cttg9phsXbp58YGV1gp7_wxlBcquY39PGbmtDdfKJYBNpp8hEr3kIFpOsyWlm1JPCNd7LwxvdI3W0SV"
                 />
 
@@ -145,10 +189,10 @@ export default function HeroSection() {
 
                   <div>
                     <p className="text-[10px] text-slate-500 font-bold">
-                      Match Score
+                      Hồ sơ chuẩn hóa
                     </p>
                     <p className="text-xl font-black text-slate-900">
-                      98.4%
+                      Chính xác
                     </p>
                   </div>
                 </div>
@@ -156,10 +200,10 @@ export default function HeroSection() {
                 {/* floating mini badge */}
                 <div className="absolute -top-6 -right-5 bg-white px-4 py-3 rounded-2xl shadow-xl border border-blue-100 animate-float-subtle-delay">
                   <p className="text-[10px] text-slate-400 font-semibold">
-                    VIỆC LÀM MỚI
+                    VIỆC LÀM ĐANG TUYỂN
                   </p>
                   <p className="text-base font-black text-primary">
-                    +1.248
+                    {totalJobs > 0 ? `+${totalJobs}` : "0"}
                   </p>
                 </div>
               </div>

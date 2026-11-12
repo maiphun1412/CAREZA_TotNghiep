@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo, Fragment } from "react";
+import React, { useState, useMemo, useEffect, useCallback, Fragment } from "react";
 import {
   Send,
   Users,
@@ -51,8 +51,13 @@ import {
   Progress,
   App,
   Tabs,
+  Button,
+  Spin,
+  Alert,
+  Empty,
 } from "antd";
 import { useAuthStore } from "@/store/auth-store";
+import { employerService } from "@/services/employer.service";
 
 // =====================================================================
 // INTERFACES & TYPES
@@ -119,294 +124,7 @@ export interface OfferCandidate {
 // INITIAL DATASET (MATCHING 100% REFERENCE SCREENSHOT)
 // =====================================================================
 
-const INITIAL_OFFER_CANDIDATES: OfferCandidate[] = [
-  {
-    id: "off-01",
-    candidateName: "Nguyễn Minh Anh",
-    candidateEmail: "minhanh@email.com",
-    candidatePhone: "0345 678 901",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Product Manager",
-    department: "Phòng Sản phẩm",
-    salary: 25000000,
-    salaryFormatted: "25,000,000 VNĐ",
-    salaryType: "Lương gross / tháng",
-    currency: "VNĐ",
-    sentDate: "20/08/2026",
-    sentTime: "10:30",
-    deadline: "27/08/2026",
-    deadlineDaysRemaining: 5,
-    deadlineStatus: "ACTIVE",
-    status: "PENDING",
-    onboardingStatus: "NOT_STARTED",
-    onboardingProgress: 0,
-    startDate: "01/09/2026",
-    contractType: "Hợp đồng không xác định thời hạn",
-    probationPeriod: "2 tháng (85% lương cơ bản)",
-    hrAssigned: "Trần Thu Hà",
-    templateName: "Mẫu Offer Product & Management 2026",
-    notes: "Ứng viên có kinh nghiệm 4 năm lead product B2B SaaS, tư duy logic và kỹ năng roadmap rất xuất sắc.",
-    documents: [
-      { id: "d1", name: "Hợp đồng lao động", type: "DOC", status: "PENDING_SIGN", expiryDate: "28/08/2026", expiryDaysRemaining: 5 },
-      { id: "d2", name: "CCCD / Hộ chiếu", type: "PDF", status: "SUBMITTED", uploadedDate: "20/08/2026" },
-      { id: "d3", name: "Bằng cấp đại học", type: "PDF", status: "PENDING" },
-    ],
-    checklist: [
-      { id: "c1", category: "BEFORE_START", label: "Gửi thư mời nhận việc và nhận phản hồi", done: true },
-      { id: "c2", category: "BEFORE_START", label: "Thu thập thông tin cá nhân & tài khoản", done: false },
-      { id: "c3", category: "FIRST_DAY", label: "Ký kết hợp đồng lao động bản cứng/điện tử", done: false },
-      { id: "c4", category: "FIRST_DAY", label: "Bàn giao laptop & thẻ ra vào", done: false },
-      { id: "c5", category: "FIRST_WEEK", label: "Buổi Orientation văn hóa doanh nghiệp", done: false },
-    ],
-  },
-  {
-    id: "off-02",
-    candidateName: "Trần Hoàng Nam",
-    candidateEmail: "namth@outlook.com",
-    candidatePhone: "0912 345 678",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "UX/UI Designer",
-    department: "Phòng Thiết kế",
-    salary: 20000000,
-    salaryFormatted: "20,000,000 VNĐ",
-    salaryType: "Lương gross / tháng",
-    currency: "VNĐ",
-    sentDate: "18/08/2026",
-    sentTime: "14:20",
-    deadline: "25/08/2026",
-    deadlineDaysRemaining: 3,
-    deadlineStatus: "ACTIVE",
-    status: "PENDING",
-    onboardingStatus: "NOT_STARTED",
-    onboardingProgress: 0,
-    startDate: "05/09/2026",
-    contractType: "Toàn thời gian chính thức",
-    probationPeriod: "2 tháng",
-    hrAssigned: "Mai Phương",
-    templateName: "Mẫu Offer Design & Creative 2026",
-    notes: "Portfolio Figma xuất sắc, từng đạt giải thiết kế UI/UX.",
-    documents: [
-      { id: "d4", name: "Bằng cấp & Chứng chỉ", type: "PDF", status: "PENDING", expiryDate: "31/08/2026", expiryDaysRemaining: 8 },
-      { id: "d5", name: "CCCD", type: "PDF", status: "SUBMITTED" },
-    ],
-    checklist: [
-      { id: "c1", category: "BEFORE_START", label: "Xác nhận Offer", done: true },
-      { id: "c2", category: "BEFORE_START", label: "Chuẩn bị tài khoản Figma Enterprise", done: false },
-    ],
-  },
-  {
-    id: "off-03",
-    candidateName: "Lê Quang Huy",
-    candidateEmail: "lequanghuy@gmail.com",
-    candidatePhone: "0988 776 655",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Frontend Developer",
-    department: "Phòng Kỹ thuật",
-    salary: 18000000,
-    salaryFormatted: "18,000,000 VNĐ",
-    salaryType: "Lương gross / tháng",
-    currency: "VNĐ",
-    sentDate: "15/08/2026",
-    sentTime: "09:15",
-    deadline: "22/08/2026",
-    deadlineDaysRemaining: 0,
-    deadlineStatus: "EXPIRED",
-    status: "EXPIRED",
-    onboardingStatus: "NOT_STARTED",
-    onboardingProgress: 0,
-    startDate: "01/09/2026",
-    contractType: "Toàn thời gian chính thức",
-    probationPeriod: "2 tháng",
-    hrAssigned: "Trần Thu Hà",
-    templateName: "Mẫu Offer Kỹ Thuật (Tech & Dev)",
-    notes: "Đã quá hạn phản hồi offer 1 ngày. Cần liên hệ lại hoặc gia hạn.",
-    documents: [
-      { id: "d6", name: "CCCD", type: "PDF", status: "PENDING", expiryDate: "30/08/2026", expiryDaysRemaining: 7 },
-    ],
-    checklist: [],
-  },
-  {
-    id: "off-04",
-    candidateName: "Phạm Thu Hằng",
-    candidateEmail: "hangpt@gmail.com",
-    candidatePhone: "0934 567 890",
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Marketing Specialist",
-    department: "Phòng Marketing",
-    salary: 16500000,
-    salaryFormatted: "16,500,000 VNĐ",
-    salaryType: "Lương gross / tháng",
-    currency: "VNĐ",
-    sentDate: "14/08/2026",
-    sentTime: "16:45",
-    deadline: "21/08/2026",
-    deadlineDaysRemaining: 0,
-    deadlineStatus: "EXPIRED",
-    status: "REJECTED",
-    onboardingStatus: "NONE",
-    onboardingProgress: 0,
-    startDate: "01/09/2026",
-    contractType: "Toàn thời gian chính thức",
-    probationPeriod: "2 tháng",
-    hrAssigned: "Mai Phương",
-    templateName: "Mẫu Offer Marketing & Truyền thông",
-    notes: "Ứng viên từ chối do nhận được cơ hội làm việc Remote 100% từ công ty nước ngoài.",
-    documents: [],
-    checklist: [],
-  },
-  {
-    id: "off-05",
-    candidateName: "Đỗ Thành Tùng",
-    candidateEmail: "thanhtung@gmail.com",
-    candidatePhone: "0977 123 456",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "DevOps Engineer",
-    department: "Phòng Kỹ thuật",
-    salary: 22000000,
-    salaryFormatted: "22,000,000 VNĐ",
-    salaryType: "Lương gross / tháng",
-    currency: "VNĐ",
-    sentDate: "12/08/2026",
-    sentTime: "11:00",
-    deadline: "19/08/2026",
-    deadlineDaysRemaining: null,
-    deadlineStatus: "RESPONDED",
-    status: "ACCEPTED",
-    onboardingStatus: "IN_PROGRESS",
-    onboardingProgress: 45,
-    startDate: "25/08/2026",
-    contractType: "Toàn thời gian chính thức",
-    probationPeriod: "2 tháng",
-    hrAssigned: "Trần Thu Hà",
-    templateName: "Mẫu Offer Kỹ Thuật (Tech & Dev)",
-    notes: "Đã nộp CCCD và thông tin ngân hàng. Đang chuẩn bị cấp tài khoản AWS & Kubernetes.",
-    documents: [
-      { id: "d7", name: "CCCD", type: "PDF", status: "SUBMITTED", uploadedDate: "15/08/2026" },
-      { id: "d8", name: "Thông tin tài khoản ngân hàng", type: "PDF", status: "SUBMITTED" },
-      { id: "d9", name: "Hợp đồng lao động", type: "DOC", status: "PENDING_SIGN" },
-    ],
-    checklist: [
-      { id: "c1", category: "BEFORE_START", label: "Xác nhận Offer", done: true },
-      { id: "c2", category: "BEFORE_START", label: "Thu thập CCCD & Tài khoản", done: true },
-      { id: "c3", category: "BEFORE_START", label: "Cấp quyền server & VPN", done: false },
-      { id: "c4", category: "FIRST_DAY", label: "Ký hợp đồng lao động", done: false },
-    ],
-  },
-  {
-    id: "off-06",
-    candidateName: "Vũ Ngọc Mai",
-    candidateEmail: "ngocma@gmail.com",
-    candidatePhone: "0945 678 123",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Data Analyst",
-    department: "Phòng Dữ liệu",
-    salary: 17000000,
-    salaryFormatted: "17,000,000 VNĐ",
-    salaryType: "Lương gross / tháng",
-    currency: "VNĐ",
-    sentDate: "10/08/2026",
-    sentTime: "13:30",
-    deadline: "17/08/2026",
-    deadlineDaysRemaining: null,
-    deadlineStatus: "RESPONDED",
-    status: "ACCEPTED",
-    onboardingStatus: "IN_PROGRESS",
-    onboardingProgress: 75,
-    startDate: "22/08/2026",
-    contractType: "Toàn thời gian chính thức",
-    probationPeriod: "2 tháng",
-    hrAssigned: "Mai Phương",
-    templateName: "Mẫu Offer Data & Analytics",
-    notes: "Đã hoàn thành 3/4 tài liệu và tham gia buổi giới thiệu đội nhóm.",
-    documents: [
-      { id: "d10", name: "CCCD", type: "PDF", status: "SUBMITTED" },
-      { id: "d11", name: "Bằng cấp đại học", type: "PDF", status: "SUBMITTED" },
-      { id: "d12", name: "Hợp đồng lao động", type: "DOC", status: "SIGNED" },
-    ],
-    checklist: [
-      { id: "c1", category: "BEFORE_START", label: "Xác nhận Offer", done: true },
-      { id: "c2", category: "BEFORE_START", label: "Thu thập hồ sơ", done: true },
-      { id: "c3", category: "FIRST_DAY", label: "Ký hợp đồng", done: true },
-      { id: "c4", category: "FIRST_WEEK", label: "Orientation data pipeline", done: false },
-    ],
-  },
-  {
-    id: "off-07",
-    candidateName: "Nguyễn Đức Anh",
-    candidateEmail: "ducanh@gmail.com",
-    candidatePhone: "0909 888 777",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Backend Developer",
-    department: "Phòng Kỹ thuật",
-    salary: 20000000,
-    salaryFormatted: "20,000,000 VNĐ",
-    salaryType: "Lương gross / tháng",
-    currency: "VNĐ",
-    sentDate: "08/08/2026",
-    sentTime: "09:45",
-    deadline: "15/08/2026",
-    deadlineDaysRemaining: null,
-    deadlineStatus: "RESPONDED",
-    status: "ACCEPTED",
-    onboardingStatus: "COMPLETED",
-    onboardingProgress: 100,
-    startDate: "18/08/2026",
-    contractType: "Toàn thời gian chính thức",
-    probationPeriod: "2 tháng",
-    hrAssigned: "Trần Thu Hà",
-    templateName: "Mẫu Offer Kỹ Thuật (Tech & Dev)",
-    notes: "Đã hoàn thành xuất sắc toàn bộ quy trình Onboarding tuần đầu tiên.",
-    documents: [
-      { id: "d13", name: "Hợp đồng lao động", type: "DOC", status: "SIGNED" },
-      { id: "d14", name: "CCCD", type: "PDF", status: "SUBMITTED" },
-      { id: "d15", name: "Bằng cấp & Chứng chỉ", type: "PDF", status: "SUBMITTED" },
-    ],
-    checklist: [
-      { id: "c1", category: "BEFORE_START", label: "Xác nhận Offer", done: true },
-      { id: "c2", category: "BEFORE_START", label: "Thu thập hồ sơ", done: true },
-      { id: "c3", category: "FIRST_DAY", label: "Ký hợp đồng", done: true },
-      { id: "c4", category: "FIRST_DAY", label: "Bàn giao thiết bị", done: true },
-      { id: "c5", category: "FIRST_WEEK", label: "Hoàn tất đào tạo nội bộ", done: true },
-    ],
-  },
-  {
-    id: "off-08",
-    candidateName: "Bùi Khánh Linh",
-    candidateEmail: "linhbk@gmail.com",
-    candidatePhone: "0966 554 433",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "HR Generalist",
-    department: "Phòng Nhân sự",
-    salary: 15000000,
-    salaryFormatted: "15,000,000 VNĐ",
-    salaryType: "Lương gross / tháng",
-    currency: "VNĐ",
-    sentDate: "05/08/2026",
-    sentTime: "15:20",
-    deadline: "12/08/2026",
-    deadlineDaysRemaining: null,
-    deadlineStatus: "RESPONDED",
-    status: "ACCEPTED",
-    onboardingStatus: "COMPLETED",
-    onboardingProgress: 100,
-    startDate: "15/08/2026",
-    contractType: "Toàn thời gian chính thức",
-    probationPeriod: "2 tháng",
-    hrAssigned: "Mai Phương",
-    templateName: "Mẫu Offer Khối Văn Phòng & HR",
-    notes: "Đã hoàn tất onboarding và nhận bàn giao các nghiệp vụ tuyển dụng.",
-    documents: [
-      { id: "d16", name: "Hợp đồng lao động", type: "DOC", status: "SIGNED" },
-      { id: "d17", name: "CCCD", type: "PDF", status: "SUBMITTED" },
-    ],
-    checklist: [
-      { id: "c1", category: "BEFORE_START", label: "Xác nhận Offer", done: true },
-      { id: "c2", category: "BEFORE_START", label: "Thu thập hồ sơ", done: true },
-      { id: "c3", category: "FIRST_DAY", label: "Ký hợp đồng", done: true },
-      { id: "c4", category: "FIRST_WEEK", label: "Orientation", done: true },
-    ],
-  },
-];
+const INITIAL_OFFER_CANDIDATES: OfferCandidate[] = [];
 
 // Status badge styling helper
 const OFFER_STATUS_CONFIG: Record<
@@ -461,7 +179,9 @@ export default function EmployerOfferOnboardingPage() {
   const recruiterName = user?.fullName || "Mai Phương";
 
   // State
-  const [candidates, setCandidates] = useState<OfferCandidate[]>(INITIAL_OFFER_CANDIDATES);
+  const [candidates, setCandidates] = useState<OfferCandidate[]>([]);
+  const [availableApplications, setAvailableApplications] = useState<any[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const [activeMainTab, setActiveMainTab] = useState<"offer" | "onboarding">("offer");
   const [statusFilter, setStatusFilter] = useState<string>("all");
   const [searchQuery, setSearchQuery] = useState<string>("");
@@ -469,6 +189,8 @@ export default function EmployerOfferOnboardingPage() {
   const [selectedStatusDropdown, setSelectedStatusDropdown] = useState<string>("all");
   const [selectedCreator, setSelectedCreator] = useState<string>("all");
   const [selectedIds, setSelectedIds] = useState<string[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [submittingOffer, setSubmittingOffer] = useState<boolean>(false);
 
   // Modals state
   const [isCreateModalOpen, setIsCreateModalOpen] = useState<boolean>(false);
@@ -478,6 +200,7 @@ export default function EmployerOfferOnboardingPage() {
   const [selectedOnboardingDetail, setSelectedOnboardingDetail] = useState<OfferCandidate | null>(null);
 
   // Form State for creating new offer
+  const [selectedApplicationId, setSelectedApplicationId] = useState<string>("");
   const [formCandidateName, setFormCandidateName] = useState<string>("");
   const [formCandidateEmail, setFormCandidateEmail] = useState<string>("");
   const [formJobTitle, setFormJobTitle] = useState<string>("Product Manager");
@@ -485,22 +208,165 @@ export default function EmployerOfferOnboardingPage() {
   const [formSalary, setFormSalary] = useState<string>("25,000,000");
   const [formStartDate, setFormStartDate] = useState<string>("2026-09-01");
   const [formDeadline, setFormDeadline] = useState<string>("2026-08-27");
+  const [formContractType, setFormContractType] = useState<string>("Toàn thời gian chính thức");
+  const [formWorkLocation, setFormWorkLocation] = useState<string>("Trụ sở chính CAREZA, TP. Hồ Chí Minh");
   const [formTemplate, setFormTemplate] = useState<string>("Mẫu Offer Tiêu Chuẩn 2026");
   const [formNotes, setFormNotes] = useState<string>("");
+  const [formTerms, setFormTerms] = useState<string>("- Thử việc 85% lương trong 2 tháng\n- Đóng BHXH/BHYT đầy đủ theo luật\n- Thưởng hiệu quả quý & năm");
+
+  const fetchOfferCandidates = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+
+      const [offersRes, appsRes] = await Promise.all([
+        employerService.getOffers().catch(() => ({ data: { offers: [] } })),
+        employerService.getApplications().catch(() => ({ data: { applications: [] } })),
+      ]);
+
+      const rawOffers = (offersRes as any)?.data?.offers || [];
+      const rawApps = (appsRes as any)?.data?.applications || [];
+      setAvailableApplications(rawApps);
+
+      if (rawOffers.length > 0) {
+        const mapped: OfferCandidate[] = rawOffers.map((o: any) => {
+          const s = String(o.status || "").toLowerCase();
+          const offerStatus: OfferStatus =
+            s === "draft"
+              ? "DRAFT"
+              : s === "sent"
+              ? "PENDING"
+              : s === "accepted"
+              ? "ACCEPTED"
+              : s === "rejected"
+              ? "REJECTED"
+              : s === "expired"
+              ? "EXPIRED"
+              : s === "cancelled"
+              ? "CANCELLED"
+              : "PENDING";
+
+          const onbStatus: OnboardingStatus =
+            offerStatus === "ACCEPTED" ? "IN_PROGRESS" : offerStatus === "PENDING" ? "NOT_STARTED" : "NONE";
+
+          const salaryNum = Number(o.salary || 0);
+
+          return {
+            id: String(o.id),
+            candidateName: o.candidate_name || "Ứng viên",
+            candidateEmail: o.candidate_email || "",
+            candidatePhone: o.candidate_phone || "0900 000 000",
+            avatar:
+              o.candidate_avatar ||
+              "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+            jobTitle: o.position || o.job_title || "Vị trí tuyển dụng",
+            department: o.department || "Bộ phận tuyển dụng",
+            salary: salaryNum,
+            salaryFormatted: salaryNum > 0 ? `${salaryNum.toLocaleString("vi-VN")} VNĐ` : "Thỏa thuận",
+            salaryType: "Lương gross / tháng",
+            currency: "VNĐ",
+            sentDate: o.sent_at ? new Date(o.sent_at).toLocaleDateString("vi-VN") : "Mới tạo",
+            sentTime: o.sent_at ? new Date(o.sent_at).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) : "09:00",
+            deadline: o.deadline ? new Date(o.deadline).toLocaleDateString("vi-VN") : "Chưa đặt",
+            deadlineDaysRemaining: null,
+            deadlineStatus: offerStatus === "PENDING" ? "ACTIVE" : "RESPONDED",
+            status: offerStatus,
+            onboardingStatus: onbStatus,
+            onboardingProgress: offerStatus === "ACCEPTED" ? 60 : 0,
+            startDate: o.start_date ? new Date(o.start_date).toLocaleDateString("vi-VN") : "Chưa xác định",
+            contractType: o.contract_type || "Toàn thời gian chính thức",
+            probationPeriod: "2 tháng",
+            hrAssigned: recruiterName,
+            templateName: "Mẫu Offer Tiêu Chuẩn 2026",
+            notes: o.notes || "",
+            documents: [],
+            checklist: [],
+          };
+        });
+        setCandidates(mapped);
+      } else {
+        // Fallback hiển thị applications nếu chưa có offer riêng lẻ
+        const mapped: OfferCandidate[] = rawApps.map((a: any) => {
+          const s = String(a.status || "").toLowerCase();
+          const offerStatus: OfferStatus =
+            s === "offered"
+              ? "PENDING"
+              : s === "hired"
+              ? "ACCEPTED"
+              : s === "rejected"
+              ? "REJECTED"
+              : "DRAFT";
+
+          const onbStatus: OnboardingStatus =
+            s === "hired" ? "IN_PROGRESS" : s === "offered" ? "NOT_STARTED" : "NONE";
+
+          const salaryNum = Number(a.expected_salary || a.job?.salary_min || 0);
+
+          return {
+            id: String(a.id),
+            candidateName: a.candidate?.full_name || a.candidate?.name || "Ứng viên",
+            candidateEmail: a.candidate?.email || "",
+            candidatePhone: a.candidate?.phone || "0900 000 000",
+            avatar:
+              a.candidate?.avatar_url ||
+              a.candidate?.avatar ||
+              "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+            jobTitle: a.job?.title || "Vị trí tuyển dụng",
+            department: a.job?.department || "Bộ phận tuyển dụng",
+            salary: salaryNum,
+            salaryFormatted: salaryNum > 0 ? `${salaryNum.toLocaleString("vi-VN")} VNĐ` : "Thỏa thuận",
+            salaryType: "Lương gross / tháng",
+            currency: "VNĐ",
+            sentDate: a.applied_at ? new Date(a.applied_at).toLocaleDateString("vi-VN") : "Hôm nay",
+            sentTime: a.applied_at ? new Date(a.applied_at).toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }) : "09:00",
+            deadline: a.interview_at ? new Date(a.interview_at).toLocaleDateString("vi-VN") : "Chưa đặt",
+            deadlineDaysRemaining: null,
+            deadlineStatus: s === "offered" ? "ACTIVE" : "RESPONDED",
+            status: offerStatus,
+            onboardingStatus: onbStatus,
+            onboardingProgress: s === "hired" ? 60 : 0,
+            startDate: "01/09/2026",
+            contractType: "Toàn thời gian chính thức",
+            probationPeriod: "2 tháng",
+            hrAssigned: recruiterName,
+            templateName: "Mẫu Offer Tiêu Chuẩn 2026",
+            notes: a.cover_letter || "",
+            documents: [],
+            checklist: [],
+          };
+        });
+        setCandidates(mapped);
+      }
+    } catch {
+      setError("Không thể tải danh sách Offer & Onboarding từ máy chủ. Vui lòng thử lại.");
+    } finally {
+      setLoading(false);
+    }
+  }, [recruiterName]);
+
+  useEffect(() => {
+    fetchOfferCandidates();
+  }, [fetchOfferCandidates]);
 
   // =====================================================================
-  // KPI CALCULATIONS (MATCHING REFERENCE DATA: 56, 18, 24, 6, 16, 12)
+  // KPI CALCULATIONS (CALCULATED DYNAMICALLY FROM CANDIDATES)
   // =====================================================================
   const kpiStats = useMemo(() => {
+    const total = candidates.length;
+    const pending = candidates.filter((c) => c.status === "PENDING").length;
+    const accepted = candidates.filter((c) => c.status === "ACCEPTED").length;
+    const rejected = candidates.filter((c) => c.status === "REJECTED").length;
+    const onboarding = candidates.filter((c) => c.onboardingStatus === "IN_PROGRESS").length;
+    const completed = candidates.filter((c) => c.onboardingStatus === "COMPLETED").length;
     return {
-      total: 56,
-      pending: 18,
-      accepted: 24,
-      rejected: 6,
-      onboarding: 16,
-      completed: 12,
+      total,
+      pending,
+      accepted,
+      rejected,
+      onboarding,
+      completed,
     };
-  }, []);
+  }, [candidates]);
 
   // Filtered dataset
   const filteredOffers = useMemo(() => {
@@ -561,17 +427,70 @@ export default function EmployerOfferOnboardingPage() {
     }
   };
 
-  // Funnel percentages
-  const funnelStages = [
-    { key: "sent", label: "Offer đã gửi", count: 56, percent: 100, color: "#0062ff", bg: "bg-blue-500" },
-    { key: "pending", label: "Chờ phản hồi", count: 18, percent: 32.1, color: "#f59e0b", bg: "bg-amber-500" },
-    { key: "accepted", label: "Đã chấp nhận", count: 24, percent: 42.9, color: "#10b981", bg: "bg-emerald-500" },
-    { key: "onboarding", label: "Đang onboarding", count: 16, percent: 28.6, color: "#8b5cf6", bg: "bg-purple-500" },
-    { key: "completed", label: "Hoàn thành", count: 12, percent: 21.4, color: "#06b6d4", bg: "bg-cyan-500" },
-  ];
+  // Funnel percentages (calculated dynamically)
+  const funnelStages = useMemo(() => {
+    const total = candidates.length || 1;
+    return [
+      { key: "sent", label: "Offer đã gửi", count: candidates.length, percent: 100, color: "#0062ff", bg: "bg-blue-500" },
+      { key: "pending", label: "Chờ phản hồi", count: kpiStats.pending, percent: Math.round((kpiStats.pending / total) * 1000) / 10, color: "#f59e0b", bg: "bg-amber-500" },
+      { key: "accepted", label: "Đã chấp nhận", count: kpiStats.accepted, percent: Math.round((kpiStats.accepted / total) * 1000) / 10, color: "#10b981", bg: "bg-emerald-500" },
+      { key: "onboarding", label: "Đang onboarding", count: kpiStats.onboarding, percent: Math.round((kpiStats.onboarding / total) * 1000) / 10, color: "#8b5cf6", bg: "bg-purple-500" },
+      { key: "completed", label: "Hoàn thành", count: kpiStats.completed, percent: Math.round((kpiStats.completed / total) * 1000) / 10, color: "#06b6d4", bg: "bg-cyan-500" },
+    ];
+  }, [candidates.length, kpiStats]);
+
+  // Handlers for Offer actions
+  const handleSendDraftOffer = async (id: string, name: string) => {
+    try {
+      await employerService.sendOffer(id);
+      message.success(`Đã gửi thư mời nhận việc chính thức đến ứng viên ${name}!`);
+      fetchOfferCandidates();
+      if (selectedOfferDetail?.id === id) {
+        setSelectedOfferDetail(null);
+      }
+    } catch (err: any) {
+      message.error(err?.response?.data?.error || "Không thể gửi thư mời lúc này.");
+    }
+  };
+
+  const handleCancelOffer = async (id: string, name: string) => {
+    try {
+      await employerService.cancelOffer(id, "Doanh nghiệp chủ động thu hồi thư mời");
+      message.warning(`Đã thu hồi thư mời nhận việc của ${name}.`);
+      fetchOfferCandidates();
+      if (selectedOfferDetail?.id === id) {
+        setSelectedOfferDetail(null);
+      }
+    } catch (err: any) {
+      message.error(err?.response?.data?.error || "Không thể thu hồi thư mời lúc này.");
+    }
+  };
 
   // Actions menu for offer row
   const getOfferRowMenuItems = (offer: OfferCandidate) => {
+    if (offer.status === "DRAFT") {
+      return [
+        {
+          key: "view",
+          label: "Xem chi tiết Offer",
+          icon: <Eye className="w-3.5 h-3.5" />,
+          onClick: () => setSelectedOfferDetail(offer),
+        },
+        {
+          key: "send_now",
+          label: "Gửi Offer ngay cho ứng viên",
+          icon: <Send className="w-3.5 h-3.5 text-blue-600" />,
+          onClick: () => handleSendDraftOffer(offer.id, offer.candidateName),
+        },
+        {
+          key: "cancel",
+          danger: true,
+          label: "Xóa bản nháp",
+          icon: <Trash2 className="w-3.5 h-3.5" />,
+          onClick: () => handleCancelOffer(offer.id, offer.candidateName),
+        },
+      ];
+    }
     if (offer.status === "PENDING") {
       return [
         {
@@ -582,28 +501,16 @@ export default function EmployerOfferOnboardingPage() {
         },
         {
           key: "resend",
-          label: "Gửi lại email Offer",
+          label: "Gửi lại thư mời nhận việc",
           icon: <Mail className="w-3.5 h-3.5 text-blue-600" />,
-          onClick: () => message.success(`Đã gửi lại email thư mời nhận việc đến ${offer.candidateEmail}`),
-        },
-        {
-          key: "extend",
-          label: "Gia hạn thời gian phản hồi",
-          icon: <Clock className="w-3.5 h-3.5 text-amber-600" />,
-          onClick: () => message.info(`Gia hạn hạn phản hồi cho ${offer.candidateName}`),
-        },
-        {
-          key: "edit",
-          label: "Chỉnh sửa nội dung Offer",
-          icon: <Edit3 className="w-3.5 h-3.5 text-slate-600" />,
-          onClick: () => message.info(`Mở trình chỉnh sửa offer của ${offer.candidateName}`),
+          onClick: () => handleSendDraftOffer(offer.id, offer.candidateName),
         },
         {
           key: "cancel",
           danger: true,
-          label: "Hủy thư mời nhận việc",
+          label: "Thu hồi thư mời nhận việc",
           icon: <XCircle className="w-3.5 h-3.5" />,
-          onClick: () => message.warning(`Đã thu hồi offer của ${offer.candidateName}`),
+          onClick: () => handleCancelOffer(offer.id, offer.candidateName),
         },
       ];
     }
@@ -916,12 +823,12 @@ export default function EmployerOfferOnboardingPage() {
             {/* Status Chips Filter */}
             <div className="flex items-center gap-2 overflow-x-auto pb-1 text-[11px]">
               {[
-                { key: "all", label: "Tất cả", count: 56 },
-                { key: "PENDING", label: "Chờ phản hồi", count: 18 },
-                { key: "ACCEPTED", label: "Đã chấp nhận", count: 24 },
-                { key: "REJECTED", label: "Đã từ chối", count: 6 },
-                { key: "EXPIRED", label: "Đã hết hạn", count: 2 },
-                { key: "CANCELLED", label: "Đã hủy", count: 6 },
+                { key: "all", label: "Tất cả", count: candidates.length },
+                { key: "PENDING", label: "Chờ phản hồi", count: kpiStats.pending },
+                { key: "ACCEPTED", label: "Đã chấp nhận", count: kpiStats.accepted },
+                { key: "REJECTED", label: "Đã từ chối", count: kpiStats.rejected },
+                { key: "EXPIRED", label: "Đã hết hạn", count: candidates.filter((c) => c.status === "EXPIRED").length },
+                { key: "CANCELLED", label: "Đã hủy", count: candidates.filter((c) => c.status === "CANCELLED").length },
               ].map((chip) => {
                 const isActive = statusFilter === chip.key;
                 return (
@@ -980,12 +887,33 @@ export default function EmployerOfferOnboardingPage() {
               </div>
             )}
 
-            {/* ======================================================== */}
-            {/* OFFER TABLE (MATCHING REFERENCE DESIGN)                 */}
-            {/* ======================================================== */}
-            <div className="overflow-hidden rounded-2xl border border-slate-200/90 shadow-xs bg-white">
-              <div className="overflow-x-auto">
-                <table className="w-full border-collapse min-w-[860px]">
+            {error && (
+              <Alert
+                type="error"
+                message={error}
+                action={
+                  <Button size="small" onClick={fetchOfferCandidates}>
+                    Tải lại
+                  </Button>
+                }
+                className="my-3 rounded-xl"
+                showIcon
+              />
+            )}
+
+            {loading ? (
+              <div className="py-16 flex flex-col items-center justify-center gap-3 bg-white rounded-2xl border border-slate-200">
+                <Spin size="large" />
+                <span className="text-xs text-slate-500 font-medium">Đang tải danh sách offer...</span>
+              </div>
+            ) : filteredOffers.length === 0 ? (
+              <div className="py-16 bg-white rounded-2xl border border-slate-200">
+                <Empty description="Không có offer nào phù hợp với bộ lọc hiện tại" />
+              </div>
+            ) : (
+              <div className="overflow-hidden rounded-2xl border border-slate-200/90 shadow-xs bg-white">
+                <div className="overflow-x-auto">
+                  <table className="w-full border-collapse min-w-[860px]">
                   <thead>
                     <tr className="border-b border-slate-200 bg-slate-50/80 text-[10.5px] font-extrabold text-slate-700 uppercase tracking-wider">
                       <th className="py-2.5 px-3 w-8 text-center">
@@ -1237,10 +1165,13 @@ export default function EmployerOfferOnboardingPage() {
                 </table>
               </div>
             </div>
+            )}
 
             {/* Pagination Footer */}
             <div className="flex items-center justify-between pt-3 border-t border-slate-100 text-xs text-slate-500 flex-wrap gap-3">
-              <span>Hiển thị 1 – 8 trong tổng số 56 offer</span>
+              <span>
+                Hiển thị {filteredOffers.length > 0 ? `1 – ${filteredOffers.length}` : 0} trong tổng số {candidates.length} offer
+              </span>
 
               <div className="flex items-center gap-1">
                 <button
@@ -1709,23 +1640,37 @@ export default function EmployerOfferOnboardingPage() {
               </button>
 
               <div className="flex items-center gap-2">
+                {selectedOfferDetail.status === "DRAFT" && (
+                  <>
+                    <button
+                      type="button"
+                      onClick={() => handleCancelOffer(selectedOfferDetail.id, selectedOfferDetail.candidateName)}
+                      className="px-3.5 py-2 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold text-xs cursor-pointer"
+                    >
+                      Xóa nháp
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => handleSendDraftOffer(selectedOfferDetail.id, selectedOfferDetail.candidateName)}
+                      className="px-4 py-2 rounded-xl bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold text-xs shadow-md cursor-pointer"
+                    >
+                      Gửi Offer ngay
+                    </button>
+                  </>
+                )}
+
                 {selectedOfferDetail.status === "PENDING" && (
                   <>
                     <button
                       type="button"
-                      onClick={() => {
-                        message.warning(`Đã hủy thư mời của ${selectedOfferDetail.candidateName}`);
-                        setSelectedOfferDetail(null);
-                      }}
+                      onClick={() => handleCancelOffer(selectedOfferDetail.id, selectedOfferDetail.candidateName)}
                       className="px-3.5 py-2 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold text-xs cursor-pointer"
                     >
-                      Hủy Offer
+                      Thu hồi Offer
                     </button>
                     <button
                       type="button"
-                      onClick={() => {
-                        message.success(`Đã gửi lại email thư mời đến ${selectedOfferDetail.candidateEmail}`);
-                      }}
+                      onClick={() => handleSendDraftOffer(selectedOfferDetail.id, selectedOfferDetail.candidateName)}
                       className="px-4 py-2 rounded-xl bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold text-xs shadow-md cursor-pointer"
                     >
                       Gửi lại Email
@@ -1788,10 +1733,39 @@ export default function EmployerOfferOnboardingPage() {
           </div>
 
           <div className="space-y-3">
+            {/* Section 0: Chọn ứng viên */}
+            <div>
+              <label className="font-semibold text-slate-700 block mb-1">Chọn hồ sơ ứng viên *</label>
+              <Select
+                value={selectedApplicationId || undefined}
+                onChange={(val) => {
+                  setSelectedApplicationId(val);
+                  const found = availableApplications.find((a: any) => String(a.id) === String(val));
+                  if (found) {
+                    setFormCandidateName(found.candidate?.full_name || found.candidate?.name || "");
+                    setFormCandidateEmail(found.candidate?.email || "");
+                    if (found.job?.title) setFormJobTitle(found.job.title);
+                    if (found.job?.department) setFormDepartment(found.job.department);
+                    if (found.expected_salary) setFormSalary(Number(found.expected_salary).toLocaleString("vi-VN"));
+                  }
+                }}
+                placeholder="Chọn ứng viên từ quy trình tuyển dụng..."
+                className="w-full text-xs"
+                showSearch
+                filterOption={(input, option) =>
+                  (option?.label ?? "").toLowerCase().includes(input.toLowerCase())
+                }
+                options={availableApplications.map((a: any) => ({
+                  value: String(a.id),
+                  label: `${a.candidate?.full_name || a.candidate?.name || "Ứng viên"} - ${a.job?.title || "Vị trí"} (#${a.id})`,
+                }))}
+              />
+            </div>
+
             {/* Section 1: Ứng viên */}
             <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Họ tên ứng viên *</label>
+                <label className="font-semibold text-slate-700 block mb-1">Họ tên ứng viên</label>
                 <Input
                   value={formCandidateName}
                   onChange={(e) => setFormCandidateName(e.target.value)}
@@ -1801,7 +1775,7 @@ export default function EmployerOfferOnboardingPage() {
               </div>
 
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Email ứng viên *</label>
+                <label className="font-semibold text-slate-700 block mb-1">Email ứng viên</label>
                 <Input
                   value={formCandidateEmail}
                   onChange={(e) => setFormCandidateEmail(e.target.value)}
@@ -1815,35 +1789,21 @@ export default function EmployerOfferOnboardingPage() {
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="font-semibold text-slate-700 block mb-1">Vị trí công việc *</label>
-                <Select
+                <Input
                   value={formJobTitle}
-                  onChange={setFormJobTitle}
-                  className="w-full text-xs"
-                  options={[
-                    { value: "Product Manager", label: "Product Manager" },
-                    { value: "UX/UI Designer", label: "UX/UI Designer" },
-                    { value: "Frontend Developer", label: "Frontend Developer" },
-                    { value: "Backend Developer", label: "Backend Developer" },
-                    { value: "DevOps Engineer", label: "DevOps Engineer" },
-                    { value: "Data Analyst", label: "Data Analyst" },
-                  ]}
+                  onChange={(e) => setFormJobTitle(e.target.value)}
+                  placeholder="Vị trí tuyển dụng"
+                  className="rounded-xl text-xs"
                 />
               </div>
 
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Phòng ban *</label>
-                <Select
+                <label className="font-semibold text-slate-700 block mb-1">Phòng ban</label>
+                <Input
                   value={formDepartment}
-                  onChange={setFormDepartment}
-                  className="w-full text-xs"
-                  options={[
-                    { value: "Phòng Sản phẩm", label: "Phòng Sản phẩm" },
-                    { value: "Phòng Kỹ thuật", label: "Phòng Kỹ thuật" },
-                    { value: "Phòng Thiết kế", label: "Phòng Thiết kế" },
-                    { value: "Phòng Dữ liệu", label: "Phòng Dữ liệu" },
-                    { value: "Phòng Marketing", label: "Phòng Marketing" },
-                    { value: "Phòng Nhân sự", label: "Phòng Nhân sự" },
-                  ]}
+                  onChange={(e) => setFormDepartment(e.target.value)}
+                  placeholder="Phòng ban"
+                  className="rounded-xl text-xs"
                 />
               </div>
             </div>
@@ -1881,28 +1841,52 @@ export default function EmployerOfferOnboardingPage() {
               </div>
             </div>
 
-            {/* Section 4: Mẫu offer */}
+            {/* Section 4: Loại hợp đồng & Địa điểm */}
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">Loại hợp đồng</label>
+                <Select
+                  value={formContractType}
+                  onChange={setFormContractType}
+                  className="w-full text-xs"
+                  options={[
+                    { value: "Toàn thời gian chính thức", label: "Toàn thời gian chính thức" },
+                    { value: "Thử việc (2 tháng)", label: "Thử việc (2 tháng)" },
+                    { value: "Hợp đồng xác định thời hạn (1 năm)", label: "Hợp đồng xác định thời hạn (1 năm)" },
+                    { value: "Bán thời gian / Part-time", label: "Bán thời gian / Part-time" },
+                  ]}
+                />
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">Địa điểm làm việc</label>
+                <Input
+                  value={formWorkLocation}
+                  onChange={(e) => setFormWorkLocation(e.target.value)}
+                  placeholder="Địa điểm làm việc..."
+                  className="rounded-xl text-xs"
+                />
+              </div>
+            </div>
+
             <div>
-              <label className="font-semibold text-slate-700 block mb-1">Mẫu thư mời áp dụng</label>
-              <Select
-                value={formTemplate}
-                onChange={setFormTemplate}
-                className="w-full text-xs"
-                options={[
-                  { value: "Mẫu Offer Tiêu Chuẩn 2026", label: "Mẫu Offer Tiêu Chuẩn 2026 (Chính thức)" },
-                  { value: "Mẫu Offer Kỹ Thuật (Tech & Dev)", label: "Mẫu Offer Kỹ Thuật (Tech & Dev)" },
-                  { value: "Mẫu Offer Product & Management", label: "Mẫu Offer Product & Management" },
-                ]}
+              <label className="font-semibold text-slate-700 block mb-1">Chế độ đãi ngộ & Điều khoản</label>
+              <Input.TextArea
+                rows={2}
+                value={formTerms}
+                onChange={(e) => setFormTerms(e.target.value)}
+                placeholder="Thử việc 85% lương, bảo hiểm PVI, 14 ngày phép năm..."
+                className="rounded-xl text-xs"
               />
             </div>
 
             <div>
-              <label className="font-semibold text-slate-700 block mb-1">Ghi chú & Phúc lợi bổ sung</label>
+              <label className="font-semibold text-slate-700 block mb-1">Ghi chú & Lời nhắn</label>
               <Input.TextArea
                 rows={2}
                 value={formNotes}
                 onChange={(e) => setFormNotes(e.target.value)}
-                placeholder="Gói bảo hiểm sức khỏe VIP, thưởng KPI theo quý, 14 ngày phép năm..."
+                placeholder="Lời nhắn gửi trực tiếp tới ứng viên..."
                 className="rounded-xl text-xs"
               />
             </div>
@@ -1911,6 +1895,7 @@ export default function EmployerOfferOnboardingPage() {
           <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
             <button
               type="button"
+              disabled={submittingOffer}
               onClick={() => setIsCreateModalOpen(false)}
               className="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs cursor-pointer"
             >
@@ -1918,23 +1903,91 @@ export default function EmployerOfferOnboardingPage() {
             </button>
             <button
               type="button"
-              onClick={() => {
-                message.info("Đã lưu bản nháp Offer!");
-                setIsCreateModalOpen(false);
+              disabled={submittingOffer}
+              onClick={async () => {
+                if (!selectedApplicationId) {
+                  message.warning("Vui lòng chọn hồ sơ ứng viên để tạo Offer.");
+                  return;
+                }
+                const cleanSalary = Number(String(formSalary).replace(/\D/g, ""));
+                if (!cleanSalary || cleanSalary <= 0) {
+                  message.warning("Vui lòng nhập mức lương hợp lệ.");
+                  return;
+                }
+                if (!formStartDate) {
+                  message.warning("Vui lòng chọn ngày bắt đầu làm việc.");
+                  return;
+                }
+                setSubmittingOffer(true);
+                try {
+                  await employerService.createOffer({
+                    application_id: Number(selectedApplicationId),
+                    salary: cleanSalary,
+                    start_date: formStartDate,
+                    deadline: formDeadline || undefined,
+                    contract_type: formContractType,
+                    work_location: formWorkLocation,
+                    position: formJobTitle,
+                    notes: formNotes.trim() || undefined,
+                    terms: formTerms.trim() || undefined,
+                    status: "draft",
+                  });
+                  message.info("Đã lưu bản nháp Offer thành công!");
+                  setIsCreateModalOpen(false);
+                  await fetchOfferCandidates();
+                } catch (err: any) {
+                  message.error(err?.response?.data?.error || "Không thể lưu bản nháp.");
+                } finally {
+                  setSubmittingOffer(false);
+                }
               }}
-              className="px-4 py-2 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-[#0062ff] font-bold text-xs cursor-pointer"
+              className="px-4 py-2 rounded-xl border border-blue-200 bg-blue-50 hover:bg-blue-100 text-[#0062ff] font-bold text-xs cursor-pointer disabled:opacity-50"
             >
-              Lưu nháp
+              {submittingOffer ? "Đang lưu..." : "Lưu nháp"}
             </button>
             <button
               type="button"
-              onClick={() => {
-                message.success("Đã gửi thư mời nhận việc (Offer) thành công!");
-                setIsCreateModalOpen(false);
+              disabled={submittingOffer}
+              onClick={async () => {
+                if (!selectedApplicationId) {
+                  message.warning("Vui lòng chọn hồ sơ ứng viên để gửi Offer.");
+                  return;
+                }
+                const cleanSalary = Number(String(formSalary).replace(/\D/g, ""));
+                if (!cleanSalary || cleanSalary <= 0) {
+                  message.warning("Vui lòng nhập mức lương hợp lệ.");
+                  return;
+                }
+                if (!formStartDate) {
+                  message.warning("Vui lòng chọn ngày bắt đầu làm việc.");
+                  return;
+                }
+                setSubmittingOffer(true);
+                try {
+                  await employerService.createOffer({
+                    application_id: Number(selectedApplicationId),
+                    salary: cleanSalary,
+                    start_date: formStartDate,
+                    deadline: formDeadline || undefined,
+                    contract_type: formContractType,
+                    work_location: formWorkLocation,
+                    position: formJobTitle,
+                    notes: formNotes.trim() || undefined,
+                    terms: formTerms.trim() || undefined,
+                    status: "sent",
+                  });
+                  message.success("Đã gửi thư mời nhận việc (Offer) thành công!");
+                  setIsCreateModalOpen(false);
+                  await fetchOfferCandidates();
+                } catch (err: any) {
+                  message.error(err?.response?.data?.error || "Không thể gửi thư mời nhận việc.");
+                } finally {
+                  setSubmittingOffer(false);
+                }
               }}
-              className="px-5 py-2 rounded-xl bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold text-xs shadow-md cursor-pointer"
+              className="px-5 py-2 rounded-xl bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold text-xs shadow-md cursor-pointer disabled:opacity-50"
             >
-              Gửi Offer
+              {submittingOffer ? "Đang gửi..." : "Gửi Offer"}
             </button>
           </div>
         </div>

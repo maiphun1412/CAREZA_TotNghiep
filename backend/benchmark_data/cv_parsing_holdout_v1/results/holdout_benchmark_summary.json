@@ -1,0 +1,63 @@
+{
+  "metadata": {
+    "benchmark_name": "CAREZA Independent Holdout CV Parsing Benchmark V1",
+    "description": "Kết quả đánh giá kiểm thử độc lập trên 30 tệp mới (15 PDF + 15 DOCX) sử dụng parser careza-nlp-parser-v2",
+    "total_files": 30,
+    "total_pdf": 15,
+    "total_docx": 15,
+    "parser_model": "careza-nlp-parser-v2"
+  },
+  "macro_average": {
+    "sample_count": 30,
+    "name_exact_match": 0.9333,
+    "email_exact_match": 1.0,
+    "phone_exact_match": 1.0,
+    "skill_precision": 0.9372,
+    "skill_recall": 0.9963,
+    "skill_f1": 0.9636,
+    "exp_mae": 0.0667,
+    "exp_accuracy_tol_0_5": 0.9333,
+    "section_detection": {
+      "education": 1.0,
+      "experience": 0.8667,
+      "projects": 0.5333,
+      "certificates": 0.8667
+    }
+  },
+  "by_format": {
+    "PDF": {
+      "sample_count": 15,
+      "name_exact_match": 0.9333,
+      "email_exact_match": 1.0,
+      "phone_exact_match": 1.0,
+      "skill_precision": 0.9368,
+      "skill_recall": 0.9926,
+      "skill_f1": 0.9616,
+      "exp_mae": 0.0667,
+      "exp_accuracy_tol_0_5": 0.9333,
+      "section_detection": {
+        "education": 1.0,
+        "experience": 0.8667,
+        "projects": 0.5333,
+        "certificates": 0.8667
+      }
+    },
+    "DOCX": {
+      "sample_count": 15,
+      "name_exact_match": 0.9333,
+      "email_exact_match": 1.0,
+      "phone_exact_match": 1.0,
+      "skill_precision": 0.9375,
+      "skill_recall": 1.0,
+      "skill_f1": 0.9655,
+      "exp_mae": 0.0667,
+      "exp_accuracy_tol_0_5": 0.9333,
+      "section_detection": {
+        "education": 1.0,
+        "experience": 0.8667,
+        "projects": 0.5333,
+        "certificates": 0.8667
+      }
+    }
+  }
+}

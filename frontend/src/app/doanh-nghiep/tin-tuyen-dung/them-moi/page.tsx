@@ -1,38 +1,77 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { Card, Form, Input, Button, Select, DatePicker, Row, Col, Space, Divider, message } from "antd";
 import { ArrowLeftOutlined, SaveOutlined } from "@ant-design/icons";
+import { employerService } from "@/services/employer.service";
 
 const { TextArea } = Input;
 
-const MOCK_BRANCHES = [
-  { value: "br-1", label: "Chi nhánh Hồ Chí Minh" },
-  { value: "br-2", label: "Chi nhánh Hà Nội" },
-];
-
-const MOCK_SKILLS = [
-  { value: "react", label: "ReactJS" },
-  { value: "nodejs", label: "Node.js" },
-  { value: "python", label: "Python" },
-  { value: "typescript", label: "TypeScript" },
-  { value: "sql", label: "SQL Server" },
+const SUGGESTED_SKILLS = [
+  { value: "React", label: "React" },
+  { value: "TypeScript", label: "TypeScript" },
+  { value: "Next.js", label: "Next.js" },
+  { value: "Node.js", label: "Node.js" },
+  { value: "Python", label: "Python" },
+  { value: "Java", label: "Java" },
+  { value: "SQL", label: "SQL" },
+  { value: "UI/UX", label: "UI/UX" },
+  { value: "Git", label: "Git" },
 ];
 
 export default function AddJobPage() {
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
+  const [branches, setBranches] = useState<{ value: number; label: string }[]>([]);
+
+  useEffect(() => {
+    async function loadBranches() {
+      try {
+        const res = await employerService.getBranches();
+        const list = res.data?.branches || [];
+        setBranches(
+          list.map((b: any) => ({
+            value: b.id,
+            label: b.name + (b.address ? ` (${b.address})` : ""),
+          }))
+        );
+      } catch {
+        // preserve empty branches
+      }
+    }
+    loadBranches();
+  }, []);
 
   const handleSubmit = async (values: any) => {
     setSubmitting(true);
     try {
-      // Mock API call để tạo job tuyển dụng
+      await employerService.createJob({
+        title: values.title,
+        description: values.description,
+        requirements: values.requirements,
+        benefits: values.benefits || "",
+        openings: Number(values.vacancyCount) || 1,
+        work_mode: values.workMode?.toLowerCase() || "onsite",
+        employment_type:
+          values.employmentType === "Full-time"
+            ? "full_time"
+            : values.employmentType === "Part-time"
+            ? "part_time"
+            : "contract",
+        experience_min: values.experienceMin ? Number(values.experienceMin) : undefined,
+        salary_min: values.salaryMin ? Number(values.salaryMin) : null,
+        salary_max: values.salaryMax ? Number(values.salaryMax) : null,
+        currency: "VND",
+        expires_at: values.expiredAt ? values.expiredAt.toISOString() : null,
+        status: "published",
+      });
       message.success("Tạo tin tuyển dụng thành công!");
       router.push("/doanh-nghiep/tin-tuyen-dung");
-    } catch (error) {
-      message.error("Tạo tin tuyển dụng thất bại.");
+    } catch (error: any) {
+      const msg = error?.response?.data?.message || error?.response?.data?.errors?.title?.[0] || "Tạo tin tuyển dụng thất bại.";
+      message.error(msg);
     } finally {
       setSubmitting(false);
     }
@@ -64,8 +103,8 @@ export default function AddJobPage() {
 
             <Row gutter={16}>
               <Col xs={24} sm={12}>
-                <Form.Item label="Chi nhánh làm việc" name="branchId" rules={[{ required: true, message: "Chọn chi nhánh!" }]}>
-                  <Select placeholder="Chọn chi nhánh làm việc" options={MOCK_BRANCHES} size="large" />
+                <Form.Item label="Chi nhánh làm việc" name="branchId">
+                  <Select placeholder="Chọn chi nhánh làm việc (tùy chọn)" options={branches} size="large" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>
@@ -143,7 +182,7 @@ export default function AddJobPage() {
             <Row gutter={16}>
               <Col xs={24} sm={12}>
                 <Form.Item label="Kỹ năng yêu cầu" name="skills">
-                  <Select mode="multiple" placeholder="Chọn các kỹ năng yêu cầu" options={MOCK_SKILLS} size="large" />
+                  <Select mode="tags" placeholder="Chọn hoặc nhập các kỹ năng yêu cầu" options={SUGGESTED_SKILLS} size="large" />
                 </Form.Item>
               </Col>
               <Col xs={24} sm={12}>

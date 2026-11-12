@@ -6,13 +6,13 @@ import { useRouter, useSearchParams } from "next/navigation";
 import { authService } from "@/services/auth.service";
 import { useAuthStore } from "@/store/auth-store";
 import { Form, Input, Button, Checkbox, App, Spin } from "antd";
-import { 
-  UserOutlined, 
-  LockOutlined, 
-  MailOutlined, 
-  PhoneOutlined, 
-  BankOutlined, 
-  NumberOutlined 
+import {
+  UserOutlined,
+  LockOutlined,
+  MailOutlined,
+  PhoneOutlined,
+  BankOutlined,
+  NumberOutlined
 } from "@ant-design/icons";
 import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -121,10 +121,16 @@ function RegisterForm() {
 
       const user = response.data.user;
       setAuth(user);
-      document.cookie = `careza_logged_in=true; path=/; max-age=2592000; SameSite=Lax`;
+      if (response.data.company) {
+        useAuthStore.getState().setCompanyInfo(response.data.company);
+      }
       message.success("Đăng ký tài khoản thành công!");
 
-      window.location.href = "/";
+      if (data.accountType === "COMPANY") {
+        window.location.href = "/doanh-nghiep/dashboard";
+      } else {
+        window.location.href = "/ung-vien/ho-so";
+      }
     } catch (error: any) {
       const apiErrors = error.response?.data?.errors;
       if (Array.isArray(apiErrors) && apiErrors.length > 0) {
@@ -140,9 +146,10 @@ function RegisterForm() {
   };
 
   return (
-    <div className="h-screen max-h-screen w-screen overflow-hidden flex flex-col lg:flex-row bg-[#f8fbff] font-sans text-slate-800 selection:bg-blue-100 selection:text-blue-900 select-none">
+    <div className="min-h-screen lg:h-screen lg:max-h-screen w-full overflow-x-hidden lg:overflow-hidden flex flex-col lg:flex-row bg-[#f8fbff] font-sans text-slate-800 selection:bg-blue-100 selection:text-blue-900 select-none">
       {/* Google Fonts: Caveat (viết tay) & Font styles */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
         
         .font-handwriting {
@@ -150,9 +157,9 @@ function RegisterForm() {
         }
         
         .register-input .ant-input-affix-wrapper {
-          border-radius: 10px;
+          border-radius: 12px;
           border-color: #e2e8f0;
-          padding: 5px 11px;
+          padding: 7px 13px;
           background-color: #ffffff;
           box-shadow: 0 1px 2px rgba(0, 0, 0, 0.02);
           transition: all 0.2s ease;
@@ -169,13 +176,17 @@ function RegisterForm() {
         }
 
         .register-input .ant-input {
-          font-size: 12px;
+          font-size: 13px;
           color: #1e293b;
         }
 
         .register-input .ant-input::placeholder {
           color: #94a3b8;
-          font-size: 11.5px;
+          font-size: 12.5px;
+        }
+
+        .register-input .ant-form-item {
+          margin-bottom: 15px;
         }
 
         @keyframes float-slow-1 {
@@ -199,14 +210,14 @@ function RegisterForm() {
       `}} />
 
       {/* =========================================================================
-          CỘT TRÁI (3/5 MÀN HÌNH - 60%): ẢNH HERO DANGNHAP.PNG + BRANDING + TEXT + 2 FLOATING CARDS
+          CỘT TRÁI (3/5 MÀN HÌNH - 60%): ẢNH BANNERS/DANGNHAP.WEBP + BRANDING + TEXT + 2 FLOATING CARDS
          ========================================================================= */}
-      <div className="w-full lg:w-3/5 h-full relative flex flex-col justify-between p-6 sm:p-8 lg:p-12 overflow-hidden bg-[#edf3fd]">
-        
+      <div className="w-full lg:w-3/5 min-h-[420px] lg:h-full relative flex flex-col justify-between p-6 sm:p-8 lg:p-12 overflow-hidden bg-[#edf3fd]">
+
         {/* Ảnh nền rõ nét, căn chỉnh không gian bàn làm việc */}
         <div className="absolute inset-0 z-0 pointer-events-none select-none">
-          <img 
-            src="/images/banners/dangnhap.png" 
+          <img
+            src="/images/banners/dangnhap.webp"
             alt="Careza Workspace"
             className="w-full h-full object-cover object-[center_bottom] filter brightness-[1.01]"
           />
@@ -216,60 +227,44 @@ function RegisterForm() {
         </div>
 
         {/* 1. Header Logo Careza & Slogan */}
-        <div className="relative z-20 flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            {/* Logo Icon 4 cánh sao sáng màu xanh */}
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#0052d9] to-[#0070f3] flex items-center justify-center text-white shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" />
-                <circle cx="19" cy="5" r="2" />
-                <circle cx="5" cy="19" r="1.5" />
-              </svg>
-            </div>
-            {/* Chữ Careza */}
-            <span className="text-[23px] font-black tracking-tight text-[#0052d9]">
-              Careza
-            </span>
+        <div className="relative z-20 flex items-center">
+          <Link href="/" className="inline-flex items-center group">
+            <img
+              src="/images/logos/010cd82d-47e5-4e32-86e1-2df16032be39.png"
+              alt="Careza - Kết nối nhân tài, Kiến tạo sự nghiệp"
+              className="h-[72px] sm:h-[82px] lg:h-[88px] w-auto object-contain mix-blend-multiply group-hover:scale-[1.02] transition-transform"
+            />
           </Link>
-
-          {/* Vạch ngăn cách dọc */}
-          <div className="h-6 w-[1px] bg-slate-300/80 mx-1" />
-
-          {/* Slogan */}
-          <div className="flex flex-col text-[10px] font-semibold text-slate-600 leading-tight">
-            <span>Kết nối nhân tài</span>
-            <span>Kiến tạo sự nghiệp</span>
-          </div>
         </div>
 
         {/* 2. Hero Headline, Highlight cọ vàng, Mô tả & 3 Badges (Vị trí giữ nguyên chính xác) */}
-        <div className="relative z-20 mt-[54px] sm:mt-[64px] lg:mt-[72px] mb-auto max-w-md lg:max-w-lg">
+        <div className="relative z-20 mt-[26px] sm:mt-[36px] lg:mt-[44px] mb-auto max-w-md lg:max-w-lg">
           {/* Headline lớn */}
           <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-black text-slate-900 leading-[1.18] tracking-tight m-0">
-            Bắt đầu hành trình<br />
+            Cùng bạn chạm tới<br />
             phiên{" "}
             <span className="relative inline-block text-[#0062ff]">
               bản tốt hơn
               {/* Nét highlight cọ vàng vẽ tay lượn sóng bằng SVG */}
-              <svg 
-                className="absolute -bottom-2.5 left-0 w-full h-3 text-[#facc15] pointer-events-none" 
-                viewBox="0 0 200 12" 
-                fill="none" 
+              <svg
+                className="absolute -bottom-2.5 left-0 w-full h-3 text-[#facc15] pointer-events-none"
+                viewBox="0 0 200 12"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path 
-                  d="M3 8.5C35 4 85 2.5 197 6.5C145 9.5 65 10.5 8 10" 
-                  stroke="currentColor" 
-                  strokeWidth="4.5" 
-                  strokeLinecap="round" 
+                <path
+                  d="M3 8.5C35 4 85 2.5 197 6.5C145 9.5 65 10.5 8 10"
+                  stroke="currentColor"
+                  strokeWidth="4.5"
+                  strokeLinecap="round"
                 />
               </svg>
             </span>
           </h1>
 
           {/* Đoạn mô tả */}
-          <p className="mt-3.5 text-xs sm:text-[13px] text-slate-600 leading-relaxed font-normal max-w-sm sm:max-w-md">
-            Careza đồng hành cùng bạn mở khóa những cơ hội nghề nghiệp đột phá và phát triển sự nghiệp toàn diện.
+          <p className="mt-4 mb-1 text-[13.5px] sm:text-[15px] text-slate-700 leading-relaxed font-semibold tracking-[0.01em] max-w-sm sm:max-w-md">
+            Kết nối đúng cơ hội, phát triển đúng tiềm năng.
           </p>
 
           {/* 3 Mục lợi ích (Icon + Text) */}
@@ -392,10 +387,10 @@ function RegisterForm() {
       </div>
 
       {/* =========================================================================
-          CỘT PHẢI (2/5 MÀN HÌNH - 40%): FORM ĐĂNG KÝ (GỌN GÀNG, KHÔNG CUỘN TRANG)
+          CỘT PHẢI (2/5 MÀN HÌNH - 40%): FORM ĐĂNG KÝ + DOTTED GRID + CÁC LỚP SÓNG LƯỢN + SHAPE GRADIENT
          ========================================================================= */}
-      <div className="w-full lg:w-2/5 h-full relative bg-[#f4f8fe] flex flex-col justify-between items-center p-4 sm:p-5 lg:p-6 z-10 overflow-hidden select-none">
-        
+      <div className="w-full lg:w-2/5 lg:h-full relative bg-[#f4f8fe] flex flex-col justify-between items-center p-5 sm:p-7 lg:p-8 z-10 overflow-y-auto overflow-x-hidden select-none">
+
         {/* Vòm tròn mờ xanh pastel lớn trên đỉnh */}
         <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-[480px] sm:w-[520px] h-[340px] rounded-b-[260px] bg-gradient-to-b from-[#d9ebff] via-[#e6f2ff] to-transparent pointer-events-none z-0 opacity-80" />
 
@@ -403,15 +398,15 @@ function RegisterForm() {
         <div className="absolute top-12 right-12 w-28 h-28 bg-[radial-gradient(#93c5fd_1.5px,transparent_1.5px)] [background-size:12px_12px] opacity-60 pointer-events-none z-0" />
 
         {/* Dải sóng cong mềm màu xanh pastel bên sườn phải */}
-        <svg 
-          className="absolute right-0 top-[20%] w-48 h-[60%] text-[#dbeeff]/70 pointer-events-none z-0" 
-          viewBox="0 0 200 600" 
-          fill="none" 
+        <svg
+          className="absolute right-0 top-[20%] w-48 h-[60%] text-[#dbeeff]/70 pointer-events-none z-0"
+          viewBox="0 0 200 600"
+          fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path 
-            d="M200 0C110 80 40 180 50 300C60 420 140 500 200 600V0Z" 
-            fill="currentColor" 
+          <path
+            d="M200 0C110 80 40 180 50 300C60 420 140 500 200 600V0Z"
+            fill="currentColor"
           />
         </svg>
 
@@ -419,9 +414,9 @@ function RegisterForm() {
         <div className="absolute -bottom-8 -left-8 w-[240px] h-[200px] rounded-tr-[160px] bg-gradient-to-tr from-[#e7d8ff]/60 to-transparent pointer-events-none z-0" />
 
         {/* Góc trên cùng: Link "Về Careza →" */}
-        <div className="w-full flex justify-end items-start relative z-20 max-w-[400px]">
-          <Link 
-            href="/" 
+        <div className="w-full flex justify-end items-start relative z-20 max-w-[400px] shrink-0 mb-2">
+          <Link
+            href="/"
             className="inline-flex items-center gap-1.5 text-[13px] font-bold text-[#0062ff] hover:text-blue-700 transition-colors py-1 px-2.5 rounded-full hover:bg-blue-50/60"
           >
             <span>Về Careza</span>
@@ -429,41 +424,39 @@ function RegisterForm() {
           </Link>
         </div>
 
-        {/* ==================== KHỐI CARD FORM ĐĂNG KÝ CHÍNH (KHÔNG CUỘN TRANG) ==================== */}
-        <div className="w-full max-w-[400px] my-auto relative z-20">
-          <div className="bg-white rounded-[28px] p-4 sm:p-5 shadow-[0_16px_40px_rgba(0,40,120,0.06)] border border-slate-100/90 relative">
-            
+        {/* ==================== KHỐI CARD FORM ĐĂNG KÝ CHÍNH ==================== */}
+        <div className="w-full max-w-[400px] my-auto relative z-20 py-1">
+          <div className="bg-white rounded-[32px] px-6 py-6 sm:px-7 sm:py-7 shadow-[0_20px_45px_rgba(0,40,120,0.06)] border border-slate-100/90 relative">
+
             {/* Header Form (Căn giữa) */}
-            <div className="mb-2.5 text-center">
-              <h2 className="text-[21px] sm:text-[22px] font-black text-slate-900 tracking-tight m-0 leading-tight">
+            <div className="mb-4 text-center">
+              <h2 className="text-[23px] sm:text-[25px] font-black text-slate-900 tracking-tight m-0 leading-tight">
                 Tạo tài khoản
               </h2>
-              <p className="text-[11.5px] text-slate-400 font-medium mt-0.5">
+              <p className="text-[12px] text-slate-400 font-medium mt-1.5">
                 Bắt đầu hành trình cùng Careza
               </p>
             </div>
 
             {/* Segmented Control / Tab chọn vai trò */}
-            <div className="grid grid-cols-2 bg-[#f1f5f9] p-1 rounded-xl mb-2.5">
+            <div className="grid grid-cols-2 bg-[#f1f5f9] p-1 rounded-xl mb-4">
               <button
                 type="button"
                 onClick={() => setValue("accountType", "CANDIDATE")}
-                className={`py-1 text-xs font-bold rounded-lg transition-all ${
-                  accountType === "CANDIDATE"
+                className={`py-1.5 text-xs font-bold rounded-lg transition-all ${accountType === "CANDIDATE"
                     ? "bg-[#e8f1ff] text-[#0062ff] shadow-xs"
                     : "text-slate-500 hover:text-slate-700"
-                }`}
+                  }`}
               >
                 Người tìm việc
               </button>
               <button
                 type="button"
                 onClick={() => setValue("accountType", "COMPANY")}
-                className={`py-1 text-xs font-bold rounded-lg transition-all ${
-                  accountType === "COMPANY"
+                className={`py-1.5 text-xs font-bold rounded-lg transition-all ${accountType === "COMPANY"
                     ? "bg-[#e8f1ff] text-[#0062ff] shadow-xs"
                     : "text-slate-500 hover:text-slate-700"
-                }`}
+                  }`}
               >
                 Nhà tuyển dụng
               </button>
@@ -471,12 +464,12 @@ function RegisterForm() {
 
             {/* Form Ant Design + React Hook Form */}
             <Form layout="vertical" onFinish={handleSubmit(onSubmit)} requiredMark={false} className="register-input">
-              
+
               {/* Họ và tên */}
               <Form.Item
                 validateStatus={errors.fullName ? "error" : ""}
                 help={errors.fullName?.message}
-                className="mb-1.5"
+                className="!mb-[15px]"
               >
                 <Controller
                   name="fullName"
@@ -492,12 +485,12 @@ function RegisterForm() {
               </Form.Item>
 
               {/* Email & Số điện thoại (Grid 2 cột) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-1.5">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-[15px]">
                 {/* Email */}
                 <Form.Item
                   validateStatus={errors.email ? "error" : ""}
                   help={errors.email?.message}
-                  className="mb-0"
+                  className="!mb-0"
                 >
                   <Controller
                     name="email"
@@ -517,7 +510,7 @@ function RegisterForm() {
                 <Form.Item
                   validateStatus={errors.phoneNumber ? "error" : ""}
                   help={errors.phoneNumber?.message}
-                  className="mb-0"
+                  className="!mb-0"
                 >
                   <Controller
                     name="phoneNumber"
@@ -535,12 +528,12 @@ function RegisterForm() {
 
               {/* Thông tin Doanh nghiệp nếu chọn Nhà tuyển dụng */}
               {accountType === "COMPANY" && (
-                <div className="bg-slate-50/90 p-2 rounded-xl mb-1.5 border border-slate-200/60">
+                <div className="bg-slate-50/90 p-3 rounded-xl mb-[15px] border border-slate-200/60">
                   {/* Tên công ty */}
                   <Form.Item
                     validateStatus={errors.companyName ? "error" : ""}
                     help={errors.companyName?.message}
-                    className="mb-1.5"
+                    className="!mb-3"
                   >
                     <Controller
                       name="companyName"
@@ -559,7 +552,7 @@ function RegisterForm() {
                   <Form.Item
                     validateStatus={errors.taxCode ? "error" : ""}
                     help={errors.taxCode?.message}
-                    className="mb-0"
+                    className="!mb-0"
                   >
                     <Controller
                       name="taxCode"
@@ -577,12 +570,12 @@ function RegisterForm() {
               )}
 
               {/* Mật khẩu & Xác nhận mật khẩu (Grid 2 cột) */}
-              <div className="grid grid-cols-1 sm:grid-cols-2 gap-1.5 mb-2">
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-[19px]">
                 {/* Mật khẩu */}
                 <Form.Item
                   validateStatus={errors.password ? "error" : ""}
                   help={errors.password?.message}
-                  className="mb-0"
+                  className="!mb-0"
                 >
                   <Controller
                     name="password"
@@ -591,7 +584,7 @@ function RegisterForm() {
                       <Input.Password
                         {...field}
                         prefix={<LockOutlined className="text-slate-400 mr-1.5 text-sm" />}
-                        placeholder="Mật khẩu (≥ 8 ký tự, 1 hoa, 1 số)"
+                        placeholder="Mật khẩu (≥ 8 ký tự)"
                         autoComplete="new-password"
                       />
                     )}
@@ -602,7 +595,7 @@ function RegisterForm() {
                 <Form.Item
                   validateStatus={errors.confirmPassword ? "error" : ""}
                   help={errors.confirmPassword?.message}
-                  className="mb-0"
+                  className="!mb-0"
                 >
                   <Controller
                     name="confirmPassword"
@@ -620,42 +613,50 @@ function RegisterForm() {
               </div>
 
               {/* Checkbox Điều khoản & Chính sách */}
-              <div className="mb-2.5">
+              <div className="mb-[18px]">
                 <Controller
                   name="agreeTerms"
                   control={control}
                   render={({ field: { value, onChange } }) => (
-                    <Checkbox 
-                      checked={value} 
-                      onChange={(e) => onChange(e.target.checked)} 
-                      className="text-[10.5px] text-slate-600 font-medium items-start"
+                    <Checkbox
+                      checked={value}
+                      onChange={(e) => onChange(e.target.checked)}
+                      className="text-[11.5px] text-slate-600 font-medium items-start"
                     >
                       Tôi đồng ý với{" "}
-                      <Link href="/dieu-khoan" className="text-[#0062ff] hover:underline font-semibold">
+                      <Link
+                        href="/dieu-khoan?tab=terms"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-[#0062ff] hover:underline font-semibold"
+                      >
                         Điều khoản
                       </Link>{" "}
                       &{" "}
-                      <Link href="/chinh-sach" className="text-[#0062ff] hover:underline font-semibold">
+                      <Link
+                        href="/dieu-khoan?tab=privacy"
+                        onClick={(e) => e.stopPropagation()}
+                        className="text-[#0062ff] hover:underline font-semibold"
+                      >
                         Chính sách bảo mật
                       </Link>
                     </Checkbox>
                   )}
                 />
                 {errors.agreeTerms && (
-                  <div className="text-[10px] text-red-500 mt-0.5 font-medium">
+                  <div className="text-[10.5px] text-red-500 mt-1 font-medium">
                     {errors.agreeTerms.message}
                   </div>
                 )}
               </div>
 
               {/* Button Đăng ký chính */}
-              <Form.Item className="mb-2">
+              <Form.Item className="!mb-[20px]">
                 <Button
                   type="primary"
                   htmlType="submit"
                   block
                   loading={submitting}
-                  className="bg-[#0062ff] hover:bg-[#0052d9] text-white border-none rounded-xl h-9 text-[13px] font-bold shadow-[0_6px_16px_rgba(0,98,255,0.25)] hover:shadow-[0_8px_20px_rgba(0,98,255,0.35)] transition-all flex items-center justify-center gap-1.5"
+                  className="bg-[#0062ff] hover:bg-[#0052d9] text-white border-none rounded-xl h-10 text-[13.5px] font-bold shadow-[0_6px_16px_rgba(0,98,255,0.25)] hover:shadow-[0_8px_20px_rgba(0,98,255,0.35)] transition-all flex items-center justify-center gap-1.5"
                 >
                   <span>Đăng ký tài khoản</span>
                   <span className="text-base leading-none">→</span>
@@ -664,7 +665,7 @@ function RegisterForm() {
 
               {/* Chuyển hướng Đăng nhập */}
               <div className="text-center">
-                <span className="text-[11px] text-slate-500 font-medium">
+                <span className="text-[11.5px] text-slate-500 font-medium">
                   Đã có tài khoản?{" "}
                   <Link href="/dang-nhap" className="text-[#0062ff] hover:underline font-bold">
                     Đăng nhập ngay →
@@ -675,40 +676,8 @@ function RegisterForm() {
           </div>
         </div>
 
-        {/* Footer: An toàn · Bảo mật · Luôn đồng hành */}
-        <div className="relative z-20 flex items-center justify-center gap-6 text-[11px] text-slate-500 font-medium pt-0.5">
-          <div className="flex items-center gap-1.5">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-            <span>An toàn</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-            <span>Bảo mật</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
-            <span>Luôn đồng hành</span>
-          </div>
-        </div>
-
         {/* Shape sóng gradient xanh - tím nhiều lớp góc dưới cùng bên phải */}
-        <div className="hidden lg:flex absolute bottom-0 right-0 w-48 h-36 rounded-tl-[130px] bg-gradient-to-tr from-[#0052d9] via-[#2563eb] to-[#7c3aed] text-white flex-col justify-end p-5 shadow-lg pointer-events-none z-10">
-          <div className="text-[9.5px] font-extrabold tracking-wider leading-tight text-white/95">
-            VÌ NHỮNG ✦<br />
-            GIÁ TRỊ TỐT ĐẸP<br />
-            HƠN MỖI NGÀY
-          </div>
-        </div>
+        <div className="hidden lg:flex absolute bottom-0 right-0 w-48 h-36 rounded-tl-[130px] bg-gradient-to-tr from-[#0052d9] via-[#2563eb] to-[#7c3aed] text-white flex-col justify-end p-5 shadow-lg pointer-events-none z-10" />
 
         {/* Lớp sóng tím phụ phía dưới */}
         <div className="hidden lg:block absolute -bottom-6 -right-6 w-56 h-40 rounded-tl-[140px] bg-gradient-to-tr from-[#3b82f6]/40 to-[#a855f7]/50 blur-[2px] pointer-events-none z-0" />

@@ -5,9 +5,9 @@ import MouseSpotlight from "@/components/common/mouse-spotlight";
 
 export default function AICareerSection() {
   return (
-    <section className="py-16 bg-white w-full border-b border-outline-variant/15">
+    <section className="py-5 md:py-7 bg-white w-full border-b border-outline-variant/15">
       <div className="max-w-container-max mx-auto px-margin-desktop">
-        <div className="relative overflow-hidden bg-gradient-to-br from-[#00174B] via-[#041d56] to-slate-950 text-white rounded-[48px] px-8 sm:px-12 lg:px-16 py-14 lg:py-16 shadow-2xl">
+        <div className="relative overflow-hidden bg-gradient-to-br from-[#00174B] via-[#041d56] to-slate-950 text-white rounded-[36px] lg:rounded-[40px] px-6 sm:px-10 lg:px-12 py-8 sm:py-9 lg:py-10 shadow-2xl">
           {/* Background Ambient Elements */}
           <div className="absolute top-0 right-0 w-[600px] h-[600px] bg-primary/20 rounded-full blur-[100px] -translate-y-1/2 translate-x-1/3 pointer-events-none" />
           <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-[#14b8a6]/15 rounded-full blur-[80px] translate-y-1/2 -translate-x-1/4 pointer-events-none" />
@@ -15,11 +15,11 @@ export default function AICareerSection() {
           {/* Spotlight bám theo chuột */}
           <MouseSpotlight color="rgba(20, 184, 166, 0.08), rgba(0, 74, 198, 0.06)" />
 
-          <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-14 items-center relative z-10">
+          <div className="grid grid-cols-1 lg:grid-cols-12 gap-8 lg:gap-10 items-center relative z-10">
             {/* Cột trái: Thông tin và các tính năng */}
             <div className="lg:col-span-7">
               {/* Badge */}
-              <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full mb-6 border border-white/20 text-xs font-black tracking-wider uppercase text-[#71f8e4]">
+              <div className="inline-flex items-center gap-2 bg-white/10 px-4 py-1.5 rounded-full mb-4 border border-white/20 text-xs font-black tracking-wider uppercase text-[#71f8e4]">
                 <span className="material-symbols-outlined text-[16px]" style={{ fontVariationSettings: "'FILL' 1" }}>
                   auto_awesome
                 </span>
@@ -27,18 +27,18 @@ export default function AICareerSection() {
               </div>
 
               {/* Tiêu đề */}
-              <h2 className="text-3xl sm:text-4xl md:text-5xl font-black mb-4 leading-[1.15] tracking-tight">
+              <h2 className="text-3xl sm:text-4xl font-black mb-3 leading-[1.15] tracking-tight">
                 Hiểu hồ sơ – Tìm đúng cơ hội <br />
                 <span className="text-[#71f8e4]">cùng Careza</span>
               </h2>
 
               {/* Mô tả ngắn */}
-              <p className="text-white/80 text-base md:text-lg leading-relaxed mb-8 max-w-xl">
+              <p className="text-white/80 text-base leading-relaxed mb-5 max-w-xl">
                 Careza phân tích hồ sơ và kết nối bạn với những cơ hội việc làm phù hợp hơn.
               </p>
 
               {/* 3 Cards Tính năng */}
-              <div className="space-y-3.5 mb-8">
+              <div className="space-y-3 mb-6">
                 {/* 1. Phân tích & tối ưu CV */}
                 <div className="group flex gap-4 sm:gap-5 items-start p-4 sm:p-5 rounded-2xl bg-white/5 border border-white/10 hover:bg-white/10 hover:border-white/25 transition-all">
                   <div className="w-12 h-12 rounded-xl bg-primary/25 flex items-center justify-center shrink-0 border border-white/15 text-[#b4c5ff]">

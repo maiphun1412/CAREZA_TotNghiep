@@ -1,9 +1,11 @@
 "use client";
 
-import { useState, useMemo, Suspense } from "react";
+import { useState, useMemo, useEffect, useCallback, Suspense } from "react";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
+import { employerService } from "@/services/employer.service";
+
 import {
   Dropdown,
   Tooltip,
@@ -84,12 +86,14 @@ export interface PipelineCandidate {
   id: string;
   name: string;
   avatar: string;
+  jobId?: string | number;
   jobTitle: string;
   jobCode: string;
   stage: PipelineStage;
   source: "Website" | "LinkedIn" | "Referral" | "VietnamWorks" | "TopCV";
   timeAgo: string;
   appliedDate: string;
+  appliedAtRaw?: number;
   rating: number;
   email: string;
   phone: string;
@@ -99,6 +103,9 @@ export interface PipelineCandidate {
   skills: string[];
   notes?: string;
   cvName: string;
+  cvFileUrl?: string | null;
+  matchScore?: number | null;
+  coverLetter?: string;
 }
 
 // Stage visual configurations (matching pastel colors from reference screenshot)
@@ -116,8 +123,8 @@ export const STAGE_COLUMNS: {
 }[] = [
   {
     key: "NEW",
-    label: "Mới",
-    count: 312,
+    label: "Mới nộp",
+    count: 0,
     colBg: "bg-[#F4F8FD]",
     colBorder: "border-blue-200/90",
     headerColor: "text-[#0062ff]",
@@ -129,7 +136,7 @@ export const STAGE_COLUMNS: {
   {
     key: "SCREENING",
     label: "Sàng lọc",
-    count: 226,
+    count: 0,
     colBg: "bg-[#F2F7FC]",
     colBorder: "border-sky-200/90",
     headerColor: "text-[#0284c7]",
@@ -140,8 +147,8 @@ export const STAGE_COLUMNS: {
   },
   {
     key: "MATCHED",
-    label: "Phù hợp",
-    count: 328,
+    label: "Danh sách phù hợp",
+    count: 0,
     colBg: "bg-[#FAF7FD]",
     colBorder: "border-purple-200/90",
     headerColor: "text-[#9333ea]",
@@ -153,7 +160,7 @@ export const STAGE_COLUMNS: {
   {
     key: "INTERVIEW",
     label: "Phỏng vấn",
-    count: 192,
+    count: 0,
     colBg: "bg-[#FEF9F2]",
     colBorder: "border-amber-200/90",
     headerColor: "text-[#d97706]",
@@ -164,8 +171,8 @@ export const STAGE_COLUMNS: {
   },
   {
     key: "OFFER",
-    label: "Offer",
-    count: 48,
+    label: "Đề nghị nhận việc",
+    count: 0,
     colBg: "bg-[#FDF5F5]",
     colBorder: "border-rose-200/90",
     headerColor: "text-[#e11d48]",
@@ -176,8 +183,8 @@ export const STAGE_COLUMNS: {
   },
   {
     key: "HIRED",
-    label: "Đã nhận việc",
-    count: 24,
+    label: "Trúng tuyển",
+    count: 0,
     colBg: "bg-[#F2FAF6]",
     colBorder: "border-emerald-200/90",
     headerColor: "text-[#059669]",
@@ -189,7 +196,7 @@ export const STAGE_COLUMNS: {
   {
     key: "REJECTED",
     label: "Đã từ chối",
-    count: 118,
+    count: 0,
     colBg: "bg-[#FDF5F5]",
     colBorder: "border-rose-200/90",
     headerColor: "text-[#e11d48]",
@@ -203,447 +210,7 @@ export const STAGE_COLUMNS: {
 // =====================================================================
 // INITIAL PIPELINE CANDIDATES (MATCHING REFERENCE EXACTLY)
 // =====================================================================
-const INITIAL_PIPELINE_CANDIDATES: PipelineCandidate[] = [
-  // 1. Column MỚI
-  {
-    id: "p-cand-1",
-    name: "Nguyễn Minh Anh",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Product Manager",
-    jobCode: "PM-2408",
-    stage: "NEW",
-    source: "Website",
-    timeAgo: "2 giờ trước",
-    appliedDate: "16/08/2026",
-    rating: 5,
-    email: "minhanh@gmail.com",
-    phone: "0345 678 901",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 4,
-    education: "Cử nhân Quản trị Kinh doanh - ĐH Ngoại Thương",
-    skills: ["Product Strategy", "Roadmap", "Scrum", "User Research", "Agile"],
-    cvName: "Nguyen_Minh_Anh_CV.pdf",
-    notes: "Kinh nghiệm tốt về quản trị sản phẩm B2B SaaS, tư duy logic số liệu xuất sắc.",
-  },
-  {
-    id: "p-cand-2",
-    name: "Trần Hoàng Nam",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Senior UX/UI Designer",
-    jobCode: "UX-2408",
-    stage: "NEW",
-    source: "LinkedIn",
-    timeAgo: "4 giờ trước",
-    appliedDate: "16/08/2026",
-    rating: 4,
-    email: "namth@outlook.com",
-    phone: "0389 123 456",
-    location: "Hà Nội, Việt Nam",
-    experienceYears: 5,
-    education: "Cử nhân Thiết kế Đồ họa - ĐH Mỹ thuật Công nghiệp",
-    skills: ["Figma", "Design System", "Prototyping", "UX Audit", "Mobile App UI"],
-    cvName: "Tran_Hoang_Nam_Portfolio.pdf",
-    notes: "Portfolio thực tế ấn tượng, từng làm việc ở Agency lớn và dự án Fintech.",
-  },
-  {
-    id: "p-cand-3",
-    name: "Lê Quang Huy",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Frontend Developer",
-    jobCode: "FE-2407",
-    stage: "NEW",
-    source: "Referral",
-    timeAgo: "1 ngày trước",
-    appliedDate: "15/08/2026",
-    rating: 4,
-    email: "lequanghuy@gmail.com",
-    phone: "0378 456 789",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 3,
-    education: "Kỹ sư CNTT - ĐH Bách Khoa TP.HCM",
-    skills: ["React", "TypeScript", "Next.js", "TailwindCSS", "Redux"],
-    cvName: "Le_Quang_Huy_CV.pdf",
-    notes: "Được Tech lead giới thiệu, nắm vững Next.js và TailwindCSS.",
-  },
-  {
-    id: "p-cand-4",
-    name: "Phạm Thu Hằng",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Data Analyst",
-    jobCode: "DA-2406",
-    stage: "NEW",
-    source: "VietnamWorks",
-    timeAgo: "1 ngày trước",
-    appliedDate: "15/08/2026",
-    rating: 5,
-    email: "hangpt@gmail.com",
-    phone: "0367 890 123",
-    location: "Đà Nẵng, Việt Nam",
-    experienceYears: 3,
-    education: "Cử nhân Thống kê Kinh tế - ĐH Kinh tế Quốc dân",
-    skills: ["SQL", "Python", "PowerBI", "Tableau", "Data Modeling"],
-    cvName: "Pham_Thu_Hang_Data_CV.pdf",
-    notes: "Tư duy logic số liệu sắc bén, có chứng chỉ Google Data Analytics Certified.",
-  },
-  {
-    id: "p-cand-5",
-    name: "Vũ Ngọc Mai",
-    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "HR Generalist",
-    jobCode: "HR-2408",
-    stage: "NEW",
-    source: "Website",
-    timeAgo: "2 ngày trước",
-    appliedDate: "14/08/2026",
-    rating: 3,
-    email: "ngocmai@gmail.com",
-    phone: "0356 123 789",
-    location: "Hà Nội, Việt Nam",
-    experienceYears: 2,
-    education: "Cử nhân Quản trị Nhân lực - ĐH Thương mại",
-    skills: ["Recruitment", "C&B", "Labor Law", "Onboarding"],
-    cvName: "Vu_Ngoc_Mai_HR_CV.pdf",
-    notes: "Có kinh nghiệm tổng hợp nhân sự tại công ty quy mô 100 người.",
-  },
-
-  // 2. Column SÀNG LỌC
-  {
-    id: "p-cand-6",
-    name: "Hoàng Tuấn Anh",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Product Manager",
-    jobCode: "PM-2408",
-    stage: "SCREENING",
-    source: "Website",
-    timeAgo: "1 ngày trước",
-    appliedDate: "15/08/2026",
-    rating: 4,
-    email: "tuananh@gmail.com",
-    phone: "0333 444 555",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 4,
-    education: "Kỹ sư Phần mềm - ĐH FPT",
-    skills: ["Product Strategy", "Agile", "SQL", "User Story Mapping"],
-    cvName: "Hoang_Tuan_Anh_CV.pdf",
-    notes: "Đã qua vòng kiểm tra CV, đang chờ xếp lịch gọi sàng lọc sơ bộ.",
-  },
-  {
-    id: "p-cand-7",
-    name: "Nguyễn Thị Phương",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "UI/UX Designer",
-    jobCode: "UX-2408",
-    stage: "SCREENING",
-    source: "LinkedIn",
-    timeAgo: "2 ngày trước",
-    appliedDate: "14/08/2026",
-    rating: 4,
-    email: "phuongnt@gmail.com",
-    phone: "0344 555 666",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 3,
-    skills: ["Figma", "UI Design", "Wireframing"],
-    cvName: "Nguyen_Thi_Phuong_Portfolio.pdf",
-  },
-  {
-    id: "p-cand-8",
-    name: "Đỗ Mạnh Cường",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Frontend Developer",
-    jobCode: "FE-2407",
-    stage: "SCREENING",
-    source: "TopCV",
-    timeAgo: "2 ngày trước",
-    appliedDate: "14/08/2026",
-    rating: 4,
-    email: "cuongdm@gmail.com",
-    phone: "0355 666 777",
-    location: "Hà Nội, Việt Nam",
-    experienceYears: 3,
-    skills: ["React", "VueJS", "TailwindCSS"],
-    cvName: "Do_Manh_Cuong_CV.pdf",
-  },
-  {
-    id: "p-cand-9",
-    name: "Trần Thị Bảo Châu",
-    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Data Analyst",
-    jobCode: "DA-2406",
-    stage: "SCREENING",
-    source: "Referral",
-    timeAgo: "3 ngày trước",
-    appliedDate: "13/08/2026",
-    rating: 5,
-    email: "chautb@gmail.com",
-    phone: "0366 777 888",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 3,
-    skills: ["SQL", "Tableau", "Statistics"],
-    cvName: "Tran_Thi_Bao_Chau_CV.pdf",
-  },
-
-  // 3. Column PHÙ HỢP
-  {
-    id: "p-cand-10",
-    name: "Nguyễn Đức Anh",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "DevOps Engineer",
-    jobCode: "DEVOPS-2408",
-    stage: "MATCHED",
-    source: "TopCV",
-    timeAgo: "2 ngày trước",
-    appliedDate: "14/08/2026",
-    rating: 5,
-    email: "ducanh.dev@gmail.com",
-    phone: "0377 888 999",
-    location: "Hà Nội, Việt Nam",
-    experienceYears: 4,
-    skills: ["AWS", "Docker", "Kubernetes", "CI/CD"],
-    cvName: "Nguyen_Duc_Anh_DevOps.pdf",
-  },
-  {
-    id: "p-cand-11",
-    name: "Lê Thị Ngọc Ánh",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Product Manager",
-    jobCode: "PM-2408",
-    stage: "MATCHED",
-    source: "Website",
-    timeAgo: "3 ngày trước",
-    appliedDate: "13/08/2026",
-    rating: 5,
-    email: "ngocanh@gmail.com",
-    phone: "0388 999 000",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 5,
-    skills: ["Product Roadmap", "Growth", "A/B Testing"],
-    cvName: "Le_Thi_Ngoc_Anh_PM.pdf",
-  },
-  {
-    id: "p-cand-12",
-    name: "Phan Văn Dũng",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Backend Developer",
-    jobCode: "BE-2407",
-    stage: "MATCHED",
-    source: "LinkedIn",
-    timeAgo: "3 ngày trước",
-    appliedDate: "13/08/2026",
-    rating: 4,
-    email: "dungpv@gmail.com",
-    phone: "0399 000 111",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 3,
-    skills: ["Golang", "NestJS", "PostgreSQL"],
-    cvName: "Phan_Van_Dung_Backend.pdf",
-  },
-  {
-    id: "p-cand-13",
-    name: "Võ Minh Tâm",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Data Engineer",
-    jobCode: "DA-2406",
-    stage: "MATCHED",
-    source: "VietnamWorks",
-    timeAgo: "4 ngày trước",
-    appliedDate: "12/08/2026",
-    rating: 4,
-    email: "tamvm@gmail.com",
-    phone: "0311 222 333",
-    location: "Hà Nội, Việt Nam",
-    experienceYears: 4,
-    skills: ["Python", "Spark", "Airflow", "ETL"],
-    cvName: "Vo_Minh_Tam_DataEngineer.pdf",
-  },
-
-  // 4. Column PHỎNG VẤN
-  {
-    id: "p-cand-14",
-    name: "Bùi Quốc Khánh",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Product Manager",
-    jobCode: "PM-2408",
-    stage: "INTERVIEW",
-    source: "Website",
-    timeAgo: "4 ngày trước",
-    appliedDate: "12/08/2026",
-    rating: 5,
-    email: "khanhbq@gmail.com",
-    phone: "0322 333 444",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 4,
-    skills: ["Product Strategy", "Leadership"],
-    cvName: "Bui_Quoc_Khanh_PM.pdf",
-  },
-  {
-    id: "p-cand-15",
-    name: "Nguyễn Thùy Linh",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "UX/UI Designer",
-    jobCode: "UX-2408",
-    stage: "INTERVIEW",
-    source: "LinkedIn",
-    timeAgo: "5 ngày trước",
-    appliedDate: "11/08/2026",
-    rating: 4,
-    email: "linhnt@gmail.com",
-    phone: "0333 444 555",
-    location: "Hà Nội, Việt Nam",
-    experienceYears: 3,
-    skills: ["Figma", "Design System"],
-    cvName: "Nguyen_Thuy_Linh_Design.pdf",
-  },
-  {
-    id: "p-cand-16",
-    name: "Trần Bảo Long",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Frontend Developer",
-    jobCode: "FE-2407",
-    stage: "INTERVIEW",
-    source: "Referral",
-    timeAgo: "5 ngày trước",
-    appliedDate: "11/08/2026",
-    rating: 4,
-    email: "longtb@gmail.com",
-    phone: "0344 555 666",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 3,
-    skills: ["React", "Next.js", "TypeScript"],
-    cvName: "Tran_Bao_Long_Frontend.pdf",
-  },
-  {
-    id: "p-cand-17",
-    name: "Đặng Hải Yến",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Data Analyst",
-    jobCode: "DA-2406",
-    stage: "INTERVIEW",
-    source: "TopCV",
-    timeAgo: "6 ngày trước",
-    appliedDate: "10/08/2026",
-    rating: 4,
-    email: "yendh@gmail.com",
-    phone: "0355 666 777",
-    location: "Đà Nẵng, Việt Nam",
-    experienceYears: 3,
-    skills: ["SQL", "PowerBI", "Python"],
-    cvName: "Dang_Hai_Yen_Data.pdf",
-  },
-
-  // 5. Column OFFER
-  {
-    id: "p-cand-18",
-    name: "Lưu Quang Minh",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Product Manager",
-    jobCode: "PM-2408",
-    stage: "OFFER",
-    source: "Website",
-    timeAgo: "7 ngày trước",
-    appliedDate: "09/08/2026",
-    rating: 5,
-    email: "minhlq@gmail.com",
-    phone: "0366 777 888",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 5,
-    skills: ["Leadership", "Product Strategy", "SaaS"],
-    cvName: "Luu_Quang_Minh_Offer.pdf",
-  },
-  {
-    id: "p-cand-19",
-    name: "Nguyễn Ngọc Trâm",
-    avatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "UX Researcher",
-    jobCode: "UX-2408",
-    stage: "OFFER",
-    source: "LinkedIn",
-    timeAgo: "7 ngày trước",
-    appliedDate: "09/08/2026",
-    rating: 5,
-    email: "tramnn@gmail.com",
-    phone: "0377 888 999",
-    location: "Hà Nội, Việt Nam",
-    experienceYears: 4,
-    skills: ["User Research", "Usability Testing"],
-    cvName: "Nguyen_Ngoc_Tram_Offer.pdf",
-  },
-  {
-    id: "p-cand-20",
-    name: "Phạm Khánh Duy",
-    avatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Frontend Developer",
-    jobCode: "FE-2407",
-    stage: "OFFER",
-    source: "Referral",
-    timeAgo: "8 ngày trước",
-    appliedDate: "08/08/2026",
-    rating: 5,
-    email: "duypk@gmail.com",
-    phone: "0388 999 000",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 4,
-    skills: ["React", "TypeScript", "Performance Tuning"],
-    cvName: "Pham_Khanh_Duy_Offer.pdf",
-  },
-
-  // 6. Column ĐÃ NHẬN VIỆC
-  {
-    id: "p-cand-21",
-    name: "Mai Anh Tuấn",
-    avatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Product Manager",
-    jobCode: "PM-2408",
-    stage: "HIRED",
-    source: "Website",
-    timeAgo: "10 ngày trước",
-    appliedDate: "06/08/2026",
-    rating: 5,
-    email: "tuanma@gmail.com",
-    phone: "0399 000 111",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 5,
-    skills: ["Product Growth", "Fintech", "Scrum Master"],
-    cvName: "Mai_Anh_Tuan_Hired.pdf",
-  },
-  {
-    id: "p-cand-22",
-    name: "Vũ Thị Huyền",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Data Analyst",
-    jobCode: "DA-2406",
-    stage: "HIRED",
-    source: "LinkedIn",
-    timeAgo: "12 ngày trước",
-    appliedDate: "04/08/2026",
-    rating: 5,
-    email: "huyenvt@gmail.com",
-    phone: "0311 222 333",
-    location: "Hà Nội, Việt Nam",
-    experienceYears: 4,
-    skills: ["BigQuery", "Looker", "Machine Learning"],
-    cvName: "Vu_Thi_Huyen_Hired.pdf",
-  },
-
-  // 7. Column ĐÃ TỪ CHỐI
-  {
-    id: "p-cand-23",
-    name: "Đinh Văn Hòa",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-    jobTitle: "Senior UX/UI Designer",
-    jobCode: "UX-2408",
-    stage: "REJECTED",
-    source: "LinkedIn",
-    timeAgo: "14 ngày trước",
-    appliedDate: "02/08/2026",
-    rating: 3,
-    email: "hoadv@gmail.com",
-    phone: "0322 111 444",
-    location: "Hồ Chí Minh, Việt Nam",
-    experienceYears: 4,
-    skills: ["Figma", "UI Design"],
-    cvName: "Dinh_Van_Hoa_CV.pdf",
-  },
-];
+const INITIAL_PIPELINE_CANDIDATES: PipelineCandidate[] = [];
 
 // =====================================================================
 // COMPONENT MAIN
@@ -657,7 +224,9 @@ function EmployerPipelineContent() {
   const jobIdFromQuery = searchParams.get("jobId");
 
   // State
-  const [candidates, setCandidates] = useState<PipelineCandidate[]>(INITIAL_PIPELINE_CANDIDATES);
+  const [candidates, setCandidates] = useState<PipelineCandidate[]>([]);
+  const [jobsList, setJobsList] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
   const [selectedJob, setSelectedJob] = useState<string>(jobIdFromQuery || "all");
   const [selectedPosition, setSelectedPosition] = useState<string>("all");
   const [selectedSource, setSelectedSource] = useState<string>("all");
@@ -665,6 +234,96 @@ function EmployerPipelineContent() {
   const [selectedSort, setSelectedSort] = useState<string>("newest");
   const [viewMode, setViewMode] = useState<"kanban" | "list">("kanban");
   const [searchQuery, setSearchQuery] = useState<string>("");
+
+  const stageMapToString: Record<PipelineStage, string> = {
+    NEW: "submitted",
+    SCREENING: "screening",
+    MATCHED: "shortlisted",
+    INTERVIEW: "interview",
+    OFFER: "offered",
+    HIRED: "hired",
+    REJECTED: "rejected",
+  };
+
+  // Tải danh sách tin tuyển dụng thật của doanh nghiệp
+  useEffect(() => {
+    employerService
+      .getJobs({ page_size: 100 })
+      .then((res) => {
+        setJobsList(res?.data?.items || []);
+      })
+      .catch(() => setJobsList([]));
+  }, []);
+
+  const fetchPipelineCandidates = useCallback(async () => {
+    setLoading(true);
+    try {
+      const res = await employerService.getApplications({
+        jobId: selectedJob !== "all" ? selectedJob : undefined,
+      });
+      const list = res?.data?.applications || [];
+      const mapped = list.map((app: any) => {
+        const s = String(app.status || "").toLowerCase();
+        const stage: PipelineStage =
+          s === "submitted"
+            ? "NEW"
+            : s === "screening"
+            ? "SCREENING"
+            : s === "shortlisted" || s === "test"
+            ? "MATCHED"
+            : s === "interview"
+            ? "INTERVIEW"
+            : s === "offered"
+            ? "OFFER"
+            : s === "hired"
+            ? "HIRED"
+            : s === "rejected"
+            ? "REJECTED"
+            : "NEW";
+
+        return {
+          id: String(app.id),
+          jobId: app.job?.id,
+          name: app.candidate?.full_name || app.candidate?.name || "Ứng viên",
+          avatar:
+            app.candidate?.avatar_url ||
+            app.candidate?.avatar ||
+            "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+          jobTitle: app.job?.title || "Vị trí tuyển dụng",
+          jobCode: app.job?.slug || `JD-${app.job?.id || ""}`,
+          stage: stage,
+          source: app.source || "CAREZA Portal",
+          timeAgo: "Gần đây",
+          appliedDate: app.applied_at
+            ? new Date(app.applied_at).toLocaleDateString("vi-VN")
+            : "Hôm nay",
+          appliedAtRaw: app.applied_at ? new Date(app.applied_at).getTime() : 0,
+          rating: app.rating || 4,
+          email: app.candidate?.email || "",
+          phone: app.candidate?.phone || "",
+          location: app.candidate?.location || "Việt Nam",
+          experienceYears: app.candidate?.experience_years || 2,
+          education: app.candidate?.education || "Đại học",
+          skills: app.candidate?.skills || [],
+          cvName: app.cv?.title || "CV_Ung_Vien.pdf",
+          cvFileUrl: app.cv?.file_url || null,
+          matchScore: typeof app.match_score === "number" ? app.match_score : null,
+          coverLetter: app.cover_letter || "",
+          notes: app.note || "",
+        };
+      });
+      setCandidates(mapped);
+    } catch {
+      setCandidates([]);
+    } finally {
+      setLoading(false);
+    }
+  }, [selectedJob]);
+
+  useEffect(() => {
+    fetchPipelineCandidates();
+  }, [fetchPipelineCandidates]);
+
 
   // Drag & Drop State
   const [draggingCardId, setDraggingCardId] = useState<string | null>(null);
@@ -711,7 +370,6 @@ function EmployerPipelineContent() {
   const openModal = (candidate: PipelineCandidate, action: PipelineActionType) => {
     setActiveCandidate(candidate);
     setActiveAction(action);
-    // Initialize modal state defaults
     if (action === "move-stage") {
       setTargetStage(candidate.stage);
       setMoveStageNote("");
@@ -728,63 +386,103 @@ function EmployerPipelineContent() {
   };
 
   // Move Stage Handler
-  const handleConfirmMoveStage = () => {
+  const handleConfirmMoveStage = async () => {
     if (!activeCandidate) return;
     setActionLoading(true);
-    setTimeout(() => {
+    const prevStage = activeCandidate.stage;
+    try {
+      if (targetStage === "HIRED") {
+        await employerService.markAsHired(activeCandidate.id);
+      } else if (targetStage === "REJECTED") {
+        await employerService.rejectApplication(activeCandidate.id, moveStageNote || "Hồ sơ chưa phù hợp.");
+      } else {
+        await employerService.changeStage(activeCandidate.id, stageMapToString[targetStage] || "submitted", moveStageNote);
+      }
       setCandidates((prev) =>
         prev.map((c) => (c.id === activeCandidate.id ? { ...c, stage: targetStage } : c))
       );
       const stageName = STAGE_COLUMNS.find((s) => s.key === targetStage)?.label || targetStage;
       message.success(`Đã chuyển ứng viên "${activeCandidate.name}" sang giai đoạn "${stageName}" thành công!`);
       closeModal();
-    }, 400);
+    } catch (err: any) {
+      setCandidates((prev) =>
+        prev.map((c) => (c.id === activeCandidate.id ? { ...c, stage: prevStage } : c))
+      );
+      message.error(err?.response?.data?.message || "Lỗi khi chuyển giai đoạn ứng viên.");
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   // Schedule Interview Handler
-  const handleConfirmScheduleInterview = () => {
+  const handleConfirmScheduleInterview = async () => {
     if (!activeCandidate) return;
+    if (!interviewDate) {
+      message.warning("Vui lòng chọn ngày và giờ phỏng vấn.");
+      return;
+    }
     setActionLoading(true);
-    setTimeout(() => {
+    try {
+      const res = await employerService.createInterview({
+        application_id: Number(activeCandidate.id),
+        mode: interviewFormat,
+        meeting_url: interviewLocationOrLink,
+        scheduled_at: interviewDate,
+        notes: interviewNote,
+      });
+
       setCandidates((prev) =>
         prev.map((c) => (c.id === activeCandidate.id ? { ...c, stage: "INTERVIEW" } : c))
       );
-      message.success(`Đã lên lịch phỏng vấn cho ứng viên "${activeCandidate.name}" thành công!`);
+
+      if ((res as any)?.has_conflict) {
+        message.warning((res as any)?.conflict_message || "Đã tạo lịch nhưng có trùng giờ phỏng vấn!");
+      } else {
+        message.success(`Đã lên lịch phỏng vấn và chuyển ứng viên "${activeCandidate.name}" sang giai đoạn Phỏng vấn!`);
+      }
       closeModal();
-    }, 450);
+    } catch (err: any) {
+      const errDetail = err?.response?.data?.error || "Lỗi khi tạo lịch phỏng vấn.";
+      message.error(errDetail);
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   // Talent Pool Handler
   const handleConfirmSaveTalentPool = () => {
     if (!activeCandidate) return;
-    setActionLoading(true);
-    setTimeout(() => {
-      message.success(`Đã lưu "${activeCandidate.name}" vào Talent Pool (${poolGroup})!`);
-      closeModal();
-    }, 400);
+    message.success(`Đã lưu "${activeCandidate.name}" vào Talent Pool (${poolGroup})!`);
+    closeModal();
   };
 
   // Send Message Handler
   const handleConfirmSendMessage = () => {
     if (!activeCandidate) return;
-    setActionLoading(true);
-    setTimeout(() => {
-      message.success(`Đã gửi tin nhắn đến ứng viên "${activeCandidate.name}" thành công!`);
-      closeModal();
-    }, 400);
+    message.success(`Đã gửi tin nhắn đến ứng viên "${activeCandidate.name}" thành công!`);
+    closeModal();
   };
 
   // Reject Candidate Handler
-  const handleConfirmReject = () => {
+  const handleConfirmReject = async () => {
     if (!activeCandidate) return;
     setActionLoading(true);
-    setTimeout(() => {
+    const prevStage = activeCandidate.stage;
+    try {
+      await employerService.rejectApplication(activeCandidate.id, rejectionNote || "Hồ sơ chưa phù hợp.");
       setCandidates((prev) =>
         prev.map((c) => (c.id === activeCandidate.id ? { ...c, stage: "REJECTED" } : c))
       );
       message.success(`Đã chuyển ứng viên "${activeCandidate.name}" sang giai đoạn Đã từ chối!`);
       closeModal();
-    }, 400);
+    } catch (err: any) {
+      setCandidates((prev) =>
+        prev.map((c) => (c.id === activeCandidate.id ? { ...c, stage: prevStage } : c))
+      );
+      message.error(err?.response?.data?.message || "Lỗi cập nhật từ chối hồ sơ.");
+    } finally {
+      setActionLoading(false);
+    }
   };
 
   // HTML5 Drag & Drop handlers
@@ -804,23 +502,60 @@ function EmployerPipelineContent() {
     setDragOverStage(null);
   };
 
-  const handleDrop = (e: React.DragEvent, targetStageVal: PipelineStage) => {
+  const handleDrop = async (e: React.DragEvent, targetStageVal: PipelineStage) => {
     e.preventDefault();
     const candidateId = e.dataTransfer.getData("text/plain");
-    if (candidateId) {
-      setCandidates((prev) =>
-        prev.map((c) => (c.id === candidateId ? { ...c, stage: targetStageVal } : c))
-      );
-      const stageName = STAGE_COLUMNS.find((s) => s.key === targetStageVal)?.label || targetStageVal;
-      message.success(`Đã chuyển ứng viên sang giai đoạn "${stageName}"!`);
+    if (!candidateId) return;
+
+    const currentCandidate = candidates.find((c) => c.id === candidateId);
+    if (!currentCandidate) return;
+
+    if (currentCandidate.stage === targetStageVal) {
+      setDraggingCardId(null);
+      setDragOverStage(null);
+      return;
     }
-    setDraggingCardId(null);
-    setDragOverStage(null);
+
+    // Chặn chuyển trạng thái không hợp lệ:
+    if (currentCandidate.stage === "HIRED" || currentCandidate.stage === "REJECTED") {
+      message.warning(`Hồ sơ đã ở giai đoạn "${currentCandidate.stage === "HIRED" ? "Trúng tuyển" : "Đã từ chối"}", không thể chuyển ngược vòng.`);
+      setDraggingCardId(null);
+      setDragOverStage(null);
+      return;
+    }
+
+    const prevStage = currentCandidate.stage;
+    // Optimistic update
+    setCandidates((prev) =>
+      prev.map((c) => (c.id === candidateId ? { ...c, stage: targetStageVal } : c))
+    );
+
+    try {
+      if (targetStageVal === "HIRED") {
+        await employerService.markAsHired(candidateId);
+      } else if (targetStageVal === "REJECTED") {
+        await employerService.rejectApplication(candidateId, "Từ chối trong Pipeline tuyển dụng.");
+      } else {
+        await employerService.changeStage(candidateId, stageMapToString[targetStageVal] || "submitted");
+      }
+      const stageName = STAGE_COLUMNS.find((s) => s.key === targetStageVal)?.label || targetStageVal;
+      message.success(`Đã chuyển ứng viên "${currentCandidate.name}" sang "${stageName}" thành công!`);
+    } catch (err: any) {
+      // Khôi phục trạng thái ban đầu nếu thất bại
+      setCandidates((prev) =>
+        prev.map((c) => (c.id === candidateId ? { ...c, stage: prevStage } : c))
+      );
+      message.error(err?.response?.data?.message || "Lỗi khi cập nhật trạng thái. Đã khôi phục trạng thái ban đầu.");
+    } finally {
+      setDraggingCardId(null);
+      setDragOverStage(null);
+    }
   };
+
 
   // Filtered dataset
   const filteredCandidates = useMemo(() => {
-    return candidates.filter((c) => {
+    const list = candidates.filter((c) => {
       // Search
       if (searchQuery.trim()) {
         const q = searchQuery.toLowerCase();
@@ -834,14 +569,27 @@ function EmployerPipelineContent() {
         if (!matches) return false;
       }
       // Job
-      if (selectedJob !== "all" && c.jobCode !== selectedJob) return false;
+      if (selectedJob !== "all" && String(c.jobId) !== selectedJob && c.jobCode !== selectedJob) return false;
       // Position
       if (selectedPosition !== "all" && !c.jobTitle.includes(selectedPosition)) return false;
       // Source
       if (selectedSource !== "all" && c.source !== selectedSource) return false;
       return true;
     });
-  }, [candidates, searchQuery, selectedJob, selectedPosition, selectedSource]);
+
+    const sorted = [...list];
+    if (selectedSort === "rating") {
+      sorted.sort((a, b) => (b.rating || 0) - (a.rating || 0));
+    } else if (selectedSort === "match-score") {
+      sorted.sort((a, b) => (b.matchScore || 0) - (a.matchScore || 0));
+    } else if (selectedSort === "oldest") {
+      sorted.sort((a, b) => (a.appliedAtRaw || 0) - (b.appliedAtRaw || 0));
+    } else {
+      // Sắp xếp mới nhất theo applied_at
+      sorted.sort((a, b) => (b.appliedAtRaw || 0) - (a.appliedAtRaw || 0));
+    }
+    return sorted;
+  }, [candidates, searchQuery, selectedJob, selectedPosition, selectedSource, selectedSort]);
 
   // Context Menu Items for Card (Click item closes menu & opens Center Modal)
   const getCardMenuItems = (candidate: PipelineCandidate) => {
@@ -1012,12 +760,10 @@ function EmployerPipelineContent() {
             popupMatchSelectWidth={false}
             options={[
               { value: "all", label: "Tất cả tin tuyển dụng" },
-              { value: "PM-2408", label: "Product Manager (PM-2408)" },
-              { value: "UX-2408", label: "Senior UX/UI Designer (UX-2408)" },
-              { value: "FE-2407", label: "Frontend Developer (FE-2407)" },
-              { value: "DA-2406", label: "Data Analyst (DA-2406)" },
-              { value: "HR-2408", label: "HR Generalist (HR-2408)" },
-              { value: "DEVOPS-2408", label: "DevOps Engineer (DEVOPS-2408)" },
+              ...jobsList.map((job) => ({
+                value: String(job.id),
+                label: `${job.title} (${job.id})`,
+              })),
             ]}
           />
 
@@ -1071,13 +817,14 @@ function EmployerPipelineContent() {
           <Select
             value={selectedSort}
             onChange={setSelectedSort}
-            className="custom-filter-select text-xs min-w-[140px]"
+            className="custom-filter-select text-xs min-w-[155px]"
             size="small"
             suffixIcon={<Calendar className="w-3 h-3 text-slate-400" />}
             options={[
-              { value: "newest", label: "Ngày tạo (Mới nhất)" },
-              { value: "oldest", label: "Ngày tạo (Cũ nhất)" },
-              { value: "rating", label: "Đánh giá cao nhất" },
+              { value: "newest", label: "Thời gian nộp (Mới nhất)" },
+              { value: "oldest", label: "Thời gian nộp (Cũ nhất)" },
+              { value: "match-score", label: "Điểm CV–JD cao nhất" },
+              { value: "rating", label: "Đánh giá sao cao nhất" },
             ]}
           />
         </div>
@@ -1105,124 +852,142 @@ function EmployerPipelineContent() {
       </div>
 
       {/* ======================================================== */}
-      {/* 3. TỔNG QUAN PIPELINE (8 KPI MINI CARDS - CENTERED)      */}
+      {/* 3. TỔNG QUAN PIPELINE (8 KPI MINI CARDS - DYNAMIC)      */}
       {/* ======================================================== */}
       <div className="space-y-1.5">
         <span className="text-[11px] font-semibold text-slate-600 block">Tổng quan pipeline</span>
 
-        <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
-          {/* Card 1: Tổng ứng viên */}
-          <div className="p-2 px-2.5 rounded-xl bg-white border border-blue-200/90 shadow-2xs text-center flex flex-col items-center justify-center hover:border-blue-400 transition-all">
-            <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-slate-600 leading-tight">
-              <Users className="w-3 h-3 text-blue-600 shrink-0" />
-              <span>Tổng ứng viên</span>
-            </div>
-            <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
-              1,248
-            </span>
-            <span className="text-[9.5px] font-medium text-emerald-600 block leading-none">
-              ↑ 18% <span className="text-slate-400">tháng trước</span>
-            </span>
-          </div>
+        {(() => {
+          const totalCount = filteredCandidates.length;
+          const getStageStats = (stageKey: PipelineStage) => {
+            const count = filteredCandidates.filter((c) => c.stage === stageKey).length;
+            const pct = totalCount > 0 ? ((count / totalCount) * 100).toFixed(1) : "0.0";
+            return { count, pct };
+          };
+          const newStats = getStageStats("NEW");
+          const screenStats = getStageStats("SCREENING");
+          const matchStats = getStageStats("MATCHED");
+          const interviewStats = getStageStats("INTERVIEW");
+          const offerStats = getStageStats("OFFER");
+          const hiredStats = getStageStats("HIRED");
+          const rejectedStats = getStageStats("REJECTED");
 
-          {/* Card 2: Mới */}
-          <div className="p-2 px-2.5 rounded-xl bg-[#F4F8FD] border border-[#BFDBFE] shadow-2xs text-center flex flex-col items-center justify-center hover:border-blue-400 transition-all">
-            <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-blue-700 leading-tight">
-              <UserPlus className="w-3 h-3 text-[#0062ff] shrink-0" />
-              <span>Mới</span>
-            </div>
-            <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
-              312
-            </span>
-            <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
-              25.0%
-            </span>
-          </div>
+          return (
+            <div className="grid grid-cols-2 sm:grid-cols-4 lg:grid-cols-8 gap-2">
+              {/* Card 1: Tổng ứng viên */}
+              <div className="p-2 px-2.5 rounded-xl bg-white border border-blue-200/90 shadow-2xs text-center flex flex-col items-center justify-center hover:border-blue-400 transition-all">
+                <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-slate-600 leading-tight">
+                  <Users className="w-3 h-3 text-blue-600 shrink-0" />
+                  <span>Tổng ứng viên</span>
+                </div>
+                <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
+                  {totalCount}
+                </span>
+                <span className="text-[9.5px] font-medium text-blue-600 block leading-none">
+                  Trong bộ lọc
+                </span>
+              </div>
 
-          {/* Card 3: Sàng lọc */}
-          <div className="p-2 px-2.5 rounded-xl bg-[#F2F7FC] border border-[#BAE6FD] shadow-2xs text-center flex flex-col items-center justify-center hover:border-sky-400 transition-all">
-            <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-sky-700 leading-tight">
-              <Filter className="w-3 h-3 text-[#0284c7] shrink-0" />
-              <span>Sàng lọc</span>
-            </div>
-            <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
-              226
-            </span>
-            <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
-              18.1%
-            </span>
-          </div>
+              {/* Card 2: Mới nộp */}
+              <div className="p-2 px-2.5 rounded-xl bg-[#F4F8FD] border border-[#BFDBFE] shadow-2xs text-center flex flex-col items-center justify-center hover:border-blue-400 transition-all">
+                <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-blue-700 leading-tight">
+                  <UserPlus className="w-3 h-3 text-[#0062ff] shrink-0" />
+                  <span>Mới nộp</span>
+                </div>
+                <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
+                  {newStats.count}
+                </span>
+                <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
+                  {newStats.pct}%
+                </span>
+              </div>
 
-          {/* Card 4: Phù hợp */}
-          <div className="p-2 px-2.5 rounded-xl bg-[#FAF7FD] border border-[#E9D5FF] shadow-2xs text-center flex flex-col items-center justify-center hover:border-purple-400 transition-all">
-            <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-purple-700 leading-tight">
-              <Star className="w-3 h-3 text-[#9333ea] fill-[#9333ea] shrink-0" />
-              <span>Phù hợp</span>
-            </div>
-            <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
-              328
-            </span>
-            <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
-              26.3%
-            </span>
-          </div>
+              {/* Card 3: Sàng lọc */}
+              <div className="p-2 px-2.5 rounded-xl bg-[#F2F7FC] border border-[#BAE6FD] shadow-2xs text-center flex flex-col items-center justify-center hover:border-sky-400 transition-all">
+                <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-sky-700 leading-tight">
+                  <Filter className="w-3 h-3 text-[#0284c7] shrink-0" />
+                  <span>Sàng lọc</span>
+                </div>
+                <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
+                  {screenStats.count}
+                </span>
+                <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
+                  {screenStats.pct}%
+                </span>
+              </div>
 
-          {/* Card 5: Phỏng vấn */}
-          <div className="p-2 px-2.5 rounded-xl bg-[#FEF9F2] border border-[#FDE68A] shadow-2xs text-center flex flex-col items-center justify-center hover:border-amber-400 transition-all">
-            <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-amber-700 leading-tight">
-              <Calendar className="w-3 h-3 text-[#d97706] shrink-0" />
-              <span>Phỏng vấn</span>
-            </div>
-            <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
-              192
-            </span>
-            <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
-              15.4%
-            </span>
-          </div>
+              {/* Card 4: Phù hợp */}
+              <div className="p-2 px-2.5 rounded-xl bg-[#FAF7FD] border border-[#E9D5FF] shadow-2xs text-center flex flex-col items-center justify-center hover:border-purple-400 transition-all">
+                <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-purple-700 leading-tight">
+                  <Star className="w-3 h-3 text-[#9333ea] fill-[#9333ea] shrink-0" />
+                  <span>Phù hợp</span>
+                </div>
+                <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
+                  {matchStats.count}
+                </span>
+                <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
+                  {matchStats.pct}%
+                </span>
+              </div>
 
-          {/* Card 6: Offer */}
-          <div className="p-2 px-2.5 rounded-xl bg-[#FDF5F5] border border-[#FECDD3] shadow-2xs text-center flex flex-col items-center justify-center hover:border-rose-400 transition-all">
-            <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-rose-700 leading-tight">
-              <Award className="w-3 h-3 text-[#e11d48] shrink-0" />
-              <span>Offer</span>
-            </div>
-            <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
-              48
-            </span>
-            <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
-              3.8%
-            </span>
-          </div>
+              {/* Card 5: Phỏng vấn */}
+              <div className="p-2 px-2.5 rounded-xl bg-[#FEF9F2] border border-[#FDE68A] shadow-2xs text-center flex flex-col items-center justify-center hover:border-amber-400 transition-all">
+                <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-amber-700 leading-tight">
+                  <Calendar className="w-3 h-3 text-[#d97706] shrink-0" />
+                  <span>Phỏng vấn</span>
+                </div>
+                <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
+                  {interviewStats.count}
+                </span>
+                <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
+                  {interviewStats.pct}%
+                </span>
+              </div>
 
-          {/* Card 7: Đã nhận việc */}
-          <div className="p-2 px-2.5 rounded-xl bg-[#F2FAF6] border border-[#A7F3D0] shadow-2xs text-center flex flex-col items-center justify-center hover:border-emerald-400 transition-all">
-            <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-emerald-700 leading-tight">
-              <CheckCircle className="w-3 h-3 text-[#059669] shrink-0" />
-              <span>Đã nhận việc</span>
-            </div>
-            <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
-              24
-            </span>
-            <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
-              1.9%
-            </span>
-          </div>
+              {/* Card 6: Offer */}
+              <div className="p-2 px-2.5 rounded-xl bg-[#FDF5F5] border border-[#FECDD3] shadow-2xs text-center flex flex-col items-center justify-center hover:border-rose-400 transition-all">
+                <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-rose-700 leading-tight">
+                  <Award className="w-3 h-3 text-[#e11d48] shrink-0" />
+                  <span>Offer</span>
+                </div>
+                <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
+                  {offerStats.count}
+                </span>
+                <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
+                  {offerStats.pct}%
+                </span>
+              </div>
 
-          {/* Card 8: Đã từ chối */}
-          <div className="p-2 px-2.5 rounded-xl bg-[#FDF5F5] border border-[#FECDD3] shadow-2xs text-center flex flex-col items-center justify-center hover:border-rose-400 transition-all">
-            <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-rose-700 leading-tight">
-              <XCircle className="w-3 h-3 text-[#e11d48] shrink-0" />
-              <span>Đã từ chối</span>
+              {/* Card 7: Trúng tuyển */}
+              <div className="p-2 px-2.5 rounded-xl bg-[#F2FAF6] border border-[#A7F3D0] shadow-2xs text-center flex flex-col items-center justify-center hover:border-emerald-400 transition-all">
+                <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-emerald-700 leading-tight">
+                  <CheckCircle className="w-3 h-3 text-[#059669] shrink-0" />
+                  <span>Trúng tuyển</span>
+                </div>
+                <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
+                  {hiredStats.count}
+                </span>
+                <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
+                  {hiredStats.pct}%
+                </span>
+              </div>
+
+              {/* Card 8: Đã từ chối */}
+              <div className="p-2 px-2.5 rounded-xl bg-[#FDF5F5] border border-[#FECDD3] shadow-2xs text-center flex flex-col items-center justify-center hover:border-rose-400 transition-all">
+                <div className="flex items-center justify-center gap-1 text-[10.5px] font-medium text-rose-700 leading-tight">
+                  <XCircle className="w-3 h-3 text-[#e11d48] shrink-0" />
+                  <span>Đã từ chối</span>
+                </div>
+                <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
+                  {rejectedStats.count}
+                </span>
+                <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
+                  {rejectedStats.pct}%
+                </span>
+              </div>
             </div>
-            <span className="text-base sm:text-lg font-bold text-slate-800 block my-0.5 leading-tight">
-              118
-            </span>
-            <span className="text-[9.5px] font-medium text-slate-500 block leading-none">
-              9.5%
-            </span>
-          </div>
-        </div>
+          );
+        })()}
       </div>
 
       {/* ======================================================== */}
@@ -1253,7 +1018,7 @@ function EmployerPipelineContent() {
                       {column.label}
                     </span>
                     <span className={`px-2.5 py-0.5 rounded-full font-bold text-[11px] ${column.pillBg}`}>
-                      {column.count}
+                      {stageCandidates.length}
                     </span>
                   </div>
 
@@ -1271,87 +1036,103 @@ function EmployerPipelineContent() {
 
                   {/* Candidate Cards Scrollable Column */}
                   <div className="flex-1 min-h-0 overflow-y-auto p-2 space-y-2 [&::-webkit-scrollbar]:w-1 [&::-webkit-scrollbar-thumb]:bg-slate-200 [&::-webkit-scrollbar-thumb]:rounded-full">
-                    {stageCandidates.map((candidate) => {
-                      const isDragging = draggingCardId === candidate.id;
-                      const menuItems = getCardMenuItems(candidate);
+                    {stageCandidates.length === 0 ? (
+                      <div className="py-8 text-center px-3 border border-dashed border-slate-200/80 rounded-xl bg-white/40 my-2">
+                        <span className="text-xs text-slate-400 font-medium block">
+                          Chưa có ứng viên
+                        </span>
+                      </div>
+                    ) : (
+                      stageCandidates.map((candidate) => {
+                        const isDragging = draggingCardId === candidate.id;
+                        const menuItems = getCardMenuItems(candidate);
 
-                      return (
-                        <div
-                          key={candidate.id}
-                          draggable
-                          onDragStart={(e) => handleDragStart(e, candidate.id)}
-                          onClick={() => openModal(candidate, "profile")}
-                          className={`p-2.5 bg-white rounded-xl border border-slate-200/90 shadow-2xs hover:shadow-xs transition-all cursor-grab active:cursor-grabbing group ${
-                            isDragging ? "opacity-40 scale-95 border-blue-400" : ""
-                          }`}
-                        >
-                          {/* Top row: Avatar, Name, Job, Action */}
-                          <div className="flex items-start justify-between gap-2">
-                            <div className="flex items-center gap-2.5 min-w-0">
-                              <Avatar
-                                src={candidate.avatar}
-                                size={34}
-                                className="border border-slate-200 shrink-0 shadow-2xs"
-                              />
-                              <div className="min-w-0">
-                                <span className="font-bold text-slate-900 text-[13.5px] block leading-tight truncate group-hover:text-[#0062ff] transition-colors">
-                                  {candidate.name}
+                        return (
+                          <div
+                            key={candidate.id}
+                            draggable
+                            onDragStart={(e) => handleDragStart(e, candidate.id)}
+                            onClick={() => openModal(candidate, "profile")}
+                            className={`p-2.5 bg-white rounded-xl border border-slate-200/90 shadow-2xs hover:shadow-xs transition-all cursor-grab active:cursor-grabbing group ${
+                              isDragging ? "opacity-40 scale-95 border-blue-400" : ""
+                            }`}
+                          >
+                            {/* Top row: Avatar, Name, Job, Action */}
+                            <div className="flex items-start justify-between gap-2">
+                              <div className="flex items-center gap-2.5 min-w-0">
+                                <Avatar
+                                  src={candidate.avatar}
+                                  size={34}
+                                  className="border border-slate-200 shrink-0 shadow-2xs"
+                                />
+                                <div className="min-w-0">
+                                  <span className="font-bold text-slate-900 text-[13.5px] block leading-tight truncate group-hover:text-[#0062ff] transition-colors">
+                                    {candidate.name}
+                                  </span>
+                                  <span className="text-[11.5px] text-slate-500 font-medium block truncate mt-0.5">
+                                    {candidate.jobTitle}
+                                  </span>
+                                </div>
+                              </div>
+
+                              {/* Action button */}
+                              <Dropdown
+                                menu={{ items: menuItems }}
+                                trigger={["click"]}
+                                placement="bottomRight"
+                                arrow
+                              >
+                                <button
+                                  type="button"
+                                  onClick={(e) => e.stopPropagation()}
+                                  className="w-5 h-5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer shrink-0"
+                                >
+                                  <MoreHorizontal className="w-4 h-4" />
+                                </button>
+                              </Dropdown>
+                            </div>
+
+                            {/* Second row: Time ago & Source & Applied Date */}
+                            <div className="text-[11px] text-slate-400 font-medium pt-1.5 flex items-center justify-between border-t border-slate-100/70 mt-2">
+                              <span>{candidate.appliedDate || candidate.timeAgo} • {candidate.source}</span>
+                              {candidate.matchScore != null && (
+                                <span
+                                  className={`px-1.5 py-0.2 rounded-md font-bold text-[10px] border ${
+                                    candidate.matchScore >= 80
+                                      ? "bg-emerald-50 text-emerald-700 border-emerald-200"
+                                      : candidate.matchScore >= 60
+                                      ? "bg-blue-50 text-blue-700 border-blue-200"
+                                      : "bg-amber-50 text-amber-700 border-amber-200"
+                                  }`}
+                                >
+                                  🎯 {candidate.matchScore}%
                                 </span>
-                                <span className="text-[11.5px] text-slate-500 font-medium block truncate mt-0.5">
-                                  {candidate.jobTitle}
-                                </span>
+                              )}
+                            </div>
+
+                            {/* Third row: Status Badge & Rating */}
+                            <div className="pt-1.5 flex items-center justify-between">
+                              <span className={`px-2 py-0.2 rounded-full font-bold text-[9.5px] border ${column.tagColor}`}>
+                                {column.label}
+                              </span>
+
+                              <div className="flex items-center gap-0.5 text-amber-400 text-xs">
+                                <span>⭐</span>
+                                <span className="font-bold text-slate-700 text-[11.5px]">{candidate.rating}.0</span>
                               </div>
                             </div>
-
-                            {/* Action button */}
-                            <Dropdown
-                              menu={{ items: menuItems }}
-                              trigger={["click"]}
-                              placement="bottomRight"
-                              arrow
-                            >
-                              <button
-                                type="button"
-                                onClick={(e) => e.stopPropagation()}
-                                className="w-5 h-5 rounded-md hover:bg-slate-100 text-slate-400 hover:text-slate-700 flex items-center justify-center transition-colors cursor-pointer shrink-0"
-                              >
-                                <MoreHorizontal className="w-4 h-4" />
-                              </button>
-                            </Dropdown>
                           </div>
+                        );
+                      })
+                    )}
 
-                          {/* Second row: Time ago & Source */}
-                          <div className="text-[11px] text-slate-400 font-medium pt-1.5 flex items-center justify-between border-t border-slate-100/70 mt-2">
-                            <span>{candidate.timeAgo} • {candidate.source}</span>
-                          </div>
-
-                          {/* Third row: Status Badge */}
-                          <div className="pt-1.5 flex items-center justify-between">
-                            <span className={`px-2 py-0.2 rounded-full font-bold text-[9.5px] border ${column.tagColor}`}>
-                              {column.label}
-                            </span>
-
-                            <div className="flex items-center gap-0.5 text-amber-400 text-xs">
-                              <span>⭐</span>
-                              <span className="font-bold text-slate-700 text-[11.5px]">{candidate.rating}.0</span>
-                            </div>
-                          </div>
-                        </div>
-                      );
-                    })}
-
-                    {/* + X ứng viên khác */}
-                    <div className="p-2 text-center">
-                      <button
-                        type="button"
-                        onClick={() => {
-                          message.info(`Xem toàn bộ ${column.count} ứng viên giai đoạn ${column.label}`);
-                        }}
-                        className="text-[11.5px] font-bold text-slate-500 hover:text-[#0062ff] transition-colors cursor-pointer block w-full py-1 rounded-lg hover:bg-white/80"
-                      >
-                        + {column.count - stageCandidates.length} ứng viên khác
-                      </button>
-                    </div>
+                    {stageCandidates.length > 0 && (
+                      <div className="pt-1 pb-1 text-center">
+                        <span className="text-[11px] font-medium text-slate-400">
+                          {stageCandidates.length} ứng viên
+                        </span>
+                      </div>
+                    )}
                   </div>
                 </div>
               );
@@ -1572,7 +1353,7 @@ function EmployerPipelineContent() {
             )}
 
             {/* Footer */}
-            <div className="flex items-center justify-between pt-4 border-t border-slate-100">
+            <div className="flex items-center justify-between pt-4 border-t border-slate-100 flex-wrap gap-2">
               <button
                 type="button"
                 onClick={closeModal}
@@ -1581,7 +1362,15 @@ function EmployerPipelineContent() {
                 Đóng
               </button>
 
-              <div className="flex items-center gap-2.5">
+              <div className="flex items-center gap-2.5 flex-wrap">
+                <Link
+                  href={`/doanh-nghiep/ung-vien/${activeCandidate.id}`}
+                  className="px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0062ff] font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer border border-blue-200"
+                >
+                  <ExternalLink className="w-3.5 h-3.5" />
+                  <span>Toàn bộ hồ sơ & Lịch sử</span>
+                </Link>
+
                 <button
                   type="button"
                   onClick={() => openModal(activeCandidate, "move-stage")}
@@ -1619,7 +1408,7 @@ function EmployerPipelineContent() {
       >
         {activeCandidate && (
           <div className="space-y-4 p-1">
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100 flex-wrap gap-2">
               <div>
                 <h3 className="text-base font-bold text-slate-900 m-0">
                   CV của {activeCandidate.name}
@@ -1630,16 +1419,29 @@ function EmployerPipelineContent() {
               <div className="flex items-center gap-2">
                 <button
                   type="button"
-                  onClick={() => message.success("Đang tải xuống file PDF...")}
+                  onClick={() => {
+                    if (activeCandidate.cvFileUrl) {
+                      window.open(activeCandidate.cvFileUrl, "_blank");
+                    } else {
+                      message.info("Không có liên kết file trực tiếp, mở trang chi tiết ứng viên.");
+                      window.open(`/doanh-nghiep/ung-vien/${activeCandidate.id}`, "_blank");
+                    }
+                  }}
                   className="px-3.5 py-1.5 rounded-xl bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold text-xs shadow-md transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <Download className="w-3.5 h-3.5" />
-                  <span>Tải xuống</span>
+                  <span>Tải xuống CV</span>
                 </button>
 
                 <button
                   type="button"
-                  onClick={() => message.info("Đang mở trong tab mới...")}
+                  onClick={() => {
+                    if (activeCandidate.cvFileUrl) {
+                      window.open(activeCandidate.cvFileUrl, "_blank");
+                    } else {
+                      window.open(`/doanh-nghiep/ung-vien/${activeCandidate.id}`, "_blank");
+                    }
+                  }}
                   className="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-700 font-bold text-xs transition-all flex items-center gap-1.5 cursor-pointer"
                 >
                   <ExternalLink className="w-3.5 h-3.5" />
@@ -1656,7 +1458,7 @@ function EmployerPipelineContent() {
               <div>
                 <h4 className="text-sm font-bold text-slate-800 m-0">{activeCandidate.cvName}</h4>
                 <p className="text-xs text-slate-500 font-medium m-0 mt-0.5">
-                  Dung lượng: 2.4 MB • Tải lên lúc {activeCandidate.appliedDate} • Đã quét bảo mật
+                  Thời điểm nộp: {activeCandidate.appliedDate} • Phiên bản snapshot lưu trữ an toàn
                 </p>
               </div>
 
@@ -1677,6 +1479,14 @@ function EmployerPipelineContent() {
                   <span className="text-slate-400">Kỹ năng:</span>
                   <strong>{activeCandidate.skills.join(", ")}</strong>
                 </div>
+                {activeCandidate.coverLetter && (
+                  <div className="pt-2 border-t border-slate-100">
+                    <span className="text-slate-400 block mb-1">Thư ứng tuyển (Cover letter):</span>
+                    <p className="m-0 text-slate-600 italic bg-slate-50 p-2 rounded-lg">
+                      &quot;{activeCandidate.coverLetter}&quot;
+                    </p>
+                  </div>
+                )}
               </div>
             </div>
 

@@ -1,8 +1,9 @@
 "use client";
 
-import React, { useState, useMemo, Suspense, Fragment } from "react";
+import React, { useState, useMemo, useEffect, useCallback, Suspense, Fragment } from "react";
 import Link from "next/link";
 import { useAuthStore } from "@/store/auth-store";
+import { employerService } from "@/services/employer.service";
 import {
   Dropdown,
   Tooltip,
@@ -15,6 +16,10 @@ import {
   Rate,
   DatePicker,
   TimePicker,
+  Button,
+  Spin,
+  Alert,
+  Empty,
 } from "antd";
 import {
   Plus,
@@ -88,6 +93,8 @@ export interface InterviewEvent {
   interviewerAvatar?: string;
   status: InterviewStatus;
   notes?: string;
+  rating?: number;
+  applicationId?: number;
   // Event card styling
   cardBg: string;
   cardBorder: string;
@@ -129,365 +136,7 @@ const TIME_SLOTS = [
 ];
 
 // Initial Interview Dataset matching reference
-const INITIAL_INTERVIEWS: InterviewEvent[] = [
-  // Thứ 2 (18/08) - 2 lịch
-  {
-    id: "iv-1",
-    candidateName: "Nguyễn Minh Anh",
-    candidateAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "minhanh@email.com",
-    candidatePhone: "0345 678 901",
-    jobTitle: "Product Manager",
-    jobCode: "PM-2408",
-    round: "Vòng 2",
-    roundTitle: "Phỏng vấn chuyên môn",
-    date: "2026-08-18",
-    dayOfWeek: 1,
-    startTime: "09:00",
-    endTime: "10:00",
-    startHour: 9,
-    startMinute: 0,
-    durationHours: 1,
-    format: "OFFLINE",
-    locationOrLink: "Phòng A • Tầng 5",
-    roomName: "Phòng A",
-    interviewerName: "Phạm Văn Hùng",
-    interviewerRole: "Hiring Manager",
-    status: "COMPLETED",
-    notes: "Ứng viên trả lời rất lưu loát về tư duy thiết kế sản phẩm và Roadmap.",
-    cardBg: "bg-blue-100/90",
-    cardBorder: "border-blue-300 border-l-[3.5px] border-l-blue-600",
-    cardText: "text-blue-900 font-extrabold",
-  },
-  {
-    id: "iv-2",
-    candidateName: "Trần Hoàng Nam",
-    candidateAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "namth@outlook.com",
-    candidatePhone: "0389 123 456",
-    jobTitle: "UX/UI Designer",
-    jobCode: "UX-2408",
-    round: "Vòng 1",
-    roundTitle: "Phỏng vấn HR",
-    date: "2026-08-18",
-    dayOfWeek: 1,
-    startTime: "11:00",
-    endTime: "12:00",
-    startHour: 11,
-    startMinute: 0,
-    durationHours: 1,
-    format: "OFFLINE",
-    locationOrLink: "Phòng B • Tầng 5",
-    roomName: "Phòng B",
-    interviewerName: "Nguyễn Thu Trang",
-    interviewerRole: "HR Lead",
-    status: "COMPLETED",
-    notes: "Kinh nghiệm 4 năm, thái độ hợp tác và hòa đồng.",
-    cardBg: "bg-emerald-100/90",
-    cardBorder: "border-emerald-300 border-l-[3.5px] border-l-emerald-600",
-    cardText: "text-emerald-900 font-extrabold",
-  },
-  {
-    id: "iv-3",
-    candidateName: "Lê Quang Huy",
-    candidateAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "lequanghuy@gmail.com",
-    candidatePhone: "0378 456 789",
-    jobTitle: "Frontend Developer",
-    jobCode: "FE-2407",
-    round: "Vòng 2",
-    roundTitle: "Phỏng vấn kỹ thuật",
-    date: "2026-08-18",
-    dayOfWeek: 1,
-    startTime: "14:00",
-    endTime: "15:00",
-    startHour: 14,
-    startMinute: 0,
-    durationHours: 1,
-    format: "OFFLINE",
-    locationOrLink: "Phòng A • Tầng 5",
-    roomName: "Phòng A",
-    interviewerName: "Lê Minh Quân",
-    interviewerRole: "Tech Lead",
-    status: "COMPLETED",
-    notes: "Live coding React & TypeScript tốt, nắm chắc async/await.",
-    cardBg: "bg-purple-100/90",
-    cardBorder: "border-purple-300 border-l-[3.5px] border-l-purple-600",
-    cardText: "text-purple-900 font-extrabold",
-  },
-
-  // Thứ 3 (19/08) - 2 lịch
-  {
-    id: "iv-4",
-    candidateName: "Nguyễn Thị Phương",
-    candidateAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "phuongnt@gmail.com",
-    jobTitle: "Data Analyst",
-    jobCode: "DA-2406",
-    round: "Vòng 1",
-    roundTitle: "Phỏng vấn Sơ bộ",
-    date: "2026-08-19",
-    dayOfWeek: 2,
-    startTime: "10:00",
-    endTime: "11:00",
-    startHour: 10,
-    startMinute: 0,
-    durationHours: 1,
-    format: "OFFLINE",
-    locationOrLink: "Phòng C • Tầng 5",
-    roomName: "Phòng C",
-    interviewerName: "Mai Phương",
-    interviewerRole: "Recruiter",
-    status: "COMPLETED",
-    cardBg: "bg-amber-100/90",
-    cardBorder: "border-amber-300 border-l-[3.5px] border-l-amber-500",
-    cardText: "text-amber-900 font-extrabold",
-  },
-  {
-    id: "iv-5",
-    candidateName: "Vũ Ngọc Mai",
-    candidateAvatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "ngocmai@gmail.com",
-    jobTitle: "HR Generalist",
-    jobCode: "HR-2408",
-    round: "Vòng 2",
-    roundTitle: "Phỏng vấn Trưởng phòng",
-    date: "2026-08-19",
-    dayOfWeek: 2,
-    startTime: "15:30",
-    endTime: "16:30",
-    startHour: 15.5,
-    startMinute: 30,
-    durationHours: 1,
-    format: "OFFLINE",
-    locationOrLink: "Phòng A • Tầng 5",
-    roomName: "Phòng A",
-    interviewerName: "Phạm Văn Hùng",
-    interviewerRole: "HR Director",
-    status: "COMPLETED",
-    cardBg: "bg-rose-100/90",
-    cardBorder: "border-rose-300 border-l-[3.5px] border-l-rose-500",
-    cardText: "text-rose-900 font-extrabold",
-  },
-
-  // Thứ 4 (20/08 - HÔM NAY) - 3 lịch
-  {
-    id: "iv-6",
-    candidateName: "Phạm Thu Hằng",
-    candidateAvatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "hangpt@gmail.com",
-    candidatePhone: "0357 890 123",
-    jobTitle: "Marketing Specialist",
-    jobCode: "MKT-2408",
-    round: "Vòng 1",
-    roundTitle: "Phỏng vấn HR",
-    date: "2026-08-20",
-    dayOfWeek: 3,
-    startTime: "09:00",
-    endTime: "10:30",
-    startHour: 9,
-    startMinute: 0,
-    durationHours: 1.5,
-    format: "ONLINE",
-    locationOrLink: "meet.google.com/abc-def",
-    roomName: "Google Meet",
-    interviewerName: "Nguyễn Thu Trang",
-    interviewerRole: "HR Manager",
-    status: "UPCOMING",
-    notes: "Phỏng vấn trực tuyến qua Google Meet, yêu cầu chuẩn bị slide giới thiệu chiến dịch mẫu.",
-    cardBg: "bg-purple-100/90",
-    cardBorder: "border-purple-300 border-l-[3.5px] border-l-purple-600",
-    cardText: "text-purple-900 font-extrabold",
-  },
-  {
-    id: "iv-7",
-    candidateName: "Đỗ Thành Tùng",
-    candidateAvatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "thanhtung@gmail.com",
-    candidatePhone: "0334 567 890",
-    jobTitle: "DevOps Engineer",
-    jobCode: "DEVOPS-2408",
-    round: "Vòng 2",
-    roundTitle: "Phỏng vấn kỹ thuật",
-    date: "2026-08-20",
-    dayOfWeek: 3,
-    startTime: "13:30",
-    endTime: "14:30",
-    startHour: 13.5,
-    startMinute: 30,
-    durationHours: 1,
-    format: "OFFLINE",
-    locationOrLink: "Phòng A • Tầng 5",
-    roomName: "Phòng A",
-    interviewerName: "Lê Minh Quân",
-    interviewerRole: "Tech Lead",
-    status: "UPCOMING",
-    notes: "Trực tiếp tại văn phòng. Kiểm tra kiến thức AWS, Kubernetes và kiến trúc Microservices.",
-    cardBg: "bg-blue-100/90",
-    cardBorder: "border-blue-300 border-l-[3.5px] border-l-blue-600",
-    cardText: "text-blue-900 font-extrabold",
-  },
-  {
-    id: "iv-8",
-    candidateName: "Bùi Khánh Linh",
-    candidateAvatar: "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "khanhlinh@gmail.com",
-    jobTitle: "Business Analyst",
-    jobCode: "BA-2408",
-    round: "Vòng 2",
-    roundTitle: "Phỏng vấn Nghiệp vụ",
-    date: "2026-08-20",
-    dayOfWeek: 3,
-    startTime: "15:00",
-    endTime: "17:00",
-    startHour: 15,
-    startMinute: 0,
-    durationHours: 2,
-    format: "OFFLINE",
-    locationOrLink: "Phòng C • Tầng 5",
-    roomName: "Phòng C",
-    interviewerName: "Phạm Văn Hùng",
-    interviewerRole: "Head of Product",
-    status: "UPCOMING",
-    cardBg: "bg-emerald-100/90",
-    cardBorder: "border-emerald-300 border-l-[3.5px] border-l-emerald-600",
-    cardText: "text-emerald-900 font-extrabold",
-  },
-
-  // Thứ 5 (21/08) - 4 lịch
-  {
-    id: "iv-9",
-    candidateName: "Phan Văn Dũng",
-    candidateAvatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "dungpv@gmail.com",
-    jobTitle: "Backend Developer",
-    jobCode: "BE-2407",
-    round: "Vòng 2",
-    roundTitle: "Phỏng vấn Tech Lead",
-    date: "2026-08-21",
-    dayOfWeek: 4,
-    startTime: "08:30",
-    endTime: "10:00",
-    startHour: 8.5,
-    startMinute: 30,
-    durationHours: 1.5,
-    format: "OFFLINE",
-    locationOrLink: "Phòng A • Tầng 5",
-    roomName: "Phòng A",
-    interviewerName: "Lê Minh Quân",
-    interviewerRole: "Tech Lead",
-    status: "UPCOMING",
-    cardBg: "bg-teal-100/90",
-    cardBorder: "border-teal-300 border-l-[3.5px] border-l-teal-600",
-    cardText: "text-teal-900 font-extrabold",
-  },
-  {
-    id: "iv-10",
-    candidateName: "Nguyễn Đức Anh",
-    candidateAvatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "ducanh@gmail.com",
-    jobTitle: "Data Engineer",
-    jobCode: "DE-2406",
-    round: "Vòng 2",
-    roundTitle: "Phỏng vấn Chuyên môn",
-    date: "2026-08-21",
-    dayOfWeek: 4,
-    startTime: "11:00",
-    endTime: "12:00",
-    startHour: 11,
-    startMinute: 0,
-    durationHours: 1,
-    format: "OFFLINE",
-    locationOrLink: "Phòng B • Tầng 5",
-    roomName: "Phòng B",
-    interviewerName: "Phạm Văn Hùng",
-    interviewerRole: "Hiring Manager",
-    status: "UPCOMING",
-    cardBg: "bg-rose-100/90",
-    cardBorder: "border-rose-300 border-l-[3.5px] border-l-rose-500",
-    cardText: "text-rose-900 font-extrabold",
-  },
-  {
-    id: "iv-11",
-    candidateName: "Trần Thị Bảo Châu",
-    candidateAvatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "chautb@gmail.com",
-    jobTitle: "Product Owner",
-    jobCode: "PO-2408",
-    round: "Vòng 3",
-    roundTitle: "Phỏng vấn BOD",
-    date: "2026-08-21",
-    dayOfWeek: 4,
-    startTime: "14:00",
-    endTime: "15:30",
-    startHour: 14,
-    startMinute: 0,
-    durationHours: 1.5,
-    format: "OFFLINE",
-    locationOrLink: "Phòng B • Tầng 5",
-    roomName: "Phòng B",
-    interviewerName: "Nguyễn Văn Hùng",
-    interviewerRole: "CEO",
-    status: "UPCOMING",
-    cardBg: "bg-amber-100/90",
-    cardBorder: "border-amber-300 border-l-[3.5px] border-l-amber-500",
-    cardText: "text-amber-900 font-extrabold",
-  },
-  {
-    id: "iv-12",
-    candidateName: "Võ Minh Tâm",
-    candidateAvatar: "https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "tamvm@gmail.com",
-    jobTitle: "QA Engineer",
-    jobCode: "QA-2408",
-    round: "Vòng 1",
-    roundTitle: "Phỏng vấn Sơ bộ",
-    date: "2026-08-21",
-    dayOfWeek: 4,
-    startTime: "16:30",
-    endTime: "17:30",
-    startHour: 16.5,
-    startMinute: 30,
-    durationHours: 1,
-    format: "OFFLINE",
-    locationOrLink: "Phòng B • Tầng 5",
-    roomName: "Phòng B",
-    interviewerName: "Mai Phương",
-    interviewerRole: "Recruiter",
-    status: "UPCOMING",
-    cardBg: "bg-purple-100/90",
-    cardBorder: "border-purple-300 border-l-[3.5px] border-l-purple-600",
-    cardText: "text-purple-900 font-extrabold",
-  },
-
-  // Thứ 6 (22/08) - 1 lịch
-  {
-    id: "iv-13",
-    candidateName: "Mai Anh Tuấn",
-    candidateAvatar: "https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=150&auto=format&fit=crop&q=80",
-    candidateEmail: "tuanma@gmail.com",
-    jobTitle: "Sales Executive",
-    jobCode: "SALES-2408",
-    round: "Vòng 2",
-    roundTitle: "Phỏng vấn Trưởng bộ phận",
-    date: "2026-08-22",
-    dayOfWeek: 5,
-    startTime: "09:30",
-    endTime: "10:30",
-    startHour: 9.5,
-    startMinute: 30,
-    durationHours: 1,
-    format: "OFFLINE",
-    locationOrLink: "Phòng A • Tầng 5",
-    roomName: "Phòng A",
-    interviewerName: "Phạm Văn Hùng",
-    interviewerRole: "Sales Director",
-    status: "UPCOMING",
-    cardBg: "bg-blue-100/90",
-    cardBorder: "border-blue-300 border-l-[3.5px] border-l-blue-600",
-    cardText: "text-blue-900 font-extrabold",
-  },
-];
+const INITIAL_INTERVIEWS: InterviewEvent[] = [];
 
 // =====================================================================
 // COMPONENT MAIN
@@ -498,9 +147,11 @@ function EmployerInterviewContent() {
   const recruiterName = user?.fullName || "Mai Phương";
 
   // State
-  const [interviews, setInterviews] = useState<InterviewEvent[]>(INITIAL_INTERVIEWS);
+  const [interviews, setInterviews] = useState<InterviewEvent[]>([]);
+  const [error, setError] = useState<string | null>(null);
   const [viewMode, setViewMode] = useState<"day" | "week" | "month" | "agenda">("week");
   const [currentWeekLabel, setCurrentWeekLabel] = useState<string>("18 – 24 Tháng 8, 2026");
+  const [loading, setLoading] = useState<boolean>(true);
 
   // Modals state
   const [selectedEvent, setSelectedEvent] = useState<InterviewEvent | null>(null);
@@ -520,71 +171,252 @@ function EmployerInterviewContent() {
   const [formLocationOrLink, setFormLocationOrLink] = useState<string>("Phòng A • Tầng 5");
   const [formInterviewer, setFormInterviewer] = useState<string>("Phạm Văn Hùng (Hiring Manager)");
   const [formNotes, setFormNotes] = useState<string>("");
+  const [applications, setApplications] = useState<any[]>([]);
+  const [formApplicationId, setFormApplicationId] = useState<number | null>(null);
+
+  // Reschedule interview state
+  const [rescheduleEvent, setRescheduleEvent] = useState<InterviewEvent | null>(null);
+  const [rescheduleDate, setRescheduleDate] = useState<string>("");
+  const [rescheduleTime, setRescheduleTime] = useState<string>("09:00");
+  const [rescheduleDuration, setRescheduleDuration] = useState<number>(45);
+  const [rescheduleNote, setRescheduleNote] = useState<string>("");
+  const [isSubmittingReschedule, setIsSubmittingReschedule] = useState<boolean>(false);
+
+  // Cancel interview state
+  const [cancelReason, setCancelReason] = useState<string>("Người phỏng vấn bận lịch đột xuất");
+  const [isCancelling, setIsCancelling] = useState<boolean>(false);
+
+  // Scorecard evaluation state
+  const [evalTechScore, setEvalTechScore] = useState<number>(4);
+  const [evalCommScore, setEvalCommScore] = useState<number>(4);
+  const [evalCultureScore, setEvalCultureScore] = useState<number>(4);
+  const [evalNotes, setEvalNotes] = useState<string>("");
+  const [isSubmittingEval, setIsSubmittingEval] = useState<boolean>(false);
+
+  const kpiStats = useMemo(() => {
+    const total = interviews.length;
+    const upcoming = interviews.filter((i) => i.status === "UPCOMING").length;
+    const inProgress = interviews.filter((i) => i.status === "IN_PROGRESS").length;
+    const completed = interviews.filter((i) => i.status === "COMPLETED").length;
+    const needReview = interviews.filter((i) => i.status === "COMPLETED" && !i.rating).length;
+    return { total, upcoming, inProgress, completed, needReview };
+  }, [interviews]);
+
+  const fetchInterviews = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [res, appsRes] = await Promise.all([
+        employerService.getInterviews(),
+        employerService.getApplications({ page_size: 100 }).catch(() => null),
+      ]);
+      const list = res.data?.interviews || [];
+      const appList = (appsRes as any)?.data?.applications || (appsRes as any)?.applications || [];
+      setApplications(appList);
+
+      const mapped: InterviewEvent[] = list.map((iv: any, idx: number) => {
+        const d = iv.scheduled_at ? new Date(iv.scheduled_at) : new Date();
+        const dateStr = d.toISOString().split("T")[0];
+        const hours = d.getHours().toString().padStart(2, "0");
+        const mins = d.getMinutes().toString().padStart(2, "0");
+        const startT = `${hours}:${mins}`;
+        const dur = iv.duration_minutes || 60;
+        const endD = new Date(d.getTime() + dur * 60000);
+        const endH = endD.getHours().toString().padStart(2, "0");
+        const endM = endD.getMinutes().toString().padStart(2, "0");
+        const endT = `${endH}:${endM}`;
+        const color = EVENT_COLORS[idx % EVENT_COLORS.length];
+
+        const rawStat = String(iv.status || "").toLowerCase();
+        let stat: InterviewStatus = "UPCOMING";
+        if (rawStat === "completed") stat = "COMPLETED";
+        else if (rawStat === "cancelled") stat = "CANCELLED";
+        else if (rawStat === "in_progress") stat = "IN_PROGRESS";
+        else stat = "UPCOMING";
+
+        return {
+          id: String(iv.id),
+          applicationId: iv.application_id,
+          candidateName: iv.candidate_name || "Ứng viên",
+          candidateAvatar: iv.candidate_avatar || "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
+          candidateEmail: iv.candidate_email || "",
+          candidatePhone: iv.candidate_phone || "",
+          jobTitle: iv.job_title || "Vị trí tuyển dụng",
+          jobCode: `JOB-${iv.job_id || iv.id}`,
+          round: "Vòng phỏng vấn",
+          roundTitle: "Phỏng vấn chuyên môn & Văn hóa",
+          date: dateStr,
+          dayOfWeek: d.getDay(),
+          startTime: startT,
+          endTime: endT,
+          startHour: d.getHours(),
+          startMinute: d.getMinutes(),
+          durationHours: Math.max(1, Math.round(dur / 60)),
+          format: String(iv.mode || "").toLowerCase() === "online" ? "ONLINE" : "OFFLINE",
+          locationOrLink: iv.meeting_url || "Văn phòng công ty",
+          roomName: iv.meeting_url || "Văn phòng công ty",
+          interviewerName: iv.interviewer_name || "Hội đồng tuyển dụng",
+          interviewerRole: "Hiring Team",
+          status: stat,
+          notes: iv.notes,
+          rating: iv.rating,
+          cardBg: color.bg,
+          cardBorder: color.border,
+          cardText: color.text,
+        };
+      });
+      setInterviews(mapped);
+    } catch {
+      setError("Không thể tải lịch phỏng vấn từ máy chủ. Vui lòng thử lại.");
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    fetchInterviews();
+  }, [fetchInterviews]);
 
   // Conflict state detection
   const hasConflictWarning = useMemo(() => {
     if (!formDate || !formStartTime || !formInterviewer) return false;
-    // Check if interviewer already has interview at that time
     return interviews.some(
       (iv) =>
         iv.date === formDate &&
         iv.startTime === formStartTime &&
-        iv.interviewerName.toLowerCase().includes("hùng") &&
-        formInterviewer.toLowerCase().includes("hùng")
+        iv.status !== "CANCELLED"
     );
   }, [formDate, formStartTime, formInterviewer, interviews]);
 
   // Handle Create Interview
-  const handleConfirmCreateInterview = () => {
-    if (!formCandidateName.trim()) {
-      message.error("Vui lòng nhập tên ứng viên!");
+  const handleConfirmCreateInterview = async () => {
+    if (!formCandidateName.trim() && !formApplicationId) {
+      message.error("Vui lòng chọn hoặc nhập tên ứng viên!");
       return;
     }
 
-    const randomColor = EVENT_COLORS[Math.floor(Math.random() * EVENT_COLORS.length)];
-    const newInterview: InterviewEvent = {
-      id: `iv-${Date.now()}`,
-      candidateName: formCandidateName,
-      candidateAvatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=150&auto=format&fit=crop&q=80",
-      candidateEmail: `${formCandidateName.toLowerCase().replace(/\s+/g, "")}@gmail.com`,
-      jobTitle: formJobTitle,
-      jobCode: "JOB-2408",
-      round: formRound.split("-")[0].trim(),
-      roundTitle: formRound,
-      date: formDate,
-      dayOfWeek: 4,
-      startTime: formStartTime,
-      endTime: formEndTime,
-      startHour: parseInt(formStartTime.split(":")[0]) || 9,
-      startMinute: parseInt(formStartTime.split(":")[1]) || 0,
-      durationHours: 1,
-      format: formFormat,
-      locationOrLink: formLocationOrLink,
-      roomName: formLocationOrLink.split("•")[0].trim(),
-      interviewerName: formInterviewer.split("(")[0].trim(),
-      interviewerRole: "Hiring Manager",
-      status: "UPCOMING",
-      notes: formNotes,
-      cardBg: randomColor.bg,
-      cardBorder: randomColor.border,
-      cardText: randomColor.text,
-    };
+    try {
+      const scheduledDateTime = `${formDate}T${formStartTime}:00`;
+      let appId = formApplicationId;
+      if (!appId && applications.length > 0) {
+        const found = applications.find(
+          (a) => (a.candidate?.full_name || a.candidate_name || "").toLowerCase() === formCandidateName.toLowerCase()
+        );
+        appId = found ? found.id : applications[0].id;
+      }
 
-    setInterviews((prev) => [newInterview, ...prev]);
-    setIsCreateModalOpen(false);
-    setFormCandidateName("");
-    message.success(`Đã tạo lịch phỏng vấn cho "${formCandidateName}" thành công!`);
+      if (!appId) {
+        message.warning("Cần chọn một hồ sơ ứng tuyển hợp lệ để lên lịch phỏng vấn chính thức.");
+        return;
+      }
+
+      const res = await employerService.createInterview({
+        application_id: appId,
+        scheduled_at: scheduledDateTime,
+        duration_minutes: 45,
+        mode: formFormat.toLowerCase(),
+        meeting_url: formLocationOrLink,
+        notes: formNotes,
+      });
+
+      if (res?.data?.interview?.has_conflict) {
+        message.warning(res.data.interview.conflict_message || "Lưu ý: Có lịch phỏng vấn khác trùng thời gian!");
+      }
+
+      message.success(`Đã tạo lịch phỏng vấn cho "${formCandidateName}" thành công!`);
+      setIsCreateModalOpen(false);
+      setFormCandidateName("");
+      setFormApplicationId(null);
+      setFormNotes("");
+      fetchInterviews();
+    } catch (err: any) {
+      const msg = err.response?.data?.errors?.application_id?.[0] || err.response?.data?.errors?.scheduled_at?.[0] || err.response?.data?.message || err.message || "Tạo lịch phỏng vấn thất bại.";
+      message.error(msg);
+    }
   };
 
-  // Handle Cancel Interview
-  const handleConfirmCancelInterview = () => {
+  // Handle Save Scorecard Evaluation
+  const handleSaveScorecard = async () => {
+    if (!evaluationCandidate) return;
+    setIsSubmittingEval(true);
+    try {
+      const appId = evaluationCandidate.applicationId;
+      if (appId) {
+        await employerService.addScorecard({
+          application_id: appId,
+          technical_score: evalTechScore,
+          communication_score: evalCommScore,
+          culture_score: evalCultureScore,
+          notes: evalNotes,
+        });
+      }
+      message.success(`Đã lưu kết quả đánh giá cho "${evaluationCandidate.candidateName}"!`);
+      setEvaluationCandidate(null);
+      setEvalNotes("");
+      fetchInterviews();
+    } catch (err: any) {
+      const msg = err.response?.data?.message || err.message || "Lưu kết quả đánh giá thất bại.";
+      message.error(msg);
+    } finally {
+      setIsSubmittingEval(false);
+    }
+  };
+
+  // Handle Cancel Interview via API
+  const handleConfirmCancelInterview = async () => {
     if (!cancelCandidate) return;
-    setInterviews((prev) =>
-      prev.map((iv) => (iv.id === cancelCandidate.id ? { ...iv, status: "CANCELLED" } : iv))
-    );
-    setCancelCandidate(null);
-    setSelectedEvent(null);
-    message.success("Đã hủy lịch phỏng vấn thành công!");
+    setIsCancelling(true);
+    try {
+      await employerService.cancelInterview(cancelCandidate.id, cancelReason);
+      message.success("Đã hủy lịch phỏng vấn thành công!");
+      setCancelCandidate(null);
+      setSelectedEvent(null);
+      setCancelReason("Người phỏng vấn bận lịch đột xuất");
+      fetchInterviews();
+    } catch (err: any) {
+      message.error(err.response?.data?.message || "Không thể hủy lịch phỏng vấn lúc này.");
+    } finally {
+      setIsCancelling(false);
+    }
+  };
+
+  // Handle Reschedule Interview via API
+  const handleConfirmReschedule = async () => {
+    if (!rescheduleEvent) return;
+    if (!rescheduleDate || !rescheduleTime) {
+      message.error("Vui lòng chọn ngày và giờ phỏng vấn mới!");
+      return;
+    }
+    setIsSubmittingReschedule(true);
+    try {
+      const newScheduledAt = `${rescheduleDate}T${rescheduleTime}:00`;
+      await employerService.updateInterview(rescheduleEvent.id, {
+        scheduled_at: newScheduledAt,
+        duration_minutes: rescheduleDuration,
+        notes: rescheduleNote ? `${rescheduleEvent.notes || ""}\n[Đổi lịch]: ${rescheduleNote}`.trim() : rescheduleEvent.notes,
+        status: "scheduled",
+      });
+      message.success("Đã dời / đổi lịch phỏng vấn thành công!");
+      setRescheduleEvent(null);
+      setSelectedEvent(null);
+      fetchInterviews();
+    } catch (err: any) {
+      message.error(err.response?.data?.message || "Lỗi khi cập nhật đổi lịch.");
+    } finally {
+      setIsSubmittingReschedule(false);
+    }
+  };
+
+  // Handle Mark Interview Completed
+  const handleMarkCompleted = async (eventItem: InterviewEvent) => {
+    try {
+      await employerService.updateInterview(eventItem.id, { status: "completed" });
+      message.success("Đã đánh dấu hoàn tất cuộc phỏng vấn!");
+      setSelectedEvent(null);
+      fetchInterviews();
+    } catch (err: any) {
+      message.error(err.response?.data?.message || "Lỗi cập nhật hoàn tất phỏng vấn.");
+    }
   };
 
   return (
@@ -640,13 +472,13 @@ function EmployerInterviewContent() {
           </div>
           <div className="flex-1 text-center min-w-0 pr-2">
             <span className="text-xs font-semibold text-slate-500 block leading-none">
-              Tổng lịch hôm nay
+              Tổng lịch phỏng vấn
             </span>
             <span className="text-xl font-black text-slate-900 block my-1 leading-tight">
-              8
+              {kpiStats.total}
             </span>
-            <span className="text-[10px] font-bold text-emerald-600 block leading-none">
-              ↑ 14% <span className="text-slate-400 font-normal">so với hôm qua</span>
+            <span className="text-[10px] font-bold text-slate-400 block leading-none">
+              Tất cả thời gian
             </span>
           </div>
         </div>
@@ -661,10 +493,10 @@ function EmployerInterviewContent() {
               Sắp diễn ra
             </span>
             <span className="text-xl font-black text-slate-900 block my-1 leading-tight">
-              3
+              {kpiStats.upcoming}
             </span>
             <span className="text-[10px] font-medium text-slate-400 block leading-none">
-              Trong 1 giờ tới
+              Đang chờ diễn ra
             </span>
           </div>
         </div>
@@ -679,10 +511,10 @@ function EmployerInterviewContent() {
               Đang diễn ra
             </span>
             <span className="text-xl font-black text-slate-900 block my-1 leading-tight">
-              2
+              {kpiStats.inProgress}
             </span>
             <span className="text-[10px] font-medium text-slate-400 block leading-none">
-              Hiện tại
+              Thời điểm hiện tại
             </span>
           </div>
         </div>
@@ -694,13 +526,13 @@ function EmployerInterviewContent() {
           </div>
           <div className="flex-1 text-center min-w-0 pr-2">
             <span className="text-xs font-semibold text-slate-500 block leading-none">
-              Hoàn thành hôm nay
+              Đã hoàn thành
             </span>
             <span className="text-xl font-black text-slate-900 block my-1 leading-tight">
-              3
+              {kpiStats.completed}
             </span>
             <span className="text-[10px] font-bold text-emerald-600 block leading-none">
-              ↑ 20% <span className="text-slate-400 font-normal">so với hôm qua</span>
+              Đã phỏng vấn xong
             </span>
           </div>
         </div>
@@ -715,7 +547,7 @@ function EmployerInterviewContent() {
               Cần đánh giá
             </span>
             <span className="text-xl font-black text-slate-900 block my-1 leading-tight">
-              5
+              {kpiStats.needReview}
             </span>
             <span className="text-[10px] font-medium text-slate-400 block leading-none">
               Ứng viên chờ đánh giá
@@ -793,6 +625,31 @@ function EmployerInterviewContent() {
               </div>
             </div>
 
+            {error && (
+              <Alert
+                type="error"
+                message={error}
+                action={
+                  <Button size="small" onClick={fetchInterviews}>
+                    Tải lại
+                  </Button>
+                }
+                className="my-2 rounded-xl"
+                showIcon
+              />
+            )}
+
+            {loading ? (
+              <div className="py-20 flex flex-col items-center justify-center gap-3">
+                <Spin size="large" />
+                <span className="text-xs text-slate-500 font-medium">Đang tải lịch phỏng vấn...</span>
+              </div>
+            ) : interviews.length === 0 ? (
+              <div className="py-16">
+                <Empty description="Chưa có lịch phỏng vấn nào được lên lịch" />
+              </div>
+            ) : (
+              <>
             {/* ======================================================== */}
             {/* VIEW MODE 1: WEEK CALENDAR GRID                          */}
             {/* ======================================================== */}
@@ -1178,6 +1035,8 @@ function EmployerInterviewContent() {
                 })}
               </div>
             )}
+              </>
+            )}
           </div>
 
           {/* ======================================================== */}
@@ -1205,7 +1064,14 @@ function EmployerInterviewContent() {
                 </thead>
 
                 <tbody className="divide-y divide-slate-100">
-                  {interviews.slice(0, 4).map((item) => (
+                  {interviews.length === 0 ? (
+                    <tr>
+                      <td colSpan={9} className="py-8 text-center text-slate-400">
+                        Chưa có lịch phỏng vấn nào sắp tới
+                      </td>
+                    </tr>
+                  ) : (
+                    interviews.slice(0, 4).map((item) => (
                     <tr
                       key={item.id}
                       onClick={() => setSelectedEvent(item)}
@@ -1358,7 +1224,7 @@ function EmployerInterviewContent() {
                         </div>
                       </td>
                     </tr>
-                  ))}
+                  )))}
                 </tbody>
               </table>
             </div>
@@ -1739,7 +1605,7 @@ function EmployerInterviewContent() {
               </div>
             )}
 
-            <div className="flex items-center justify-between pt-3 border-t border-slate-100">
+            <div className="flex items-center justify-between pt-3 border-t border-slate-100 flex-wrap gap-2">
               <button
                 type="button"
                 onClick={() => setSelectedEvent(null)}
@@ -1748,33 +1614,76 @@ function EmployerInterviewContent() {
                 Đóng
               </button>
 
-              <div className="flex items-center gap-2">
-                <button
-                  type="button"
-                  onClick={() => {
-                    setCancelCandidate(selectedEvent);
-                  }}
-                  className="px-3.5 py-2 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold text-xs"
-                >
-                  Hủy lịch
-                </button>
+              <div className="flex items-center gap-2 flex-wrap">
+                {selectedEvent.applicationId && (
+                  <Link
+                    href={`/doanh-nghiep/ung-vien/${selectedEvent.applicationId}`}
+                    className="px-3.5 py-2 rounded-xl bg-blue-50 hover:bg-blue-100 text-[#0062ff] border border-blue-200 font-bold text-xs inline-flex items-center gap-1 cursor-pointer"
+                  >
+                    <ExternalLink className="w-3.5 h-3.5" />
+                    <span>Hồ sơ ứng viên</span>
+                  </Link>
+                )}
+
+                {selectedEvent.status !== "CANCELLED" && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setRescheduleEvent(selectedEvent);
+                      setRescheduleDate(selectedEvent.date);
+                      setRescheduleTime(selectedEvent.startTime);
+                      setRescheduleDuration(selectedEvent.durationHours * 60 || 45);
+                      setRescheduleNote("");
+                    }}
+                    className="px-3.5 py-2 rounded-xl border border-amber-200 text-amber-700 hover:bg-amber-50 font-bold text-xs cursor-pointer"
+                  >
+                    Dời lịch
+                  </button>
+                )}
+
+                {selectedEvent.status !== "COMPLETED" && selectedEvent.status !== "CANCELLED" && (
+                  <button
+                    type="button"
+                    onClick={() => handleMarkCompleted(selectedEvent)}
+                    className="px-3.5 py-2 rounded-xl bg-emerald-50 hover:bg-emerald-100 text-emerald-700 border border-emerald-200 font-bold text-xs cursor-pointer"
+                  >
+                    Đã hoàn thành
+                  </button>
+                )}
+
+                {selectedEvent.status !== "CANCELLED" && (
+                  <button
+                    type="button"
+                    onClick={() => {
+                      setCancelCandidate(selectedEvent);
+                    }}
+                    className="px-3.5 py-2 rounded-xl border border-rose-200 text-rose-600 hover:bg-rose-50 font-bold text-xs cursor-pointer"
+                  >
+                    Hủy lịch
+                  </button>
+                )}
 
                 <button
                   type="button"
                   onClick={() => setEvaluationCandidate(selectedEvent)}
-                  className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md"
+                  className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-md cursor-pointer"
                 >
                   Đánh giá ứng viên
                 </button>
 
-                {selectedEvent.format === "ONLINE" && (
+                {selectedEvent.format === "ONLINE" && selectedEvent.locationOrLink && (
                   <button
                     type="button"
-                    onClick={() => message.info("Đang mở phòng họp Google Meet...")}
-                    className="px-4 py-2 rounded-xl bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold text-xs shadow-md flex items-center gap-1.5"
+                    onClick={() => {
+                      const url = selectedEvent.locationOrLink.startsWith("http")
+                        ? selectedEvent.locationOrLink
+                        : `https://${selectedEvent.locationOrLink}`;
+                      window.open(url, "_blank");
+                    }}
+                    className="px-4 py-2 rounded-xl bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold text-xs shadow-md flex items-center gap-1.5 cursor-pointer"
                   >
                     <Video className="w-3.5 h-3.5" />
-                    <span>Tham gia phòng họp</span>
+                    <span>Phòng họp</span>
                   </button>
                 )}
               </div>
@@ -1831,6 +1740,34 @@ function EmployerInterviewContent() {
           )}
 
           <div className="space-y-3">
+            {applications.length > 0 && (
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">
+                  Hồ sơ ứng tuyển từ hệ thống (nếu có)
+                </label>
+                <Select
+                  placeholder="-- Chọn ứng viên đã nộp đơn --"
+                  className="w-full text-xs"
+                  allowClear
+                  value={formApplicationId}
+                  onChange={(val) => {
+                    setFormApplicationId(val);
+                    if (val) {
+                      const app = applications.find((a) => a.id === val);
+                      if (app) {
+                        setFormCandidateName(app.candidate?.full_name || app.candidate_name || "");
+                        if (app.job?.title) setFormJobTitle(app.job.title);
+                      }
+                    }
+                  }}
+                  options={applications.map((app: any) => ({
+                    value: app.id,
+                    label: `${app.candidate?.full_name || app.candidate_name || "Ứng viên"} - ${app.job?.title || "Vị trí ứng tuyển"}`,
+                  }))}
+                />
+              </div>
+            )}
+
             <div className="grid grid-cols-2 gap-3">
               <div>
                 <label className="font-semibold text-slate-700 block mb-1">Tên ứng viên *</label>
@@ -1844,16 +1781,11 @@ function EmployerInterviewContent() {
 
               <div>
                 <label className="font-semibold text-slate-700 block mb-1">Vị trí ứng tuyển *</label>
-                <Select
+                <Input
                   value={formJobTitle}
-                  onChange={setFormJobTitle}
-                  className="w-full text-xs"
-                  options={[
-                    { value: "Product Manager", label: "Product Manager" },
-                    { value: "UX/UI Designer", label: "UX/UI Designer" },
-                    { value: "Frontend Developer", label: "Frontend Developer" },
-                    { value: "DevOps Engineer", label: "DevOps Engineer" },
-                  ]}
+                  onChange={(e) => setFormJobTitle(e.target.value)}
+                  placeholder="Ví dụ: Frontend Developer"
+                  className="rounded-xl text-xs"
                 />
               </div>
             </div>
@@ -2004,37 +1936,28 @@ function EmployerInterviewContent() {
             <div className="space-y-3">
               <div className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200">
                 <span className="font-semibold text-slate-700">Chuyên môn & Kỹ thuật:</span>
-                <Rate defaultValue={4} className="text-amber-400 text-sm" />
+                <Rate value={evalTechScore} onChange={setEvalTechScore} className="text-amber-400 text-sm" />
               </div>
 
               <div className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200">
                 <span className="font-semibold text-slate-700">Giao tiếp & Tư duy logic:</span>
-                <Rate defaultValue={5} className="text-amber-400 text-sm" />
+                <Rate value={evalCommScore} onChange={setEvalCommScore} className="text-amber-400 text-sm" />
               </div>
 
               <div className="flex items-center justify-between p-2.5 bg-slate-50 rounded-xl border border-slate-200">
                 <span className="font-semibold text-slate-700">Phù hợp văn hóa công ty:</span>
-                <Rate defaultValue={4} className="text-amber-400 text-sm" />
+                <Rate value={evalCultureScore} onChange={setEvalCultureScore} className="text-amber-400 text-sm" />
               </div>
 
               <div>
-                <label className="font-semibold text-slate-700 block mb-1">Kết luận đánh giá:</label>
-                <Select
-                  defaultValue="PASS"
-                  className="w-full text-xs"
-                  options={[
-                    { value: "PASS", label: "Đạt yêu cầu - Chuyển sang vòng tiếp theo / Offer" },
-                    { value: "CONSIDER", label: "Cần cân nhắc thêm / Phỏng vấn bổ sung" },
-                    { value: "FAIL", label: "Chưa phù hợp" },
-                  ]}
-                />
-              </div>
-
-              <div>
-                <label className="font-semibold text-slate-700 block mb-1">Nhận xét chi tiết:</label>
+                <label className="font-semibold text-slate-700 block mb-1">
+                  Nhận xét & Ghi chú nội bộ (không hiển thị cho ứng viên):
+                </label>
                 <Input.TextArea
                   rows={3}
-                  placeholder="Nhập nhận xét của người phỏng vấn..."
+                  value={evalNotes}
+                  onChange={(e) => setEvalNotes(e.target.value)}
+                  placeholder="Ghi nhận điểm mạnh, điểm yếu, phản hồi của hội đồng tuyển dụng..."
                   className="rounded-xl text-xs"
                 />
               </div>
@@ -2044,19 +1967,17 @@ function EmployerInterviewContent() {
               <button
                 type="button"
                 onClick={() => setEvaluationCandidate(null)}
-                className="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs"
+                className="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs cursor-pointer"
               >
                 Hủy
               </button>
               <button
                 type="button"
-                onClick={() => {
-                  setEvaluationCandidate(null);
-                  message.success("Đã lưu kết quả đánh giá phỏng vấn!");
-                }}
-                className="px-5 py-2 rounded-xl bg-[#0062ff] text-white font-bold text-xs shadow-md"
+                disabled={isSubmittingEval}
+                onClick={handleSaveScorecard}
+                className="px-5 py-2 rounded-xl bg-[#0062ff] text-white font-bold text-xs shadow-md disabled:opacity-50 cursor-pointer"
               >
-                Lưu đánh giá
+                {isSubmittingEval ? "Đang lưu..." : "Lưu đánh giá"}
               </button>
             </div>
           </div>
@@ -2099,19 +2020,20 @@ function EmployerInterviewContent() {
             </div>
 
             <div className="p-3 bg-rose-50/70 rounded-xl border border-rose-100 text-rose-900 leading-relaxed">
-              Bạn có chắc chắn muốn hủy lịch hẹn phỏng vấn này? Hệ thống sẽ gửi email thông báo hủy và giải thích lý do đến ứng viên.
+              Bạn có chắc chắn muốn hủy lịch hẹn phỏng vấn này? Hệ thống sẽ gửi thông báo hệ thống đến ứng viên.
             </div>
 
             <div>
               <label className="font-semibold text-slate-700 block mb-1">Lý do hủy lịch:</label>
               <Select
-                defaultValue="RECRUITER_BUSY"
+                value={cancelReason}
+                onChange={setCancelReason}
                 className="w-full text-xs"
                 options={[
-                  { value: "RECRUITER_BUSY", label: "Người phỏng vấn bận lịch đột xuất" },
-                  { value: "CANDIDATE_RESCHEDULE", label: "Ứng viên yêu cầu dời lịch hẹn" },
-                  { value: "POSITION_CLOSED", label: "Vị trí tuyển dụng đã đủ chỉ tiêu" },
-                  { value: "OTHER", label: "Lý do khác" },
+                  { value: "Người phỏng vấn bận lịch đột xuất", label: "Người phỏng vấn bận lịch đột xuất" },
+                  { value: "Ứng viên yêu cầu dời lịch hẹn", label: "Ứng viên yêu cầu dời lịch hẹn" },
+                  { value: "Vị trí tuyển dụng đã đủ chỉ tiêu", label: "Vị trí tuyển dụng đã đủ chỉ tiêu" },
+                  { value: "Thay đổi kế hoạch tuyển dụng", label: "Thay đổi kế hoạch tuyển dụng" },
                 ]}
               />
             </div>
@@ -2120,16 +2042,123 @@ function EmployerInterviewContent() {
               <button
                 type="button"
                 onClick={() => setCancelCandidate(null)}
-                className="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs"
+                className="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs cursor-pointer"
               >
                 Quay lại
               </button>
               <button
                 type="button"
+                disabled={isCancelling}
                 onClick={handleConfirmCancelInterview}
-                className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md"
+                className="px-5 py-2 rounded-xl bg-rose-600 hover:bg-rose-700 text-white font-bold text-xs shadow-md cursor-pointer disabled:opacity-50"
               >
-                Xác nhận hủy lịch
+                {isCancelling ? "Đang hủy..." : "Xác nhận hủy lịch"}
+              </button>
+            </div>
+          </div>
+        )}
+      </Modal>
+
+      {/* Modal 6: Đổi / Dời lịch phỏng vấn */}
+      <Modal
+        open={!!rescheduleEvent}
+        onCancel={() => setRescheduleEvent(null)}
+        footer={null}
+        width={480}
+        centered
+        destroyOnHidden
+        closable={false}
+        title={null}
+      >
+        {rescheduleEvent && (
+          <div className="space-y-4 p-1 text-xs">
+            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-xl bg-amber-50 text-amber-600 flex items-center justify-center shadow-2xs">
+                  <Calendar className="w-5 h-5" />
+                </div>
+                <div>
+                  <h3 className="text-base font-bold text-slate-900 m-0">Dời / Đổi lịch phỏng vấn</h3>
+                  <span className="text-xs text-slate-500 font-medium">
+                    {rescheduleEvent.candidateName} • Lịch cũ: {rescheduleEvent.date} ({rescheduleEvent.startTime})
+                  </span>
+                </div>
+              </div>
+
+              <button
+                type="button"
+                onClick={() => setRescheduleEvent(null)}
+                className="p-1 rounded-lg hover:bg-slate-100 text-slate-400 hover:text-slate-700 cursor-pointer"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            </div>
+
+            <div className="space-y-3">
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">Ngày phỏng vấn mới *</label>
+                <Input
+                  type="date"
+                  value={rescheduleDate}
+                  onChange={(e) => setRescheduleDate(e.target.value)}
+                  className="rounded-xl text-xs"
+                />
+              </div>
+
+              <div className="grid grid-cols-2 gap-3">
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Giờ bắt đầu mới *</label>
+                  <Select
+                    value={rescheduleTime}
+                    onChange={setRescheduleTime}
+                    className="w-full text-xs"
+                    options={TIME_SLOTS.map((t) => ({ value: t, label: t }))}
+                  />
+                </div>
+
+                <div>
+                  <label className="font-semibold text-slate-700 block mb-1">Thời lượng (phút)</label>
+                  <Select
+                    value={rescheduleDuration}
+                    onChange={setRescheduleDuration}
+                    className="w-full text-xs"
+                    options={[
+                      { value: 30, label: "30 phút" },
+                      { value: 45, label: "45 phút" },
+                      { value: 60, label: "60 phút" },
+                      { value: 90, label: "90 phút" },
+                    ]}
+                  />
+                </div>
+              </div>
+
+              <div>
+                <label className="font-semibold text-slate-700 block mb-1">Lý do dời lịch / Ghi chú:</label>
+                <Input.TextArea
+                  rows={2}
+                  value={rescheduleNote}
+                  onChange={(e) => setRescheduleNote(e.target.value)}
+                  placeholder="Lý do thay đổi thời gian phỏng vấn..."
+                  className="rounded-xl text-xs"
+                />
+              </div>
+            </div>
+
+            <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-slate-100">
+              <button
+                type="button"
+                onClick={() => setRescheduleEvent(null)}
+                className="px-4 py-2 rounded-xl border border-slate-200 bg-white hover:bg-slate-50 text-slate-700 font-bold text-xs cursor-pointer"
+              >
+                Hủy
+              </button>
+              <button
+                type="button"
+                disabled={isSubmittingReschedule}
+                onClick={handleConfirmReschedule}
+                className="px-5 py-2 rounded-xl bg-amber-600 hover:bg-amber-700 text-white font-bold text-xs shadow-md cursor-pointer disabled:opacity-50"
+              >
+                {isSubmittingReschedule ? "Đang lưu..." : "Xác nhận dời lịch"}
               </button>
             </div>
           </div>

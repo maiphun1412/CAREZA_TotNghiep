@@ -1,0 +1,68 @@
+{
+  "dataset": "rag_retrieval_v1 (90 queries)",
+  "metrics_comparison": {
+    "metric": [
+      "mrr",
+      "hit_rate@1",
+      "hit_rate@3",
+      "hit_rate@5",
+      "recall@3",
+      "recall@5",
+      "precision@1",
+      "false_negative_rate"
+    ],
+    "baseline": [
+      0.7115,
+      0.6,
+      0.8125,
+      0.8375,
+      0.6958,
+      0.75,
+      0.6,
+      0.0625
+    ],
+    "hybrid_v1": [
+      0.8099,
+      0.7125,
+      0.9,
+      0.9375,
+      0.8417,
+      0.9,
+      0.7125,
+      0.025
+    ],
+    "hybrid_v2": [
+      0.8188,
+      0.7125,
+      0.9125,
+      0.95,
+      0.8604,
+      0.925,
+      0.7125,
+      0.025
+    ]
+  },
+  "unanswerable_comparison": {
+    "baseline": {
+      "count": 10,
+      "correct_rejections": 4,
+      "correct_rejection_rate": 0.4,
+      "false_retrievals": 6,
+      "false_retrieval_rate": 0.6
+    },
+    "hybrid_v1": {
+      "count": 10,
+      "correct_rejections": 10,
+      "correct_rejection_rate": 1.0,
+      "false_retrievals": 0,
+      "false_retrieval_rate": 0.0
+    },
+    "hybrid_v2": {
+      "count": 10,
+      "correct_rejections": 9,
+      "correct_rejection_rate": 0.9,
+      "false_retrievals": 1,
+      "false_retrieval_rate": 0.1
+    }
+  }
+}

@@ -29,22 +29,24 @@ const BLOGS = [
 
 export default function CareerBlog() {
   return (
-    <section className="py-16 bg-[#f3f6fc] w-full border-b border-outline-variant/15 relative overflow-hidden">
+    <section className="py-5 md:py-7 bg-[#f3f6fc] w-full border-b border-outline-variant/15 relative overflow-hidden">
       <MouseSpotlight size={600} color="rgba(15, 82, 186, 0.04)" />
       <div className="max-w-container-max mx-auto px-margin-desktop relative z-10">
-        <div className="flex flex-col md:flex-row justify-between items-end mb-10 gap-8">
-          <div>
-            <h2 className="text-3xl font-black mb-3">Cẩm nang sự nghiệp</h2>
+        <div className="relative mb-6">
+          <div className="text-center max-w-2xl mx-auto">
+            <h2 className="text-3xl font-black mb-1.5">Cẩm nang sự nghiệp</h2>
             <p className="text-base text-on-surface-variant">Kiến thức và kinh nghiệm từ các chuyên gia hàng đầu.</p>
           </div>
-          <Link className="text-primary text-sm font-bold flex items-center gap-2 group hover:gap-4 transition-all" href="/tin-tuc">
-            Khám phá Blog <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
-          </Link>
+          <div className="mt-3 md:mt-0 md:absolute md:right-0 md:bottom-1 flex justify-center">
+            <Link className="text-primary text-sm font-bold flex items-center gap-2 group hover:gap-4 transition-all" href="/tin-tuc">
+              Khám phá Blog <span className="material-symbols-outlined text-[18px]">arrow_forward</span>
+            </Link>
+          </div>
         </div>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 lg:gap-6">
           {BLOGS.map((blog) => (
-            <div key={blog.id} className="bg-white p-6 rounded-[40px] border border-blue-100/30 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group cursor-pointer flex flex-col h-full">
-              <div className="h-48 rounded-[28px] overflow-hidden mb-5 border border-outline-variant/20 shadow-sm">
+            <div key={blog.id} className="bg-white p-5 rounded-[32px] border border-blue-100/30 shadow-sm hover:shadow-md hover:-translate-y-1 transition-all duration-300 group cursor-pointer flex flex-col h-full">
+              <div className="h-44 rounded-[22px] overflow-hidden mb-4 border border-outline-variant/20 shadow-sm">
                 <img 
                   alt={blog.title} 
                   className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700" 

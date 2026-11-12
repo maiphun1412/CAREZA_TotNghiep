@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 import {
   Avatar,
   Modal,
@@ -13,6 +13,9 @@ import {
   Progress,
   Tag,
   Skeleton,
+  Spin,
+  Alert,
+  Empty,
 } from "antd";
 import type { MenuProps } from "antd";
 import {
@@ -51,45 +54,9 @@ import {
   Share2,
 } from "lucide-react";
 import { useAuthStore } from "@/store/auth-store";
+import { employerService } from "@/services/employer.service";
+import { aiService } from "@/services/ai.service";
 import Link from "next/link";
-
-// =====================================================================
-// INTERFACES & DATA MODELS
-// =====================================================================
-
-export interface CandidateSearchResult {
-  id: string;
-  name: string;
-  avatar: string;
-  tag: string;
-  tagColor: "green" | "blue" | "purple" | "amber";
-  jobTitle: string;
-  currentCompany: string;
-  experienceYears: number;
-  location: string;
-  salaryExpectation: string;
-  skills: string[];
-  source: string;
-  updatedTime: string;
-  matchScore: number;
-  email: string;
-  phone: string;
-  isSaved?: boolean;
-  education?: string;
-  bio?: string;
-}
-
-export interface SavedFilterItem {
-  id: string;
-  name: string;
-  candidateCount: number;
-  criteria: {
-    skills?: string[];
-    position?: string;
-    experience?: string;
-    location?: string;
-  };
-}
 
 export interface SearchSuggestionItem {
   id: string;
@@ -98,144 +65,54 @@ export interface SearchSuggestionItem {
   count: number;
 }
 
+export interface SavedFilterItem {
+  id: string;
+  name: string;
+  candidateCount: number;
+  criteria: any;
+}
+
 export interface RecentSearchItem {
   id: string;
   query: string;
   timeAgo: string;
 }
 
-// =====================================================================
-// INITIAL MOCK DATA (MATCHING REFERENCE EXACTLY)
-// =====================================================================
-
-const MOCK_CANDIDATES: CandidateSearchResult[] = [
-  {
-    id: "cand-1",
-    name: "Nguyễn Minh Anh",
-    avatar: "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=150&h=150&q=80",
-    tag: "Tiềm năng cao",
-    tagColor: "green",
-    jobTitle: "Frontend Developer",
-    currentCompany: "TechSoft",
-    experienceYears: 3,
-    location: "Hà Nội",
-    salaryExpectation: "$1,500 - $2,000",
-    skills: ["React", "TypeScript", "Next.js", "Tailwind CSS", "Redux", "GraphQL", "Webpack", "REST API"],
-    source: "LinkedIn",
-    updatedTime: "2 ngày trước",
-    matchScore: 92,
-    email: "minhanh.frontend@email.com",
-    phone: "0345 678 901",
-    education: "Đại học Bách Khoa Hà Nội - Kỹ sư CNTT",
-    bio: "3 năm kinh nghiệm xây dựng các ứng dụng Web SPA quy mô lớn với React và Next.js. Tư duy logic tốt, chủ động trong công việc.",
-    isSaved: true,
-  },
-  {
-    id: "cand-2",
-    name: "Trần Hoàng Nam",
-    avatar: "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=150&h=150&q=80",
-    tag: "Phù hợp",
-    tagColor: "blue",
-    jobTitle: "Frontend Engineer",
-    currentCompany: "VinGroup",
-    experienceYears: 4,
-    location: "TP. Hồ Chí Minh",
-    salaryExpectation: "$1,800 - $2,500",
-    skills: ["React", "Vue.js", "JavaScript", "Node.js", "HTML/CSS", "TypeScript", "Docker"],
-    source: "VietnamWorks",
-    updatedTime: "1 tuần trước",
-    matchScore: 88,
-    email: "namth.fe@outlook.com",
-    phone: "0912 345 678",
-    education: "Đại học Khoa học Tự nhiên TP.HCM",
-    bio: "Chuyên sâu về Frontend Architecture, Micro-frontend và tối ưu trải nghiệm người dùng trên quy mô lớn.",
-    isSaved: false,
-  },
-  {
-    id: "cand-3",
-    name: "Phạm Thu Hằng",
-    avatar: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?auto=format&fit=crop&w=150&h=150&q=80",
-    tag: "Phù hợp",
-    tagColor: "blue",
-    jobTitle: "UI/UX Developer",
-    currentCompany: "FPT Software",
-    experienceYears: 2,
-    location: "Đà Nẵng",
-    salaryExpectation: "$1,200 - $1,600",
-    skills: ["Figma", "React", "UI/UX", "CSS", "JavaScript", "Tailwind CSS"],
-    source: "TopCV",
-    updatedTime: "3 ngày trước",
-    matchScore: 85,
-    email: "hangpt.design@gmail.com",
-    phone: "0987 654 321",
-    education: "Đại học Bách Khoa Đà Nẵng",
-    bio: "Kết hợp tư duy thẩm mỹ UI/UX hiện đại với khả năng code Frontend React sắc bén, chuẩn Design System.",
-    isSaved: false,
-  },
-  {
-    id: "cand-4",
-    name: "Đỗ Thành Tùng",
-    avatar: "https://images.unsplash.com/photo-1522075469751-3a6694fb2f61?auto=format&fit=crop&w=150&h=150&q=80",
-    tag: "Cân nhắc",
-    tagColor: "purple",
-    jobTitle: "Frontend Developer",
-    currentCompany: "Tiki",
-    experienceYears: 5,
-    location: "Hà Nội",
-    salaryExpectation: "$2,000 - $3,000",
-    skills: ["React", "TypeScript", "Next.js", "Node.js", "GraphQL", "CI/CD", "AWS"],
-    source: "Careza",
-    updatedTime: "5 ngày trước",
-    matchScore: 78,
-    email: "tungdt.dev@yahoo.com",
-    phone: "0901 234 567",
-    education: "Đại học Công Nghệ - ĐHQGHN",
-    bio: "Senior Frontend Developer có kinh nghiệm Fullstack và Lead nhóm 6 kỹ sư xây dựng hệ thống E-commerce.",
-    isSaved: false,
-  },
-  {
-    id: "cand-5",
-    name: "Lê Quang Huy",
-    avatar: "https://images.unsplash.com/photo-1500648767791-00dcc994a43e?auto=format&fit=crop&w=150&h=150&q=80",
-    tag: "Tiềm năng cao",
-    tagColor: "green",
-    jobTitle: "Senior React Engineer",
-    currentCompany: "VNG Corporation",
-    experienceYears: 6,
-    location: "TP. Hồ Chí Minh",
-    salaryExpectation: "$2,200 - $3,200",
-    skills: ["React", "Next.js", "TypeScript", "Tailwind CSS", "Redux Toolkit", "Zustand"],
-    source: "LinkedIn",
-    updatedTime: "1 ngày trước",
-    matchScore: 94,
-    email: "huy.le@vng.com.vn",
-    phone: "0934 567 890",
-    education: "Đại học Bách Khoa TP.HCM",
-    bio: "Hơn 6 năm kinh nghiệm phát triển các sản phẩm game web và ứng dụng tài chính hiệu năng cao.",
-    isSaved: true,
-  },
-  {
-    id: "cand-6",
-    name: "Vũ Ngọc Mai",
-    avatar: "https://images.unsplash.com/photo-1544005313-94ddf0286df2?auto=format&fit=crop&w=150&h=150&q=80",
-    tag: "Phù hợp",
-    tagColor: "blue",
-    jobTitle: "Frontend Web Developer",
-    currentCompany: "One Mount Group",
-    experienceYears: 3,
-    location: "Hà Nội",
-    salaryExpectation: "$1,400 - $1,900",
-    skills: ["React", "TypeScript", "Ant Design", "Tailwind CSS", "REST API"],
-    source: "TopCV",
-    updatedTime: "4 ngày trước",
-    matchScore: 86,
-    email: "maivn.web@gmail.com",
-    phone: "0978 123 456",
-    education: "Đại học Hà Nội",
-    bio: "Kỹ sư Frontend cẩn thận, nắm vững Ant Design, React Query và quy trình Agile Scrum.",
-    isSaved: false,
-  },
-];
+export interface CandidateSearchResult {
+  id: string;
+  candidateId?: string | number | null;
+  cvId?: string | number | null;
+  name: string;
+  avatar: string;
+  title?: string;
+  jobTitle: string;
+  currentCompany: string;
+  rankPosition?: number | null;
+  topsisScore?: number | null;
+  matchScore: number | null;
+  skillScore?: number | null;
+  tfidfScore?: number | null;
+  experienceScore?: number | null;
+  matchedSkills?: string[];
+  missingSkills?: string[];
+  explanationSummary?: string;
+  location: string;
+  experienceYears: number | null;
+  education: string;
+  salaryExpectation: string;
+  appliedDate?: string;
+  skills: string[];
+  bio: string;
+  badges?: string[];
+  cvUrl?: string;
+  phone?: string;
+  email?: string;
+  tag?: string;
+  tagColor?: string;
+  source?: string;
+  updatedTime?: string;
+  isSaved?: boolean;
+}
 
 const SEARCH_SUGGESTIONS: SearchSuggestionItem[] = [
   { id: "sug-1", from: "React", to: "Next.js", count: 38 },
@@ -284,16 +161,16 @@ export default function EmployerSearchCandidatePage() {
 
   // Filter States
   const [keyword, setKeyword] = useState<string>("");
-  const [position, setPosition] = useState<string>("Frontend Developer");
-  const [skill, setSkill] = useState<string>("React");
-  const [experience, setExperience] = useState<string>("2-5");
+  const [position, setPosition] = useState<string>("all");
+  const [skill, setSkill] = useState<string>("all");
+  const [experience, setExperience] = useState<string>("all");
   const [salary, setSalary] = useState<string>("all");
-  const [location, setLocation] = useState<string>("Hà Nội");
+  const [location, setLocation] = useState<string>("all");
   const [workType, setWorkType] = useState<string>("all");
   const [source, setSource] = useState<string>("all");
   const [candidateGroup, setCandidateGroup] = useState<string>("all");
   const [status, setStatus] = useState<string>("all");
-  const [sortBy, setSortBy] = useState<string>("newest");
+  const [sortBy, setSortBy] = useState<string>("topsis");
   const [isAdvancedOpen, setIsAdvancedOpen] = useState<boolean>(false);
 
   // Advanced Filter States
@@ -303,9 +180,228 @@ export default function EmployerSearchCandidatePage() {
 
   // View mode & Selection
   const [viewMode, setViewMode] = useState<"list" | "grid">("list");
-  const [selectedCandidateIds, setSelectedCandidateIds] = useState<string[]>(["cand-1"]);
+  const [selectedCandidateIds, setSelectedCandidateIds] = useState<string[]>([]);
   const [savedFiltersList, setSavedFiltersList] = useState<SavedFilterItem[]>(SAVED_FILTERS);
   const [recentSearchesList, setRecentSearchesList] = useState<RecentSearchItem[]>(RECENT_SEARCHES);
+
+  // API Data States (Tin tuyển dụng thật của doanh nghiệp + Ứng viên TOPSIS)
+  const [companyJobs, setCompanyJobs] = useState<any[]>([]);
+  const [selectedJobId, setSelectedJobId] = useState<number | string>("");
+  const [candidates, setCandidates] = useState<CandidateSearchResult[]>([]);
+  const [pools, setPools] = useState<any[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+  const [selectedPoolId, setSelectedPoolId] = useState<string | number>("");
+
+  const formatCandidateSalary = (minSal?: number | null, maxSal?: number | null): string => {
+    const sMin = Number(minSal || 0);
+    const sMax = Number(maxSal || 0);
+    if (sMin > 0 && sMax > 0) {
+      return sMin >= 1_000_000
+        ? `${Math.round(sMin / 1_000_000)} - ${Math.round(sMax / 1_000_000)} triệu`
+        : `${sMin.toLocaleString("vi-VN")} - ${sMax.toLocaleString("vi-VN")} VNĐ`;
+    }
+    if (sMin > 0) {
+      return sMin >= 1_000_000
+        ? `Từ ${Math.round(sMin / 1_000_000)} triệu`
+        : `Từ ${sMin.toLocaleString("vi-VN")} VNĐ`;
+    }
+    if (sMax > 0) {
+      return sMax >= 1_000_000
+        ? `Đến ${Math.round(sMax / 1_000_000)} triệu`
+        : `Đến ${sMax.toLocaleString("vi-VN")} VNĐ`;
+    }
+    return "Chưa cập nhật";
+  };
+
+  const fetchRecommendationsForJob = useCallback(async (jobId: number | string) => {
+    if (!jobId) {
+      setCandidates([]);
+      return;
+    }
+    try {
+      setLoading(true);
+      setError(null);
+      const recRes = await aiService.getCandidateRecommendations(jobId, 30);
+      const rawList =
+        recRes?.data?.recommendations ||
+        recRes?.data?.candidates ||
+        [];
+
+      if (Array.isArray(rawList)) {
+        const mapped: CandidateSearchResult[] = rawList.map((item: any, idx: number) => {
+          const cand = item.candidate || {};
+          const expl = item.explanation || {};
+          const breakdown = expl.breakdown || {};
+          const rankPos = typeof item.rank_position === "number" ? item.rank_position : idx + 1;
+          const topsisVal = typeof item.topsis_score === "number" ? item.topsis_score : null;
+          const matchPct =
+            typeof item.match_percentage === "number"
+              ? item.match_percentage
+              : typeof item.hybrid_score === "number"
+              ? Math.round(item.hybrid_score * 1000) / 10
+              : null;
+
+          const expVal =
+            typeof cand.experience_years === "number"
+              ? cand.experience_years
+              : typeof expl.candidate_experience_years === "number"
+              ? expl.candidate_experience_years
+              : null;
+
+          const appStatus = cand.application_status;
+          const tagLabel =
+            appStatus === "hired"
+              ? "Đã tuyển"
+              : appStatus === "interview"
+              ? "Vòng phỏng vấn"
+              : appStatus
+              ? "Đã ứng tuyển"
+              : `Hạng #${rankPos} TOPSIS`;
+          const tagClr =
+            appStatus === "hired"
+              ? "green"
+              : appStatus === "interview"
+              ? "blue"
+              : "purple";
+
+          const rawDate = cand.applied_at || cand.cv_created_at;
+          const formattedDate = rawDate
+            ? new Date(rawDate).toLocaleDateString("vi-VN")
+            : "Chưa cập nhật";
+
+          const skillsArr: string[] = Array.isArray(cand.skills)
+            ? cand.skills
+            : Array.isArray(expl.matched_skills)
+            ? expl.matched_skills
+            : [];
+
+          return {
+            id: String(cand.cv_id || cand.id || idx + 1),
+            candidateId: cand.id ?? cand.user_id ?? cand.cv_id ?? null,
+            cvId: cand.cv_id ?? null,
+            name: cand.candidate_name || cand.full_name || "Ứng viên",
+            avatar: cand.avatar_url || "",
+            tag: tagLabel,
+            tagColor: tagClr,
+            title: cand.headline || cand.cv_title || "Chưa cập nhật chức danh",
+            jobTitle: cand.headline || cand.cv_title || "Chưa cập nhật chức danh",
+            currentCompany: cand.current_company || "Chưa cập nhật đơn vị",
+            rankPosition: rankPos,
+            topsisScore: topsisVal,
+            matchScore: matchPct,
+            skillScore:
+              typeof item.skill_score === "number"
+                ? item.skill_score
+                : typeof breakdown.skill_score === "number"
+                ? breakdown.skill_score
+                : null,
+            tfidfScore:
+              typeof item.tfidf_cosine === "number"
+                ? item.tfidf_cosine
+                : typeof breakdown.tfidf_cosine === "number"
+                ? breakdown.tfidf_cosine
+                : null,
+            experienceScore:
+              typeof item.experience_score === "number"
+                ? item.experience_score
+                : typeof breakdown.experience_score === "number"
+                ? breakdown.experience_score
+                : null,
+            matchedSkills: Array.isArray(expl.matched_skills) ? expl.matched_skills : [],
+            missingSkills: Array.isArray(expl.missing_skills) ? expl.missing_skills : [],
+            explanationSummary: expl.summary || "",
+            experienceYears: expVal,
+            location: cand.location || "Chưa cập nhật",
+            salaryExpectation: formatCandidateSalary(cand.desired_salary_min, cand.desired_salary_max),
+            skills: skillsArr,
+            source: cand.application_id ? "Đã nộp đơn ứng tuyển" : "Cơ sở dữ liệu CV (TOPSIS)",
+            updatedTime: formattedDate,
+            appliedDate: formattedDate,
+            email: cand.email || "Chưa cập nhật",
+            phone: cand.phone || "Chưa cập nhật",
+            education: cand.education || "Chưa cập nhật học vấn",
+            bio: cand.bio || expl.summary || "Chưa có giới thiệu chi tiết.",
+            cvUrl: cand.cv_file_url || undefined,
+            badges: [],
+            isSaved: false,
+          };
+        });
+        setCandidates(mapped);
+      } else {
+        setCandidates([]);
+      }
+    } catch (err: any) {
+      const errData = err?.response?.data;
+      const errMsg =
+        errData?.error ||
+        errData?.detail ||
+        errData?.message ||
+        err?.message ||
+        "Không thể tải danh sách xếp hạng ứng viên TOPSIS.";
+      setError(typeof errMsg === "string" ? errMsg : "Không thể tải danh sách xếp hạng ứng viên.");
+      setCandidates([]);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  const fetchInitialData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [jobsRes, poolsRes] = await Promise.all([
+        employerService.getJobs({ page_size: 50 }).catch((e) => {
+          console.error("Lỗi lấy danh sách tin tuyển dụng:", e);
+          return null;
+        }),
+        employerService.getTalentPools().catch((e) => {
+          console.error("Lỗi lấy talent pools:", e);
+          return null;
+        }),
+      ]);
+
+      const poolList =
+        (poolsRes as any)?.data?.talent_pools ||
+        (poolsRes as any)?.data?.pools ||
+        (poolsRes as any)?.talent_pools ||
+        (poolsRes as any)?.pools ||
+        [];
+      setPools(poolList);
+      if (poolList.length > 0) {
+        setSelectedPoolId(poolList[0].id);
+      }
+
+      const jobItems =
+        (jobsRes as any)?.data?.items ||
+        (jobsRes as any)?.items ||
+        [];
+      setCompanyJobs(jobItems);
+
+      if (jobItems.length > 0) {
+        const firstJobId = jobItems[0].id;
+        setSelectedJobId(firstJobId);
+        await fetchRecommendationsForJob(firstJobId);
+      } else {
+        setCandidates([]);
+        setLoading(false);
+      }
+    } catch (err: any) {
+      console.error("Lỗi nạp dữ liệu ban đầu:", err);
+      setError(err?.message || "Không thể tải danh sách tin tuyển dụng của doanh nghiệp.");
+      setLoading(false);
+    }
+  }, [fetchRecommendationsForJob]);
+
+  useEffect(() => {
+    fetchInitialData();
+  }, [fetchInitialData]);
+
+  const handleJobChange = (newJobId: number | string) => {
+    setSelectedJobId(newJobId);
+    setSelectedCandidateIds([]);
+    fetchRecommendationsForJob(newJobId);
+  };
 
   // Modals
   const [selectedCandidateDetail, setSelectedCandidateDetail] = useState<CandidateSearchResult | null>(null);
@@ -378,44 +474,57 @@ export default function EmployerSearchCandidatePage() {
 
   // Filtered Candidates List
   const filteredCandidates = useMemo(() => {
-    return MOCK_CANDIDATES.filter((cand) => {
+    const res = candidates.filter((cand) => {
       // Keyword matching
       if (keyword.trim()) {
         const q = keyword.toLowerCase();
         const matchName = cand.name.toLowerCase().includes(q);
         const matchTitle = cand.jobTitle.toLowerCase().includes(q);
-        const matchCompany = cand.currentCompany.toLowerCase().includes(q);
-        const matchSkill = cand.skills.some((s) => s.toLowerCase().includes(q));
+        const matchCompany = (cand.currentCompany || "").toLowerCase().includes(q);
+        const matchSkill = (cand.skills || []).some((s: string) => s.toLowerCase().includes(q));
         if (!matchName && !matchTitle && !matchCompany && !matchSkill) return false;
       }
 
       // Position matching
-      if (position !== "all" && !cand.jobTitle.toLowerCase().includes(position.toLowerCase())) {
+      if (position !== "all" && !(cand.jobTitle || "").toLowerCase().includes(position.toLowerCase())) {
         return false;
       }
 
       // Skill matching
-      if (skill !== "all" && !cand.skills.some((s) => s.toLowerCase().includes(skill.toLowerCase()))) {
+      if (skill !== "all" && !(cand.skills || []).some((s: string) => s.toLowerCase().includes(skill.toLowerCase()))) {
         return false;
       }
 
       // Location matching
-      if (location !== "all" && !cand.location.toLowerCase().includes(location.toLowerCase())) {
+      if (location !== "all" && !(cand.location || "").toLowerCase().includes(location.toLowerCase())) {
         return false;
       }
 
       // Experience matching
-      if (experience === "under1" && cand.experienceYears >= 1) return false;
-      if (experience === "1-2" && (cand.experienceYears < 1 || cand.experienceYears > 2)) return false;
-      if (experience === "2-5" && (cand.experienceYears < 2 || cand.experienceYears > 5)) return false;
-      if (experience === "over5" && cand.experienceYears <= 5) return false;
+      const expY = cand.experienceYears ?? 0;
+      if (experience === "under1" && expY >= 1) return false;
+      if (experience === "1-2" && (expY < 1 || expY > 2)) return false;
+      if (experience === "2-5" && (expY < 2 || expY > 5)) return false;
+      if (experience === "over5" && expY <= 5) return false;
 
       return true;
     });
-  }, [keyword, position, skill, location, experience]);
+
+    if (sortBy === "topsis") {
+      res.sort((a, b) => (b.topsisScore ?? 0) - (a.topsisScore ?? 0));
+    } else if (sortBy === "match") {
+      res.sort((a, b) => (b.matchScore ?? 0) - (a.matchScore ?? 0));
+    } else if (sortBy === "exp") {
+      res.sort((a, b) => (b.experienceYears ?? 0) - (a.experienceYears ?? 0));
+    } else if (sortBy === "newest") {
+      res.sort((a, b) => Number(b.id) - Number(a.id));
+    }
+
+    return res;
+  }, [candidates, keyword, position, skill, location, experience, sortBy]);
 
   // Total results count (derived from state)
-  const totalResultsCount = 128; // Dynamic display matching reference
+  const totalResultsCount = filteredCandidates.length;
 
   // Selection handlers
   const handleSelectAll = (checked: boolean) => {
@@ -541,11 +650,11 @@ export default function EmployerSearchCandidatePage() {
           {/* ---------------------------------------------------- */}
           <div className="bg-white rounded-2xl border border-slate-200/90 shadow-2xs p-4 sm:p-5 space-y-4">
             {/* Filter Card Header */}
-            <div className="flex items-center justify-between pb-3 border-b border-slate-100">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 pb-3 border-b border-slate-100">
               <div className="flex items-center gap-2">
                 <Filter className="w-4 h-4 text-slate-700" />
                 <span className="font-extrabold text-sm text-slate-900">
-                  Bộ lọc tìm kiếm
+                  Xếp hạng TOPSIS & Bộ lọc tìm kiếm ứng viên
                 </span>
               </div>
 
@@ -561,12 +670,54 @@ export default function EmployerSearchCandidatePage() {
 
                 <button
                   type="button"
-                  onClick={() => message.success("Đã áp dụng các tiêu chí tìm kiếm!")}
+                  onClick={() => {
+                    if (selectedJobId) {
+                      fetchRecommendationsForJob(selectedJobId);
+                    } else {
+                      fetchInitialData();
+                    }
+                  }}
                   className="px-4 py-1.5 rounded-xl bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold text-xs shadow-sm flex items-center gap-1.5 transition-colors cursor-pointer"
                 >
-                  <Search className="w-3.5 h-3.5" />
-                  <span>Tìm kiếm</span>
+                  <Sparkles className="w-3.5 h-3.5" />
+                  <span>Chạy xếp hạng TOPSIS</span>
                 </button>
+              </div>
+            </div>
+
+            {/* Выбор tin tuyển dụng thật của doanh nghiệp để xếp hạng TOPSIS */}
+            <div className="p-3.5 rounded-xl bg-blue-50/60 border border-blue-200/80 flex flex-col md:flex-row md:items-center justify-between gap-3">
+              <div className="space-y-0.5">
+                <div className="flex items-center gap-2">
+                  <Sparkles className="w-4 h-4 text-[#0062ff]" />
+                  <span className="text-xs font-extrabold text-slate-900">
+                    Tin tuyển dụng áp dụng xếp hạng TOPSIS
+                  </span>
+                  <span className="bg-blue-600 text-white text-[10px] font-bold px-2 py-0.5 rounded-full">
+                    Đa tiêu chí: Kỹ năng (45%) • TF-IDF (30%) • Kinh nghiệm (25%)
+                  </span>
+                </div>
+                <p className="text-[11px] text-slate-600 m-0">
+                  Chọn tin tuyển dụng của doanh nghiệp để hệ thống đối sánh CV–JD và xếp hạng ứng viên theo thuật toán TOPSIS.
+                </p>
+              </div>
+
+              <div className="w-full md:w-80 shrink-0">
+                <Select
+                  value={selectedJobId || undefined}
+                  onChange={handleJobChange}
+                  placeholder={
+                    companyJobs.length > 0
+                      ? "Chọn tin tuyển dụng..."
+                      : "Doanh nghiệp chưa có tin tuyển dụng"
+                  }
+                  disabled={companyJobs.length === 0}
+                  className="w-full text-xs"
+                  options={companyJobs.map((j: any) => ({
+                    value: j.id,
+                    label: `${j.title} (#${j.id} - ${j.status === "published" ? "Đang đăng" : j.status})`,
+                  }))}
+                />
               </div>
             </div>
 
@@ -787,13 +938,12 @@ export default function EmployerSearchCandidatePage() {
                     size="small"
                     value={sortBy}
                     onChange={setSortBy}
-                    className="w-36 text-xs h-7.5"
+                    className="w-40 text-xs h-7.5"
                     options={[
-                      { value: "newest", label: "Mới nhất" },
-                      { value: "match", label: "Độ phù hợp cao nhất" },
+                      { value: "topsis", label: "Thứ hạng TOPSIS" },
+                      { value: "match", label: "Độ khớp CV–JD" },
                       { value: "exp", label: "Kinh nghiệm nhiều nhất" },
-                      { value: "salary_asc", label: "Lương thấp đến cao" },
-                      { value: "salary_desc", label: "Lương cao đến thấp" },
+                      { value: "newest", label: "Mới nhất" },
                     ]}
                   />
                 </div>
@@ -938,11 +1088,12 @@ export default function EmployerSearchCandidatePage() {
                 <Select
                   value={sortBy}
                   onChange={setSortBy}
-                  className="w-28 text-xs"
+                  className="w-36 text-xs"
                   options={[
-                    { value: "newest", label: "Mới nhất" },
-                    { value: "match", label: "Độ phù hợp" },
+                    { value: "topsis", label: "Hạng TOPSIS" },
+                    { value: "match", label: "Độ khớp CV–JD" },
                     { value: "exp", label: "Kinh nghiệm" },
+                    { value: "newest", label: "Mới nhất" },
                   ]}
                 />
               </div>
@@ -1019,14 +1170,61 @@ export default function EmployerSearchCandidatePage() {
           {/* ---------------------------------------------------- */}
           {/* CANDIDATE RESULTS: LIST OR GRID VIEW                 */}
           {/* ---------------------------------------------------- */}
-          {filteredCandidates.length === 0 ? (
+          {loading ? (
+            <div className="p-16 text-center bg-white rounded-2xl border border-slate-200/90 space-y-3">
+              <Spin size="large" />
+              <p className="text-xs text-slate-500 font-medium">
+                Đang đối sánh CV–JD và xếp hạng ứng viên bằng thuật toán TOPSIS...
+              </p>
+            </div>
+          ) : error ? (
+            <div className="bg-white rounded-2xl p-6 border border-slate-200/90">
+              <Alert
+                type="error"
+                showIcon
+                message="Lỗi tải dữ liệu xếp hạng ứng viên"
+                description={error}
+                action={
+                  <button
+                    type="button"
+                    onClick={() => {
+                      if (selectedJobId) {
+                        fetchRecommendationsForJob(selectedJobId);
+                      } else {
+                        fetchInitialData();
+                      }
+                    }}
+                    className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white rounded-lg text-xs font-bold cursor-pointer"
+                  >
+                    Thử lại
+                  </button>
+                }
+              />
+            </div>
+          ) : companyJobs.length === 0 ? (
+            <div className="p-12 text-center bg-white rounded-2xl border border-slate-200/90 space-y-3">
+              <Briefcase className="w-10 h-10 mx-auto text-slate-300 stroke-1" />
+              <h3 className="text-sm font-bold text-slate-800 m-0">
+                Doanh nghiệp chưa có tin tuyển dụng nào
+              </h3>
+              <p className="text-xs text-slate-500 m-0">
+                Vui lòng tạo tin tuyển dụng trước để hệ thống phân tích yêu cầu JD và xếp hạng ứng viên bằng thuật toán TOPSIS.
+              </p>
+              <Link
+                href="/doanh-nghiep/tin-tuyen-dung/them-moi"
+                className="inline-block px-4 py-2 bg-[#0062ff] hover:bg-[#0052cc] text-white font-bold text-xs rounded-xl shadow-sm mt-2"
+              >
+                + Đăng tin tuyển dụng mới
+              </Link>
+            </div>
+          ) : filteredCandidates.length === 0 ? (
             <div className="p-12 text-center bg-white rounded-2xl border border-slate-200/90 space-y-3">
               <Search className="w-10 h-10 mx-auto text-slate-300 stroke-1" />
               <h3 className="text-sm font-bold text-slate-800 m-0">
                 Không tìm thấy ứng viên phù hợp
               </h3>
               <p className="text-xs text-slate-500 m-0">
-                Hãy thử giảm số điều kiện lọc, thay đổi kỹ năng hoặc mở rộng khu vực tìm kiếm.
+                Chưa có hồ sơ ứng viên khớp với điều kiện lọc hiện tại hoặc hệ thống chưa có CV trong phạm vi truy cập.
               </p>
               <button
                 type="button"
@@ -1060,14 +1258,21 @@ export default function EmployerSearchCandidatePage() {
                         />
 
                         <Avatar
-                          src={cand.avatar}
+                          src={cand.avatar || undefined}
                           size={46}
-                          className="border border-slate-200 shrink-0 shadow-2xs"
-                        />
+                          className="border border-slate-200 shrink-0 shadow-2xs bg-blue-50 text-[#0062ff] font-bold"
+                        >
+                          {cand.name?.slice(0, 2).toUpperCase()}
+                        </Avatar>
 
                         <div className="space-y-1.5 min-w-0 flex-1">
-                          {/* Name + Tag */}
+                          {/* Name + Rank + Tag */}
                           <div className="flex items-center gap-2 flex-wrap">
+                            {cand.rankPosition != null && (
+                              <span className="px-2 py-0.5 rounded-md bg-blue-600 text-white text-[10.5px] font-extrabold">
+                                Hạng #{cand.rankPosition}
+                              </span>
+                            )}
                             <span
                               onClick={() => setSelectedCandidateDetail(cand)}
                               className="font-bold text-slate-900 text-sm hover:text-[#0062ff] cursor-pointer transition-colors"
@@ -1089,17 +1294,26 @@ export default function EmployerSearchCandidatePage() {
 
                           {/* Role & Company */}
                           <div className="text-xs text-slate-700 font-medium">
-                            <span className="font-semibold">{cand.jobTitle}</span> tại{" "}
-                            <span className="text-slate-800 font-semibold">
-                              {cand.currentCompany}
-                            </span>
+                            <span className="font-semibold">{cand.jobTitle}</span>
+                            {cand.currentCompany && cand.currentCompany !== "Chưa cập nhật đơn vị" && (
+                              <>
+                                {" "}tại{" "}
+                                <span className="text-slate-800 font-semibold">
+                                  {cand.currentCompany}
+                                </span>
+                              </>
+                            )}
                           </div>
 
                           {/* Meta: Exp + Location + Salary */}
                           <div className="flex items-center gap-3 text-xs text-slate-500 flex-wrap">
                             <span className="flex items-center gap-1">
                               <Briefcase className="w-3.5 h-3.5 text-slate-400" />
-                              <span>{cand.experienceYears} năm kinh nghiệm</span>
+                              <span>
+                                {cand.experienceYears != null
+                                  ? `${cand.experienceYears} năm kinh nghiệm`
+                                  : "Chưa cập nhật KN"}
+                              </span>
                             </span>
                             <span>•</span>
                             <span className="flex items-center gap-1">
@@ -1118,17 +1332,25 @@ export default function EmployerSearchCandidatePage() {
                             <span className="text-[11px] font-medium text-slate-400 mr-0.5">
                               Kỹ năng:
                             </span>
-                            {cand.skills.slice(0, 5).map((sk, idx) => (
-                              <span
-                                key={idx}
-                                className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-semibold text-[10.5px]"
-                              >
-                                {sk}
-                              </span>
-                            ))}
-                            {cand.skills.length > 5 && (
-                              <span className="px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-500 font-bold text-[10px]">
-                                +{cand.skills.length - 5}
+                            {cand.skills.length > 0 ? (
+                              <>
+                                {cand.skills.slice(0, 5).map((sk: string, idx: number) => (
+                                  <span
+                                    key={idx}
+                                    className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-semibold text-[10.5px]"
+                                  >
+                                    {sk}
+                                  </span>
+                                ))}
+                                {cand.skills.length > 5 && (
+                                  <span className="px-1.5 py-0.5 rounded-md bg-slate-100 text-slate-500 font-bold text-[10px]">
+                                    +{cand.skills.length - 5}
+                                  </span>
+                                )}
+                              </>
+                            ) : (
+                              <span className="text-[11px] text-slate-400 italic">
+                                Chưa trích xuất kỹ năng
                               </span>
                             )}
                           </div>
@@ -1144,22 +1366,31 @@ export default function EmployerSearchCandidatePage() {
                         </div>
                       </div>
 
-                      {/* Right: Match Score + Action Buttons */}
-                      <div className="flex items-center gap-6 self-end lg:self-center shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100 w-full lg:w-auto justify-between lg:justify-end">
-                        {/* Match Score Box */}
-                        <div className="text-center w-28 shrink-0">
-                          <span className="text-xl font-black text-slate-900 block leading-tight">
-                            {cand.matchScore}%
-                          </span>
-                          <span className="text-[10px] font-semibold text-slate-400 block mb-1">
-                            Độ phù hợp
-                          </span>
-                          <div className="w-full h-1.5 bg-slate-100 rounded-full overflow-hidden">
-                            <div
-                              className="h-full bg-emerald-500 rounded-full"
-                              style={{ width: `${cand.matchScore}%` }}
-                            />
-                          </div>
+                      {/* Right: TOPSIS Score vs CV-JD Match Score (Distinct) + Action Buttons */}
+                      <div className="flex items-center gap-5 self-end lg:self-center shrink-0 pt-2 lg:pt-0 border-t lg:border-t-0 border-slate-100 w-full lg:w-auto justify-between lg:justify-end">
+                        {/* Dual Score Box: TOPSIS C_i & CV-JD Matching */}
+                        <div className="flex items-center gap-3 shrink-0">
+                          <Tooltip title="Hệ số độ gần tương đối TOPSIS C_i (0 → 1) tính trên ma trận chuẩn hóa đa tiêu chí">
+                            <div className="text-center px-3 py-1.5 rounded-xl bg-indigo-50/70 border border-indigo-200/80 min-w-[96px]">
+                              <span className="text-base font-black text-indigo-700 block leading-tight">
+                                {cand.topsisScore != null ? cand.topsisScore.toFixed(3) : "—"}
+                              </span>
+                              <span className="text-[10px] font-bold text-indigo-600 block">
+                                Điểm TOPSIS
+                              </span>
+                            </div>
+                          </Tooltip>
+
+                          <Tooltip title="Tỷ lệ tương thích CV–JD Hybrid (Kỹ năng 40% + TF-IDF 35% + Kinh nghiệm 25%)">
+                            <div className="text-center px-3 py-1.5 rounded-xl bg-emerald-50/70 border border-emerald-200/80 min-w-[96px]">
+                              <span className="text-base font-black text-emerald-700 block leading-tight">
+                                {cand.matchScore != null ? `${cand.matchScore}%` : "—"}
+                              </span>
+                              <span className="text-[10px] font-bold text-emerald-600 block">
+                                Khớp CV–JD
+                              </span>
+                            </div>
+                          </Tooltip>
                         </div>
 
                         {/* Action Icons */}
@@ -1233,7 +1464,7 @@ export default function EmployerSearchCandidatePage() {
                     }`}
                   >
                     <div className="space-y-3">
-                      {/* Top Row: Checkbox + Avatar + Match Score */}
+                      {/* Top Row: Checkbox + Avatar + Scores */}
                       <div className="flex items-start justify-between gap-2">
                         <div className="flex items-center gap-2.5">
                           <Checkbox
@@ -1241,10 +1472,12 @@ export default function EmployerSearchCandidatePage() {
                             onChange={(e) => handleSelectSingle(cand.id, e.target.checked)}
                           />
                           <Avatar
-                            src={cand.avatar}
+                            src={cand.avatar || undefined}
                             size={44}
-                            className="border border-slate-200 shadow-2xs"
-                          />
+                            className="border border-slate-200 shadow-2xs bg-blue-50 text-[#0062ff] font-bold"
+                          >
+                            {cand.name?.slice(0, 2).toUpperCase()}
+                          </Avatar>
                           <div>
                             <span
                               onClick={() => setSelectedCandidateDetail(cand)}
@@ -1266,12 +1499,14 @@ export default function EmployerSearchCandidatePage() {
                           </div>
                         </div>
 
-                        {/* Match Score Badge */}
-                        <div className="text-right">
-                          <span className="text-base font-black text-emerald-600 block leading-none">
-                            {cand.matchScore}%
-                          </span>
-                          <span className="text-[9.5px] text-slate-400 font-semibold">Phù hợp</span>
+                        {/* Dual Score Badge */}
+                        <div className="text-right space-y-0.5">
+                          <div className="text-xs font-black text-indigo-700 leading-none">
+                            TOPSIS: {cand.topsisScore != null ? cand.topsisScore.toFixed(3) : "—"}
+                          </div>
+                          <div className="text-[11px] font-bold text-emerald-600 leading-none">
+                            CV–JD: {cand.matchScore != null ? `${cand.matchScore}%` : "—"}
+                          </div>
                         </div>
                       </div>
 
@@ -1281,7 +1516,7 @@ export default function EmployerSearchCandidatePage() {
                           {cand.jobTitle}
                         </span>
                         <span className="text-[11px] text-slate-500 font-medium block truncate">
-                          tại {cand.currentCompany}
+                          {cand.currentCompany}
                         </span>
                       </div>
 
@@ -1289,7 +1524,9 @@ export default function EmployerSearchCandidatePage() {
                       <div className="space-y-1 text-[11px] text-slate-600 bg-slate-50 p-2.5 rounded-xl border border-slate-100">
                         <div className="flex items-center justify-between">
                           <span className="text-slate-400">Kinh nghiệm:</span>
-                          <span className="font-semibold text-slate-700">{cand.experienceYears} năm</span>
+                          <span className="font-semibold text-slate-700">
+                            {cand.experienceYears != null ? `${cand.experienceYears} năm` : "Chưa cập nhật"}
+                          </span>
                         </div>
                         <div className="flex items-center justify-between">
                           <span className="text-slate-400">Địa điểm:</span>
@@ -1303,7 +1540,7 @@ export default function EmployerSearchCandidatePage() {
 
                       {/* Skills */}
                       <div className="flex items-center gap-1 flex-wrap">
-                        {cand.skills.slice(0, 4).map((sk, idx) => (
+                        {cand.skills.slice(0, 4).map((sk: string, idx: number) => (
                           <span
                             key={idx}
                             className="px-2 py-0.5 rounded-md bg-slate-100 text-slate-700 font-semibold text-[10px]"
@@ -1483,49 +1720,59 @@ export default function EmployerSearchCandidatePage() {
             </div>
 
             {/* -------------------------------------------------- */}
-            {/* 2. ỨNG VIÊN NỔI BẬT                                */}
+            {/* 2. ỨNG VIÊN NỔI BẬT (TOP TOPSIS)                   */}
             {/* -------------------------------------------------- */}
             <div className="space-y-2.5 pt-3 border-t border-slate-100">
               <div className="flex items-center justify-between">
                 <span className="text-xs font-bold text-slate-900">
-                  Ứng viên nổi bật
+                  Top xếp hạng TOPSIS
                 </span>
                 <button
                   type="button"
-                  onClick={() => message.info("Xem toàn bộ ứng viên nổi bật")}
+                  onClick={() => setSortBy("topsis")}
                   className="text-[#0062ff] hover:underline text-[11px] font-bold cursor-pointer"
                 >
-                  Xem tất cả
+                  Sắp xếp TOPSIS
                 </button>
               </div>
 
               <div className="space-y-2.5">
-                {MOCK_CANDIDATES.slice(0, 3).map((cand) => (
-                  <div
-                    key={cand.id}
-                    onClick={() => setSelectedCandidateDetail(cand)}
-                    className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 cursor-pointer transition-all"
-                  >
-                    <Avatar
-                      src={cand.avatar}
-                      size={34}
-                      className="border border-slate-200 shrink-0 shadow-2xs"
-                    />
-                    <div className="min-w-0 flex-1">
-                      <div className="flex items-center justify-between gap-1">
-                        <span className="text-xs font-bold text-slate-900 truncate">
-                          {cand.name}
-                        </span>
-                        <span className="text-[10.5px] font-bold text-emerald-600 shrink-0">
-                          {cand.matchScore}% phù hợp
+                {candidates.length === 0 ? (
+                  <div className="py-4 text-center text-xs text-slate-400">Chưa có ứng viên gợi ý</div>
+                ) : (
+                  candidates.slice(0, 3).map((cand) => (
+                    <div
+                      key={cand.id}
+                      onClick={() => setSelectedCandidateDetail(cand)}
+                      className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-slate-50 border border-transparent hover:border-slate-200 cursor-pointer transition-all"
+                    >
+                      <Avatar
+                        src={cand.avatar || undefined}
+                        size={34}
+                        className="border border-slate-200 shrink-0 shadow-2xs bg-blue-50 text-[#0062ff] font-bold"
+                      >
+                        {cand.name?.slice(0, 2).toUpperCase()}
+                      </Avatar>
+                      <div className="min-w-0 flex-1">
+                        <div className="flex items-center justify-between gap-1">
+                          <span className="text-xs font-bold text-slate-900 truncate">
+                            {cand.rankPosition ? `#${cand.rankPosition} ` : ""}{cand.name}
+                          </span>
+                          <span className="text-[10.5px] font-bold text-indigo-600 shrink-0">
+                            {cand.topsisScore != null
+                              ? `TOPSIS ${cand.topsisScore.toFixed(3)}`
+                              : cand.matchScore != null
+                              ? `${cand.matchScore}% CV–JD`
+                              : "—"}
+                          </span>
+                        </div>
+                        <span className="text-[10.5px] text-slate-500 font-medium block truncate">
+                          {cand.jobTitle} • CV–JD: {cand.matchScore != null ? `${cand.matchScore}%` : "—"}
                         </span>
                       </div>
-                      <span className="text-[10.5px] text-slate-500 font-medium block truncate">
-                        {cand.jobTitle} tại {cand.currentCompany}
-                      </span>
                     </div>
-                  </div>
-                ))}
+                  ))
+                )}
               </div>
             </div>
 
@@ -1666,24 +1913,44 @@ export default function EmployerSearchCandidatePage() {
             {/* Header Profile */}
             <div className="p-4 rounded-2xl bg-slate-50 border border-slate-200 flex items-start gap-4">
               <Avatar
-                src={selectedCandidateDetail.avatar}
+                src={selectedCandidateDetail.avatar || undefined}
                 size={56}
-                className="border border-slate-200 shadow-2xs shrink-0"
-              />
+                className="border border-slate-200 shadow-2xs shrink-0 bg-blue-50 text-[#0062ff] font-bold"
+              >
+                {selectedCandidateDetail.name?.slice(0, 2).toUpperCase()}
+              </Avatar>
               <div className="space-y-1 min-w-0 flex-1">
-                <div className="flex items-center justify-between gap-2">
-                  <h3 className="text-base font-extrabold text-slate-900 m-0">
-                    {selectedCandidateDetail.name}
-                  </h3>
-                  <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs">
-                    {selectedCandidateDetail.matchScore}% Độ phù hợp
-                  </span>
+                <div className="flex items-center justify-between gap-2 flex-wrap">
+                  <div className="flex items-center gap-2">
+                    {selectedCandidateDetail.rankPosition != null && (
+                      <span className="px-2.5 py-0.5 rounded-md bg-blue-600 text-white font-extrabold text-xs">
+                        Hạng #{selectedCandidateDetail.rankPosition} TOPSIS
+                      </span>
+                    )}
+                    <h3 className="text-base font-extrabold text-slate-900 m-0">
+                      {selectedCandidateDetail.name}
+                    </h3>
+                  </div>
+                  <div className="flex items-center gap-2">
+                    <span className="px-2.5 py-0.5 rounded-full bg-indigo-100 text-indigo-700 font-bold text-xs">
+                      TOPSIS: {selectedCandidateDetail.topsisScore != null ? selectedCandidateDetail.topsisScore.toFixed(4) : "—"}
+                    </span>
+                    <span className="px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-700 font-bold text-xs">
+                      Khớp CV–JD: {selectedCandidateDetail.matchScore != null ? `${selectedCandidateDetail.matchScore}%` : "—"}
+                    </span>
+                  </div>
                 </div>
                 <p className="text-xs font-semibold text-slate-700 m-0">
-                  {selectedCandidateDetail.jobTitle} tại{" "}
-                  <span className="text-slate-900 font-bold">
-                    {selectedCandidateDetail.currentCompany}
-                  </span>
+                  {selectedCandidateDetail.jobTitle}
+                  {selectedCandidateDetail.currentCompany &&
+                    selectedCandidateDetail.currentCompany !== "Chưa cập nhật đơn vị" && (
+                      <>
+                        {" "}tại{" "}
+                        <span className="text-slate-900 font-bold">
+                          {selectedCandidateDetail.currentCompany}
+                        </span>
+                      </>
+                    )}
                 </p>
                 <div className="flex items-center gap-3 text-xs text-slate-500 pt-1 flex-wrap">
                   <span className="flex items-center gap-1">
@@ -1702,6 +1969,63 @@ export default function EmployerSearchCandidatePage() {
                   </span>
                 </div>
               </div>
+            </div>
+
+            {/* Phân tích điểm TOPSIS vs Điểm thành phần CV-JD Matching */}
+            <div className="p-3.5 rounded-xl bg-blue-50/50 border border-blue-200/80 space-y-2.5">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold text-slate-900">
+                  Chi tiết điểm xếp hạng TOPSIS & So khớp CV–JD
+                </span>
+                <span className="text-[11px] font-semibold text-slate-500">
+                  Kinh nghiệm thực tế:{" "}
+                  <strong className="text-slate-800">
+                    {selectedCandidateDetail.experienceYears != null
+                      ? `${selectedCandidateDetail.experienceYears} năm`
+                      : "Chưa cập nhật"}
+                  </strong>
+                </span>
+              </div>
+              <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-center">
+                <div className="p-2 rounded-lg bg-white border border-indigo-200">
+                  <span className="text-[10.5px] font-bold text-indigo-600 block">Hệ số TOPSIS C_i</span>
+                  <span className="text-sm font-black text-indigo-800">
+                    {selectedCandidateDetail.topsisScore != null
+                      ? selectedCandidateDetail.topsisScore.toFixed(4)
+                      : "—"}
+                  </span>
+                </div>
+                <div className="p-2 rounded-lg bg-white border border-emerald-200">
+                  <span className="text-[10.5px] font-bold text-emerald-600 block">Tổng điểm CV–JD</span>
+                  <span className="text-sm font-black text-emerald-800">
+                    {selectedCandidateDetail.matchScore != null
+                      ? `${selectedCandidateDetail.matchScore}%`
+                      : "—"}
+                  </span>
+                </div>
+                <div className="p-2 rounded-lg bg-white border border-slate-200">
+                  <span className="text-[10.5px] font-bold text-slate-500 block">Độ phủ kỹ năng</span>
+                  <span className="text-sm font-bold text-slate-800">
+                    {selectedCandidateDetail.skillScore != null
+                      ? `${Math.round(selectedCandidateDetail.skillScore * 100)}%`
+                      : "—"}
+                  </span>
+                </div>
+                <div className="p-2 rounded-lg bg-white border border-slate-200">
+                  <span className="text-[10.5px] font-bold text-slate-500 block">TF-IDF Cosine</span>
+                  <span className="text-sm font-bold text-slate-800">
+                    {selectedCandidateDetail.tfidfScore != null
+                      ? selectedCandidateDetail.tfidfScore.toFixed(4)
+                      : "—"}
+                  </span>
+                </div>
+              </div>
+              {selectedCandidateDetail.missingSkills && selectedCandidateDetail.missingSkills.length > 0 && (
+                <div className="text-[11px] text-slate-600 pt-1">
+                  <span className="font-bold text-amber-700">Kỹ năng JD chưa nêu trong CV: </span>
+                  <span>{selectedCandidateDetail.missingSkills.join(", ")}</span>
+                </div>
+              )}
             </div>
 
             {/* Bio */}
@@ -1743,7 +2067,7 @@ export default function EmployerSearchCandidatePage() {
                 Kỹ năng chuyên môn
               </span>
               <div className="flex items-center gap-1.5 flex-wrap">
-                {selectedCandidateDetail.skills.map((sk, idx) => (
+                {(selectedCandidateDetail.skills || []).map((sk: string, idx: number) => (
                   <span
                     key={idx}
                     className="px-2.5 py-1 rounded-lg bg-blue-50 text-[#0062ff] font-bold text-xs border border-blue-100"
@@ -1878,13 +2202,14 @@ export default function EmployerSearchCandidatePage() {
               Nhóm Talent Pool
             </label>
             <Select
-              defaultValue="pool-1"
+              value={selectedPoolId}
+              onChange={setSelectedPoolId}
               className="w-full text-xs"
-              options={[
-                { value: "pool-1", label: "Nhân sự Frontend / Tech tiềm năng" },
-                { value: "pool-2", label: "Talent Pool Senior & Lead" },
-                { value: "pool-3", label: "Ứng viên dự phòng Quý 4/2026" },
-              ]}
+              placeholder="Chọn nhóm Talent Pool"
+              options={pools.map((p) => ({
+                value: p.id,
+                label: p.name,
+              }))}
             />
           </div>
 
@@ -1901,9 +2226,24 @@ export default function EmployerSearchCandidatePage() {
             </button>
             <button
               type="button"
-              onClick={() => {
-                setIsTalentPoolModalOpen(false);
-                message.success(`Đã thêm ứng viên vào Talent Pool thành công!`);
+              onClick={async () => {
+                if (!talentPoolCandidate || !selectedPoolId) {
+                  message.warning("Vui lòng chọn nhóm Talent Pool!");
+                  return;
+                }
+                const targetCandId = Number(talentPoolCandidate.candidateId || talentPoolCandidate.id);
+                if (!targetCandId) {
+                  message.warning("Ứng viên này chưa liên kết hồ sơ định danh để thêm vào Talent Pool.");
+                  return;
+                }
+                try {
+                  await employerService.addCandidateToPool(selectedPoolId, targetCandId);
+                  message.success(`Đã thêm ứng viên vào Talent Pool thành công!`);
+                  setIsTalentPoolModalOpen(false);
+                  setTalentPoolCandidate(null);
+                } catch (err: any) {
+                  message.error(err?.response?.data?.message || err?.message || "Không thể thêm ứng viên vào Talent Pool.");
+                }
               }}
               className="px-4 py-2 rounded-xl bg-purple-600 hover:bg-purple-700 text-white font-bold text-xs shadow-sm cursor-pointer"
             >

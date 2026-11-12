@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, use, useMemo } from "react";
+import { useState, use, useEffect, useCallback } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import {
@@ -12,157 +12,146 @@ import {
   Row,
   Col,
   message,
-  Radio,
   Space,
+  Spin,
+  Alert,
 } from "antd";
 import {
   ArrowLeftOutlined,
   SaveOutlined,
-  CheckCircleOutlined,
+  ReloadOutlined,
 } from "@ant-design/icons";
+import { employerService } from "@/services/employer.service";
 
 const { TextArea } = Input;
 
-const MOCK_BRANCHES = [
-  { value: "Hà Nội", label: "Chi nhánh Hà Nội (Tòa Keangnam Landmark)" },
-  { value: "TP. Hồ Chí Minh", label: "Chi nhánh TP. Hồ Chí Minh (Quận 1)" },
-  { value: "Đà Nẵng", label: "Chi nhánh Đà Nẵng (Hải Châu)" },
-];
-
-const MOCK_SKILLS = [
-  { value: "Product", label: "Product" },
-  { value: "Strategy", label: "Strategy" },
-  { value: "Leadership", label: "Leadership" },
-  { value: "Figma", label: "Figma" },
-  { value: "UI/UX", label: "UI/UX" },
-  { value: "Design System", label: "Design System" },
+const SUGGESTED_SKILLS = [
   { value: "React", label: "React" },
   { value: "TypeScript", label: "TypeScript" },
   { value: "Next.js", label: "Next.js" },
-  { value: "SQL", label: "SQL" },
+  { value: "Node.js", label: "Node.js" },
   { value: "Python", label: "Python" },
-  { value: "Analytics", label: "Analytics" },
-  { value: "DevOps", label: "DevOps" },
-  { value: "AWS", label: "AWS" },
-  { value: "Docker", label: "Docker" },
+  { value: "Java", label: "Java" },
+  { value: "SQL", label: "SQL" },
+  { value: "UI/UX", label: "UI/UX" },
+  { value: "Git", label: "Git" },
 ];
-
-const EXISTING_JOBS: Record<string, any> = {
-  "job-1": {
-    title: "Product Manager",
-    code: "PM-2408",
-    workType: "Toàn thời gian",
-    location: "Hà Nội",
-    salaryText: "25 - 40 triệu VND",
-    experience: "3 - 5 năm",
-    skills: ["Product", "Strategy", "Leadership"],
-    status: "ACTIVE",
-    description: "Chịu trách nhiệm định hình chiến lược sản phẩm, quản lý roadmap phát triển các tính năng cốt lõi và làm việc chặt chẽ cùng đội ngũ Tech, Design và Business.",
-    requirement: "Tối thiểu 3 năm kinh nghiệm trong vai trò Product Manager. Kỹ năng giao tiếp và lãnh đạo xuất sắc.",
-    benefit: "Lương thưởng cạnh tranh, bảo hiểm sức khỏe cao cấp, môi trường làm việc Hybrid linh hoạt.",
-  },
-  "job-2": {
-    title: "Senior UX/UI Designer",
-    code: "UX-2408",
-    workType: "Toàn thời gian",
-    location: "TP. Hồ Chí Minh",
-    salaryText: "18 - 30 triệu VND",
-    experience: "2 - 4 năm",
-    skills: ["Figma", "UI/UX", "Design System"],
-    status: "ACTIVE",
-    description: "Thiết kế trải nghiệm người dùng đẳng cấp cho các nền tảng Web và Mobile App của Careza.",
-    requirement: "Thành thạo Figma, Design System, có portfolio sản phẩm thực tế.",
-    benefit: "Thưởng dự án, trang bị Macbook Pro, gói khám sức khỏe quốc tế.",
-  },
-  "job-3": {
-    title: "Frontend Developer",
-    code: "FE-2407",
-    workType: "Toàn thời gian",
-    location: "Đà Nẵng",
-    salaryText: "18 - 28 triệu VND",
-    experience: "2 - 4 năm",
-    skills: ["React", "TypeScript", "Next.js"],
-    status: "EXPIRING",
-    description: "Xây dựng giao diện người dùng hiện đại, tối ưu hóa hiệu năng ứng dụng với React 19 và Next.js.",
-    requirement: "Thành thạo React, TypeScript, Next.js, TailwindCSS.",
-    benefit: "Review lương 2 lần/năm, phụ cấp ăn trưa và gửi xe.",
-  },
-  "job-4": {
-    title: "Data Analyst",
-    code: "DA-2406",
-    workType: "Toàn thời gian",
-    location: "Hà Nội",
-    salaryText: "12 - 20 triệu VND",
-    experience: "1 - 3 năm",
-    skills: ["SQL", "Python", "Analytics"],
-    status: "EXPIRED",
-    description: "Thu thập, xử lý và phân tích dữ liệu tuyển dụng nhằm đưa ra các đề xuất tối ưu hóa quy trình.",
-    requirement: "Thành thạo SQL, Python, PowerBI / Tableau.",
-    benefit: "Môi trường trẻ trung, đào tạo chuyên sâu về AI & Big Data.",
-  },
-  "job-5": {
-    title: "HR Generalist",
-    code: "HR-2408",
-    workType: "Toàn thời gian",
-    location: "TP. Hồ Chí Minh",
-    salaryText: "15 - 22 triệu VND",
-    experience: "2 - 3 năm",
-    skills: ["HR", "Recruitment", "C&B"],
-    status: "DRAFT",
-    description: "Phụ trách các hoạt động tuyển dụng, quản lý hồ sơ nhân sự và chế độ phúc lợi cho nhân viên.",
-    requirement: "Từ 2 năm kinh nghiệm nhân sự tổng hợp, am hiểu luật lao động.",
-    benefit: "Chế độ nghỉ phép 14 ngày/năm, teambuilding định kỳ.",
-  },
-  "job-6": {
-    title: "DevOps Engineer",
-    code: "DEVOPS-2408",
-    workType: "Toàn thời gian",
-    location: "Hà Nội",
-    salaryText: "25 - 35 triệu VND",
-    experience: "3 - 5 năm",
-    skills: ["DevOps", "AWS", "Docker"],
-    status: "PENDING",
-    description: "Vận hành hệ thống hạ tầng Cloud AWS, thiết lập CI/CD pipeline và giám sát độ ổn định dịch vụ.",
-    requirement: "Kinh nghiệm với Docker, Kubernetes, AWS, Terraform.",
-    benefit: "Thưởng hiệu suất theo quý, hỗ trợ thi chứng chỉ quốc tế.",
-  },
-};
 
 export default function EditJobPage({ params }: { params: Promise<{ id: string }> }) {
   const { id } = use(params);
   const router = useRouter();
   const [submitting, setSubmitting] = useState(false);
-
-  const initialData = useMemo(() => {
-    return EXISTING_JOBS[id] || {
-      title: "Vị trí tuyển dụng",
-      code: `JOB-${id.toUpperCase()}`,
-      workType: "Toàn thời gian",
-      location: "Hà Nội",
-      salaryText: "Thỏa thuận",
-      experience: "2 - 4 năm",
-      skills: ["Product", "Strategy"],
-      status: "ACTIVE",
-      description: "Mô tả chi tiết công việc cho vị trí tuyển dụng.",
-      requirement: "Yêu cầu kỹ năng và kinh nghiệm phù hợp.",
-      benefit: "Chế độ đãi ngộ hấp dẫn.",
-    };
-  }, [id]);
-
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [jobCode, setJobCode] = useState<string>(`JD-${id}`);
+  const [jobTitle, setJobTitle] = useState<string>("Đang tải...");
+  const [branches, setBranches] = useState<{ value: string; label: string }[]>([]);
   const [form] = Form.useForm();
+
+  const fetchJobData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError(null);
+      const [jobRes, branchRes] = await Promise.allSettled([
+        employerService.getJobDetail(id),
+        employerService.getBranches(),
+      ]);
+
+      if (branchRes.status === "fulfilled" && branchRes.value.data?.branches) {
+        setBranches(
+          branchRes.value.data.branches.map((b: any) => ({
+            value: b.name,
+            label: b.name + (b.address ? ` (${b.address})` : ""),
+          }))
+        );
+      }
+
+      if (jobRes.status === "fulfilled" && jobRes.value.data?.job) {
+        const j = jobRes.value.data.job;
+        setJobCode(j.slug || `JD-${j.id}`);
+        setJobTitle(j.title);
+        form.setFieldsValue({
+          title: j.title,
+          workType:
+            j.employment_type === "full_time"
+              ? "Toàn thời gian"
+              : j.employment_type === "part_time"
+              ? "Bán thời gian"
+              : j.work_mode || "Toàn thời gian",
+          location: j.location || "Hà Nội",
+          salaryText:
+            j.salary_min && j.salary_max
+              ? `${(j.salary_min / 1000000).toFixed(0)} - ${(j.salary_max / 1000000).toFixed(0)} triệu VND`
+              : "Thỏa thuận",
+          experience: j.experience_min ? `${j.experience_min} năm` : "Không yêu cầu",
+          skills: Array.isArray(j.skills) ? j.skills.map((s: any) => s.skill_name || s) : [],
+          description: j.description || "",
+          requirement: j.requirements || "",
+          benefit: j.benefits || "",
+        });
+      } else {
+        setError("Không thể tải thông tin tin tuyển dụng này.");
+      }
+    } catch (err: any) {
+      setError(err?.response?.data?.message || err?.message || "Không tìm thấy tin tuyển dụng.");
+    } finally {
+      setLoading(false);
+    }
+  }, [id, form]);
+
+  useEffect(() => {
+    fetchJobData();
+  }, [fetchJobData]);
 
   const handleSubmit = async (values: any) => {
     setSubmitting(true);
     try {
-      // Mock update job
+      await employerService.updateJob(id, {
+        title: values.title,
+        description: values.description,
+        requirements: values.requirement,
+        benefits: values.benefit || "",
+        work_mode: values.workType === "Từ xa" ? "remote" : values.workType === "Hybrid" ? "hybrid" : "onsite",
+        employment_type: values.workType === "Bán thời gian" ? "part_time" : "full_time",
+      });
       message.success("Cập nhật tin tuyển dụng thành công!");
       router.push("/doanh-nghiep/tin-tuyen-dung");
-    } catch (error) {
-      message.error("Cập nhật tin tuyển dụng thất bại.");
+    } catch (err: any) {
+      const msg = err?.response?.data?.message || "Cập nhật tin tuyển dụng thất bại.";
+      message.error(msg);
     } finally {
       setSubmitting(false);
     }
   };
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center py-24 flex-1">
+        <Spin tip="Đang tải thông tin tin tuyển dụng..." />
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="max-w-xl mx-auto py-12 space-y-4">
+        <Alert
+          type="error"
+          message="Lỗi tải tin tuyển dụng"
+          description={error}
+          action={
+            <Button size="small" danger icon={<ReloadOutlined />} onClick={fetchJobData}>
+              Tải lại
+            </Button>
+          }
+          showIcon
+        />
+        <Link href="/doanh-nghiep/tin-tuyen-dung">
+          <Button icon={<ArrowLeftOutlined />}>Quay lại danh sách</Button>
+        </Link>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-6 flex-1 max-w-4xl mx-auto w-full pb-12">
@@ -177,7 +166,7 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
         </Link>
 
         <span className="text-xs font-bold text-slate-400">
-          Mã tin: <strong className="text-slate-800 font-black">{initialData.code}</strong>
+          Mã tin: <strong className="text-slate-800 font-black">{jobCode}</strong>
         </span>
       </div>
 
@@ -186,14 +175,13 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
           Chỉnh sửa tin tuyển dụng
         </h1>
         <p className="text-xs text-slate-500 font-medium mt-1">
-          Cập nhật thông tin chi tiết cho vị trí: <strong className="text-[#0062ff]">{initialData.title}</strong>
+          Cập nhật thông tin chi tiết cho vị trí: <strong className="text-[#0062ff]">{jobTitle}</strong>
         </p>
       </div>
 
       <Form
         form={form}
         layout="vertical"
-        initialValues={initialData}
         onFinish={handleSubmit}
         requiredMark={false}
       >
@@ -237,7 +225,19 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                   name="location"
                   rules={[{ required: true }]}
                 >
-                  <Select size="large" className="rounded-xl text-xs" options={MOCK_BRANCHES} />
+                  <Select
+                    size="large"
+                    className="rounded-xl text-xs"
+                    options={
+                      branches.length > 0
+                        ? branches
+                        : [
+                            { value: "Hà Nội", label: "Hà Nội" },
+                            { value: "TP. Hồ Chí Minh", label: "TP. Hồ Chí Minh" },
+                            { value: "Đà Nẵng", label: "Đà Nẵng" },
+                          ]
+                    }
+                  />
                 </Form.Item>
               </Col>
               <Col xs={24} md={12}>
@@ -269,7 +269,7 @@ export default function EditJobPage({ params }: { params: Promise<{ id: string }
                     size="large"
                     placeholder="Chọn hoặc nhập kỹ năng"
                     className="rounded-xl text-xs"
-                    options={MOCK_SKILLS}
+                    options={SUGGESTED_SKILLS}
                   />
                 </Form.Item>
               </Col>

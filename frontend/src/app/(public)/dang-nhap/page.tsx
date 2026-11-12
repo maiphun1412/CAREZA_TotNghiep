@@ -62,13 +62,30 @@ function LoginForm() {
         password: data.password,
       });
 
+
       const user = response.data.user;
       setAuth(user);
-      document.cookie = `careza_logged_in=true; path=/; max-age=2592000; SameSite=Lax`;
+      if (response.data.company) {
+        useAuthStore.getState().setCompanyInfo(response.data.company);
+      }
       message.success("Đăng nhập thành công!");
 
-      // Luôn luôn chuyển về Trang chủ (/)
-      window.location.href = "/";
+      // Điều hướng chuẩn theo vai trò tài khoản
+      if (
+        user.roles?.includes(RoleCode.ADMIN) ||
+        user.roles?.includes(RoleCode.SUPER_ADMIN) ||
+        (user as any).account_type === "admin"
+      ) {
+        window.location.href = "/admin/dashboard";
+      } else if (
+        user.roles?.includes(RoleCode.COMPANY_OWNER) ||
+        user.roles?.includes(RoleCode.RECRUITER) ||
+        (user as any).account_type === "employer"
+      ) {
+        window.location.href = "/doanh-nghiep/dashboard";
+      } else {
+        window.location.href = callbackUrl || "/";
+      }
     } catch (error: any) {
       const apiErrors = error.response?.data?.errors;
       if (Array.isArray(apiErrors) && apiErrors.length > 0) {
@@ -86,7 +103,8 @@ function LoginForm() {
   return (
     <div className="h-screen max-h-screen w-screen overflow-hidden flex flex-col lg:flex-row bg-[#f8fbff] font-sans text-slate-800 selection:bg-blue-100 selection:text-blue-900 select-none">
       {/* Import font chữ viết tay Caveat & Font chuẩn */}
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
         
         .font-handwriting {
@@ -146,11 +164,11 @@ function LoginForm() {
           CỘT TRÁI (3/5 MÀN HÌNH - 60%): ẢNH BANNERS/DANGNHAP.PNG + BRANDING + TEXT + 2 FLOATING CARDS
          ========================================================================= */}
       <div className="w-full lg:w-3/5 h-full relative flex flex-col justify-between p-6 sm:p-8 lg:p-12 overflow-hidden bg-[#edf3fd]">
-        
+
         {/* Ảnh nền gốc rõ nét, căn chỉnh chuẩn không gian làm việc */}
         <div className="absolute inset-0 z-0 pointer-events-none select-none">
-          <img 
-            src="/images/banners/dangnhap.png" 
+          <img
+            src="/images/banners/dangnhap.webp"
             alt="Careza Workspace"
             className="w-full h-full object-cover object-[center_bottom] filter brightness-[1.01]"
           />
@@ -160,34 +178,18 @@ function LoginForm() {
         </div>
 
         {/* 1. Header Logo Careza & Slogan */}
-        <div className="relative z-20 flex items-center gap-3">
-          <Link href="/" className="flex items-center gap-2.5 group">
-            {/* Logo Icon 4 cánh sao sáng màu xanh */}
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-[#0052d9] to-[#0070f3] flex items-center justify-center text-white shadow-md shadow-blue-500/25 group-hover:scale-105 transition-transform">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="currentColor">
-                <path d="M12 2L14.4 9.6L22 12L14.4 14.4L12 22L9.6 14.4L2 12L9.6 9.6L12 2Z" />
-                <circle cx="19" cy="5" r="2" />
-                <circle cx="5" cy="19" r="1.5" />
-              </svg>
-            </div>
-            {/* Chữ Careza */}
-            <span className="text-[23px] font-black tracking-tight text-[#0052d9]">
-              Careza
-            </span>
+        <div className="relative z-20 flex items-center">
+          <Link href="/" className="inline-flex items-center group">
+            <img
+              src="/images/logos/010cd82d-47e5-4e32-86e1-2df16032be39.png"
+              alt="Careza - Kết nối nhân tài, Kiến tạo sự nghiệp"
+              className="h-[72px] sm:h-[82px] lg:h-[88px] w-auto object-contain mix-blend-multiply group-hover:scale-[1.02] transition-transform"
+            />
           </Link>
-
-          {/* Vạch ngăn cách dọc */}
-          <div className="h-6 w-[1px] bg-slate-300/80 mx-1" />
-
-          {/* Slogan */}
-          <div className="flex flex-col text-[10px] font-semibold text-slate-600 leading-tight">
-            <span>Kết nối nhân tài</span>
-            <span>Kiến tạo sự nghiệp</span>
-          </div>
         </div>
 
         {/* 2. Hero Headline, Highlight cọ vàng, Mô tả & 3 Badges (Vị trí giữ nguyên chính xác) */}
-        <div className="relative z-20 mt-[54px] sm:mt-[64px] lg:mt-[72px] mb-auto max-w-md lg:max-w-lg">
+        <div className="relative z-20 mt-[26px] sm:mt-[36px] lg:mt-[44px] mb-auto max-w-md lg:max-w-lg">
           {/* Headline lớn */}
           <h1 className="text-3xl sm:text-4xl lg:text-[40px] font-black text-slate-900 leading-[1.18] tracking-tight m-0">
             Cùng bạn chạm tới<br />
@@ -195,25 +197,25 @@ function LoginForm() {
             <span className="relative inline-block text-[#0062ff]">
               bản tốt hơn
               {/* Nét highlight cọ vàng vẽ tay lượn sóng bằng SVG */}
-              <svg 
-                className="absolute -bottom-2.5 left-0 w-full h-3 text-[#facc15] pointer-events-none" 
-                viewBox="0 0 200 12" 
-                fill="none" 
+              <svg
+                className="absolute -bottom-2.5 left-0 w-full h-3 text-[#facc15] pointer-events-none"
+                viewBox="0 0 200 12"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path 
-                  d="M3 8.5C35 4 85 2.5 197 6.5C145 9.5 65 10.5 8 10" 
-                  stroke="currentColor" 
-                  strokeWidth="4.5" 
-                  strokeLinecap="round" 
+                <path
+                  d="M3 8.5C35 4 85 2.5 197 6.5C145 9.5 65 10.5 8 10"
+                  stroke="currentColor"
+                  strokeWidth="4.5"
+                  strokeLinecap="round"
                 />
               </svg>
             </span>
           </h1>
 
           {/* Đoạn mô tả */}
-          <p className="mt-3.5 text-xs sm:text-[13px] text-slate-600 leading-relaxed font-normal max-w-sm sm:max-w-md">
-            Careza là nơi kết nối nhân tài với những cơ hội phù hợp, đồng hành cùng bạn trên mọi bước đường sự nghiệp.
+          <p className="mt-4 mb-1 text-[13.5px] sm:text-[15px] text-slate-700 leading-relaxed font-semibold tracking-[0.01em] max-w-sm sm:max-w-md">
+            Kết nối đúng cơ hội, phát triển đúng tiềm năng.
           </p>
 
           {/* 3 Mục lợi ích (Icon + Text) */}
@@ -343,9 +345,9 @@ function LoginForm() {
           CỘT PHẢI (2/5 MÀN HÌNH - 40%): FORM ĐĂNG NHẬP + DOTTED GRID + CÁC LỚP SÓNG LƯỢN + SHAPE GRADIENT
          ========================================================================= */}
       <div className="w-full lg:w-2/5 h-full relative bg-[#f4f8fe] flex flex-col justify-between items-center p-5 sm:p-7 lg:p-8 z-10 overflow-hidden select-none">
-        
+
         {/* ==================== CÁC MẢNG NỀN VÒM SÓNG VÀ DOTTED GRID ==================== */}
-        
+
         {/* Vòm tròn mờ xanh pastel lớn trên đỉnh */}
         <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-[480px] sm:w-[520px] h-[340px] rounded-b-[260px] bg-gradient-to-b from-[#d9ebff] via-[#e6f2ff] to-transparent pointer-events-none z-0 opacity-80" />
 
@@ -353,15 +355,15 @@ function LoginForm() {
         <div className="absolute top-12 right-12 w-28 h-28 bg-[radial-gradient(#93c5fd_1.5px,transparent_1.5px)] [background-size:12px_12px] opacity-60 pointer-events-none z-0" />
 
         {/* Dải sóng cong mềm màu xanh pastel bên sườn phải */}
-        <svg 
-          className="absolute right-0 top-[20%] w-48 h-[60%] text-[#dbeeff]/70 pointer-events-none z-0" 
-          viewBox="0 0 200 600" 
-          fill="none" 
+        <svg
+          className="absolute right-0 top-[20%] w-48 h-[60%] text-[#dbeeff]/70 pointer-events-none z-0"
+          viewBox="0 0 200 600"
+          fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path 
-            d="M200 0C110 80 40 180 50 300C60 420 140 500 200 600V0Z" 
-            fill="currentColor" 
+          <path
+            d="M200 0C110 80 40 180 50 300C60 420 140 500 200 600V0Z"
+            fill="currentColor"
           />
         </svg>
 
@@ -372,8 +374,8 @@ function LoginForm() {
 
         {/* Góc trên cùng: Link "Về Careza →" */}
         <div className="w-full flex justify-end items-start relative z-20 max-w-[400px]">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="inline-flex items-center gap-1.5 text-[13px] font-bold text-[#0062ff] hover:text-blue-700 transition-colors py-1 px-2.5 rounded-full hover:bg-blue-50/60"
           >
             <span>Về Careza</span>
@@ -381,19 +383,10 @@ function LoginForm() {
           </Link>
         </div>
 
-        {/* Chữ viết tay "Good Jobs Greater Stories ♡" bên phải Card (Cố định tĩnh, không nháy, không rung) */}
-        <div className="absolute top-24 right-4 sm:right-8 z-10 font-handwriting text-[#7088a6] text-[19px] leading-[1.15] select-none pointer-events-none transform rotate-3">
-          Good<br />
-          Jobs<br />
-          Greater<br />
-          Stories<br />
-          <span className="text-[17px] pl-3 inline-block">♡</span>
-        </div>
-
         {/* ==================== KHỐI CARD FORM ĐĂNG NHẬP CHÍNH ==================== */}
         <div className="w-full max-w-[395px] my-auto relative z-20">
           <div className="bg-white rounded-[32px] p-6 sm:p-7 shadow-[0_20px_45px_rgba(0,40,120,0.06)] border border-slate-100/90 relative">
-            
+
             {/* Header Form (Căn giữa) */}
             <div className="mb-4 text-center">
               <h2 className="text-[23px] sm:text-[25px] font-black text-slate-900 tracking-tight m-0">
@@ -409,22 +402,20 @@ function LoginForm() {
               <button
                 type="button"
                 onClick={() => setUserRoleTab("candidate")}
-                className={`py-1.5 text-xs font-bold rounded-lg transition-all ${
-                  userRoleTab === "candidate"
+                className={`py-1.5 text-xs font-bold rounded-lg transition-all ${userRoleTab === "candidate"
                     ? "bg-[#e8f1ff] text-[#0062ff] shadow-xs"
                     : "text-slate-500 hover:text-slate-700"
-                }`}
+                  }`}
               >
                 Người tìm việc
               </button>
               <button
                 type="button"
                 onClick={() => setUserRoleTab("recruiter")}
-                className={`py-1.5 text-xs font-bold rounded-lg transition-all ${
-                  userRoleTab === "recruiter"
+                className={`py-1.5 text-xs font-bold rounded-lg transition-all ${userRoleTab === "recruiter"
                     ? "bg-[#e8f1ff] text-[#0062ff] shadow-xs"
                     : "text-slate-500 hover:text-slate-700"
-                }`}
+                  }`}
               >
                 Nhà tuyển dụng
               </button>
@@ -432,7 +423,7 @@ function LoginForm() {
 
             {/* Form Ant Design + React Hook Form */}
             <Form layout="vertical" onFinish={handleSubmit(onSubmit)} requiredMark={false} className="login-input">
-              
+
               {/* Input Email / Số điện thoại */}
               <Form.Item
                 validateStatus={errors.email ? "error" : ""}
@@ -479,9 +470,9 @@ function LoginForm() {
                   name="remember"
                   control={control}
                   render={({ field: { value, onChange } }) => (
-                    <Checkbox 
-                      checked={value} 
-                      onChange={(e) => onChange(e.target.checked)} 
+                    <Checkbox
+                      checked={value}
+                      onChange={(e) => onChange(e.target.checked)}
                       className="text-[11.5px] text-slate-600 font-medium"
                     >
                       Ghi nhớ đăng nhập
@@ -559,40 +550,8 @@ function LoginForm() {
           </div>
         </div>
 
-        {/* ==================== FOOTER: AN TOÀN · BẢO MẬT · LUÔN ĐỒNG HÀNH ==================== */}
-        <div className="relative z-20 flex items-center justify-center gap-6 text-[11.5px] text-slate-500 font-medium pt-1">
-          <div className="flex items-center gap-1.5">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">
-              <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
-            </svg>
-            <span>An toàn</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">
-              <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
-              <path d="M7 11V7a5 5 0 0 1 10 0v4" />
-            </svg>
-            <span>Bảo mật</span>
-          </div>
-          <div className="flex items-center gap-1.5">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="text-slate-400">
-              <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
-            <span>Luôn đồng hành</span>
-          </div>
-        </div>
-
         {/* Shape sóng gradient xanh - tím nhiều lớp góc dưới cùng bên phải */}
-        <div className="hidden lg:flex absolute bottom-0 right-0 w-48 h-36 rounded-tl-[130px] bg-gradient-to-tr from-[#0052d9] via-[#2563eb] to-[#7c3aed] text-white flex-col justify-end p-5 shadow-lg pointer-events-none z-10">
-          <div className="text-[9.5px] font-extrabold tracking-wider leading-tight text-white/95">
-            VÌ NHỮNG ✦<br />
-            GIÁ TRỊ TỐT ĐẸP<br />
-            HƠN MỖI NGÀY
-          </div>
-        </div>
+        <div className="hidden lg:flex absolute bottom-0 right-0 w-48 h-36 rounded-tl-[130px] bg-gradient-to-tr from-[#0052d9] via-[#2563eb] to-[#7c3aed] text-white flex-col justify-end p-5 shadow-lg pointer-events-none z-10" />
 
         {/* Lớp sóng tím phụ phía dưới */}
         <div className="hidden lg:block absolute -bottom-6 -right-6 w-56 h-40 rounded-tl-[140px] bg-gradient-to-tr from-[#3b82f6]/40 to-[#a855f7]/50 blur-[2px] pointer-events-none z-0" />

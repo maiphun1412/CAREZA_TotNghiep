@@ -9,12 +9,14 @@ import PublicFooter from "@/components/layouts/public-footer";
 export default function PublicLayout({ children }: { children: ReactNode }) {
   const pathname = usePathname();
   
-  // Ẩn Header và Footer trên các trang xác thực (đăng nhập, đăng ký, quên mật khẩu, đặt lại mật khẩu)
+  // Ẩn Header và Footer trên các trang xác thực (đăng nhập, đăng ký, quên mật khẩu, đặt lại mật khẩu) và trang điều khoản/chính sách
   const isAuthPage =
     pathname.startsWith("/dang-nhap") ||
     pathname.startsWith("/dang-ky") ||
     pathname.startsWith("/quen-mat-khau") ||
-    pathname.startsWith("/dat-lai-mat-khau");
+    pathname.startsWith("/dat-lai-mat-khau") ||
+    pathname.startsWith("/dieu-khoan") ||
+    pathname.startsWith("/chinh-sach");
 
   if (isAuthPage) {
     return <main className="min-h-screen w-full flex flex-col">{children}</main>;

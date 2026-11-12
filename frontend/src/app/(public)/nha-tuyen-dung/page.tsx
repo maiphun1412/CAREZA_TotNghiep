@@ -15,7 +15,7 @@ export default function RecruiterLandingPage() {
   return (
     <div className="w-full bg-[#f5f8ff] py-12 flex-1 relative overflow-hidden" style={{ fontFamily: "var(--font-be-vietnam), 'Be Vietnam Pro', sans-serif" }}>
       <MouseSpotlight size={600} color="rgba(15, 82, 186, 0.03)" />
-      
+
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8 relative z-10">
         {/* 1. Hero Banner */}
         <div className="relative overflow-hidden bg-white/45 backdrop-blur-[2px] border border-white/80 rounded-[48px] p-8 sm:p-16 mb-12 text-slate-800 shadow-lg">
@@ -36,7 +36,7 @@ export default function RecruiterLandingPage() {
               <p className="text-sm sm:text-base text-slate-600 leading-relaxed max-w-xl">
                 Careza kết nối doanh nghiệp của bạn với hơn 1.2 triệu ứng viên chất lượng cao. Hệ thống tích hợp Trí tuệ nhân tạo (AI) giúp tối ưu hóa 80% thời gian tuyển dụng của bạn.
               </p>
-              
+
               <div className="flex flex-wrap gap-4 pt-2">
                 <Link href="/dang-ky?type=COMPANY">
                   <Button
@@ -101,7 +101,7 @@ export default function RecruiterLandingPage() {
                 </div>
               </Card>
             </Col>
-            
+
             <Col xs={24} md={8}>
               <Card className="border-blue-100/50 shadow-sm rounded-[32px] hover:shadow-md transition-all h-full bg-white">
                 <div className="space-y-4">
@@ -165,9 +165,7 @@ export default function RecruiterLandingPage() {
         {/* 4. Pricing / Package Introduction */}
         <div className="text-center max-w-4xl mx-auto space-y-6">
           <h2 className="text-2xl sm:text-3xl font-black text-slate-800 m-0">Khởi đầu Tuyển dụng Số ngay hôm nay</h2>
-          <p className="text-slate-500 text-xs font-semibold leading-relaxed max-w-xl mx-auto">
-            Chúng tôi cung cấp gói tài khoản khởi đầu miễn phí trọn đời cho doanh nghiệp mới để đăng tuyển và trải nghiệm đầy đủ công nghệ AI.
-          </p>
+
           <div className="pt-4">
             <Link href="/dang-ky?type=COMPANY">
               <Button

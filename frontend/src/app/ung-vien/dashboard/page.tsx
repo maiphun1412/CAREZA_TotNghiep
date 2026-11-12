@@ -1,9 +1,12 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
-import { Progress, Tag } from "antd";
+import { candidateService } from "@/services/candidate.service";
+import { aiService } from "@/services/ai.service";
+import { Progress, Tag, Spin, Alert, Tooltip } from "antd";
 import {
   FilePdfOutlined,
   MoreOutlined,
@@ -12,13 +15,79 @@ import {
 } from "@ant-design/icons";
 
 export default function CandidateDashboardPage() {
+  const router = useRouter();
   const { user } = useAuthStore();
-  const [bookmarkedJobs, setBookmarkedJobs] = useState<string[]>([]);
 
-  const toggleBookmark = (jobId: string) => {
-    setBookmarkedJobs((prev) =>
-      prev.includes(jobId) ? prev.filter((id) => id !== jobId) : [...prev, jobId]
-    );
+  useEffect(() => {
+    router.replace("/ung-vien/ho-so");
+  }, [router]);
+  const [bookmarkedJobs, setBookmarkedJobs] = useState<string[]>([]);
+  const [dashboardData, setDashboardData] = useState<any>(null);
+  const [matchingJobs, setMatchingJobs] = useState<any[]>([]);
+  const [loading, setLoading] = useState(true);
+  const [recLoading, setRecLoading] = useState(true);
+  const [recError, setRecError] = useState<string | null>(null);
+
+  const fetchRecommendations = useCallback(async () => {
+    setRecLoading(true);
+    setRecError(null);
+    try {
+      const recRes = await aiService.getJobRecommendations(6);
+      const recs = recRes?.data?.recommendations;
+      if (Array.isArray(recs)) {
+        setMatchingJobs(recs);
+      } else {
+        setMatchingJobs([]);
+      }
+    } catch (err: any) {
+      const errData = err?.response?.data;
+      const errMsg =
+        errData?.cv?.[0] ||
+        errData?.cv ||
+        errData?.detail ||
+        errData?.error ||
+        errData?.message ||
+        err?.message ||
+        "Không thể tải danh sách việc làm gợi ý từ hệ thống.";
+      setRecError(typeof errMsg === "string" ? errMsg : "Chưa có dữ liệu gợi ý việc làm phù hợp.");
+      setMatchingJobs([]);
+    } finally {
+      setRecLoading(false);
+    }
+  }, []);
+
+  useEffect(() => {
+    const fetchDashboard = async () => {
+      setLoading(true);
+      try {
+        const dashRes = await candidateService.getDashboard();
+        if (dashRes?.data) {
+          setDashboardData(dashRes.data);
+        }
+      } catch (err) {
+        console.warn("Lỗi nạp dashboard ứng viên:", err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchDashboard();
+    fetchRecommendations();
+  }, [fetchRecommendations]);
+
+  const toggleBookmark = async (jobId: string) => {
+    const isSaved = bookmarkedJobs.includes(jobId);
+    try {
+      if (isSaved) {
+        await candidateService.removeJobBookmark(jobId);
+        setBookmarkedJobs((prev) => prev.filter((id) => id !== jobId));
+      } else {
+        await candidateService.saveJobBookmark(jobId);
+        setBookmarkedJobs((prev) => [...prev, jobId]);
+      }
+    } catch {
+      // ignore
+    }
   };
 
   const candidateName = user?.fullName || "Mai Phương";
@@ -62,12 +131,14 @@ export default function CandidateDashboardPage() {
           <div className="space-y-1.5 flex-1">
             <span className="text-xs font-bold text-slate-500 block">Hồ sơ hoàn thiện</span>
             <div className="flex items-baseline gap-1">
-              <span className="text-3xl font-black text-slate-900">75%</span>
+              <span className="text-3xl font-black text-slate-900">{dashboardData?.stats?.profile_completion ?? 0}%</span>
             </div>
             <div className="w-44 my-1">
-              <Progress percent={75} showInfo={false} strokeColor="#0062ff" strokeWidth={8} />
+              <Progress percent={dashboardData?.stats?.profile_completion ?? 0} showInfo={false} strokeColor="#0062ff" strokeWidth={8} />
             </div>
-            <span className="text-xs font-bold text-slate-500 block pt-0.5">Bạn đang tiến rất tốt!</span>
+            <span className="text-xs font-bold text-slate-500 block pt-0.5">
+              {(dashboardData?.stats?.profile_completion ?? 0) >= 80 ? "Hồ sơ của bạn rất xuất sắc!" : "Hãy bổ sung thông tin để tăng cơ hội trúng tuyển!"}
+            </span>
           </div>
 
           {/* Illustration */}
@@ -93,7 +164,9 @@ export default function CandidateDashboardPage() {
               <span className="material-symbols-outlined text-2xl">description</span>
             </div>
             <div>
-              <span className="text-2xl sm:text-3xl font-black text-slate-900 block leading-none">3</span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 block leading-none">
+                {dashboardData?.stats?.cv_count ?? 0}
+              </span>
               <span className="text-xs sm:text-sm font-bold text-slate-600 mt-1 block">CV của tôi</span>
             </div>
           </div>
@@ -109,13 +182,15 @@ export default function CandidateDashboardPage() {
               <span className="material-symbols-outlined text-2xl">send</span>
             </div>
             <div>
-              <span className="text-2xl sm:text-3xl font-black text-slate-900 block leading-none">8</span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 block leading-none">
+                {dashboardData?.stats?.applied_count ?? 0}
+              </span>
               <span className="text-xs sm:text-sm font-bold text-slate-600 mt-1 block">Đã ứng tuyển</span>
             </div>
           </div>
-          <span className="bg-emerald-50 text-emerald-600 text-xs font-bold px-2.5 py-1 rounded-md">
-            +2 tháng này
-          </span>
+          <Link href="/ung-vien/ung-tuyen" className="text-xs font-bold text-primary hover:underline">
+            Xem lịch sử →
+          </Link>
         </div>
 
         {/* Card 3: Việc đã lưu (Viền hồng rose) */}
@@ -125,13 +200,15 @@ export default function CandidateDashboardPage() {
               <span className="material-symbols-outlined text-2xl">favorite</span>
             </div>
             <div>
-              <span className="text-2xl sm:text-3xl font-black text-slate-900 block leading-none">12</span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 block leading-none">
+                {dashboardData?.stats?.saved_jobs_count ?? 0}
+              </span>
               <span className="text-xs sm:text-sm font-bold text-slate-600 mt-1 block">Việc đã lưu</span>
             </div>
           </div>
-          <span className="bg-emerald-50 text-emerald-600 text-xs font-bold px-2.5 py-1 rounded-md">
-            +4 tháng này
-          </span>
+          <Link href="/ung-vien/viec-da-luu" className="text-xs font-bold text-primary hover:underline">
+            Xem danh sách →
+          </Link>
         </div>
 
         {/* Card 4: Lịch phỏng vấn (Viền tím indigo) */}
@@ -141,7 +218,9 @@ export default function CandidateDashboardPage() {
               <span className="material-symbols-outlined text-2xl">calendar_month</span>
             </div>
             <div>
-              <span className="text-2xl sm:text-3xl font-black text-slate-900 block leading-none">2</span>
+              <span className="text-2xl sm:text-3xl font-black text-slate-900 block leading-none">
+                {dashboardData?.stats?.interview_count ?? 0}
+              </span>
               <span className="text-xs sm:text-sm font-bold text-slate-600 mt-1 block">Lịch phỏng vấn</span>
             </div>
           </div>
@@ -160,110 +239,66 @@ export default function CandidateDashboardPage() {
           <div>
             <div className="flex items-center justify-between mb-5">
               <h3 className="text-base sm:text-lg font-black text-slate-800 m-0">Tiến trình ứng tuyển</h3>
-              <Link href="/ung-vien/ung-tuyen" className="text-xs sm:text-sm font-bold text-primary hover:underline">
-                Xem tất cả ứng tuyển →
+              <Link href="/ung-vien/ung-tuyen" className="text-xs font-bold text-primary hover:underline">
+                Xem tất cả ({dashboardData?.stats?.applied_count ?? 0}) →
               </Link>
             </div>
 
-            {/* Danh sách 3 ứng tuyển */}
+            {/* Danh sách ứng tuyển thật từ API */}
             <div className="space-y-4">
-              {/* Item 1 */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/70 border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex items-center gap-3.5 min-w-[240px]">
-                  <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 p-2 flex items-center justify-center shrink-0 shadow-2xs">
-                    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/FPT_Software_logo.svg" alt="FPT" className="w-full h-full object-contain" />
-                  </div>
-                  <div>
-                    <h4 className="font-extrabold text-sm sm:text-base text-slate-800 m-0 leading-tight">Frontend Developer</h4>
-                    <p className="text-xs text-slate-500 font-medium m-0 mt-0.5">FPT Software • Ứng tuyển: 28/08/2025</p>
-                  </div>
-                </div>
+              {dashboardData?.recent_applications && dashboardData.recent_applications.length > 0 ? (
+                dashboardData.recent_applications.map((app: any) => {
+                  const statusMap: Record<string, { label: string; color: string }> = {
+                    submitted: { label: "Đã ứng tuyển", color: "bg-blue-50 text-blue-600" },
+                    screening: { label: "Đang sàng lọc", color: "bg-purple-50 text-purple-600" },
+                    interview: { label: "Phỏng vấn", color: "bg-amber-50 text-amber-600" },
+                    hired: { label: "Trúng tuyển", color: "bg-emerald-50 text-emerald-600" },
+                    rejected: { label: "Chưa phù hợp", color: "bg-rose-50 text-rose-600" },
+                  };
+                  const statusInfo = statusMap[app.status] || { label: app.status || "Đã ứng tuyển", color: "bg-slate-100 text-slate-700" };
+                  const appliedDate = app.applied_at ? new Date(app.applied_at).toLocaleDateString("vi-VN") : "Gần đây";
 
-                {/* Status & Pipeline */}
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                  <span className="bg-blue-50 text-primary text-xs font-bold px-3 py-1 rounded-full self-start sm:self-center">
-                    Đang sàng lọc
-                  </span>
-                  {/* Pipeline 4 steps */}
-                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                    <span className="flex items-center gap-1.5 text-primary font-bold">
-                      <span className="w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center text-[9px]">✓</span> Đã ứng tuyển
-                    </span>
-                    <span className="w-6 h-[2px] bg-primary"></span>
-                    <span className="flex items-center gap-1.5 text-primary font-bold">
-                      <span className="w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center text-[9px]">✓</span> Sàng lọc
-                    </span>
-                    <span className="w-6 h-[2px] bg-slate-200"></span>
-                    <span className="text-slate-400 font-normal">Phỏng vấn</span>
-                    <span className="w-6 h-[2px] bg-slate-200"></span>
-                    <span className="text-slate-400 font-normal">Kết quả</span>
-                  </div>
-                </div>
-              </div>
+                  return (
+                    <div key={app.id} className="p-4 sm:p-5 rounded-2xl bg-slate-50/70 border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
+                      <div className="flex items-center gap-3.5 min-w-[240px]">
+                        <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 p-2 flex items-center justify-center shrink-0 shadow-2xs">
+                          {app.company_logo ? (
+                            <img src={app.company_logo} alt={app.company_name} className="w-full h-full object-contain" />
+                          ) : (
+                            <span className="material-symbols-outlined text-2xl text-slate-400">apartment</span>
+                          )}
+                        </div>
+                        <div>
+                          <h4 className="font-extrabold text-sm sm:text-base text-slate-800 m-0 leading-tight">
+                            {app.job_title}
+                          </h4>
+                          <p className="text-xs text-slate-500 font-medium m-0 mt-0.5">
+                            {app.company_name} • Ứng tuyển: {appliedDate}
+                          </p>
+                        </div>
+                      </div>
 
-              {/* Item 2 */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/70 border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex items-center gap-3.5 min-w-[240px]">
-                  <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 p-2 flex items-center justify-center shrink-0 shadow-2xs">
-                    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Viettel_logo_2021.svg" alt="Viettel" className="w-full h-full object-contain" />
-                  </div>
-                  <div>
-                    <h4 className="font-extrabold text-sm sm:text-base text-slate-800 m-0 leading-tight">Business Analyst</h4>
-                    <p className="text-xs text-slate-500 font-medium m-0 mt-0.5">Viettel • Ứng tuyển: 26/08/2025</p>
-                  </div>
+                      {/* Status */}
+                      <div className="flex items-center gap-3">
+                        <span className={`text-xs font-bold px-3 py-1 rounded-full ${statusInfo.color}`}>
+                          {statusInfo.label}
+                        </span>
+                        <Link href={`/ung-vien/ung-tuyen`} className="text-xs font-bold text-primary hover:underline">
+                          Chi tiết →
+                        </Link>
+                      </div>
+                    </div>
+                  );
+                })
+              ) : (
+                <div className="text-center py-10 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+                  <span className="material-symbols-outlined text-3xl text-slate-400 block mb-1">inbox</span>
+                  <p className="text-xs sm:text-sm text-slate-500 m-0 font-medium">Bạn chưa nộp đơn ứng tuyển nào.</p>
+                  <Link href="/viec-lam" className="inline-block mt-3 text-xs font-bold text-primary hover:underline">
+                    Tìm kiếm việc làm ngay →
+                  </Link>
                 </div>
-
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                  <span className="bg-emerald-50 text-emerald-600 text-xs font-bold px-3 py-1 rounded-full self-start sm:self-center">
-                    Đã ứng tuyển
-                  </span>
-                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                    <span className="flex items-center gap-1.5 text-primary font-bold">
-                      <span className="w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center text-[9px]">✓</span> Đã ứng tuyển
-                    </span>
-                    <span className="w-6 h-[2px] bg-slate-200"></span>
-                    <span className="text-slate-400 font-normal">Sàng lọc</span>
-                    <span className="w-6 h-[2px] bg-slate-200"></span>
-                    <span className="text-slate-400 font-normal">Phỏng vấn</span>
-                    <span className="w-6 h-[2px] bg-slate-200"></span>
-                    <span className="text-slate-400 font-normal">Kết quả</span>
-                  </div>
-                </div>
-              </div>
-
-              {/* Item 3 */}
-              <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/70 border border-slate-100 flex flex-col md:flex-row md:items-center justify-between gap-4">
-                <div className="flex items-center gap-3.5 min-w-[240px]">
-                  <div className="w-12 h-12 rounded-xl bg-white border border-slate-200 p-2 flex items-center justify-center shrink-0 shadow-2xs">
-                    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Shopee.svg" alt="Shopee" className="w-full h-full object-contain" />
-                  </div>
-                  <div>
-                    <h4 className="font-extrabold text-sm sm:text-base text-slate-800 m-0 leading-tight">Product Marketing Intern</h4>
-                    <p className="text-xs text-slate-500 font-medium m-0 mt-0.5">Shopee • Ứng tuyển: 20/08/2025</p>
-                  </div>
-                </div>
-
-                <div className="flex flex-col sm:flex-row sm:items-center gap-4">
-                  <span className="bg-amber-50 text-amber-600 text-xs font-bold px-3 py-1 rounded-full self-start sm:self-center">
-                    Đang phỏng vấn
-                  </span>
-                  <div className="flex items-center gap-2 text-xs font-semibold text-slate-500">
-                    <span className="flex items-center gap-1.5 text-primary font-bold">
-                      <span className="w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center text-[9px]">✓</span> Đã ứng tuyển
-                    </span>
-                    <span className="w-6 h-[2px] bg-primary"></span>
-                    <span className="flex items-center gap-1.5 text-primary font-bold">
-                      <span className="w-4 h-4 rounded-full bg-primary text-white flex items-center justify-center text-[9px]">✓</span> Sàng lọc
-                    </span>
-                    <span className="w-6 h-[2px] bg-amber-500"></span>
-                    <span className="flex items-center gap-1.5 text-amber-600 font-bold">
-                      <span className="w-4 h-4 rounded-full bg-amber-500 text-white flex items-center justify-center text-[9px]">●</span> Phỏng vấn
-                    </span>
-                    <span className="w-6 h-[2px] bg-slate-200"></span>
-                    <span className="text-slate-400 font-normal">Kết quả</span>
-                  </div>
-                </div>
-              </div>
+              )}
             </div>
           </div>
         </div>
@@ -282,7 +317,7 @@ export default function CandidateDashboardPage() {
             <div className="flex items-center gap-5 mb-5">
               <Progress
                 type="circle"
-                percent={75}
+                percent={dashboardData?.stats?.profile_completion ?? 0}
                 size={80}
                 strokeColor="#0F52BA"
                 strokeWidth={9}
@@ -290,10 +325,10 @@ export default function CandidateDashboardPage() {
               />
               <div>
                 <h4 className="text-sm sm:text-base font-bold text-slate-800 m-0 leading-snug">
-                  Hồ sơ của bạn đã khá đầy đủ!
+                  {(dashboardData?.stats?.profile_completion ?? 0) >= 80 ? "Hồ sơ của bạn đã hoàn thiện tốt!" : "Hồ sơ đang được xây dựng"}
                 </h4>
                 <p className="text-xs text-slate-500 m-0 mt-1 leading-relaxed">
-                  Hoàn thiện thêm để tăng cơ hội được nhà tuyển dụng chú ý.
+                  Cập nhật đầy đủ kỹ năng và kinh nghiệm để thu hút nhà tuyển dụng.
                 </p>
               </div>
             </div>
@@ -320,170 +355,226 @@ export default function CandidateDashboardPage() {
       </div>
 
       {/* ========================================================================= */}
-      {/* 4. VIỆC LÀM PHÙ HỢP VỚI BẠN (3 Card Carousel) */}
+      {/* 4. VIỆC LÀM PHÙ HỢP VỚI BẠN (Xếp hạng đa tiêu chí TOPSIS) */}
       {/* ========================================================================= */}
       <div className="bg-white p-6 sm:p-7 rounded-[28px] border border-slate-200/70 shadow-xs">
-        <div className="flex items-center justify-between mb-5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2 mb-5">
           <div>
-            <h3 className="text-base sm:text-lg font-black text-slate-800 m-0">Việc làm phù hợp với bạn</h3>
-            <p className="text-xs sm:text-sm text-slate-500 m-0 mt-0.5 font-medium">Dựa trên hồ sơ và hoạt động của bạn</p>
+            <div className="flex items-center gap-2">
+              <h3 className="text-base sm:text-lg font-black text-slate-800 m-0">Việc làm phù hợp với bạn</h3>
+              <span className="bg-blue-50 text-[#0062ff] border border-blue-200 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full">
+                TOPSIS Ranking
+              </span>
+            </div>
+            <p className="text-xs sm:text-sm text-slate-500 m-0 mt-0.5 font-medium">
+              Xếp hạng đa tiêu chí TOPSIS và độ tương thích CV–JD dựa trên CV của bạn
+            </p>
           </div>
           <Link href="/viec-lam" className="text-xs sm:text-sm font-bold text-primary hover:underline">
             Xem tất cả việc làm →
           </Link>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
-          {/* Job Card 1 */}
-          <div className="bg-slate-50/70 hover:bg-white p-5 rounded-2xl border border-slate-200/70 hover:border-blue-200 hover:shadow-md transition-all flex flex-col justify-between">
-            <div>
-              <div className="flex items-start justify-between gap-2 mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 p-1.5 flex items-center justify-center">
-                    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/FPT_Software_logo.svg" alt="FPT" className="w-full h-full object-contain" />
-                  </div>
-                  <div>
-                    <h4 className="font-extrabold text-sm sm:text-base text-slate-800 m-0 line-clamp-1">Frontend Developer</h4>
-                    <p className="text-xs text-slate-500 font-medium m-0 mt-0.5">FPT Software</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => toggleBookmark("job-1")}
-                  className="text-slate-400 hover:text-rose-500 cursor-pointer p-1 text-base border-none bg-transparent"
-                >
-                  {bookmarkedJobs.includes("job-1") ? <HeartFilled className="text-rose-500" /> : <HeartOutlined />}
-                </button>
-              </div>
-
-              <div className="flex items-center gap-1.5 my-2.5">
-                <span className="bg-amber-50 text-amber-700 text-xs font-bold px-2.5 py-0.5 rounded-md">
-                  Gợi ý cho bạn
-                </span>
-              </div>
-
-              <div className="text-xs text-slate-600 space-y-1.5 mb-4 font-medium">
-                <div className="flex items-center gap-1.5 truncate">
-                  <span className="material-symbols-outlined text-[16px] text-slate-400">pin_drop</span>
-                  <span>TP. Hồ Chí Minh</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-slate-400">payments</span>
-                  <span className="font-black text-slate-800 text-sm">15 - 25 triệu</span>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-1.5 mb-2">
-                <Tag className="bg-white border border-slate-200 text-slate-700 font-semibold rounded-md text-xs px-2.5 py-0.5 m-0">React</Tag>
-                <Tag className="bg-white border border-slate-200 text-slate-700 font-semibold rounded-md text-xs px-2.5 py-0.5 m-0">TypeScript</Tag>
-                <Tag className="bg-white border border-slate-200 text-slate-700 font-semibold rounded-md text-xs px-2.5 py-0.5 m-0">Next.js</Tag>
-              </div>
-            </div>
-
-            <span className="text-xs text-slate-400 pt-3 border-t border-slate-200/60 block font-medium">
-              Đăng 2 ngày trước
-            </span>
+        {/* Trạng thái Loading / Error / Empty / Danh sách TOPSIS thật từ API */}
+        {recLoading ? (
+          <div className="py-12 text-center bg-slate-50/50 rounded-2xl border border-slate-100">
+            <Spin size="default" />
+            <p className="text-xs sm:text-sm text-slate-500 font-medium m-0 mt-2">
+              Đang phân tích CV và xếp hạng việc làm phù hợp bằng thuật toán TOPSIS...
+            </p>
           </div>
-
-          {/* Job Card 2 */}
-          <div className="bg-slate-50/70 hover:bg-white p-5 rounded-2xl border border-slate-200/70 hover:border-blue-200 hover:shadow-md transition-all flex flex-col justify-between">
-            <div>
-              <div className="flex items-start justify-between gap-2 mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 p-1.5 flex items-center justify-center">
-                    <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Viettel_logo_2021.svg" alt="Viettel" className="w-full h-full object-contain" />
-                  </div>
-                  <div>
-                    <h4 className="font-extrabold text-sm sm:text-base text-slate-800 m-0 line-clamp-1">Business Analyst</h4>
-                    <p className="text-xs text-slate-500 font-medium m-0 mt-0.5">Viettel</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => toggleBookmark("job-2")}
-                  className="text-slate-400 hover:text-rose-500 cursor-pointer p-1 text-base border-none bg-transparent"
-                >
-                  {bookmarkedJobs.includes("job-2") ? <HeartFilled className="text-rose-500" /> : <HeartOutlined />}
-                </button>
-              </div>
-
-              <div className="flex items-center gap-1.5 my-2.5">
-                <span className="bg-amber-50 text-amber-700 text-xs font-bold px-2.5 py-0.5 rounded-md">
-                  Gợi ý cho bạn
-                </span>
-              </div>
-
-              <div className="text-xs text-slate-600 space-y-1.5 mb-4 font-medium">
-                <div className="flex items-center gap-1.5 truncate">
-                  <span className="material-symbols-outlined text-[16px] text-slate-400">pin_drop</span>
-                  <span>Hà Nội</span>
-                </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-slate-400">payments</span>
-                  <span className="font-black text-slate-800 text-sm">18 - 30 triệu</span>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-1.5 mb-2">
-                <Tag className="bg-white border border-slate-200 text-slate-700 font-semibold rounded-md text-xs px-2.5 py-0.5 m-0">BA</Tag>
-                <Tag className="bg-white border border-slate-200 text-slate-700 font-semibold rounded-md text-xs px-2.5 py-0.5 m-0">SQL</Tag>
-                <Tag className="bg-white border border-slate-200 text-slate-700 font-semibold rounded-md text-xs px-2.5 py-0.5 m-0">Communication</Tag>
-              </div>
+        ) : recError ? (
+          <div className="bg-slate-50/70 rounded-2xl p-5 border border-slate-200/80 space-y-3">
+            <Alert
+              type="warning"
+              showIcon
+              message="Chưa thể tạo gợi ý việc làm TOPSIS"
+              description={recError}
+            />
+            <div className="flex items-center gap-3">
+              <Link
+                href="/ung-vien/cv"
+                className="text-xs font-bold bg-[#0062ff] hover:bg-[#0052cc] text-white px-4 py-2 rounded-xl transition-all"
+              >
+                Cập nhật / Tải lên CV
+              </Link>
+              <button
+                type="button"
+                onClick={fetchRecommendations}
+                className="text-xs font-bold bg-white hover:bg-slate-100 text-slate-700 border border-slate-200 px-4 py-2 rounded-xl cursor-pointer transition-all"
+              >
+                Thử lại
+              </button>
             </div>
-
-            <span className="text-xs text-slate-400 pt-3 border-t border-slate-200/60 block font-medium">
-              Đăng 1 ngày trước
-            </span>
           </div>
+        ) : matchingJobs.length > 0 ? (
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-5">
+            {matchingJobs.map((rec: any, idx: number) => {
+              const job = rec?.job || rec || {};
+              const jobId = job.id ?? rec?.job_id;
+              const rankPos = rec?.rank_position ?? idx + 1;
+              const topsisScore =
+                typeof rec?.topsis_score === "number" ? rec.topsis_score : null;
+              const matchPercent =
+                typeof rec?.match_percentage === "number"
+                  ? rec.match_percentage
+                  : typeof rec?.hybrid_score === "number"
+                    ? Math.round(rec.hybrid_score * 1000) / 10
+                    : null;
+              const explanation = rec?.explanation || {};
+              const matchedSkills: string[] = Array.isArray(explanation?.matched_skills)
+                ? explanation.matched_skills
+                : [];
 
-          {/* Job Card 3 */}
-          <div className="bg-slate-50/70 hover:bg-white p-5 rounded-2xl border border-slate-200/70 hover:border-blue-200 hover:shadow-md transition-all flex flex-col justify-between">
-            <div>
-              <div className="flex items-start justify-between gap-2 mb-3">
-                <div className="flex items-center gap-3">
-                  <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 p-1.5 flex items-center justify-center font-black text-emerald-600 text-sm">
-                    Grab
-                  </div>
-                  <div>
-                    <h4 className="font-extrabold text-sm sm:text-base text-slate-800 m-0 line-clamp-1">Product Manager</h4>
-                    <p className="text-xs text-slate-500 font-medium m-0 mt-0.5">Grab Việt Nam</p>
-                  </div>
-                </div>
-                <button
-                  onClick={() => toggleBookmark("job-3")}
-                  className="text-slate-400 hover:text-rose-500 cursor-pointer p-1 text-base border-none bg-transparent"
+              // Định dạng mức lương thực tế từ API
+              let salaryDisplay = job.salary || "Thỏa thuận";
+              if (!job.salary) {
+                const sMin = Number(job.salary_min || 0);
+                const sMax = Number(job.salary_max || 0);
+                const cur = (job.currency || "VND").trim().toUpperCase();
+                if (sMin > 0 && sMax > 0) {
+                  salaryDisplay =
+                    cur === "VND" && sMin >= 1_000_000
+                      ? `${Math.round(sMin / 1_000_000)} - ${Math.round(sMax / 1_000_000)} triệu`
+                      : `${sMin.toLocaleString("vi-VN")} - ${sMax.toLocaleString("vi-VN")} ${cur}`;
+                } else if (sMin > 0) {
+                  salaryDisplay =
+                    cur === "VND" && sMin >= 1_000_000
+                      ? `Từ ${Math.round(sMin / 1_000_000)} triệu`
+                      : `Từ ${sMin.toLocaleString("vi-VN")} ${cur}`;
+                } else if (sMax > 0) {
+                  salaryDisplay =
+                    cur === "VND" && sMax >= 1_000_000
+                      ? `Đến ${Math.round(sMax / 1_000_000)} triệu`
+                      : `Đến ${sMax.toLocaleString("vi-VN")} ${cur}`;
+                }
+              }
+
+              const locationDisplay =
+                job.location ||
+                (job.work_mode === "remote"
+                  ? "Làm việc từ xa (Remote)"
+                  : job.work_mode === "hybrid"
+                    ? "Linh hoạt (Hybrid)"
+                    : "Chưa cập nhật địa điểm");
+
+              return (
+                <div
+                  key={jobId || idx}
+                  className="bg-slate-50/70 hover:bg-white p-5 rounded-2xl border border-slate-200/70 hover:border-blue-200 hover:shadow-md transition-all flex flex-col justify-between"
                 >
-                  {bookmarkedJobs.includes("job-3") ? <HeartFilled className="text-rose-500" /> : <HeartOutlined />}
-                </button>
-              </div>
+                  <div>
+                    <div className="flex items-start justify-between gap-2 mb-3">
+                      <div className="flex items-center gap-3 min-w-0">
+                        <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 p-1.5 flex items-center justify-center font-bold text-primary overflow-hidden shrink-0">
+                          {job.company_logo ? (
+                            <img src={job.company_logo} alt={job.company_name || "Doanh nghiệp"} className="w-full h-full object-contain" />
+                          ) : (
+                            <span className="text-sm">{(job.company_name || "DN").slice(0, 2).toUpperCase()}</span>
+                          )}
+                        </div>
+                        <div className="min-w-0">
+                          <Link href={`/viec-lam/${jobId}`}>
+                            <h4 className="font-extrabold text-sm sm:text-base text-slate-800 m-0 line-clamp-1 hover:text-primary transition-colors">
+                              {job.title || "Vị trí tuyển dụng"}
+                            </h4>
+                          </Link>
+                          <p className="text-xs text-slate-500 font-medium m-0 mt-0.5 line-clamp-1">
+                            {job.company_name || "Doanh nghiệp"}
+                          </p>
+                        </div>
+                      </div>
+                      {jobId && (
+                        <button
+                          onClick={() => toggleBookmark(String(jobId))}
+                          className="text-slate-400 hover:text-rose-500 cursor-pointer p-1 text-base border-none bg-transparent shrink-0"
+                        >
+                          {bookmarkedJobs.includes(String(jobId)) ? <HeartFilled className="text-rose-500" /> : <HeartOutlined />}
+                        </button>
+                      )}
+                    </div>
 
-              <div className="flex items-center gap-1.5 my-2.5">
-                <span className="bg-amber-50 text-amber-700 text-xs font-bold px-2.5 py-0.5 rounded-md">
-                  Gợi ý cho bạn
-                </span>
-              </div>
+                    {/* Nhãn xếp hạng TOPSIS & Độ phù hợp CV-JD */}
+                    <div className="flex items-center gap-1.5 flex-wrap my-2.5">
+                      <span className="bg-blue-600 text-white text-[11px] font-extrabold px-2.5 py-0.5 rounded-md">
+                        Hạng #{rankPos} TOPSIS
+                      </span>
+                      {topsisScore !== null && (
+                        <Tooltip title="Hệ số độ gần tương đối TOPSIS C_i (0 → 1)">
+                          <span className="bg-indigo-50 text-indigo-700 border border-indigo-200 text-[11px] font-bold px-2 py-0.5 rounded-md">
+                            TOPSIS: {(topsisScore * 100).toFixed(1)}đ ({topsisScore.toFixed(3)})
+                          </span>
+                        </Tooltip>
+                      )}
+                      {matchPercent !== null && (
+                        <Tooltip title="Điểm so khớp CV–JD Hybrid (Kỹ năng + TF-IDF + Kinh nghiệm)">
+                          <span className="bg-emerald-50 text-emerald-700 border border-emerald-200 text-[11px] font-bold px-2 py-0.5 rounded-md">
+                            CV–JD: {matchPercent}%
+                          </span>
+                        </Tooltip>
+                      )}
+                    </div>
 
-              <div className="text-xs text-slate-600 space-y-1.5 mb-4 font-medium">
-                <div className="flex items-center gap-1.5 truncate">
-                  <span className="material-symbols-outlined text-[16px] text-slate-400">pin_drop</span>
-                  <span>TP. Hồ Chí Minh</span>
+                    <div className="text-xs text-slate-600 space-y-1.5 mb-3 font-medium">
+                      <div className="flex items-center gap-1.5 truncate">
+                        <span className="material-symbols-outlined text-[16px] text-slate-400">pin_drop</span>
+                        <span>{locationDisplay}</span>
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-[16px] text-slate-400">payments</span>
+                        <span className="font-black text-slate-800 text-sm">{salaryDisplay}</span>
+                      </div>
+                      {typeof job.experience_min === "number" && (
+                        <div className="flex items-center gap-1.5">
+                          <span className="material-symbols-outlined text-[16px] text-slate-400">work_history</span>
+                          <span>
+                            {job.experience_min > 0
+                              ? `Yêu cầu tối thiểu ${job.experience_min} năm KN`
+                              : "Không yêu cầu kinh nghiệm"}
+                          </span>
+                        </div>
+                      )}
+                    </div>
+
+                    {matchedSkills.length > 0 && (
+                      <div className="flex flex-wrap gap-1.5 mb-2">
+                        {matchedSkills.slice(0, 4).map((t: string, sIdx: number) => (
+                          <Tag key={sIdx} className="bg-white border border-blue-200 text-blue-700 font-semibold rounded-md text-xs px-2 py-0.5 m-0">
+                            ✓ {t}
+                          </Tag>
+                        ))}
+                        {matchedSkills.length > 4 && (
+                          <Tag className="bg-white border border-slate-200 text-slate-600 font-semibold rounded-md text-xs px-2 py-0.5 m-0">
+                            +{matchedSkills.length - 4}
+                          </Tag>
+                        )}
+                      </div>
+                    )}
+                  </div>
+
+                  <div className="pt-3 border-t border-slate-200/60 flex items-center justify-between text-xs text-slate-500 font-medium">
+                    <span>
+                      {job.work_mode ? `Hình thức: ${job.work_mode}` : "Đang tuyển dụng"}
+                    </span>
+                    <Link href={`/viec-lam/${jobId}`} className="text-primary font-bold hover:underline">
+                      Xem chi tiết →
+                    </Link>
+                  </div>
                 </div>
-                <div className="flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-[16px] text-slate-400">payments</span>
-                  <span className="font-black text-slate-800 text-sm">25 - 40 triệu</span>
-                </div>
-              </div>
-
-              <div className="flex flex-wrap gap-1.5 mb-2">
-                <Tag className="bg-white border border-slate-200 text-slate-700 font-semibold rounded-md text-xs px-2.5 py-0.5 m-0">Product</Tag>
-                <Tag className="bg-white border border-slate-200 text-slate-700 font-semibold rounded-md text-xs px-2.5 py-0.5 m-0">Strategy</Tag>
-                <Tag className="bg-white border border-slate-200 text-slate-700 font-semibold rounded-md text-xs px-2.5 py-0.5 m-0">Analytics</Tag>
-              </div>
-            </div>
-
-            <span className="text-xs text-slate-400 pt-3 border-t border-slate-200/60 block font-medium">
-              Đăng 3 ngày trước
-            </span>
+              );
+            })}
           </div>
-        </div>
+        ) : (
+          <div className="text-center py-10 bg-slate-50/50 rounded-2xl border border-dashed border-slate-200">
+            <span className="text-3xl block mb-2">💼</span>
+            <p className="text-slate-600 font-medium text-sm m-0">
+              Hệ thống chưa tìm thấy việc làm phù hợp để xếp hạng TOPSIS cho hồ sơ hiện tại.
+            </p>
+            <Link href="/viec-lam" className="text-primary text-xs font-bold mt-2 inline-block hover:underline">
+              Khám phá danh sách việc làm đang tuyển dụng →
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* ========================================================================= */}
@@ -500,56 +591,53 @@ export default function CandidateDashboardPage() {
               </Link>
             </div>
 
-            {/* 2 Items CV */}
-            <div className="space-y-3.5">
-              <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 flex items-center justify-between">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-10 h-12 rounded-lg bg-blue-100 text-primary flex items-center justify-center text-xl">
-                    <FilePdfOutlined />
+            {dashboardData?.recent_cvs && dashboardData.recent_cvs.length > 0 ? (
+              <div className="space-y-3.5">
+                {dashboardData.recent_cvs.map((cv: any) => (
+                  <div key={cv.id} className="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 flex items-center justify-between">
+                    <div className="flex items-center gap-3.5 overflow-hidden">
+                      <div className={`w-10 h-12 rounded-lg flex items-center justify-center text-xl shrink-0 ${cv.is_primary ? "bg-blue-100 text-primary" : "bg-slate-200 text-slate-600"}`}>
+                        <FilePdfOutlined />
+                      </div>
+                      <div className="truncate">
+                        <h4 className="font-bold text-sm text-slate-800 m-0 truncate">{cv.title}</h4>
+                        <p className="text-xs text-slate-400 m-0 mt-0.5">
+                          {cv.created_at ? new Date(cv.created_at).toLocaleDateString("vi-VN") : "Đã tải lên"}
+                        </p>
+                      </div>
+                    </div>
+                    <div className="flex items-center gap-2 shrink-0">
+                      {cv.is_primary && (
+                        <span className="bg-blue-50 text-primary text-[10px] font-bold px-2 py-0.5 rounded">
+                          CV chính
+                        </span>
+                      )}
+                      <Link href={`/ung-vien/cv`} className="text-slate-400 hover:text-slate-600 p-1">
+                        <MoreOutlined />
+                      </Link>
+                    </div>
                   </div>
-                  <div>
-                    <h4 className="font-bold text-sm text-slate-800 m-0 line-clamp-1">CV Frontend Developer</h4>
-                    <p className="text-xs text-slate-400 m-0 mt-0.5">Cập nhật 2 ngày trước</p>
-                  </div>
-                </div>
-                <div className="flex items-center gap-2">
-                  <span className="bg-blue-50 text-primary text-[10px] font-bold px-2 py-0.5 rounded">
-                    CV chính
-                  </span>
-                  <button className="text-slate-400 hover:text-slate-600 p-1 border-none bg-transparent cursor-pointer">
-                    <MoreOutlined />
-                  </button>
-                </div>
+                ))}
               </div>
-
-              <div className="p-4 rounded-2xl bg-slate-50/80 border border-slate-100 flex items-center justify-between">
-                <div className="flex items-center gap-3.5">
-                  <div className="w-10 h-12 rounded-lg bg-slate-200 text-slate-600 flex items-center justify-center text-xl">
-                    <FilePdfOutlined />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-sm text-slate-800 m-0 line-clamp-1">CV UI/UX Designer</h4>
-                    <p className="text-xs text-slate-400 m-0 mt-0.5">Cập nhật 5 ngày trước</p>
-                  </div>
-                </div>
-                <button className="text-slate-400 hover:text-slate-600 p-1 border-none bg-transparent cursor-pointer">
-                  <MoreOutlined />
-                </button>
+            ) : (
+              <div className="text-center py-8 bg-slate-50/60 rounded-2xl border border-dashed border-slate-200">
+                <FilePdfOutlined className="text-2xl text-slate-400 mb-2" />
+                <p className="text-xs text-slate-500 font-medium m-0">Bạn chưa có bản CV nào trong hệ thống.</p>
               </div>
-            </div>
+            )}
           </div>
 
           {/* Bottom Actions */}
           <div className="flex items-center gap-3 pt-5 mt-4 border-t border-slate-100">
             <Link
-              href="/ung-vien/cv?tab=builder"
+              href="/ung-vien/cv"
               className="flex-1 text-center py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold transition-all"
             >
-              + Tạo CV mới
+              + Quản lý CV
             </Link>
             <Link
-              href="/ung-vien/cv?tab=upload"
-              className="flex-1 text-center py-2.5 rounded-xl border border-slate-200 text-slate-700 hover:bg-slate-50 text-xs sm:text-sm font-bold transition-all"
+              href="/ung-vien/cv"
+              className="flex-1 text-center py-2.5 rounded-xl bg-primary text-white hover:bg-blue-700 text-xs sm:text-sm font-bold transition-all"
             >
               Tải CV lên
             </Link>
@@ -566,56 +654,34 @@ export default function CandidateDashboardPage() {
               </Link>
             </div>
 
-            {/* 4 Timeline items */}
-            <div className="space-y-4 text-xs sm:text-sm">
-              <div className="flex items-start gap-3">
-                <span className="w-8 h-8 rounded-full bg-blue-50 text-primary flex items-center justify-center text-sm shrink-0 mt-0.5">
-                  ✈
-                </span>
-                <div>
-                  <p className="text-slate-800 font-semibold m-0 leading-tight">
-                    Đã ứng tuyển vào <strong>Frontend Developer - FPT Software</strong>
-                  </p>
-                  <span className="text-xs text-slate-400">2 giờ trước</span>
-                </div>
+            {dashboardData?.recent_activities && dashboardData.recent_activities.length > 0 ? (
+              <div className="space-y-4 text-xs sm:text-sm">
+                {dashboardData.recent_activities.map((act: any, idx: number) => {
+                  const iconBg = act.type === "applied" ? "bg-blue-50 text-primary" : act.type === "saved" ? "bg-rose-50 text-rose-500" : "bg-indigo-50 text-indigo-600";
+                  const iconChar = act.type === "applied" ? "✈" : act.type === "saved" ? "♥" : "📄";
+                  return (
+                    <div key={idx} className="flex items-start gap-3">
+                      <span className={`w-8 h-8 rounded-full flex items-center justify-center text-sm shrink-0 mt-0.5 ${iconBg}`}>
+                        {iconChar}
+                      </span>
+                      <div>
+                        <p className="text-slate-800 font-semibold m-0 leading-tight">
+                          {act.title}
+                        </p>
+                        <span className="text-xs text-slate-400">
+                          {act.timestamp ? new Date(act.timestamp).toLocaleDateString("vi-VN", { hour: "2-digit", minute: "2-digit" }) : "Gần đây"}
+                        </span>
+                      </div>
+                    </div>
+                  );
+                })}
               </div>
-
-              <div className="flex items-start gap-3">
-                <span className="w-8 h-8 rounded-full bg-rose-50 text-rose-500 flex items-center justify-center text-sm shrink-0 mt-0.5">
-                  ♥
-                </span>
-                <div>
-                  <p className="text-slate-800 font-semibold m-0 leading-tight">
-                    Đã lưu việc <strong>Business Analyst - Viettel</strong>
-                  </p>
-                  <span className="text-xs text-slate-400">5 giờ trước</span>
-                </div>
+            ) : (
+              <div className="text-center py-8 bg-slate-50/60 rounded-2xl border border-dashed border-slate-200">
+                <span className="text-2xl block mb-2">⏱</span>
+                <p className="text-xs text-slate-500 font-medium m-0">Chưa có hoạt động tuyển dụng nào gần đây.</p>
               </div>
-
-              <div className="flex items-start gap-3">
-                <span className="w-8 h-8 rounded-full bg-emerald-50 text-emerald-600 flex items-center justify-center text-sm shrink-0 mt-0.5">
-                  👤
-                </span>
-                <div>
-                  <p className="text-slate-800 font-semibold m-0 leading-tight">
-                    Đã cập nhật <strong>hồ sơ nghề nghiệp</strong>
-                  </p>
-                  <span className="text-xs text-slate-400">1 ngày trước</span>
-                </div>
-              </div>
-
-              <div className="flex items-start gap-3">
-                <span className="w-8 h-8 rounded-full bg-indigo-50 text-indigo-600 flex items-center justify-center text-sm shrink-0 mt-0.5">
-                  📄
-                </span>
-                <div>
-                  <p className="text-slate-800 font-semibold m-0 leading-tight">
-                    Đã tạo CV mới: <strong>CV UI/UX Designer</strong>
-                  </p>
-                  <span className="text-xs text-slate-400">2 ngày trước</span>
-                </div>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -629,41 +695,58 @@ export default function CandidateDashboardPage() {
               </Link>
             </div>
 
-            {/* Card Phỏng vấn */}
-            <div className="p-4 sm:p-5 rounded-2xl bg-slate-50/80 border border-slate-100 space-y-3.5">
-              <div className="flex items-center gap-3">
-                <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 p-1.5 flex items-center justify-center">
-                  <img src="https://commons.wikimedia.org/wiki/Special:Redirect/file/Viettel_logo_2021.svg" alt="Viettel" className="w-full h-full object-contain" />
-                </div>
-                <div>
-                  <h4 className="font-extrabold text-sm sm:text-base text-slate-800 m-0">Business Analyst</h4>
-                  <p className="text-xs text-slate-500 font-medium m-0 mt-0.5">Viettel</p>
-                </div>
-              </div>
+            {dashboardData?.upcoming_interviews && dashboardData.upcoming_interviews.length > 0 ? (
+              <div className="space-y-3.5">
+                {dashboardData.upcoming_interviews.map((iv: any) => (
+                  <div key={iv.id} className="p-4 sm:p-5 rounded-2xl bg-slate-50/80 border border-slate-100 space-y-3.5">
+                    <div className="flex items-center gap-3">
+                      <div className="w-11 h-11 rounded-xl bg-white border border-slate-200 p-1.5 flex items-center justify-center font-bold text-primary">
+                        {iv.company_logo ? (
+                          <img src={iv.company_logo} alt={iv.company_name} className="w-full h-full object-contain" />
+                        ) : (
+                          <span>{iv.company_name?.slice(0, 2).toUpperCase()}</span>
+                        )}
+                      </div>
+                      <div>
+                        <h4 className="font-extrabold text-sm sm:text-base text-slate-800 m-0 line-clamp-1">{iv.job_title}</h4>
+                        <p className="text-xs text-slate-500 font-medium m-0 mt-0.5">{iv.company_name}</p>
+                      </div>
+                    </div>
 
-              <div className="flex items-center justify-between text-xs sm:text-sm">
-                <div className="flex items-center gap-1.5 text-slate-700 font-semibold">
-                  <span className="material-symbols-outlined text-base text-slate-400">calendar_month</span>
-                  <span>Thứ 6, 05/09/2025 - 10:00</span>
-                </div>
-                <span className="bg-emerald-50 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-md">
-                  Đã xác nhận
-                </span>
-              </div>
+                    <div className="flex items-center justify-between text-xs sm:text-sm">
+                      <div className="flex items-center gap-1.5 text-slate-700 font-semibold">
+                        <span className="material-symbols-outlined text-base text-slate-400">calendar_month</span>
+                        <span>{iv.scheduled_at ? new Date(iv.scheduled_at).toLocaleString("vi-VN") : "Chưa đặt lịch"}</span>
+                      </div>
+                      <span className="bg-emerald-50 text-emerald-700 text-xs font-bold px-2.5 py-1 rounded-md">
+                        {iv.status === "scheduled" ? "Đã lên lịch" : iv.status}
+                      </span>
+                    </div>
 
-              <div className="flex items-center justify-between pt-3 border-t border-slate-200/60 text-xs sm:text-sm">
-                <span className="text-slate-600 font-semibold flex items-center gap-1.5">
-                  <span className="material-symbols-outlined text-base text-slate-400">videocam</span>
-                  <span>Hình thức: Online</span>
-                </span>
-                <Link
-                  href="/ung-vien/lich-phong-van"
-                  className="bg-primary hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-4 py-1.5 rounded-xl transition-all"
-                >
-                  Xem chi tiết
+                    <div className="flex items-center justify-between pt-3 border-t border-slate-200/60 text-xs sm:text-sm">
+                      <span className="text-slate-600 font-semibold flex items-center gap-1.5">
+                        <span className="material-symbols-outlined text-base text-slate-400">videocam</span>
+                        <span>Hình thức: {iv.mode}</span>
+                      </span>
+                      <Link
+                        href="/ung-vien/lich-phong-van"
+                        className="bg-primary hover:bg-blue-700 text-white font-bold text-xs sm:text-sm px-4 py-1.5 rounded-xl transition-all"
+                      >
+                        Xem chi tiết
+                      </Link>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            ) : (
+              <div className="text-center py-8 bg-slate-50/60 rounded-2xl border border-dashed border-slate-200">
+                <span className="text-2xl block mb-2">📅</span>
+                <p className="text-xs text-slate-500 font-medium m-0">Bạn chưa có lịch phỏng vấn nào sắp tới.</p>
+                <Link href="/viec-lam" className="text-primary text-xs font-bold mt-2 inline-block hover:underline">
+                  Ứng tuyển công việc mới →
                 </Link>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="pt-4 mt-2 text-center">
@@ -685,7 +768,8 @@ export default function CandidateDashboardPage() {
           </span>
         </div>
         <span className="text-primary font-bold">
-          Careza luôn đồng hành cùng bạn! ♥
+          Careza
+          hành cùng bạn! ♥
         </span>
       </div>
     </div>

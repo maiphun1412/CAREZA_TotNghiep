@@ -180,132 +180,134 @@ export default function GrossNetPage() {
   }, [salaryInput, selectedRegionId, insuranceType, customInsuranceSalary, dependents, calcMode]);
 
   return (
-    <div className="w-full max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-[38px] pb-12 pt-2 bg-[#f7faff] min-h-screen space-y-4">
-      {/* 1. HERO COMPACT */}
-      <div className="relative w-full rounded-2xl overflow-hidden min-h-[135px] sm:min-h-[145px] lg:min-h-[150px] bg-gradient-to-r from-[#eaf2ff] via-[#f0f6ff] to-[#e4efff] border border-blue-100/90 shadow-2xs p-4 sm:p-5 lg:p-6 flex flex-col justify-between">
-        <div className="absolute top-0 right-0 h-full w-[46%] md:w-[42%] pointer-events-none select-none overflow-hidden hidden sm:block">
-          <div className="relative w-full h-full flex items-center justify-end pr-8">
-            <div className="absolute top-3.5 left-2 z-10 text-left -rotate-6 pointer-events-none">
-              <span className="font-serif italic text-sm sm:text-base font-bold text-[#0062ff] block leading-tight drop-shadow-2xs">
-                Hiểu rõ thu nhập
-              </span>
-              <span className="font-serif italic text-sm sm:text-base font-bold text-[#0062ff] block leading-tight drop-shadow-2xs">
-                Chủ động tương lai
-              </span>
-            </div>
-            <div className="flex items-center gap-2.5 relative z-0 pr-2">
-              <div className="w-9 h-9 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-200 border-2 border-yellow-200 shadow-md flex items-center justify-center text-amber-950 font-black text-xs -rotate-12 translate-y-3">
-                ₫
-              </div>
-              <div className="w-20 h-24 bg-gradient-to-br from-[#0062ff] via-[#0052db] to-[#003da6] rounded-2xl shadow-lg border-2 border-blue-300/40 p-2 flex flex-col justify-between text-white rotate-6 relative overflow-hidden">
-                <div className="w-full h-5 bg-blue-100/90 rounded-md shadow-inner flex items-center justify-end px-1.5">
-                  <span className="text-[9px] font-mono font-bold text-slate-800">12,055,000</span>
-                </div>
-                <div className="grid grid-cols-3 gap-1 pt-1">
-                  {[1, 2, 3, 4, 5, 6, 7, 8, 9].map((n) => (
-                    <div key={n} className="h-3 rounded-xs bg-white/30 flex items-center justify-center text-[7px] font-bold">
-                      {n}
-                    </div>
-                  ))}
-                </div>
-                <div className="w-full h-3 rounded-xs bg-emerald-400/90 flex items-center justify-center text-[7px] font-bold text-emerald-950">
-                  =
-                </div>
-              </div>
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-200 border-2 border-yellow-200 shadow-md flex items-center justify-center text-amber-950 font-black text-xs rotate-12 -translate-y-2">
-                ₫
-              </div>
-              <div className="w-14 h-20 bg-white rounded-xl border border-blue-200 shadow-md p-1.5 flex flex-col justify-between text-center -rotate-6">
-                <span className="text-[9px] font-black text-[#0062ff] uppercase block">Gross</span>
-                <span className="text-[9px] font-black text-emerald-600 uppercase block">Net</span>
-                <div className="w-full h-0.5 bg-blue-100 my-0.5" />
-                <span className="text-[8px] font-bold text-slate-500 block leading-tight">Bright Career</span>
-              </div>
-            </div>
-          </div>
+    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 pb-12 pt-2 bg-[#f7faff] min-h-screen space-y-2.5">
+      {/* ======================================================== */}
+      {/* 1. BREADCRUMB ĐỘC LẬP NGOÀI BANNER                       */}
+      {/* ======================================================== */}
+      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+        <Link href="/" className="text-slate-500 hover:text-[#0062ff] transition-colors">
+          Trang chủ
+        </Link>
+        <span className="text-slate-400">/</span>
+        <Link href="/cong-cu" className="text-slate-500 hover:text-[#0062ff] transition-colors">
+          Công cụ
+        </Link>
+        <span className="text-slate-400">/</span>
+        <span className="text-[#0062ff] font-semibold">Tính lương Gross - Net</span>
+      </nav>
+
+      {/* ======================================================== */}
+      {/* 2. HERO BANNER: THU GỌN CHIỀU CAO 110-120PX, GRADIENT XANH CAREZA */}
+      {/* ======================================================== */}
+      <div className="relative w-full rounded-2xl overflow-hidden bg-gradient-to-r from-[#1d4ed8] via-[#2563eb] to-[#4f9cf8] border border-blue-300/40 shadow-md shadow-blue-600/10 px-6 sm:px-8 py-3.5 sm:py-4 flex flex-col md:flex-row items-center justify-between gap-4 min-h-[110px] md:min-h-[116px]">
+        {/* Subtle decorative background glow */}
+        <div className="absolute -right-8 -bottom-10 w-52 h-52 rounded-full bg-white/10 blur-2xl pointer-events-none" />
+        <div className="absolute top-0 right-1/4 w-32 h-32 rounded-full bg-sky-200/15 blur-xl pointer-events-none" />
+
+        {/* Nội dung bên trái: Tiêu đề + Badge cùng 1 hàng */}
+        <div className="relative z-10 flex flex-wrap items-center gap-3 sm:gap-3.5">
+          <h1 className="text-xl sm:text-2xl md:text-[25px] font-black text-white tracking-tight m-0 leading-tight drop-shadow-2xs">
+            Tính lương Gross - Net
+          </h1>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-[#1d4ed8] text-xs font-bold shadow-xs shrink-0 border border-white/90">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#2563eb]" />
+            <span>Chuẩn Thuế TNCN & BHXH 2026</span>
+          </span>
         </div>
 
-        <div className="relative z-10 max-w-2xl space-y-1.5">
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-            <Link href="/" className="hover:text-[#0062ff] transition-colors">
-              Trang chủ
-            </Link>
-            <span>›</span>
-            <Link href="/cong-cu" className="hover:text-[#0062ff] transition-colors">
-              Công cụ
-            </Link>
-            <span>›</span>
-            <span className="text-[#0062ff] font-semibold">Tính lương Gross - Net</span>
-          </div>
-          <div className="flex items-center gap-3 pt-0.5">
-            <div className="w-10 h-10 rounded-xl bg-[#0062ff] text-white flex items-center justify-center shadow-xs shrink-0">
-              <Calculator className="w-5 h-5" />
+        {/* Minh họa vector phẳng bên phải: 2 thẻ trắng thu gọn */}
+        <div className="relative z-10 hidden md:flex items-center gap-3 shrink-0">
+          {/* Card 1: Quy đổi chuẩn */}
+          <div className="bg-white rounded-xl py-2 px-3.5 border border-white/90 shadow-xs flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 text-[#0062ff] flex items-center justify-center shrink-0">
+              <Calculator className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight m-0 leading-tight">
-                  Tính lương Gross - Net
-                </h1>
-                <span className="bg-blue-100/70 text-[#0062ff] text-[10.5px] font-bold px-2.5 py-0.5 rounded-full border border-blue-200/80 hidden sm:inline-block">
-                  Công cụ hữu ích cho mọi người đi làm
-                </span>
-              </div>
-              <p className="text-xs text-slate-600 font-normal m-0 mt-0.5 leading-relaxed">
-                Tính nhanh thu nhập thực nhận, hiểu rõ các khoản khấu trừ và chi phí doanh nghiệp.
-              </p>
+              <span className="text-[10.5px] font-bold text-slate-500 block leading-tight">
+                Quy đổi hai chiều
+              </span>
+              <span className="text-xs sm:text-[13px] font-black text-[#0062ff] block leading-tight mt-0.5">
+                Gross ↔ Net chính xác
+              </span>
+            </div>
+          </div>
+
+          {/* Card 2: Giảm trừ gia cảnh */}
+          <div className="bg-white rounded-xl py-2 px-3.5 border border-white/90 shadow-xs flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-emerald-50 border border-emerald-100 text-emerald-600 flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-4 h-4 stroke-[2.2]" />
+            </div>
+            <div>
+              <span className="text-[10.5px] font-bold text-slate-500 block leading-tight">
+                Giảm trừ bản thân
+              </span>
+              <span className="text-xs sm:text-[13px] font-black text-slate-900 block leading-tight mt-0.5">
+                11.000.000 VNĐ/tháng
+              </span>
             </div>
           </div>
         </div>
       </div>
 
-      {/* 2. MODE SWITCHER */}
-      <div className="flex flex-wrap items-center gap-2 pt-1">
+      {/* ======================================================== */}
+      {/* 3. CHỌN CHẾ ĐỘ QUY ĐỔI (3 TABS RÕ RÀNG, ACTIVE NỔI BẬT) */}
+      {/* ======================================================== */}
+      <div className="flex flex-wrap items-center gap-2 !mt-5">
         <button
           type="button"
           onClick={() => setCalcMode("gross-to-net")}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-            calcMode === "gross-to-net"
-              ? "bg-[#0062ff] text-white shadow-xs"
-              : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/50 border border-slate-200"
-          }`}
+          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${calcMode === "gross-to-net"
+            ? "bg-[#0062ff] text-white shadow-xs"
+            : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/60 border border-slate-200"
+            }`}
         >
-          Tính từ Gross (Biết lương gross)
+          <Calculator className="w-3.5 h-3.5" />
+          <span>Tính từ Gross (Lương tổng)</span>
         </button>
+
         <button
           type="button"
           onClick={() => setCalcMode("net-to-gross")}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-            calcMode === "net-to-gross"
-              ? "bg-[#0062ff] text-white shadow-xs"
-              : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/50 border border-slate-200"
-          }`}
+          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${calcMode === "net-to-gross"
+            ? "bg-[#0062ff] text-white shadow-xs"
+            : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/60 border border-slate-200"
+            }`}
         >
-          Tính từ Net (Biết lương thực nhận)
+          <Calculator className="w-3.5 h-3.5" />
+          <span>Tính từ Net (Thực nhận)</span>
         </button>
+
         <button
           type="button"
           onClick={() => setCalcMode("compare")}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-            calcMode === "compare"
-              ? "bg-[#0062ff] text-white shadow-xs"
-              : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/50 border border-slate-200"
-          }`}
+          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${calcMode === "compare"
+            ? "bg-[#0062ff] text-white shadow-xs"
+            : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/60 border border-slate-200"
+            }`}
         >
-          So sánh nhanh
+          <ShieldCheck className="w-3.5 h-3.5" />
+          <span>So sánh chi tiết</span>
         </button>
       </div>
 
-      {/* 3. MAIN LAYOUT */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4.5 pt-1 items-start">
-        {/* Form 5 cols */}
-        <div className="lg:col-span-5 bg-white rounded-2xl p-5 border border-[#E5ECF6] shadow-2xs space-y-4">
-          <h2 className="text-sm sm:text-base font-bold text-slate-800 m-0">
-            Nhập thông tin
-          </h2>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            <div className="space-y-1.5 sm:col-span-1">
-              <label className="text-xs font-semibold text-slate-700 block">
-                {calcMode === "net-to-gross" ? "Mức lương Net thực nhận" : "Mức lương Gross hàng tháng"}{" "}
+      {/* ======================================================== */}
+      {/* 4. MAIN LAYOUT: FORM (5 cols) | RESULT (4 cols) | SIDEBAR (3 cols) */}
+      {/* ======================================================== */}
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start pt-0.5">
+        {/* ==================== CỘT 1: NHẬP THÔNG TIN (5/12 cols) ==================== */}
+        <div className="lg:col-span-5 bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs space-y-4">
+          <div className="pb-1.5 border-b border-slate-100 flex items-center justify-between">
+            <h2 className="text-sm sm:text-base font-black text-slate-900 m-0">
+              1. Nhập thông tin lương
+            </h2>
+            <span className="text-xs text-slate-500 font-medium">Đơn vị: VNĐ</span>
+          </div>
+
+          <div className="space-y-3.5">
+            {/* Lương Input */}
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-700 block">
+                {calcMode === "net-to-gross" ? "Mức lương Net thực nhận mong muốn" : "Mức lương Gross hàng tháng"}{" "}
                 <span className="text-rose-500">*</span>
               </label>
               <div className="relative flex items-center">
@@ -316,110 +318,60 @@ export default function GrossNetPage() {
                     const raw = e.target.value.replace(/\D/g, "");
                     setSalaryInput(raw ? parseInt(raw, 10) : 0);
                   }}
-                  className="w-full px-3.5 py-2.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800 pr-14"
+                  className="w-full h-10 px-3.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs sm:text-sm font-semibold text-slate-900 pr-14 transition-colors"
                 />
-                <span className="absolute right-3 text-xs font-bold text-slate-400 pointer-events-none">
+                <span className="absolute right-3.5 text-xs font-bold text-slate-400 pointer-events-none">
                   VNĐ
                 </span>
               </div>
             </div>
 
-            <div className="space-y-1.5 sm:col-span-1">
-              <label className="text-xs font-semibold text-slate-700 block">
-                Khu vực làm việc
-              </label>
-              <select
-                value={selectedRegionId}
-                onChange={(e) => setSelectedRegionId(parseInt(e.target.value, 10))}
-                className="w-full px-3.5 py-2.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800"
-              >
-                {REGIONS.map((r) => (
-                  <option key={r.id} value={r.id}>
-                    {r.name}
-                  </option>
-                ))}
-              </select>
-            </div>
-
-            <div className="space-y-2 sm:col-span-1">
-              <label className="text-xs font-semibold text-slate-700 block">
-                Hình thức đóng bảo hiểm
-              </label>
-              <div className="space-y-1.5">
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
-                  <input
-                    type="radio"
-                    name="insuranceType"
-                    checked={insuranceType === "full"}
-                    onChange={() => setInsuranceType("full")}
-                    className="text-[#0062ff]"
-                  />
-                  <span>
-                    <strong>Đóng đầy đủ</strong> (BHXH, BHYT, BHTN)
-                  </span>
+            {/* 2 Cột: Khu vực + Giảm trừ bản thân */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 block">
+                  Khu vực làm việc <span className="text-rose-500">*</span>
                 </label>
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
-                  <input
-                    type="radio"
-                    name="insuranceType"
-                    checked={insuranceType === "none"}
-                    onChange={() => setInsuranceType("none")}
-                    className="text-[#0062ff]"
-                  />
-                  <span>Không đóng BHXH</span>
-                </label>
-                <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
-                  <input
-                    type="radio"
-                    name="insuranceType"
-                    checked={insuranceType === "custom"}
-                    onChange={() => setInsuranceType("custom")}
-                    className="text-[#0062ff]"
-                  />
-                  <span>Tùy chỉnh</span>
-                </label>
+                <select
+                  value={selectedRegionId}
+                  onChange={(e) => setSelectedRegionId(parseInt(e.target.value, 10))}
+                  className="w-full h-10 px-3 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800 cursor-pointer"
+                >
+                  {REGIONS.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.name}
+                    </option>
+                  ))}
+                </select>
               </div>
-              {insuranceType === "custom" && (
-                <div className="pt-1">
+
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 flex items-center gap-1">
+                  <span>Giảm trừ bản thân</span>
+                  <Tooltip title="Mức giảm trừ bản thân là 11.000.000đ/tháng theo Luật Thuế TNCN">
+                    <Info className="w-3.5 h-3.5 text-slate-400 cursor-pointer" />
+                  </Tooltip>
+                </label>
+                <div className="relative flex items-center">
                   <input
                     type="text"
-                    value={formatCurrency(customInsuranceSalary)}
-                    onChange={(e) => {
-                      const raw = e.target.value.replace(/\D/g, "");
-                      setCustomInsuranceSalary(raw ? parseInt(raw, 10) : 0);
-                    }}
-                    placeholder="Lương đóng bảo hiểm..."
-                    className="w-full px-3 py-2 bg-slate-50 rounded-lg border border-slate-200 text-xs font-semibold text-slate-800"
+                    readOnly
+                    value="11.000.000"
+                    className="w-full h-10 px-3.5 bg-slate-50 rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 pr-14 cursor-not-allowed"
                   />
+                  <span className="absolute right-3.5 text-xs font-bold text-slate-400 pointer-events-none">
+                    VNĐ
+                  </span>
                 </div>
-              )}
-            </div>
-
-            <div className="space-y-1.5 sm:col-span-1">
-              <label className="text-xs font-semibold text-slate-700 flex items-center gap-1">
-                <span>Giảm trừ gia cảnh</span>
-                <Tooltip title="Mức giảm trừ bản thân là 11.000.000đ/tháng theo Luật Thuế TNCN">
-                  <Info className="w-3.5 h-3.5 text-slate-400 cursor-pointer" />
-                </Tooltip>
-              </label>
-              <div className="relative flex items-center">
-                <input
-                  type="text"
-                  readOnly
-                  value="11.000.000"
-                  className="w-full px-3.5 py-2.5 bg-slate-50 rounded-xl border border-slate-200 text-xs font-semibold text-slate-800 pr-14 cursor-not-allowed"
-                />
-                <span className="absolute right-3 text-xs font-bold text-slate-400 pointer-events-none">
-                  VNĐ
-                </span>
               </div>
             </div>
 
-            <div className="space-y-1.5 sm:col-span-2">
-              <label className="text-xs font-semibold text-slate-700 block">
-                Số người phụ thuộc (4.400.000đ/người)
+            {/* Người phụ thuộc */}
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-700 block">
+                Số người phụ thuộc (4.400.000đ/người/tháng)
               </label>
-              <div className="flex items-center gap-3 w-36 bg-slate-50 border border-slate-200 rounded-xl p-1 justify-between">
+              <div className="flex items-center gap-3 w-40 bg-slate-50 border border-slate-200 rounded-xl p-1 justify-between">
                 <button
                   type="button"
                   onClick={handleDecreaseDependents}
@@ -427,7 +379,7 @@ export default function GrossNetPage() {
                 >
                   <Minus className="w-3.5 h-3.5" />
                 </button>
-                <span className="text-xs font-bold text-slate-800">{dependents}</span>
+                <span className="text-xs sm:text-sm font-bold text-slate-900">{dependents} người</span>
                 <button
                   type="button"
                   onClick={handleIncreaseDependents}
@@ -437,178 +389,277 @@ export default function GrossNetPage() {
                 </button>
               </div>
             </div>
+
+            {/* Hình thức đóng BH */}
+            <div className="space-y-1.5 pt-1">
+              <label className="text-xs font-bold text-slate-700 block">
+                Mức lương đóng bảo hiểm
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <label
+                  className={`flex items - center gap - 2 px - 3 py - 2 rounded - xl border text - xs font - semibold cursor - pointer transition - all ${insuranceType === "full"
+                    ? "border-[#0062ff] bg-blue-50/60 text-[#0062ff]"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    } `}
+                >
+                  <input
+                    type="radio"
+                    name="insuranceType"
+                    checked={insuranceType === "full"}
+                    onChange={() => setInsuranceType("full")}
+                    className="accent-[#0062ff]"
+                  />
+                  <span>Đóng đầy đủ</span>
+                </label>
+
+                <label
+                  className={`flex items - center gap - 2 px - 3 py - 2 rounded - xl border text - xs font - semibold cursor - pointer transition - all ${insuranceType === "none"
+                    ? "border-[#0062ff] bg-blue-50/60 text-[#0062ff]"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    } `}
+                >
+                  <input
+                    type="radio"
+                    name="insuranceType"
+                    checked={insuranceType === "none"}
+                    onChange={() => setInsuranceType("none")}
+                    className="accent-[#0062ff]"
+                  />
+                  <span>Không đóng BH</span>
+                </label>
+
+                <label
+                  className={`flex items - center gap - 2 px - 3 py - 2 rounded - xl border text - xs font - semibold cursor - pointer transition - all ${insuranceType === "custom"
+                    ? "border-[#0062ff] bg-blue-50/60 text-[#0062ff]"
+                    : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                    } `}
+                >
+                  <input
+                    type="radio"
+                    name="insuranceType"
+                    checked={insuranceType === "custom"}
+                    onChange={() => setInsuranceType("custom")}
+                    className="accent-[#0062ff]"
+                  />
+                  <span>Tùy chỉnh</span>
+                </label>
+              </div>
+
+              {insuranceType === "custom" && (
+                <div className="pt-1.5">
+                  <div className="relative flex items-center">
+                    <input
+                      type="text"
+                      value={formatCurrency(customInsuranceSalary)}
+                      onChange={(e) => {
+                        const raw = e.target.value.replace(/\D/g, "");
+                        setCustomInsuranceSalary(raw ? parseInt(raw, 10) : 0);
+                      }}
+                      placeholder="Nhập mức lương đóng bảo hiểm..."
+                      className="w-full h-10 px-3.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] text-xs font-semibold text-slate-900 pr-14"
+                    />
+                    <span className="absolute right-3.5 text-xs font-bold text-slate-400 pointer-events-none">
+                      VNĐ
+                    </span>
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Lưu ý nhỏ */}
+            <div className="bg-blue-50/60 rounded-xl p-3.5 border border-blue-200/80 space-y-1.5">
+              <h4 className="text-xs font-bold text-[#0062ff] m-0 flex items-center gap-1.5">
+                <Info className="w-4 h-4 text-[#0062ff] shrink-0" />
+                <span>Quy định mức đóng tối đa 2026</span>
+              </h4>
+              <p className="text-[12px] text-slate-600 m-0 leading-relaxed font-normal">
+                Mức lương đóng BHXH, BHYT tối đa là 20 lần mức lương cơ sở (46.800.000đ). Mức đóng BHTN tối đa là 20 lần mức lương tối thiểu vùng.
+              </p>
+            </div>
           </div>
 
-          <div className="pt-2">
-            <button
-              type="button"
-              onClick={() => message.success("Đã cập nhật kết quả tính toán!")}
-              className="w-full py-3 rounded-xl bg-[#0062ff] hover:bg-[#0047ba] text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
-            >
-              <Calculator className="w-4 h-4" />
-              <span>Tính ngay</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            onClick={() => message.success("Đã tính toán chi tiết thu nhập!")}
+            className="w-full h-10.5 rounded-xl bg-[#0062ff] hover:bg-blue-700 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 transition-all cursor-pointer border-none"
+          >
+            <Calculator className="w-4 h-4" />
+            <span>Quy đổi & Cập nhật kết quả</span>
+          </button>
         </div>
 
-        {/* Result 4 cols */}
-        <div className="lg:col-span-4 bg-white rounded-2xl p-5 border border-[#E5ECF6] shadow-2xs space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm sm:text-base font-bold text-slate-800 m-0">
-              Kết quả ước tính
+        {/* ==================== CỘT 2: KẾT QUẢ ƯỚC TÍNH (4/12 cols) ==================== */}
+        <div className="lg:col-span-4 bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs space-y-4">
+          <div className="pb-1.5 border-b border-slate-100 flex items-center justify-between">
+            <h2 className="text-sm sm:text-base font-black text-slate-900 m-0">
+              2. Kết quả ước tính
             </h2>
-            <span className="text-[10px] text-slate-400 font-medium">
-              Đơn vị: VNĐ/tháng
+            <span className="text-xs font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-200">
+              Đơn vị: VNĐ
             </span>
           </div>
 
-          <div className="bg-[#f0fdf4] rounded-2xl p-4 border border-[#bbf7d0] space-y-1">
+          {/* Card Lương Net thực nhận */}
+          <div className="bg-emerald-50/90 rounded-xl p-4 border border-emerald-200 space-y-2">
             <div className="flex items-center justify-between">
-              <span className="text-xs font-bold text-emerald-800 block">
-                Lương thực nhận (Net)
+              <span className="text-xs font-bold text-emerald-800 uppercase tracking-wider block">
+                {calcMode === "net-to-gross" ? "Lương Net (Thực nhận)" : "Lương thực nhận (Net)"}
               </span>
-              <span className="text-[10px] font-bold text-emerald-700 bg-emerald-100/80 px-2 py-0.5 rounded-full">
-                Giảm ~{calculationResult.decreasePercent.toFixed(1)}%
+              <span className="text-xs font-bold text-emerald-700 bg-emerald-100/90 px-2 py-0.5 rounded-full border border-emerald-200/60">
+                {calcMode === "net-to-gross"
+                  ? `Khấu trừ ~${calculationResult.decreasePercent.toFixed(1)}% `
+                  : `Giảm ~${calculationResult.decreasePercent.toFixed(1)}% `}
               </span>
             </div>
-            <div className="text-2xl sm:text-3xl font-black text-emerald-600 tracking-tight">
-              {formatCurrency(calculationResult.net)}
+            <div className="text-2xl sm:text-3xl font-black text-emerald-600 tracking-tight tabular-nums">
+              {formatCurrency(calculationResult.net)} <span className="text-sm font-bold text-slate-500">VNĐ</span>
             </div>
-            <span className="text-[10px] text-emerald-700 font-medium block">
-              so với lương Gross
-            </span>
+            <div className="flex items-center justify-between text-xs text-slate-600 pt-1 border-t border-emerald-200/60">
+              <span>Lương Gross tương ứng:</span>
+              <span className="font-bold text-slate-900 tabular-nums">
+                {formatCurrency(calculationResult.gross)} VNĐ
+              </span>
+            </div>
           </div>
 
+          {/* Chi tiết khấu trừ: Rõ ràng, thoáng, căn gióng đều */}
           <div className="space-y-3 pt-1">
-            <div className="flex items-center justify-between text-xs py-1 border-b border-slate-100">
-              <span className="font-semibold text-slate-700">Lương Gross</span>
-              <span className="font-bold text-slate-900">
-                {formatCurrency(calculationResult.gross)}
+            <div className="flex items-center justify-between pb-1 border-b border-slate-100">
+              <h4 className="text-sm sm:text-[15px] font-bold text-slate-900 m-0">
+                Chi tiết các khoản khấu trừ
+              </h4>
+              <span className="text-xs font-bold text-rose-600">
+                - {formatCurrency(calculationResult.totalDeductions)} VNĐ
               </span>
             </div>
 
-            <div className="space-y-2 pt-0.5">
-              <div className="flex items-center justify-between text-xs font-bold text-rose-600 bg-rose-50/70 px-2.5 py-1 rounded-lg">
-                <span>Các khoản khấu trừ ({formatCurrency(calculationResult.totalDeductions)})</span>
+            <div className="space-y-2 text-[13px] sm:text-[13.5px]">
+              <div className="flex items-center justify-between text-slate-600 py-0.5">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
+                  <span>BHXH (8%)</span>
+                </span>
+                <span className="font-semibold text-slate-900 tabular-nums">
+                  {formatCurrency(calculationResult.bhxh)} VNĐ
+                </span>
               </div>
-              <div className="space-y-1.5 pl-1 pr-1 text-xs">
-                <div className="flex items-center justify-between text-slate-600">
-                  <span className="flex items-center gap-1.5 text-[11px]">
-                    <span className="text-rose-500 font-bold">🛡</span>
-                    <span>BHXH (8%)</span>
-                  </span>
-                  <span className="font-medium text-slate-800">
-                    {formatCurrency(calculationResult.bhxh)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-slate-600">
-                  <span className="flex items-center gap-1.5 text-[11px]">
-                    <span className="text-rose-500 font-bold">🛡</span>
-                    <span>BHYT (1.5%)</span>
-                  </span>
-                  <span className="font-medium text-slate-800">
-                    {formatCurrency(calculationResult.bhyt)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-slate-600">
-                  <span className="flex items-center gap-1.5 text-[11px]">
-                    <span className="text-rose-500 font-bold">🛡</span>
-                    <span>BHTN (1%)</span>
-                  </span>
-                  <span className="font-medium text-slate-800">
-                    {formatCurrency(calculationResult.bhtn)}
-                  </span>
-                </div>
-                <div className="flex items-center justify-between text-slate-600 pt-0.5">
-                  <span className="flex items-center gap-1.5 text-[11px]">
-                    <span className="text-rose-500 font-bold">🛡</span>
-                    <span>Thuế TNCN</span>
-                  </span>
-                  <span className="font-medium text-slate-800">
-                    {formatCurrency(calculationResult.pitTax)}
-                  </span>
-                </div>
+              <div className="flex items-center justify-between text-slate-600 py-0.5">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
+                  <span>BHYT (1.5%)</span>
+                </span>
+                <span className="font-semibold text-slate-900 tabular-nums">
+                  {formatCurrency(calculationResult.bhyt)} VNĐ
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-slate-600 py-0.5">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-rose-500 shrink-0" />
+                  <span>BHTN (1%)</span>
+                </span>
+                <span className="font-semibold text-slate-900 tabular-nums">
+                  {formatCurrency(calculationResult.bhtn)} VNĐ
+                </span>
+              </div>
+              <div className="flex items-center justify-between text-slate-600 py-0.5">
+                <span className="flex items-center gap-1.5">
+                  <span className="w-1.5 h-1.5 rounded-full bg-amber-500 shrink-0" />
+                  <span>Thuế TNCN</span>
+                </span>
+                <span className="font-semibold text-slate-900 tabular-nums">
+                  {formatCurrency(calculationResult.pitTax)} VNĐ
+                </span>
               </div>
             </div>
+          </div>
 
-            <div className="pt-2 border-t border-slate-100 space-y-1.5 text-xs text-slate-600">
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5 text-[11px]">
-                  <span className="text-blue-500 font-bold">👤</span>
-                  <span>Giảm trừ gia cảnh</span>
-                </span>
-                <span className="font-semibold text-slate-800">
-                  {formatCurrency(calculationResult.totalDeduction)}
+          {/* Giảm trừ gia cảnh info */}
+          <div className="space-y-2.5 pt-2.5 border-t border-slate-100">
+            <h4 className="text-sm font-bold text-slate-900 m-0 pb-1 border-b border-slate-100">
+              Mức giảm trừ áp dụng
+            </h4>
+            <div className="space-y-2 text-[13px]">
+              <div className="flex items-center justify-between text-slate-600">
+                <span>Tổng mức giảm trừ gia cảnh</span>
+                <span className="font-bold text-slate-900 tabular-nums">
+                  {formatCurrency(calculationResult.totalDeduction)} VNĐ
                 </span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5 text-[11px]">
-                  <span className="text-blue-500 font-bold">👥</span>
-                  <span>Số người phụ thuộc</span>
+              <div className="flex items-center justify-between text-slate-600">
+                <span>Số người phụ thuộc</span>
+                <span className="font-bold text-slate-900 tabular-nums">{dependents} người</span>
+              </div>
+              <div className="flex items-center justify-between text-slate-600">
+                <span>Thu nhập chịu thuế tính ra</span>
+                <span className="font-bold text-slate-900 tabular-nums">
+                  {formatCurrency(calculationResult.taxableIncome)} VNĐ
                 </span>
-                <span className="font-semibold text-slate-800">{dependents}</span>
               </div>
             </div>
           </div>
         </div>
 
-        {/* Sidebar 3 cols */}
+        {/* ==================== CỘT 3: RIGHT SIDEBAR (3/12 cols) ==================== */}
         <div className="lg:col-span-3 space-y-3.5">
-          <div className="bg-[#fffdf5] rounded-2xl p-4 border border-[#fde68a] shadow-2xs space-y-2.5">
-            <h3 className="text-xs font-bold text-slate-800 m-0 flex items-center gap-1.5">
-              <span>💡</span>
+          {/* Card 1: Hiểu thêm về Gross - Net */}
+          <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3.5">
+            <h3 className="text-sm sm:text-[15px] font-black text-slate-900 m-0 flex items-center gap-2 pb-1 border-b border-slate-100">
+              <Info className="w-4 h-4 text-[#0062ff] shrink-0" />
               <span>Hiểu thêm về Gross - Net</span>
             </h3>
-            <ul className="space-y-2 text-[11px] text-slate-700 pl-0 list-none m-0 leading-relaxed">
-              <li className="flex items-start gap-1.5">
-                <span className="text-amber-600 font-bold">✓</span>
+            <ul className="space-y-3 text-[13px] sm:text-[13.5px] text-slate-700 pl-0 list-none m-0 leading-[1.6] font-normal">
+              <li className="flex items-start gap-2.5">
+                <span className="text-[#0062ff] font-bold text-sm shrink-0 mt-0.5">✓</span>
                 <span>
-                  <strong>Lương Gross</strong> là tổng thu nhập trước khi khấu trừ các khoản bảo hiểm và thuế TNCN.
+                  <strong>Lương Gross:</strong> Tổng thu nhập trước khi trừ các khoản bảo hiểm và thuế TNCN.
                 </span>
               </li>
-              <li className="flex items-start gap-1.5">
-                <span className="text-amber-600 font-bold">✓</span>
+              <li className="flex items-start gap-2.5">
+                <span className="text-[#0062ff] font-bold text-sm shrink-0 mt-0.5">✓</span>
                 <span>
-                  <strong>Lương Net</strong> là số tiền bạn thực nhận hàng tháng.
+                  <strong>Lương Net:</strong> Số tiền thực tế người lao động nhận vào tài khoản hàng tháng.
                 </span>
               </li>
-              <li className="flex items-start gap-1.5">
-                <span className="text-amber-600 font-bold">✓</span>
-                <span>Các tỷ lệ bảo hiểm và thuế được tính theo quy định hiện hành.</span>
+              <li className="flex items-start gap-2.5">
+                <span className="text-[#0062ff] font-bold text-sm shrink-0 mt-0.5">✓</span>
+                <span>
+                  <strong>Người phụ thuộc:</strong> Giúp giảm thêm 4.400.000đ/tháng trước khi tính thuế TNCN.
+                </span>
               </li>
             </ul>
           </div>
 
-          <div className="bg-white rounded-2xl p-4 border border-[#E5ECF6] shadow-2xs space-y-2.5">
-            <h3 className="text-xs font-bold text-slate-800 m-0">
+          {/* Card 2: Công cụ liên quan */}
+          <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
+            <h3 className="text-xs sm:text-sm font-black text-slate-900 m-0 pb-1 border-b border-slate-100">
               Công cụ liên quan
             </h3>
             <div className="space-y-1.5">
               <Link
                 href="/cong-cu/bao-hiem-that-nghiep"
-                className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-emerald-50/60 border border-transparent hover:border-emerald-200 transition-all text-left group cursor-pointer"
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50/70 border border-transparent hover:border-blue-200 transition-all text-left group cursor-pointer"
               >
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0">
-                    <ShieldCheck className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0">
+                    <ShieldCheck className="w-4 h-4" />
                   </div>
-                  <span className="text-[11.5px] font-semibold text-slate-700 group-hover:text-emerald-700 truncate">
+                  <span className="text-xs font-semibold text-slate-700 group-hover:text-[#0062ff] truncate">
                     Tính bảo hiểm thất nghiệp
                   </span>
                 </div>
-                <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-emerald-600 group-hover:translate-x-0.5 transition-all shrink-0" />
+                <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0062ff] group-hover:translate-x-0.5 transition-all shrink-0" />
               </Link>
 
               <Link
                 href="/cong-cu/mbti"
-                className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-purple-50/60 border border-transparent hover:border-purple-200 transition-all text-left group cursor-pointer"
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-purple-50/70 border border-transparent hover:border-purple-200 transition-all text-left group cursor-pointer"
               >
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-                    <Brain className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+                    <Brain className="w-4 h-4" />
                   </div>
-                  <span className="text-[11.5px] font-semibold text-slate-700 group-hover:text-purple-700 truncate">
-                    Trắc nghiệm MBTI / Tính cách
+                  <span className="text-xs font-semibold text-slate-700 group-hover:text-purple-700 truncate">
+                    Trắc nghiệm tính cách MBTI
                   </span>
                 </div>
                 <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-600 group-hover:translate-x-0.5 transition-all shrink-0" />
@@ -616,14 +667,14 @@ export default function GrossNetPage() {
 
               <Link
                 href="/ai-career"
-                className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-blue-50/60 border border-transparent hover:border-blue-200 transition-all text-left group cursor-pointer"
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50/70 border border-transparent hover:border-blue-200 transition-all text-left group cursor-pointer"
               >
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0">
-                    <Bot className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0">
+                    <Bot className="w-4 h-4" />
                   </div>
-                  <span className="text-[11.5px] font-semibold text-slate-700 group-hover:text-[#0062ff] truncate">
-                    Trợ lý AI Career & Phỏng vấn
+                  <span className="text-xs font-semibold text-slate-700 group-hover:text-[#0062ff] truncate">
+                    Trợ lý AI Hướng nghiệp
                   </span>
                 </div>
                 <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0062ff] group-hover:translate-x-0.5 transition-all shrink-0" />
@@ -631,77 +682,90 @@ export default function GrossNetPage() {
             </div>
           </div>
 
-          <div className="bg-[#f0f7ff] rounded-2xl p-4 border border-[#dbeafe] shadow-2xs space-y-2.5 relative overflow-hidden">
-            <div>
-              <h4 className="text-xs font-bold text-slate-800 m-0">Cần hỗ trợ?</h4>
-              <p className="text-[10.5px] text-slate-600 font-normal m-0 mt-0.5 leading-tight">
-                Đội ngũ Careza luôn sẵn sàng đồng hành cùng bạn.
-              </p>
+
+        </div>
+      </div>
+
+      {/* ======================================================== */}
+      {/* 5. CÔNG THỨC QUY ĐỔI GROSS - NET                         */}
+      {/* ======================================================== */}
+      <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs space-y-3">
+        <div className="pb-1 border-b border-slate-100">
+          <h3 className="text-sm sm:text-base font-black text-slate-900 m-0">
+            Công thức quy đổi lương Gross - Net
+          </h3>
+          <p className="text-xs text-slate-500 font-medium m-0 mt-0.5">
+            Các khoản khấu trừ bắt buộc của người lao động trước khi nhận lương Net
+          </p>
+        </div>
+
+        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2.5 sm:gap-3 items-center pt-1">
+          <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/90 text-center space-y-1">
+            <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center mx-auto text-xs font-bold">
+              <Calculator className="w-4 h-4" />
             </div>
-            <div className="flex items-center justify-between gap-2">
-              <button
-                type="button"
-                onClick={() => message.info("Tổng đài Careza: 1900 6868")}
-                className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-[#0062ff] font-bold text-[11px] border border-blue-200 shadow-2xs flex items-center gap-1 transition-all cursor-pointer"
-              >
-                <span>Liên hệ hỗ trợ</span>
-                <ArrowRight className="w-3 h-3" />
-              </button>
-              <div className="w-10 h-10 rounded-full bg-blue-100 text-[#0062ff] flex items-center justify-center shrink-0">
-                <Headphones className="w-5 h-5" />
-              </div>
-            </div>
+            <span className="text-xs font-bold text-slate-900 block">Lương Gross</span>
+            <span className="text-[11px] text-slate-500 font-medium block">Thu nhập thỏa thuận</span>
+          </div>
+
+          <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/90 text-center space-y-0.5">
+            <span className="text-base font-black text-rose-500 block leading-tight">-</span>
+            <span className="text-xs font-bold text-slate-900 block">BHXH (8%)</span>
+            <span className="text-[11px] text-slate-500 font-medium block">Tối đa 3.744.000đ</span>
+          </div>
+
+          <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/90 text-center space-y-0.5">
+            <span className="text-base font-black text-rose-500 block leading-tight">-</span>
+            <span className="text-xs font-bold text-slate-900 block">BHYT (1.5%)</span>
+            <span className="text-[11px] text-slate-500 font-medium block">Tối đa 702.000đ</span>
+          </div>
+
+          <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/90 text-center space-y-0.5">
+            <span className="text-base font-black text-rose-500 block leading-tight">-</span>
+            <span className="text-xs font-bold text-slate-900 block">BHTN (1%)</span>
+            <span className="text-[11px] text-slate-500 font-medium block">Tối đa vùng (992.000đ)</span>
+          </div>
+
+          <div className="bg-slate-50/80 p-3 rounded-xl border border-slate-200/90 text-center space-y-0.5">
+            <span className="text-base font-black text-amber-500 block leading-tight">-</span>
+            <span className="text-xs font-bold text-slate-900 block">Thuế TNCN</span>
+            <span className="text-[11px] text-slate-500 font-medium block">Biểu lũy tiến 7 bậc</span>
+          </div>
+
+          <div className="bg-emerald-50/80 p-3 rounded-xl border border-emerald-200 text-center space-y-0.5">
+            <span className="text-base font-black text-emerald-600 block leading-tight">=</span>
+            <span className="text-xs font-bold text-emerald-900 block">Lương Net</span>
+            <span className="text-[11px] text-emerald-700 font-medium block">Thực nhận vào tài khoản</span>
           </div>
         </div>
       </div>
 
-      {/* 4. CÔNG THỨC TÍNH NHANH */}
-      <div className="bg-white rounded-2xl p-4 sm:p-5 border border-[#E5ECF6] shadow-2xs space-y-3">
-        <h3 className="text-xs sm:text-sm font-bold text-slate-800 m-0">
-          Công thức tính nhanh
-        </h3>
-        <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-6 gap-2 sm:gap-3 items-center">
-          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-center space-y-1">
-            <div className="w-6 h-6 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center mx-auto text-xs font-bold">
-              <Calculator className="w-3.5 h-3.5" />
-            </div>
-            <span className="text-xs font-bold text-slate-800 block">Lương Gross</span>
+      {/* ======================================================== */}
+      {/* 6. CTA BANNER CUỐI TRANG: ĐỒNG HÀNH CÙNG CAREZA          */}
+      {/* ======================================================== */}
+      <div className="rounded-2xl bg-gradient-to-r from-blue-50/70 via-white to-blue-50/50 border border-blue-200/90 shadow-2xs p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-blue-100/80 text-[#0062ff] flex items-center justify-center shrink-0">
+            <ShieldCheck className="w-5 h-5 stroke-[2.2]" />
           </div>
-          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-center space-y-0.5">
-            <div className="w-6 h-6 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center mx-auto text-xs font-bold">
-              -
-            </div>
-            <span className="text-xs font-bold text-slate-800 block">BHXH</span>
-            <span className="text-[10px] text-slate-500 font-normal block">8% lương Gross</span>
+          <div>
+            <h3 className="text-sm font-bold text-slate-900 m-0 leading-tight">
+              Minh bạch thu nhập · Nâng tầm giá trị bản thân
+            </h3>
+            <p className="text-xs text-slate-600 font-medium m-0 mt-0.5 leading-relaxed">
+              Careza kết nối việc làm với mức đãi ngộ hấp dẫn và môi trường phát triển sự nghiệp bền vững.
+            </p>
           </div>
-          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-center space-y-0.5">
-            <div className="w-6 h-6 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center mx-auto text-xs font-bold">
-              -
-            </div>
-            <span className="text-xs font-bold text-slate-800 block">BHYT</span>
-            <span className="text-[10px] text-slate-500 font-normal block">1.5% lương Gross</span>
-          </div>
-          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-center space-y-0.5">
-            <div className="w-6 h-6 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center mx-auto text-xs font-bold">
-              -
-            </div>
-            <span className="text-xs font-bold text-slate-800 block">BHTN</span>
-            <span className="text-[10px] text-slate-500 font-normal block">1% lương Gross</span>
-          </div>
-          <div className="bg-slate-50 p-2.5 rounded-xl border border-slate-200 text-center space-y-0.5">
-            <div className="w-6 h-6 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center mx-auto text-xs font-bold">
-              -
-            </div>
-            <span className="text-xs font-bold text-slate-800 block">Thuế TNCN</span>
-            <span className="text-[10px] text-slate-500 font-normal block">Theo biểu thuế lũy tiến</span>
-          </div>
-          <div className="bg-emerald-50 p-2.5 rounded-xl border border-emerald-200 text-center space-y-0.5">
-            <div className="w-6 h-6 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center mx-auto text-xs font-bold">
-              =
-            </div>
-            <span className="text-xs font-bold text-emerald-800 block">Lương Net</span>
-            <span className="text-[10px] text-emerald-600 font-normal block">Thực nhận hàng tháng</span>
-          </div>
+        </div>
+
+        <div className="flex items-center gap-2.5 shrink-0">
+          <Link
+            href="/viec-lam"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0062ff] hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-all"
+          >
+            <span>Khám phá việc làm lương cao</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
       </div>
     </div>

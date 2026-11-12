@@ -1,0 +1,199 @@
+{
+  "disclaimer": "LƯU Ý KHOA HỌC: Bộ nhãn đánh giá được trích xuất từ bảng 'CAREZA_ground_truth_AI_so_bo_120_cap.xlsx' là kết quả do AI hỗ trợ đánh giá sơ bộ, chưa được chuyên gia nhân sự thẩm định và xác nhận độc lập. Báo cáo này mang tính chất thử nghiệm thuật toán và đối chiếu công thức sơ bộ.",
+  "evaluation_scope": {
+    "total_jds": 6,
+    "cvs_per_jd": 20,
+    "total_pairs": 120,
+    "total_relevant_in_dataset": 12,
+    "weights": {
+      "skill": 0.4,
+      "tfidf": 0.35,
+      "experience": 0.25
+    }
+  },
+  "macro_average_metrics": {
+    "hybrid_matching": {
+      "P@1": 1.0,
+      "P@3": 0.6667,
+      "P@5": 0.4,
+      "R@1": 0.5555,
+      "R@3": 1.0,
+      "R@5": 1.0,
+      "MRR": 1.0
+    },
+    "topsis_recommendation": {
+      "P@1": 1.0,
+      "P@3": 0.6111,
+      "P@5": 0.4,
+      "R@1": 0.5555,
+      "R@3": 0.9444,
+      "R@5": 1.0,
+      "MRR": 1.0
+    }
+  },
+  "method_comparison": {
+    "summary": "So sánh giữa Xếp hạng tuyến tính Hybrid Score và Xếp hạng đa tiêu chí TOPSIS trên tập đánh giá sơ bộ 120 cặp.",
+    "delta_P@1": 0.0,
+    "delta_P@3": -0.0555,
+    "delta_P@5": 0.0,
+    "delta_MRR": 0.0
+  },
+  "per_jd_details": {
+    "JOB_01": {
+      "job_code": "JOB_01",
+      "job_title": "Backend Python Developer (Middle)",
+      "total_pairs": 20,
+      "total_relevant": 2,
+      "hybrid_metrics": {
+        "P@1": 1.0,
+        "R@1": 0.5,
+        "P@3": 0.6667,
+        "R@3": 1.0,
+        "P@5": 0.4,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      },
+      "topsis_metrics": {
+        "P@1": 1.0,
+        "R@1": 0.5,
+        "P@3": 0.6667,
+        "R@3": 1.0,
+        "P@5": 0.4,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      }
+    },
+    "JOB_02": {
+      "job_code": "JOB_02",
+      "job_title": "Senior Java Backend Engineer",
+      "total_pairs": 20,
+      "total_relevant": 2,
+      "hybrid_metrics": {
+        "P@1": 1.0,
+        "R@1": 0.5,
+        "P@3": 0.6667,
+        "R@3": 1.0,
+        "P@5": 0.4,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      },
+      "topsis_metrics": {
+        "P@1": 1.0,
+        "R@1": 0.5,
+        "P@3": 0.6667,
+        "R@3": 1.0,
+        "P@5": 0.4,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      }
+    },
+    "JOB_03": {
+      "job_code": "JOB_03",
+      "job_title": "Frontend React Developer (Middle)",
+      "total_pairs": 20,
+      "total_relevant": 3,
+      "hybrid_metrics": {
+        "P@1": 1.0,
+        "R@1": 0.3333,
+        "P@3": 1.0,
+        "R@3": 1.0,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      },
+      "topsis_metrics": {
+        "P@1": 1.0,
+        "R@1": 0.3333,
+        "P@3": 0.6667,
+        "R@3": 0.6667,
+        "P@5": 0.6,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      }
+    },
+    "JOB_04": {
+      "job_code": "JOB_04",
+      "job_title": "Fullstack Developer (NodeJS + React)",
+      "total_pairs": 20,
+      "total_relevant": 1,
+      "hybrid_metrics": {
+        "P@1": 1.0,
+        "R@1": 1.0,
+        "P@3": 0.3333,
+        "R@3": 1.0,
+        "P@5": 0.2,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      },
+      "topsis_metrics": {
+        "P@1": 1.0,
+        "R@1": 1.0,
+        "P@3": 0.3333,
+        "R@3": 1.0,
+        "P@5": 0.2,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      }
+    },
+    "JOB_05": {
+      "job_code": "JOB_05",
+      "job_title": "Data Analyst / BI Specialist (Junior - Middle)",
+      "total_pairs": 20,
+      "total_relevant": 2,
+      "hybrid_metrics": {
+        "P@1": 1.0,
+        "R@1": 0.5,
+        "P@3": 0.6667,
+        "R@3": 1.0,
+        "P@5": 0.4,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      },
+      "topsis_metrics": {
+        "P@1": 1.0,
+        "R@1": 0.5,
+        "P@3": 0.6667,
+        "R@3": 1.0,
+        "P@5": 0.4,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      }
+    },
+    "JOB_06": {
+      "job_code": "JOB_06",
+      "job_title": "DevOps / Cloud Platform Engineer (Middle - Senior)",
+      "total_pairs": 20,
+      "total_relevant": 2,
+      "hybrid_metrics": {
+        "P@1": 1.0,
+        "R@1": 0.5,
+        "P@3": 0.6667,
+        "R@3": 1.0,
+        "P@5": 0.4,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      },
+      "topsis_metrics": {
+        "P@1": 1.0,
+        "R@1": 0.5,
+        "P@3": 0.6667,
+        "R@3": 1.0,
+        "P@5": 0.4,
+        "R@5": 1.0,
+        "RR": 1.0,
+        "first_relevant_rank": 1
+      }
+    }
+  }
+}

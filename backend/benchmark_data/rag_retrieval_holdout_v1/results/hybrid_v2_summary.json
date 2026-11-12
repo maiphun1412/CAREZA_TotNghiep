@@ -1,0 +1,2175 @@
+{
+  "overall_answerable": {
+    "count": 48,
+    "mrr": 0.724,
+    "precision@1": 0.6875,
+    "recall@1": 0.5625,
+    "hit_rate@1": 0.6875,
+    "precision@3": 0.3125,
+    "recall@3": 0.7188,
+    "hit_rate@3": 0.75,
+    "precision@5": 0.1917,
+    "recall@5": 0.7396,
+    "hit_rate@5": 0.7708,
+    "false_negative_count": 7,
+    "false_negative_rate": 0.1458
+  },
+  "group_metrics": {
+    "direct": {
+      "count": 20,
+      "mrr": 0.95,
+      "precision@1": 0.9,
+      "recall@1": 0.775,
+      "hit_rate@1": 0.9,
+      "precision@3": 0.4,
+      "recall@3": 0.975,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.24,
+      "recall@5": 0.975,
+      "hit_rate@5": 1.0
+    },
+    "synonym_acronym": {
+      "count": 12,
+      "mrr": 0.8333,
+      "precision@1": 0.8333,
+      "recall@1": 0.625,
+      "hit_rate@1": 0.8333,
+      "precision@3": 0.3889,
+      "recall@3": 0.7917,
+      "hit_rate@3": 0.8333,
+      "precision@5": 0.2333,
+      "recall@5": 0.7917,
+      "hit_rate@5": 0.8333
+    },
+    "indirect": {
+      "count": 10,
+      "mrr": 0.55,
+      "precision@1": 0.5,
+      "recall@1": 0.4,
+      "hit_rate@1": 0.5,
+      "precision@3": 0.2333,
+      "recall@3": 0.55,
+      "hit_rate@3": 0.6,
+      "precision@5": 0.14,
+      "recall@5": 0.55,
+      "hit_rate@5": 0.6
+    },
+    "english": {
+      "count": 6,
+      "mrr": 0.0417,
+      "precision@1": 0.0,
+      "recall@1": 0.0,
+      "hit_rate@1": 0.0,
+      "precision@3": 0.0,
+      "recall@3": 0.0,
+      "hit_rate@3": 0.0,
+      "precision@5": 0.0333,
+      "recall@5": 0.1667,
+      "hit_rate@5": 0.1667
+    }
+  },
+  "unanswerable": {
+    "count": 7,
+    "correct_rejections": 5,
+    "correct_rejection_rate": 0.7143,
+    "false_retrievals": 2,
+    "false_retrieval_rate": 0.2857
+  },
+  "details": [
+    {
+      "query_id": "hq_01",
+      "query": "Các phông chữ chuẩn quốc tế nào được khuyến nghị sử dụng khi tạo CV trên CAREZA?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_01_c01"
+      ],
+      "retrieved_total": 6,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_01_c01",
+          "score": 0.6074,
+          "document_title": "Quy định về định dạng CV chuẩn quốc tế và mẹo tối ưu dung lượng tệp",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_01_c00",
+          "score": 0.5124,
+          "document_title": "Quy định về định dạng CV chuẩn quốc tế và mẹo tối ưu dung lượng tệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_02_c00",
+          "score": 0.5008,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.5005,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_02_c01",
+          "score": 0.4754,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_02",
+      "query": "Hệ thống AI Đánh giá CV sẽ gắn cờ cảnh báo nếu khoảng trống sự nghiệp của ứng viên kéo dài bao lâu?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_02_c00"
+      ],
+      "retrieved_total": 6,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_02_c00",
+          "score": 0.6189,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_02_c01",
+          "score": 0.5139,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.487,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_06_c01",
+          "score": 0.4744,
+          "document_title": "Chính sách thử việc và quy trình gia nhập doanh nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_01_c00",
+          "score": 0.4726,
+          "document_title": "Quy định về định dạng CV chuẩn quốc tế và mẹo tối ưu dung lượng tệp",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_03",
+      "query": "Ứng viên có thể đồng bộ những trường thông tin nào từ tài khoản mạng nghề nghiệp sang CAREZA?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_03_c00"
+      ],
+      "retrieved_total": 6,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.377,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_08_c00",
+          "score": 0.2177,
+          "document_title": "Quản lý nhãn ứng viên và ghi chú nội bộ phòng nhân sự",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_12_c01",
+          "score": 0.1281,
+          "document_title": "Quy định xử lý hành vi quấy rối, phân biệt đối xử và bảo vệ quyền lợi ứng viên",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_10_c00",
+          "score": 0.1157,
+          "document_title": "Chính sách tài khoản dùng thử và chương trình ưu đãi dành cho doanh nghiệp khởi nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_09_c00",
+          "score": 0.1124,
+          "document_title": "Bảo mật kênh trao đổi trực tiếp và lưu trữ nhật ký hội thoại tuyển dụng",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_04",
+      "query": "Thời hạn hoàn thành bài kiểm tra năng lực trực tuyến của ứng viên là bao lâu?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_04_c00",
+        "hdoc_04_c01"
+      ],
+      "retrieved_total": 5,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_04_c00",
+          "score": 0.4303,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.3192,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_08_c00",
+          "score": 0.1324,
+          "document_title": "Quản lý nhãn ứng viên và ghi chú nội bộ phòng nhân sự",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_14_c00",
+          "score": 0.0979,
+          "document_title": "Mẹo xử lý sự cố kỹ thuật và đường truyền trong phòng phỏng vấn trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_07_c01",
+          "score": 0.0851,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_05",
+      "query": "Khi nhận được thư mời nhận việc Offer Letter, ứng viên có thời hạn bao nhiêu ngày để phản hồi?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_05_c01",
+        "hdoc_05_c00"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_05_c01",
+          "score": 0.6194,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_05_c00",
+          "score": 0.5999,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_07_c00",
+          "score": 0.566,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_06",
+      "query": "Thời gian thử việc tiêu chuẩn cho các vị trí kỹ thuật và tỷ lệ lương thử việc tối thiểu là bao nhiêu?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_06_c01",
+        "hdoc_06_c00"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_06_c00",
+          "score": 0.2498,
+          "document_title": "Chính sách thử việc và quy trình gia nhập doanh nghiệp",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_06_c01",
+          "score": 0.0835,
+          "document_title": "Chính sách thử việc và quy trình gia nhập doanh nghiệp",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_07",
+      "query": "Những kịch bản tự động kích hoạt gửi email phản hồi ứng viên trên CAREZA gồm những gì?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_07_c00"
+      ],
+      "retrieved_total": 7,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_07_c00",
+          "score": 0.4403,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_07_c01",
+          "score": 0.1603,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_02_c00",
+          "score": 0.1316,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.1141,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_08_c00",
+          "score": 0.1108,
+          "document_title": "Quản lý nhãn ứng viên và ghi chú nội bộ phòng nhân sự",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_08",
+      "query": "Ai có quyền xem và chỉnh sửa các nhãn tùy chỉnh cùng ghi chú nội bộ về ứng viên?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_08_c00"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_08_c00",
+          "score": 0.3881,
+          "document_title": "Quản lý nhãn ứng viên và ghi chú nội bộ phòng nhân sự",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_05_c01",
+          "score": 0.1085,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.0859,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_09",
+      "query": "Thời gian lưu trữ mã hóa lịch sử hội thoại tin nhắn trực tiếp giữa nhà tuyển dụng và ứng viên là bao lâu?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_09_c00"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_09_c00",
+          "score": 0.6822,
+          "document_title": "Bảo mật kênh trao đổi trực tiếp và lưu trữ nhật ký hội thoại tuyển dụng",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.1043,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_10",
+      "query": "Chương trình ưu đãi Startup Booster dành cho doanh nghiệp dưới 2 năm thành lập gồm những quyền lợi gì?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_10_c00"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_10_c00",
+          "score": 0.2684,
+          "document_title": "Chính sách tài khoản dùng thử và chương trình ưu đãi dành cho doanh nghiệp khởi nghiệp",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_10_c01",
+          "score": 0.2062,
+          "document_title": "Chính sách tài khoản dùng thử và chương trình ưu đãi dành cho doanh nghiệp khởi nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_06_c00",
+          "score": 0.0962,
+          "document_title": "Chính sách thử việc và quy trình gia nhập doanh nghiệp",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_11",
+      "query": "Doanh nghiệp cần cung cấp những thông tin gì để xuất hóa đơn điện tử VAT cho dịch vụ tuyển dụng?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_11_c00"
+      ],
+      "retrieved_total": 5,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_11_c00",
+          "score": 0.4068,
+          "document_title": "Quy trình xuất hóa đơn giá trị gia tăng điện tử cho dịch vụ tuyển dụng",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_11_c01",
+          "score": 0.1875,
+          "document_title": "Quy trình xuất hóa đơn giá trị gia tăng điện tử cho dịch vụ tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_09_c00",
+          "score": 0.1432,
+          "document_title": "Bảo mật kênh trao đổi trực tiếp và lưu trữ nhật ký hội thoại tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_10_c00",
+          "score": 0.1363,
+          "document_title": "Chính sách tài khoản dùng thử và chương trình ưu đãi dành cho doanh nghiệp khởi nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_10_c01",
+          "score": 0.09,
+          "document_title": "Chính sách tài khoản dùng thử và chương trình ưu đãi dành cho doanh nghiệp khởi nghiệp",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_12",
+      "query": "Những hành vi quấy rối và phân biệt đối xử nào bị nghiêm cấm trong các buổi phỏng vấn tuyển dụng?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_12_c00"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_12_c00",
+          "score": 0.5978,
+          "document_title": "Quy định xử lý hành vi quấy rối, phân biệt đối xử và bảo vệ quyền lợi ứng viên",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_12_c01",
+          "score": 0.5605,
+          "document_title": "Quy định xử lý hành vi quấy rối, phân biệt đối xử và bảo vệ quyền lợi ứng viên",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_09_c00",
+          "score": 0.4949,
+          "document_title": "Bảo mật kênh trao đổi trực tiếp và lưu trữ nhật ký hội thoại tuyển dụng",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_13",
+      "query": "Đường link đặt lại mật khẩu gửi về email của người dùng có hiệu lực trong vòng bao nhiêu phút?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_13_c00"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_13_c00",
+          "score": 0.3348,
+          "document_title": "Quy trình xử lý sự cố quên mật khẩu và khôi phục quyền truy cập tài khoản",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_07_c00",
+          "score": 0.0887,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_14",
+      "query": "Tốc độ đường truyền Internet tối thiểu yêu cầu cho phòng phỏng vấn trực tuyến là bao nhiêu?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_14_c00"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_14_c00",
+          "score": 0.2709,
+          "document_title": "Mẹo xử lý sự cố kỹ thuật và đường truyền trong phòng phỏng vấn trực tuyến",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_14_c01",
+          "score": 0.1359,
+          "document_title": "Mẹo xử lý sự cố kỹ thuật và đường truyền trong phòng phỏng vấn trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_04_c00",
+          "score": 0.1033,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_15",
+      "query": "Những lý do hợp lý nào có thể dùng để giải trình khoảng trống sự nghiệp trên CV?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_02_c01"
+      ],
+      "retrieved_total": 6,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_02_c00",
+          "score": 0.5901,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_02_c01",
+          "score": 0.573,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_06_c01",
+          "score": 0.4927,
+          "document_title": "Chính sách thử việc và quy trình gia nhập doanh nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_01_c00",
+          "score": 0.4833,
+          "document_title": "Quy định về định dạng CV chuẩn quốc tế và mẹo tối ưu dung lượng tệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_01_c01",
+          "score": 0.4802,
+          "document_title": "Quy định về định dạng CV chuẩn quốc tế và mẹo tối ưu dung lượng tệp",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 2,
+        "reciprocal_rank": 0.5,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_16",
+      "query": "Các thẻ biến động nào được hỗ trợ để cá nhân hóa email tự động gửi ứng viên?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_07_c01"
+      ],
+      "retrieved_total": 5,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_07_c00",
+          "score": 0.3321,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_07_c01",
+          "score": 0.3237,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.1385,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_08_c00",
+          "score": 0.1159,
+          "document_title": "Quản lý nhãn ứng viên và ghi chú nội bộ phòng nhân sự",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_02_c00",
+          "score": 0.107,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 2,
+        "reciprocal_rank": 0.5,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_17",
+      "query": "Ứng viên có xem được các nhãn tùy chỉnh và ghi chú nội bộ mà nhân sự đã viết về mình không?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_08_c00"
+      ],
+      "retrieved_total": 5,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_08_c00",
+          "score": 0.432,
+          "document_title": "Quản lý nhãn ứng viên và ghi chú nội bộ phòng nhân sự",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.107,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_07_c01",
+          "score": 0.1045,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_05_c01",
+          "score": 0.1025,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.0908,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_18",
+      "query": "Thời gian gửi hóa đơn giá trị gia tăng điện tử về email của doanh nghiệp sau khi thanh toán là bao lâu?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_11_c00",
+        "hdoc_11_c01"
+      ],
+      "retrieved_total": 4,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_11_c00",
+          "score": 0.303,
+          "document_title": "Quy trình xuất hóa đơn giá trị gia tăng điện tử cho dịch vụ tuyển dụng",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_11_c01",
+          "score": 0.2888,
+          "document_title": "Quy trình xuất hóa đơn giá trị gia tăng điện tử cho dịch vụ tuyển dụng",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_10_c01",
+          "score": 0.0966,
+          "document_title": "Chính sách tài khoản dùng thử và chương trình ưu đãi dành cho doanh nghiệp khởi nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_10_c00",
+          "score": 0.0805,
+          "document_title": "Chính sách tài khoản dùng thử và chương trình ưu đãi dành cho doanh nghiệp khởi nghiệp",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_19",
+      "query": "Nếu người dùng mất thiết bị tạo mã OTP thì sử dụng phương thức nào để khôi phục quyền truy cập?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_13_c01"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_13_c01",
+          "score": 0.6138,
+          "document_title": "Quy trình xử lý sự cố quên mật khẩu và khôi phục quyền truy cập tài khoản",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_13_c00",
+          "score": 0.5083,
+          "document_title": "Quy trình xử lý sự cố quên mật khẩu và khôi phục quyền truy cập tài khoản",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_20",
+      "query": "Các bước xử lý nhanh khi gặp sự cố gián đoạn hình ảnh hoặc mất tiếng trong buổi phỏng vấn online là gì?",
+      "query_type": "direct",
+      "relevant_chunk_ids": [
+        "hdoc_14_c01",
+        "hdoc_14_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_14_c00",
+          "score": 0.2328,
+          "document_title": "Mẹo xử lý sự cố kỹ thuật và đường truyền trong phòng phỏng vấn trực tuyến",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_21",
+      "query": "Quy định font chữ tiêu chuẩn cho tệp sơ yếu lý lịch định dạng PDF là gì?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_01_c00",
+        "hdoc_01_c01"
+      ],
+      "retrieved_total": 6,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_01_c00",
+          "score": 0.5989,
+          "document_title": "Quy định về định dạng CV chuẩn quốc tế và mẹo tối ưu dung lượng tệp",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_01_c01",
+          "score": 0.5314,
+          "document_title": "Quy định về định dạng CV chuẩn quốc tế và mẹo tối ưu dung lượng tệp",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_06_c01",
+          "score": 0.5241,
+          "document_title": "Chính sách thử việc và quy trình gia nhập doanh nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.473,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_02_c01",
+          "score": 0.4608,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_22",
+      "query": "Bot AI quét hồ sơ sẽ cảnh báo thời gian gián đoạn công việc nếu nghỉ việc ngắt quãng mấy tháng?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_02_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "hq_23",
+      "query": "Làm bài test đánh giá năng lực Coding Challenge của HR thì được chuyển tab mấy lần?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_04_c00",
+        "hdoc_04_c01"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_04_c00",
+          "score": 0.1715,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.1362,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_24",
+      "query": "Nhận được offer việc làm thì có nút Accept Offer hay xin deal lại mức lương trong mấy ngày?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_05_c01"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_05_c01",
+          "score": 0.1512,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_05_c00",
+          "score": 0.1268,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_25",
+      "query": "Giai đoạn thử việc theo quy trình onboarding nhân sự mới kéo dài mấy tháng?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_06_c01",
+        "hdoc_06_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_06_c00",
+          "score": 0.1734,
+          "document_title": "Chính sách thử việc và quy trình gia nhập doanh nghiệp",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_26",
+      "query": "Thiết lập email template tự động phản hồi cho ứng viên nộp hồ sơ ở đâu?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_07_c00"
+      ],
+      "retrieved_total": 6,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_07_c00",
+          "score": 0.3726,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.1628,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_07_c01",
+          "score": 0.1497,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.1495,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_08_c00",
+          "score": 0.1152,
+          "document_title": "Quản lý nhãn ứng viên và ghi chú nội bộ phòng nhân sự",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_27",
+      "query": "Gán tag phân loại và ghi note ứng viên trong đội ngũ HR thế nào?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_08_c00"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_08_c00",
+          "score": 0.1718,
+          "document_title": "Quản lý nhãn ứng viên và ghi chú nội bộ phòng nhân sự",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.1035,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_28",
+      "query": "Lịch sử log chat giữa headhunter và ứng viên được backup lưu lại trong thời gian bao lâu?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_09_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "hq_29",
+      "query": "Startup mới thành lập được tặng trial gói subscription Pro bao nhiêu tháng?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_10_c00"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_10_c00",
+          "score": 0.5288,
+          "document_title": "Chính sách tài khoản dùng thử và chương trình ưu đãi dành cho doanh nghiệp khởi nghiệp",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_11_c00",
+          "score": 0.47,
+          "document_title": "Quy trình xuất hóa đơn giá trị gia tăng điện tử cho dịch vụ tuyển dụng",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_30",
+      "query": "Xuất hóa đơn đỏ điện tử e-Invoice VAT cho đơn hàng dịch vụ tuyển dụng mất mấy ngày?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_11_c00",
+        "hdoc_11_c01"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_11_c00",
+          "score": 0.3218,
+          "document_title": "Quy trình xuất hóa đơn giá trị gia tăng điện tử cho dịch vụ tuyển dụng",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_11_c01",
+          "score": 0.2321,
+          "document_title": "Quy trình xuất hóa đơn giá trị gia tăng điện tử cho dịch vụ tuyển dụng",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_31",
+      "query": "Quên password đăng nhập thì nhận link reset mật khẩu qua hòm thư điện tử có hạn mấy phút?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_13_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_13_c00",
+          "score": 0.2229,
+          "document_title": "Quy trình xử lý sự cố quên mật khẩu và khôi phục quyền truy cập tài khoản",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_32",
+      "query": "Phòng video call phỏng vấn online yêu cầu băng thông mạng internet tối thiểu mấy megabit?",
+      "query_type": "synonym_acronym",
+      "relevant_chunk_ids": [
+        "hdoc_14_c01",
+        "hdoc_14_c00"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_14_c00",
+          "score": 0.1212,
+          "document_title": "Mẹo xử lý sự cố kỹ thuật và đường truyền trong phòng phỏng vấn trực tuyến",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_14_c01",
+          "score": 0.112,
+          "document_title": "Mẹo xử lý sự cố kỹ thuật và đường truyền trong phòng phỏng vấn trực tuyến",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_33",
+      "query": "Làm thế nào để xuất file lý lịch vừa đẹp mắt vừa nhẹ mà không bị vỡ giao diện trên máy khác?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "hdoc_01_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "hq_34",
+      "query": "Tôi từng nghỉ việc ở nhà chăm con gần một năm thì điền vào hồ sơ xin việc thế nào cho khéo?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "hdoc_02_c01",
+        "hdoc_02_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.1021,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "hq_35",
+      "query": "Tôi không muốn mất công gõ lại từng dự án kinh nghiệm từ đầu trên web thì có cách nào nhập nhanh không?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "hdoc_03_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "hq_36",
+      "query": "Đang làm bài kiểm tra năng lực mà lỡ tay bấm nhầm sang cửa sổ khác thì bài thi có bị hủy không?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "hdoc_04_c01"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_04_c00",
+          "score": 0.2324,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.1378,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 2,
+        "reciprocal_rank": 0.5,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_37",
+      "query": "Nếu mức lương trong thư mời nhận việc thấp hơn kỳ vọng của tôi thì tôi có thể xin đàm phán lại không?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "hdoc_05_c01",
+        "hdoc_05_c00"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_05_c00",
+          "score": 0.5735,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_05_c01",
+          "score": 0.5426,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_07_c00",
+          "score": 0.4912,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.6667,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.4,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_38",
+      "query": "Công ty tuyển được người mới thì cần chuẩn bị những thủ tục và hồ sơ gì trước ngày đi làm đầu tiên?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "hdoc_06_c01"
+      ],
+      "retrieved_total": 2,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_06_c01",
+          "score": 0.1433,
+          "document_title": "Chính sách thử việc và quy trình gia nhập doanh nghiệp",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.092,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_39",
+      "query": "Tôi muốn mỗi khi từ chối hồ sơ ứng viên thì hệ thống tự gửi thư cảm ơn lịch sự thì cài đặt thế nào?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "hdoc_07_c00"
+      ],
+      "retrieved_total": 10,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_07_c00",
+          "score": 0.4801,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.2496,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_05_c00",
+          "score": 0.1956,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_05_c01",
+          "score": 0.1938,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_02_c00",
+          "score": 0.1905,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_40",
+      "query": "Người phỏng vấn có thể ghi chú đánh giá ứng viên mà không sợ ứng viên đọc trộm được ở đâu?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "hdoc_08_c00"
+      ],
+      "retrieved_total": 7,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_08_c00",
+          "score": 0.2783,
+          "document_title": "Quản lý nhãn ứng viên và ghi chú nội bộ phòng nhân sự",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.1635,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_07_c00",
+          "score": 0.141,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_05_c01",
+          "score": 0.1342,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.1271,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 1.0,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 1.0,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_41",
+      "query": "Nếu người phỏng vấn cố tình hỏi chuyện riêng tư về kế hoạch kết hôn sinh con thì ứng viên làm gì?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "hdoc_12_c01",
+        "hdoc_12_c00"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.1183,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_08_c00",
+          "score": 0.1035,
+          "document_title": "Quản lý nhãn ứng viên và ghi chú nội bộ phòng nhân sự",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_14_c00",
+          "score": 0.0929,
+          "document_title": "Mẹo xử lý sự cố kỹ thuật và đường truyền trong phòng phỏng vấn trực tuyến",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "hq_42",
+      "query": "Đang phỏng vấn trực tiếp mà bỗng dưng mic bị rè hoặc không nghe thấy tiếng đối phương thì làm sao?",
+      "query_type": "indirect",
+      "relevant_chunk_ids": [
+        "hdoc_14_c01",
+        "hdoc_14_c00"
+      ],
+      "retrieved_total": 1,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_14_c00",
+          "score": 0.1174,
+          "document_title": "Mẹo xử lý sự cố kỹ thuật và đường truyền trong phòng phỏng vấn trực tuyến",
+          "is_relevant": true
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 1,
+        "reciprocal_rank": 1.0,
+        "precision@1": 1.0,
+        "recall@1": 0.5,
+        "hit_rate@1": 1.0,
+        "precision@3": 0.3333,
+        "recall@3": 0.5,
+        "hit_rate@3": 1.0,
+        "precision@5": 0.2,
+        "recall@5": 0.5,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_43",
+      "query": "What are the recommended standard fonts and size for resume documents on CAREZA?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "hdoc_01_c01"
+      ],
+      "retrieved_total": 6,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.4637,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_02_c00",
+          "score": 0.4612,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_01_c00",
+          "score": 0.4589,
+          "document_title": "Quy định về định dạng CV chuẩn quốc tế và mẹo tối ưu dung lượng tệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_01_c01",
+          "score": 0.45,
+          "document_title": "Quy định về định dạng CV chuẩn quốc tế và mẹo tối ưu dung lượng tệp",
+          "is_relevant": true
+        },
+        {
+          "chunk_id": "hdoc_02_c01",
+          "score": 0.45,
+          "document_title": "Cơ chế phân tích khoảng trống sự nghiệp và giải trình trên CV",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 4,
+        "reciprocal_rank": 0.25,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.2,
+        "recall@5": 1.0,
+        "hit_rate@5": 1.0
+      }
+    },
+    {
+      "query_id": "hq_44",
+      "query": "How many days does an applicant have to respond to an official Offer Letter on the platform?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "hdoc_05_c01",
+        "hdoc_05_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "hq_45",
+      "query": "What are the benefits offered to tech startups in the Startup Booster trial program?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "hdoc_10_c00"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_05_c00",
+          "score": 0.4601,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_05_c01",
+          "score": 0.45,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_07_c00",
+          "score": 0.45,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "hq_46",
+      "query": "What information is required from a business to issue a valid VAT electronic invoice?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "hdoc_11_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "hq_47",
+      "query": "How long is the password reset link valid after being sent to the user email address?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "hdoc_13_c00"
+      ],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "hq_48",
+      "query": "What are the minimum internet bandwidth requirements and browser recommendations for online video interviews?",
+      "query_type": "english",
+      "relevant_chunk_ids": [
+        "hdoc_14_c00"
+      ],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_05_c00",
+          "score": 0.45,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_05_c01",
+          "score": 0.45,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_07_c00",
+          "score": 0.45,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "first_relevant_rank": 0,
+        "reciprocal_rank": 0.0,
+        "precision@1": 0.0,
+        "recall@1": 0.0,
+        "hit_rate@1": 0.0,
+        "precision@3": 0.0,
+        "recall@3": 0.0,
+        "hit_rate@3": 0.0,
+        "precision@5": 0.0,
+        "recall@5": 0.0,
+        "hit_rate@5": 0.0
+      }
+    },
+    {
+      "query_id": "hq_49",
+      "query": "Hồ sơ hưởng trợ cấp bảo hiểm thất nghiệp tại trung tâm dịch vụ việc làm gồm những giấy tờ gì?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 3,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_06_c01",
+          "score": 0.1212,
+          "document_title": "Chính sách thử việc và quy trình gia nhập doanh nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_11_c00",
+          "score": 0.1117,
+          "document_title": "Quy trình xuất hóa đơn giá trị gia tăng điện tử cho dịch vụ tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.0917,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "correct_rejection": false,
+        "false_retrieval": true,
+        "retrieved_count": 3,
+        "top_score": 0.1212,
+        "top_chunk": "hdoc_06_c01"
+      }
+    },
+    {
+      "query_id": "hq_50",
+      "query": "Quy trình nộp hồ sơ thi tuyển công chức nhà nước ngạch chuyên viên năm nay quy định ra sao?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 7,
+      "top_retrieved": [
+        {
+          "chunk_id": "hdoc_05_c00",
+          "score": 0.1487,
+          "document_title": "Quy trình đàm phán lương bổng và phản hồi thư mời nhận việc",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_06_c00",
+          "score": 0.1368,
+          "document_title": "Chính sách thử việc và quy trình gia nhập doanh nghiệp",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_04_c01",
+          "score": 0.1184,
+          "document_title": "Hướng dẫn ứng viên tham gia bài kiểm tra năng lực trực tuyến",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_07_c00",
+          "score": 0.1125,
+          "document_title": "Cấu hình tự động gửi email phản hồi ứng viên cho nhà tuyển dụng",
+          "is_relevant": false
+        },
+        {
+          "chunk_id": "hdoc_03_c00",
+          "score": 0.1109,
+          "document_title": "Tính năng đồng bộ hồ sơ ứng viên từ tài khoản chuyên nghiệp sang CAREZA",
+          "is_relevant": false
+        }
+      ],
+      "metrics": {
+        "correct_rejection": false,
+        "false_retrieval": true,
+        "retrieved_count": 7,
+        "top_score": 0.1487,
+        "top_chunk": "hdoc_05_c00"
+      }
+    },
+    {
+      "query_id": "hq_51",
+      "query": "Cách kết nối máy chấm công vân tay Ronald Jack qua mạng LAN vào phần mềm máy chủ?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "correct_rejection": true,
+        "false_retrieval": false,
+        "retrieved_count": 0,
+        "top_score": 0.0,
+        "top_chunk": null
+      }
+    },
+    {
+      "query_id": "hq_52",
+      "query": "CAREZA có hỗ trợ dịch vụ đóng hộ bảo hiểm y tế tự nguyện cho cá nhân tự do không?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "correct_rejection": true,
+        "false_retrieval": false,
+        "retrieved_count": 0,
+        "top_score": 0.0,
+        "top_chunk": null
+      }
+    },
+    {
+      "query_id": "hq_53",
+      "query": "Thủ tục xin cấp giấy phép lao động work permit cho chuyên gia nước ngoài tại Sở LĐTBXH?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "correct_rejection": true,
+        "false_retrieval": false,
+        "retrieved_count": 0,
+        "top_score": 0.0,
+        "top_chunk": null
+      }
+    },
+    {
+      "query_id": "hq_54",
+      "query": "What is the capital gains tax rate applied to cryptocurrency trading in Vietnam?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "correct_rejection": true,
+        "false_retrieval": false,
+        "retrieved_count": 0,
+        "top_score": 0.0,
+        "top_chunk": null
+      }
+    },
+    {
+      "query_id": "hq_55",
+      "query": "What are the financial proof requirements when applying for an Australian subclass 500 student visa?",
+      "query_type": "unanswerable",
+      "relevant_chunk_ids": [],
+      "retrieved_total": 0,
+      "top_retrieved": [],
+      "metrics": {
+        "correct_rejection": true,
+        "false_retrieval": false,
+        "retrieved_count": 0,
+        "top_score": 0.0,
+        "top_chunk": null
+      }
+    }
+  ]
+}

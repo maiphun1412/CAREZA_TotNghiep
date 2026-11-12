@@ -1,0 +1,161 @@
+{
+  "metadata": {
+    "benchmark_name": "CAREZA AI Mock Interview Scoring Benchmark Evaluation",
+    "version": "1.0.0",
+    "evaluated_at": "2026-10-21T15:46:17.962969",
+    "total_answers": 360,
+    "total_questions": 90,
+    "scoring_algorithm": "MockInterviewService (TF-IDF Cosine Similarity 60% + Length Factor 40%, Range [3.0, 9.8])",
+    "ground_truth_note": "Nhãn tham chiếu là dữ liệu tổng hợp dựa trên Rubric 4 tiêu chí chuẩn hóa, chưa được chuyên gia độc lập xác nhận."
+  },
+  "overall_metrics": {
+    "mae": 2.4717,
+    "rmse": 3.0082,
+    "pearson_correlation": 0.2012,
+    "spearman_correlation": 0.3597,
+    "pairwise_ranking_accuracy": 0.9333
+  },
+  "group_metrics": {
+    "good": {
+      "count": 90,
+      "mean_expected": 9.25,
+      "mean_system": 5.03,
+      "mae": 4.2233,
+      "rmse": 4.2359,
+      "min_system": 4.5,
+      "max_system": 5.3,
+      "min_expected": 9.07,
+      "max_expected": 9.42
+    },
+    "average": {
+      "count": 90,
+      "mean_expected": 6.16,
+      "mean_system": 4.52,
+      "mae": 1.638,
+      "rmse": 1.6668,
+      "min_system": 4.1,
+      "max_system": 4.9,
+      "min_expected": 5.85,
+      "max_expected": 6.52
+    },
+    "poor": {
+      "count": 90,
+      "mean_expected": 3.2,
+      "mean_system": 3.16,
+      "mae": 0.296,
+      "rmse": 0.4283,
+      "min_system": 3.0,
+      "max_system": 3.4,
+      "min_expected": 2.92,
+      "max_expected": 3.85
+    },
+    "adversarial": {
+      "count": 68,
+      "mean_expected": 1.66,
+      "mean_system": 5.2,
+      "mae": 3.5353,
+      "rmse": 3.7648,
+      "min_system": 4.0,
+      "max_system": 7.3,
+      "min_expected": 1.45,
+      "max_expected": 1.8
+    },
+    "short_correct": {
+      "count": 22,
+      "mean_expected": 7.42,
+      "mean_system": 3.09,
+      "mae": 4.3291,
+      "rmse": 4.33,
+      "min_system": 3.0,
+      "max_system": 3.2,
+      "min_expected": 7.42,
+      "max_expected": 7.42
+    }
+  },
+  "adversarial_subtypes_metrics": {
+    "negation": {
+      "count": 22,
+      "mean_expected": 1.8,
+      "mean_system": 4.28,
+      "mae": 2.4818,
+      "rmse": 2.485,
+      "min_system": 4.1,
+      "max_system": 4.5,
+      "min_expected": 1.8,
+      "max_expected": 1.8
+    },
+    "repeat_question": {
+      "count": 23,
+      "mean_expected": 1.75,
+      "mean_system": 7.07,
+      "mae": 5.3239,
+      "rmse": 5.3252,
+      "min_system": 6.9,
+      "max_system": 7.3,
+      "min_expected": 1.75,
+      "max_expected": 1.75
+    },
+    "long_gibberish": {
+      "count": 23,
+      "mean_expected": 1.45,
+      "mean_system": 4.2,
+      "mae": 2.7543,
+      "rmse": 2.7642,
+      "min_system": 4.0,
+      "max_system": 4.6,
+      "min_expected": 1.45,
+      "max_expected": 1.45
+    },
+    "short_correct": {
+      "count": 22,
+      "mean_expected": 7.42,
+      "mean_system": 3.09,
+      "mae": 4.3291,
+      "rmse": 4.33,
+      "min_system": 3.0,
+      "max_system": 3.2,
+      "min_expected": 7.42,
+      "max_expected": 7.42
+    }
+  },
+  "ranking_consistency": {
+    "details": {
+      "good_gt_average": {
+        "total": 90,
+        "correct": 72,
+        "equal": 0,
+        "inverted": 18
+      },
+      "average_gt_poor": {
+        "total": 90,
+        "correct": 90,
+        "equal": 0,
+        "inverted": 0
+      },
+      "good_gt_poor": {
+        "total": 90,
+        "correct": 90,
+        "equal": 0,
+        "inverted": 0
+      }
+    },
+    "total_pairs": 270,
+    "correct_pairs": 252,
+    "pairwise_accuracy": 0.9333
+  },
+  "feedback_conflict_summary": {
+    "total_conflicts": 90,
+    "conflict_rate": 0.25,
+    "primary_cause": "Rule-based feedback chỉ dựa trên số từ (word_count >= 40) mà không phân tích ngữ nghĩa, dẫn đến khen ngợi chi tiết/ví dụ rõ ràng cho các câu trả lời dài nhưng vô nghĩa hoặc lạc đề."
+  },
+  "question_quality_compliance": {
+    "total_questions": 90,
+    "rule_checks": {
+      "has_role_and_job_title": 90,
+      "has_specific_skills": 90,
+      "has_level_alignment": 90,
+      "covers_5_categories": true
+    },
+    "compliance_note": "100% tuân thủ quy tắc sinh câu hỏi có cấu trúc theo mẫu tham số hóa. Lưu ý: Chưa phải độ chính xác chuyên gia độc lập xác nhận."
+  }
+}

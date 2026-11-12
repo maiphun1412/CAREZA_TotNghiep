@@ -85,7 +85,8 @@ function ResetPasswordForm() {
 
   return (
     <div className="h-screen max-h-screen w-screen overflow-hidden flex flex-col lg:flex-row bg-[#f8fbff] font-sans text-slate-800 selection:bg-blue-100 selection:text-blue-900 select-none">
-      <style dangerouslySetInnerHTML={{ __html: `
+      <style dangerouslySetInnerHTML={{
+        __html: `
         @import url('https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&display=swap');
         
         .font-handwriting {
@@ -135,11 +136,11 @@ function ResetPasswordForm() {
           CỘT TRÁI (3/5 MÀN HÌNH - 60%): ẢNH HERO DANGNHAP.PNG + BRANDING + TEXT
          ========================================================================= */}
       <div className="w-full lg:w-3/5 h-full relative flex flex-col justify-between p-6 sm:p-8 lg:p-12 overflow-hidden bg-[#edf3fd]">
-        
+
         {/* Ảnh nền rõ nét */}
         <div className="absolute inset-0 z-0 pointer-events-none select-none">
-          <img 
-            src="/images/banners/dangnhap.png" 
+          <img
+            src="/images/banners/dangnhap.webp"
             alt="Careza Security"
             className="w-full h-full object-cover object-[center_bottom] filter brightness-[1.01]"
           />
@@ -170,7 +171,7 @@ function ResetPasswordForm() {
 
         {/* 2. Hero Headline, Badge dạng vạch, Highlight cọ vàng, Mô tả */}
         <div className="relative z-20 mt-6 sm:mt-8 lg:mt-10 mb-auto max-w-md lg:max-w-lg">
-          
+
           {/* Badge: BẢO MẬT TÀI KHOẢN */}
           <div className="flex items-center gap-3 mb-3">
             <span className="text-[11px] font-extrabold tracking-wider uppercase text-[#0062ff]">
@@ -185,17 +186,17 @@ function ResetPasswordForm() {
             của{" "}
             <span className="relative inline-block text-[#0062ff]">
               bạn
-              <svg 
-                className="absolute -bottom-2.5 left-0 w-full h-3 text-[#facc15] pointer-events-none" 
-                viewBox="0 0 200 12" 
-                fill="none" 
+              <svg
+                className="absolute -bottom-2.5 left-0 w-full h-3 text-[#facc15] pointer-events-none"
+                viewBox="0 0 200 12"
+                fill="none"
                 xmlns="http://www.w3.org/2000/svg"
               >
-                <path 
-                  d="M3 8.5C35 4 85 2.5 197 6.5C145 9.5 65 10.5 8 10" 
-                  stroke="currentColor" 
-                  strokeWidth="4.5" 
-                  strokeLinecap="round" 
+                <path
+                  d="M3 8.5C35 4 85 2.5 197 6.5C145 9.5 65 10.5 8 10"
+                  stroke="currentColor"
+                  strokeWidth="4.5"
+                  strokeLinecap="round"
                 />
               </svg>
             </span>
@@ -246,7 +247,7 @@ function ResetPasswordForm() {
           CỘT PHẢI (2/5 MÀN HÌNH - 40%): FORM ĐỔI MẬT KHẨU
          ========================================================================= */}
       <div className="w-full lg:w-2/5 h-full relative bg-[#f4f8fe] flex flex-col justify-between items-center p-5 sm:p-7 lg:p-8 z-10 overflow-hidden select-none">
-        
+
         {/* Vòm tròn mờ xanh pastel lớn trên đỉnh */}
         <div className="absolute -top-16 left-1/2 -translate-x-1/2 w-[480px] sm:w-[520px] h-[340px] rounded-b-[260px] bg-gradient-to-b from-[#d9ebff] via-[#e6f2ff] to-transparent pointer-events-none z-0 opacity-80" />
 
@@ -254,15 +255,15 @@ function ResetPasswordForm() {
         <div className="absolute top-12 right-12 w-28 h-28 bg-[radial-gradient(#93c5fd_1.5px,transparent_1.5px)] [background-size:12px_12px] opacity-60 pointer-events-none z-0" />
 
         {/* Dải sóng cong mềm màu xanh pastel bên sườn phải */}
-        <svg 
-          className="absolute right-0 top-[20%] w-48 h-[60%] text-[#dbeeff]/70 pointer-events-none z-0" 
-          viewBox="0 0 200 600" 
-          fill="none" 
+        <svg
+          className="absolute right-0 top-[20%] w-48 h-[60%] text-[#dbeeff]/70 pointer-events-none z-0"
+          viewBox="0 0 200 600"
+          fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >
-          <path 
-            d="M200 0C110 80 40 180 50 300C60 420 140 500 200 600V0Z" 
-            fill="currentColor" 
+          <path
+            d="M200 0C110 80 40 180 50 300C60 420 140 500 200 600V0Z"
+            fill="currentColor"
           />
         </svg>
 
@@ -271,8 +272,8 @@ function ResetPasswordForm() {
 
         {/* Góc trên cùng: Link "Về Careza →" */}
         <div className="w-full flex justify-end items-start relative z-20 max-w-[400px]">
-          <Link 
-            href="/" 
+          <Link
+            href="/"
             className="inline-flex items-center gap-1.5 text-[13px] font-bold text-[#0062ff] hover:text-blue-700 transition-colors py-1 px-2.5 rounded-full hover:bg-blue-50/60"
           >
             <span>Về Careza</span>
@@ -283,7 +284,7 @@ function ResetPasswordForm() {
         {/* ==================== KHỐI CARD FORM CHÍNH ==================== */}
         <div className="w-full max-w-[395px] my-auto relative z-20">
           <div className="bg-white rounded-[32px] p-6 sm:p-7 shadow-[0_20px_45px_rgba(0,40,120,0.06)] border border-slate-100/90 relative">
-            
+
             {!success ? (
               <>
                 {/* Header Form (Căn giữa) */}
@@ -304,7 +305,7 @@ function ResetPasswordForm() {
 
                 {/* Form Ant Design + React Hook Form */}
                 <Form layout="vertical" onFinish={handleSubmit(onSubmit)} requiredMark={false} className="reset-input">
-                  
+
                   {/* Mật khẩu mới */}
                   <Form.Item
                     validateStatus={errors.password ? "error" : ""}

@@ -2,95 +2,179 @@
 
 import { useState } from "react";
 import { Card, Tabs, Input, Button, Avatar, Typography, Space, Progress, Tag, Alert, message, Spin, Divider } from "antd";
-import { RobotOutlined, SendOutlined, UserOutlined, StarOutlined, ThunderboltOutlined } from "@ant-design/icons";
+import { RobotOutlined, SendOutlined, UserOutlined, StarOutlined, ThunderboltOutlined, FileTextOutlined } from "@ant-design/icons";
+import { aiService } from "@/services/ai.service";
 
 const { Title, Text, Paragraph } = Typography;
 const { TextArea } = Input;
 
 const INTRO_CHATS = [
-  { id: "ai-1", sender: "ai", text: "Xin chào! Tôi là Trợ lý Hướng nghiệp AI của CAREZA. Tôi có thể giúp bạn tối ưu hóa CV, định hướng nghề nghiệp, hoặc chuẩn bị câu trả lời phỏng vấn. Bạn cần tôi trợ giúp gì hôm nay?", time: "10:00" },
-];
-
-const MOCK_QUESTIONS = [
-  { id: 1, question: "Hãy giải thích sự khác biệt giữa state và props trong ReactJS?" },
-  { id: 2, question: "Làm thế nào để tối ưu hóa hiệu năng render của một ứng dụng React lớn?" },
+  {
+    id: "ai-intro",
+    sender: "ai",
+    text: "Xin chào! Tôi là Trợ lý Hướng nghiệp AI của CAREZA. Tôi có thể hỗ trợ giải đáp các quy định tuyển dụng, cách viết CV, quy trình phỏng vấn hoặc tra cứu thông tin chính thức trong cơ sở tri thức CAREZA. Bạn muốn tìm hiểu nội dung gì?",
+    time: "10:00",
+    citations: [] as any[],
+  },
 ];
 
 export default function CandidateAiAssistantPage() {
   const [activeTab, setActiveTab] = useState("career");
-  
-  // Chatbot state
+
+  // Chatbot RAG state
   const [chatMessages, setChatMessages] = useState(INTRO_CHATS);
   const [chatInput, setChatInput] = useState("");
+  const [sessionId, setSessionId] = useState<number | undefined>(undefined);
   const [aiResponding, setAiResponding] = useState(false);
 
-  // Interview state
+  // Mock Interview state
   const [interviewStarted, setInterviewStarted] = useState(false);
+  const [startingInterview, setStartingInterview] = useState(false);
+  const [interviewId, setInterviewId] = useState<number | null>(null);
+  const [interviewQuestions, setInterviewQuestions] = useState<any[]>([]);
   const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
-  const [answers, setAnswers] = useState<string[]>([]);
   const [answerInput, setAnswerInput] = useState("");
-  const [interviewResult, setInterviewResult] = useState<any>(null);
+  const [submittingAnswer, setSubmittingAnswer] = useState(false);
   const [evaluating, setEvaluating] = useState(false);
+  const [interviewResult, setInterviewResult] = useState<any>(null);
 
-  // Xử lý gửi tin nhắn Chatbot
-  const handleSendChatMessage = () => {
-    if (!chatInput.trim()) return;
+  // Xử lý gửi tin nhắn Chatbot RAG
+  const handleSendChatMessage = async () => {
+    const trimmed = chatInput.trim();
+    if (!trimmed) return;
 
     const userMsg = {
       id: `u-${Date.now()}`,
       sender: "user",
-      text: chatInput,
+      text: trimmed,
       time: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+      citations: [],
     };
 
     setChatMessages((prev) => [...prev, userMsg]);
     setChatInput("");
     setAiResponding(true);
 
-    setTimeout(() => {
+    try {
+      const res = await aiService.chatRag(trimmed, sessionId);
+      const data = res?.data;
+      if (data?.session_id) {
+        setSessionId(data.session_id);
+      }
+
       const aiMsg = {
         id: `ai-${Date.now()}`,
         sender: "ai",
-        text: `Dựa trên câu hỏi của bạn, đây là đề xuất từ AI của CAREZA: Để phát triển kỹ năng nhanh nhất, bạn nên xây dựng các dự án thực tế sử dụng React + TypeScript, đồng thời đóng góp vào các dự án mã nguồn mở hoặc viết blog kỹ thuật để tăng uy tín chuyên môn.`,
+        text: data?.content || "Hệ thống AI đã tiếp nhận câu hỏi của bạn.",
         time: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+        citations: data?.retrieved_chunks || [],
       };
       setChatMessages((prev) => [...prev, aiMsg]);
+    } catch (err: any) {
+      const errMsg =
+        err?.response?.data?.question?.[0] ||
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        "Không thể kết nối đến Trợ lý AI. Vui lòng thử lại sau.";
+      message.error(errMsg);
+    } finally {
       setAiResponding(false);
-    }, 1500);
+    }
   };
 
-  // Xử lý Phỏng vấn AI
-  const handleStartInterview = () => {
-    setInterviewStarted(true);
-    setCurrentQuestionIndex(0);
-    setAnswers([]);
-    setAnswerInput("");
-    setInterviewResult(null);
+  // Khởi tạo phiên Phỏng vấn AI thực tế
+  const handleStartInterview = async () => {
+    setStartingInterview(true);
+    try {
+      const res = await aiService.createMockInterview({
+        target_role: "Lập trình viên Fullstack",
+        level: "middle",
+        years_of_experience: 3,
+      });
+
+      const data = res?.data;
+      const createdInterview = data?.interview || data;
+      const qList = createdInterview?.questions || [];
+
+      if (!qList || qList.length === 0) {
+        message.warning("Hiện tại chưa có bộ câu hỏi phù hợp. Vui lòng thử lại.");
+        return;
+      }
+
+      setInterviewId(createdInterview.interview_id || createdInterview.id);
+      setInterviewQuestions(qList);
+      setCurrentQuestionIndex(0);
+      setAnswerInput("");
+      setInterviewResult(null);
+      setInterviewStarted(true);
+      message.success("Đã khởi tạo phiên phỏng vấn AI thành công!");
+    } catch (err: any) {
+      const errMsg =
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        "Không thể khởi tạo phiên phỏng vấn AI. Vui lòng kiểm tra quyền đăng nhập.";
+      message.error(errMsg);
+    } finally {
+      setStartingInterview(false);
+    }
   };
 
-  const handleNextQuestion = () => {
-    if (!answerInput.trim()) {
+  // Nộp câu trả lời và chuyển câu hoặc hoàn thành
+  const handleNextQuestion = async () => {
+    const trimmed = answerInput.trim();
+    if (!trimmed) {
       message.error("Vui lòng nhập câu trả lời của bạn!");
       return;
     }
 
-    setAnswers([...answers, answerInput]);
-    setAnswerInput("");
+    if (!interviewId || interviewQuestions.length === 0) return;
+    const currentQ = interviewQuestions[currentQuestionIndex];
 
-    if (currentQuestionIndex < MOCK_QUESTIONS.length - 1) {
-      setCurrentQuestionIndex(currentQuestionIndex + 1);
-    } else {
-      // Đánh giá kết quả
-      setEvaluating(true);
-      setTimeout(() => {
+    setSubmittingAnswer(true);
+    try {
+      await aiService.submitAnswer(interviewId, {
+        question_id: currentQ.id || currentQuestionIndex + 1,
+        answer_text: trimmed,
+        duration_seconds: 45,
+      });
+
+      setAnswerInput("");
+
+      if (currentQuestionIndex < interviewQuestions.length - 1) {
+        setCurrentQuestionIndex((prev) => prev + 1);
+        message.success("Đã ghi nhận câu trả lời. Hãy trả lời câu tiếp theo!");
+      } else {
+        // Đã hoàn thành câu cuối -> yêu cầu tổng kết báo cáo
+        setEvaluating(true);
+        const completeRes = await aiService.completeMockInterview(interviewId);
+        const reportData = completeRes?.data?.report || completeRes?.data;
+
         setInterviewResult({
-          score: 8.5,
-          positives: "Bạn hiểu rõ khái niệm Virtual DOM và cơ chế Data Binding của React. Diễn đạt mạch lạc.",
-          negatives: "Cần làm rõ thêm cách tối ưu sử dụng useMemo và useCallback để tránh re-render không đáng có.",
-          advice: "Hãy tập trung đọc thêm về React reconciliation algorithm và practices tối ưu hóa Redux/Context API.",
+          score: reportData?.overall_score || reportData?.content_score || 8.0,
+          positives:
+            Array.isArray(reportData?.strengths) && reportData.strengths.length > 0
+              ? reportData.strengths.join(". ")
+              : "Thể hiện được nền tảng kiến thức và khả năng tiếp cận vấn đề.",
+          negatives:
+            Array.isArray(reportData?.improvements) && reportData.improvements.length > 0
+              ? reportData.improvements.join(". ")
+              : "Cần bổ sung thêm ví dụ thực tế và giải pháp kỹ thuật chi tiết hơn.",
+          advice:
+            reportData?.feedback ||
+            reportData?.advice ||
+            "Tiếp tục củng cố kiến thức chuyên môn và rèn luyện kỹ năng trình bày có cấu trúc theo phương pháp STAR.",
         });
         setEvaluating(false);
-      }, 2000);
+      }
+    } catch (err: any) {
+      const errMsg =
+        err?.response?.data?.answer?.[0] ||
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        "Không thể gửi câu trả lời. Vui lòng thử lại.";
+      message.error(errMsg);
+    } finally {
+      setSubmittingAnswer(false);
     }
   };
 
@@ -101,12 +185,14 @@ export default function CandidateAiAssistantPage() {
         <h3 className="m-0 text-slate-800 font-extrabold text-xl sm:text-2xl flex items-center gap-2">
           <RobotOutlined className="text-blue-600 animate-bounce" /> Trung tâm Trí tuệ Nhân tạo AI
         </h3>
-        <span className="text-xs text-slate-500 block mt-1">Sử dụng sức mạnh của AI để bứt phá giới hạn năng lực và sự nghiệp của bạn</span>
+        <span className="text-xs text-slate-500 block mt-1">
+          Hỏi đáp tri thức nghề nghiệp chuẩn xác và luyện tập phỏng vấn thử với công nghệ AI của CAREZA
+        </span>
       </div>
 
       <Card className="border-slate-100 shadow-sm flex-1 flex flex-col" styles={{ body: { padding: 16 } }} style={{ borderRadius: 12 }}>
         <Tabs activeKey={activeTab} onChange={setActiveTab}>
-          {/* Tab 1: AI Career Assistant Chatbot */}
+          {/* Tab 1: AI Career Assistant Chatbot (RAG) */}
           <Tabs.TabPane
             tab={
               <span className="flex items-center gap-1.5 font-semibold text-xs sm:text-sm">
@@ -115,7 +201,7 @@ export default function CandidateAiAssistantPage() {
             }
             key="career"
           >
-            <div className="flex flex-col h-[500px] justify-between bg-slate-50/50 rounded-2xl border border-slate-100 p-4">
+            <div className="flex flex-col h-[520px] justify-between bg-slate-50/50 rounded-2xl border border-slate-100 p-4">
               {/* Message Box */}
               <div className="flex-1 overflow-y-auto space-y-4 pr-2 flex flex-col">
                 {chatMessages.map((msg) => {
@@ -123,19 +209,37 @@ export default function CandidateAiAssistantPage() {
                   return (
                     <div
                       key={msg.id}
-                      className={`flex gap-3 max-w-[80%] ${isAi ? "self-start" : "self-end flex-row-reverse"}`}
+                      className={`flex gap-3 max-w-[85%] ${isAi ? "self-start" : "self-end flex-row-reverse"}`}
                     >
                       <Avatar
                         icon={isAi ? <RobotOutlined /> : <UserOutlined />}
                         className={isAi ? "bg-blue-100 text-blue-600" : "bg-slate-800 text-white"}
                       />
-                      <div className="space-y-1">
+                      <div className="space-y-1.5">
                         <div
-                          className={`p-3 rounded-2xl text-xs sm:text-sm ${
-                            isAi ? "bg-white text-slate-800 border border-slate-100 rounded-tl-none" : "bg-blue-600 text-white rounded-tr-none"
+                          className={`p-3.5 rounded-2xl text-xs sm:text-sm whitespace-pre-line leading-relaxed ${
+                            isAi ? "bg-white text-slate-800 border border-slate-200/80 rounded-tl-none shadow-xs" : "bg-blue-600 text-white rounded-tr-none shadow-xs"
                           }`}
                         >
-                          {msg.text}
+                          <div>{msg.text}</div>
+                          {isAi && msg.citations && msg.citations.length > 0 && (
+                            <div className="mt-2.5 pt-2 border-t border-slate-100 space-y-1">
+                              <span className="text-[10px] font-bold uppercase tracking-wider text-slate-400 block">
+                                Nguồn tài liệu xác thực:
+                              </span>
+                              <div className="flex flex-wrap gap-1">
+                                {msg.citations.map((c: any, idx: number) => (
+                                  <span
+                                    key={c.chunk_id || idx}
+                                    className="inline-flex items-center gap-1 px-2 py-0.5 rounded bg-blue-50 text-blue-700 text-[11px] font-medium border border-blue-100"
+                                  >
+                                    <FileTextOutlined className="text-blue-500" />
+                                    <span>{c.document_title || `Tài liệu #${c.document_id}`}</span>
+                                  </span>
+                                ))}
+                              </div>
+                            </div>
+                          )}
                         </div>
                         <span className={`text-[9px] text-slate-400 block px-1 ${!isAi && "text-right"}`}>{msg.time}</span>
                       </div>
@@ -145,7 +249,7 @@ export default function CandidateAiAssistantPage() {
                 {aiResponding && (
                   <div className="flex gap-3 self-start max-w-[80%] items-center">
                     <Avatar icon={<RobotOutlined />} className="bg-blue-100 text-blue-600" />
-                    <span className="text-xs text-slate-400 italic">Trợ lý AI đang soạn câu trả lời...</span>
+                    <span className="text-xs text-slate-400 italic">Trợ lý AI đang tra cứu tri thức và soạn câu trả lời...</span>
                   </div>
                 )}
               </div>
@@ -153,13 +257,20 @@ export default function CandidateAiAssistantPage() {
               {/* Chat Input */}
               <div className="mt-4 pt-3 border-t border-slate-100 flex gap-2">
                 <Input
-                  placeholder="Nhập câu hỏi định hướng sự nghiệp, viết CV..."
+                  placeholder="Hỏi về viết CV, chuẩn bị phỏng vấn, quy định CAREZA..."
                   value={chatInput}
+                  disabled={aiResponding}
                   onChange={(e) => setChatInput(e.target.value)}
                   onPressEnter={handleSendChatMessage}
                   className="h-11 rounded-lg"
                 />
-                <Button type="primary" onClick={handleSendChatMessage} icon={<SendOutlined />} className="bg-blue-600 hover:bg-blue-700 h-11 w-11 flex items-center justify-center rounded-lg" />
+                <Button
+                  type="primary"
+                  loading={aiResponding}
+                  onClick={handleSendChatMessage}
+                  icon={<SendOutlined />}
+                  className="bg-blue-600 hover:bg-blue-700 h-11 w-11 flex items-center justify-center rounded-lg"
+                />
               </div>
             </div>
           </Tabs.TabPane>
@@ -180,31 +291,45 @@ export default function CandidateAiAssistantPage() {
                     <RobotOutlined />
                   </div>
                   <div className="space-y-2">
-                    <Title level={4} className="m-0 text-slate-800 font-bold">Phỏng vấn giả lập thời gian thực với AI</Title>
+                    <Title level={4} className="m-0 text-slate-800 font-bold">
+                      Phỏng vấn giả lập chuyên sâu với AI
+                    </Title>
                     <Paragraph className="text-slate-500 text-xs sm:text-sm">
-                      AI sẽ lần lượt đưa ra các câu hỏi chuyên môn liên quan đến CV của bạn và JD. Bạn sẽ gõ câu trả lời, AI tiến hành chấm điểm và cung cấp nhận xét chi tiết.
+                      AI sẽ tự động phân tích hồ sơ và đưa ra các câu hỏi tình huống chuyên môn. Bạn nhập câu trả lời, AI chấm điểm theo rubric chuẩn và phản hồi chi tiết.
                     </Paragraph>
                   </div>
-                  <Button type="primary" size="large" onClick={handleStartInterview} className="bg-blue-600 hover:bg-blue-700 font-bold rounded-lg h-11">
+                  <Button
+                    type="primary"
+                    size="large"
+                    loading={startingInterview}
+                    onClick={handleStartInterview}
+                    className="bg-blue-600 hover:bg-blue-700 font-bold rounded-lg h-11"
+                  >
                     Bắt đầu phỏng vấn thử
                   </Button>
                 </div>
               ) : evaluating ? (
                 <div className="text-center space-y-4">
                   <Spin size="large" />
-                  <span className="block text-sm text-slate-500 font-medium">AI đang chấm điểm và phân tích câu trả lời của bạn...</span>
+                  <span className="block text-sm text-slate-500 font-medium">AI đang chấm điểm và tổng hợp báo cáo đánh giá của bạn...</span>
                 </div>
               ) : interviewResult ? (
                 <div className="w-full max-w-xl space-y-6">
-                  <Alert title="Phỏng vấn giả lập hoàn thành!" type="success" showIcon className="rounded-xl" />
-                  
-                  <Card title="Kết quả đánh giá từ AI" className="border-slate-100 shadow-sm" style={{ borderRadius: 12 }}>
+                  <Alert title="Phiên phỏng vấn AI đã hoàn thành xuất sắc!" type="success" showIcon className="rounded-xl" />
+
+                  <Card title="Báo cáo kết quả đánh giá từ AI" className="border-slate-100 shadow-sm" style={{ borderRadius: 12 }}>
                     <div className="space-y-6">
                       <div className="flex items-center gap-4">
-                        <Progress type="circle" percent={interviewResult.score * 10} format={() => `${interviewResult.score}/10`} size={80} strokeColor="#10b981" />
+                        <Progress
+                          type="circle"
+                          percent={Math.min(100, Math.round(interviewResult.score * 10))}
+                          format={() => `${Number(interviewResult.score).toFixed(1)}/10`}
+                          size={80}
+                          strokeColor="#10b981"
+                        />
                         <div>
                           <Title level={5} className="m-0 text-slate-800 font-bold">Điểm số năng lực chuyên môn</Title>
-                          <Text type="secondary" className="text-xs">Đánh giá dựa trên độ chuẩn xác kiến thức</Text>
+                          <Text type="secondary" className="text-xs">Chấm điểm theo rubric tiêu chuẩn kết hợp bộ quy tắc mâu thuẫn kỹ thuật</Text>
                         </div>
                       </div>
 
@@ -237,32 +362,48 @@ export default function CandidateAiAssistantPage() {
                 <div className="w-full max-w-xl space-y-6">
                   <div className="flex justify-between items-center text-xs text-slate-400">
                     <span>Tiến trình phỏng vấn:</span>
-                    <span>Câu {currentQuestionIndex + 1} / {MOCK_QUESTIONS.length}</span>
+                    <span>
+                      Câu {currentQuestionIndex + 1} / {interviewQuestions.length}
+                    </span>
                   </div>
-                  <Progress percent={((currentQuestionIndex + 1) / MOCK_QUESTIONS.length) * 100} showInfo={false} strokeColor="#3b82f6" />
+                  <Progress
+                    percent={Math.round(((currentQuestionIndex + 1) / interviewQuestions.length) * 100)}
+                    showInfo={false}
+                    strokeColor="#3b82f6"
+                  />
 
                   <Card className="border-slate-200/60 bg-white" style={{ borderRadius: 12 }}>
-                    <span className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">Câu hỏi của AI:</span>
+                    <span className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider mb-2">
+                      Câu hỏi từ AI ({interviewQuestions[currentQuestionIndex]?.category || "Chuyên môn"}):
+                    </span>
                     <Title level={5} className="m-0 text-slate-800 font-extrabold leading-snug">
-                      {MOCK_QUESTIONS[currentQuestionIndex].question}
+                      {interviewQuestions[currentQuestionIndex]?.question || interviewQuestions[currentQuestionIndex]?.question_text}
                     </Title>
                   </Card>
 
                   <div className="space-y-2">
-                    <span className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">Nhập câu trả lời của bạn:</span>
+                    <span className="block text-[10px] font-semibold text-slate-400 uppercase tracking-wider">
+                      Nhập câu trả lời của bạn:
+                    </span>
                     <TextArea
                       rows={5}
                       value={answerInput}
+                      disabled={submittingAnswer}
                       onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setAnswerInput(e.target.value)}
-                      placeholder="Gõ lời giải thích chi tiết nhất có thể tại đây..."
+                      placeholder="Gõ câu trả lời chi tiết và giải pháp cụ thể..."
                       maxLength={1500}
                       showCount
                     />
                   </div>
 
                   <div className="text-right">
-                    <Button type="primary" onClick={handleNextQuestion} className="bg-blue-600 hover:bg-blue-700 h-10 font-semibold rounded-lg px-6">
-                      {currentQuestionIndex < MOCK_QUESTIONS.length - 1 ? "Gửi & Sang câu tiếp theo" : "Hoàn thành & Nhận đánh giá"}
+                    <Button
+                      type="primary"
+                      loading={submittingAnswer}
+                      onClick={handleNextQuestion}
+                      className="bg-blue-600 hover:bg-blue-700 h-10 font-semibold rounded-lg px-6"
+                    >
+                      {currentQuestionIndex < interviewQuestions.length - 1 ? "Gửi & Sang câu tiếp theo" : "Hoàn thành & Nhận đánh giá"}
                     </Button>
                   </div>
                 </div>

@@ -6,6 +6,7 @@ import { usePathname, useRouter, useSearchParams } from "next/navigation";
 import { useAuthStore } from "@/store/auth-store";
 import { authService } from "@/services/auth.service";
 import { candidateService } from "@/services/candidate.service";
+import { interactionService } from "@/services/interaction.service";
 import {
   Button,
   Avatar,
@@ -76,16 +77,7 @@ function PublicHeaderMain() {
   const { user, isAuthenticated, logout } = useAuthStore();
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Active key for Company Dropdown menu
-  const companyTab = searchParams?.get("tab") || searchParams?.get("filter");
-  const selectedCompanyKeys = useMemo(() => {
-    if (pathname !== "/cong-ty") return [];
-    if (companyTab === "featured") return ["company-featured"];
-    if (companyTab === "reviews" || companyTab === "review") return ["company-reviews"];
-    if (companyTab === "verified") return ["company-verified"];
-    if (companyTab === "following" || companyTab === "favorite") return ["company-following"];
-    return ["company-explore"];
-  }, [pathname, companyTab]);
+  // State drawer việc làm đã lưu
   const [isFavoritesOpen, setIsFavoritesOpen] = useState(false);
   const [favoriteJobs, setFavoriteJobs] = useState<any[]>([]);
   const [favoriteCount, setFavoriteCount] = useState<number>(0);
@@ -108,6 +100,8 @@ function PublicHeaderMain() {
     }
   };
 
+  const [unreadNotificationCount, setUnreadNotificationCount] = useState<number>(0);
+
   const loadFavoriteIdsOnly = async () => {
     if (!isAuthenticated) return;
     try {
@@ -120,12 +114,26 @@ function PublicHeaderMain() {
     }
   };
 
+  const loadUnreadNotificationCount = async () => {
+    if (!isAuthenticated) return;
+    try {
+      const res = await interactionService.getNotifications({ page: 1, page_size: 1 });
+      if (typeof res?.unread_count === "number") {
+        setUnreadNotificationCount(res.unread_count);
+      }
+    } catch (error) {
+      // Bỏ qua lỗi ngầm
+    }
+  };
+
   useEffect(() => {
     if (isAuthenticated) {
       loadFavoriteIdsOnly();
+      loadUnreadNotificationCount();
     } else {
       setFavoriteCount(0);
       setFavoriteJobs([]);
+      setUnreadNotificationCount(0);
     }
   }, [isAuthenticated, pathname]);
 
@@ -160,15 +168,25 @@ function PublicHeaderMain() {
     }
   };
 
+  const userRoles: RoleCode[] = useMemo(() => {
+    if (!user) return [];
+    const list: string[] = [];
+    if (Array.isArray(user.roles)) list.push(...user.roles.map(String));
+    if ((user as any).role) list.push(String((user as any).role));
+    if ((user as any).account_type) list.push(String((user as any).account_type));
+    if ((user as any).user_type) list.push(String((user as any).user_type));
+    return list.map((r) => r.toUpperCase()) as RoleCode[];
+  }, [user]);
+
   const getDashboardLink = () => {
     if (!user) return "/";
-    if (user.roles.includes(RoleCode.ADMIN) || user.roles.includes(RoleCode.SUPER_ADMIN)) {
+    if (userRoles.includes(RoleCode.ADMIN) || userRoles.includes(RoleCode.SUPER_ADMIN)) {
       return "/admin/dashboard";
     }
-    if (user.roles.includes(RoleCode.COMPANY_OWNER) || user.roles.includes(RoleCode.RECRUITER)) {
+    if (userRoles.includes(RoleCode.COMPANY_OWNER) || userRoles.includes(RoleCode.RECRUITER)) {
       return "/doanh-nghiep/dashboard";
     }
-    return "/ung-vien/dashboard";
+    return "/ung-vien/ho-so";
   };
 
   const formatSalary = (job: any) => {
@@ -184,208 +202,6 @@ function PublicHeaderMain() {
     }
     return "Thương lượng";
   };
-
-  // Menu Dropdown 1: Việc làm
-  const jobsMenuItems: MenuProps["items"] = [
-    {
-      key: "job-search",
-      icon: <SearchOutlined className="text-primary text-base" />,
-      label: (
-        <Link href="/viec-lam" className="font-medium text-slate-700 hover:text-primary py-0.5 block">
-          Tìm việc làm
-        </Link>
-      ),
-    },
-    {
-      key: "job-matched",
-      icon: <StarOutlined className="text-amber-500 text-base" />,
-      label: (
-        <Link href="/viec-lam?type=matched" className="font-medium text-slate-700 hover:text-primary py-0.5 block">
-          Việc làm phù hợp với bạn
-        </Link>
-      ),
-    },
-    {
-      key: "job-latest",
-      icon: <ClockCircleOutlined className="text-blue-500 text-base" />,
-      label: (
-        <Link href="/viec-lam?sort=newest" className="font-medium text-slate-700 hover:text-primary py-0.5 block">
-          Việc làm mới nhất
-        </Link>
-      ),
-    },
-    {
-      key: "job-featured",
-      icon: <FireOutlined className="text-orange-500 text-base" />,
-      label: (
-        <Link href="/viec-lam?type=featured" className="font-medium text-slate-700 hover:text-primary py-0.5 block">
-          Việc làm nổi bật
-        </Link>
-      ),
-    },
-    {
-      type: "divider" as const,
-    },
-    {
-      key: "job-by-industry",
-      icon: <AppstoreOutlined className="text-indigo-500 text-base" />,
-      label: <span className="font-medium text-slate-700">Theo ngành nghề</span>,
-      children: [
-        {
-          key: "ind-it",
-          label: <Link href="/viec-lam?industry=cong-nghe-thong-tin">Công nghệ thông tin</Link>,
-        },
-        {
-          key: "ind-business",
-          label: <Link href="/viec-lam?industry=kinh-doanh">Kinh doanh</Link>,
-        },
-        {
-          key: "ind-marketing",
-          label: <Link href="/viec-lam?industry=marketing">Marketing</Link>,
-        },
-        {
-          key: "ind-finance",
-          label: <Link href="/viec-lam?industry=tai-chinh-ngan-hang">Tài chính – Ngân hàng</Link>,
-        },
-        {
-          key: "ind-hr",
-          label: <Link href="/viec-lam?industry=nhan-su">Nhân sự</Link>,
-        },
-        {
-          key: "ind-design",
-          label: <Link href="/viec-lam?industry=thiet-ke">Thiết kế</Link>,
-        },
-        {
-          type: "divider" as const,
-        },
-        {
-          key: "ind-all",
-          label: (
-            <Link href="/viec-lam" className="text-primary font-bold text-xs">
-              Xem tất cả ngành nghề →
-            </Link>
-          ),
-        },
-      ],
-    },
-    {
-      key: "job-by-location",
-      icon: <EnvironmentOutlined className="text-emerald-500 text-base" />,
-      label: <span className="font-medium text-slate-700">Theo địa điểm</span>,
-      children: [
-        {
-          key: "loc-hcm",
-          label: <Link href="/viec-lam?location=ho-chi-minh">TP. Hồ Chí Minh</Link>,
-        },
-        {
-          key: "loc-hn",
-          label: <Link href="/viec-lam?location=ha-noi">Hà Nội</Link>,
-        },
-        {
-          key: "loc-dn",
-          label: <Link href="/viec-lam?location=da-nang">Đà Nẵng</Link>,
-        },
-        {
-          key: "loc-bd",
-          label: <Link href="/viec-lam?location=binh-duong">Bình Dương</Link>,
-        },
-        {
-          key: "loc-dnai",
-          label: <Link href="/viec-lam?location=dong-nai">Đồng Nai</Link>,
-        },
-        {
-          type: "divider" as const,
-        },
-        {
-          key: "loc-all",
-          label: (
-            <Link href="/viec-lam" className="text-primary font-bold text-xs">
-              Xem tất cả địa điểm →
-            </Link>
-          ),
-        },
-      ],
-    },
-    {
-      key: "job-by-work-mode",
-      icon: <RiseOutlined className="text-cyan-500 text-base" />,
-      label: <span className="font-medium text-slate-700">Theo hình thức làm việc</span>,
-      children: [
-        {
-          key: "wm-office",
-          label: <Link href="/viec-lam?workMode=office">Tại văn phòng</Link>,
-        },
-        {
-          key: "wm-hybrid",
-          label: <Link href="/viec-lam?workMode=hybrid">Hybrid</Link>,
-        },
-        {
-          key: "wm-remote",
-          label: <Link href="/viec-lam?workMode=remote">Remote</Link>,
-        },
-        {
-          type: "divider" as const,
-        },
-        {
-          key: "et-fulltime",
-          label: <Link href="/viec-lam?employmentType=fulltime">Toàn thời gian</Link>,
-        },
-        {
-          key: "et-parttime",
-          label: <Link href="/viec-lam?employmentType=parttime">Bán thời gian</Link>,
-        },
-      ],
-    },
-  ];
-
-  // Menu Dropdown 2: Công ty
-  const companyMenuItems: MenuProps["items"] = [
-    {
-      key: "company-explore",
-      icon: <BankOutlined className="text-primary text-base" />,
-      label: (
-        <Link href="/cong-ty" className="font-medium text-slate-700 hover:text-primary py-1 block">
-          Khám phá công ty
-        </Link>
-      ),
-    },
-    {
-      key: "company-featured",
-      icon: <FireOutlined className="text-orange-500 text-base" />,
-      label: (
-        <Link href="/cong-ty?tab=featured" className="font-medium text-slate-700 hover:text-primary py-1 block">
-          Công ty nổi bật
-        </Link>
-      ),
-    },
-    {
-      key: "company-reviews",
-      icon: <CommentOutlined className="text-sky-500 text-base" />,
-      label: (
-        <Link href="/cong-ty?tab=reviews" className="font-medium text-slate-700 hover:text-primary py-1 block">
-          Đánh giá công ty
-        </Link>
-      ),
-    },
-    {
-      key: "company-verified",
-      icon: <CheckCircleOutlined className="text-emerald-500 text-base" />,
-      label: (
-        <Link href="/cong-ty?tab=verified" className="font-medium text-slate-700 hover:text-primary py-1 block">
-          Công ty đã xác thực
-        </Link>
-      ),
-    },
-    {
-      key: "company-following",
-      icon: <HeartOutlined className="text-rose-500 text-base" />,
-      label: (
-        <Link href="/cong-ty?tab=following" className="font-medium text-slate-700 hover:text-primary py-1 block">
-          Công ty đang theo dõi
-        </Link>
-      ),
-    },
-  ];
 
   // Menu Dropdown 3: CV & Hồ sơ
   const cvMenuItems: MenuProps["items"] = [
@@ -431,64 +247,6 @@ function PublicHeaderMain() {
       label: (
         <Link href="/ung-vien/ho-so" className="font-medium text-slate-700 hover:text-primary py-1 block">
           Hồ sơ nghề nghiệp
-        </Link>
-      ),
-    },
-  ];
-
-  // Menu Dropdown 4: Cẩm nang nghề nghiệp
-  const handbookMenuItems: MenuProps["items"] = [
-    {
-      key: "hb-experience",
-      icon: <BookOutlined className="text-primary text-base" />,
-      label: (
-        <Link href="/cam-nang-nghe-nghiep?category=tim-viec" className="font-medium text-slate-700 hover:text-primary py-1 block">
-          Kinh nghiệm tìm việc
-        </Link>
-      ),
-    },
-    {
-      key: "hb-skills",
-      icon: <ThunderboltOutlined className="text-amber-500 text-base" />,
-      label: (
-        <Link href="/cam-nang-nghe-nghiep?category=ky-nang" className="font-medium text-slate-700 hover:text-primary py-1 block">
-          Kỹ năng nghề nghiệp
-        </Link>
-      ),
-    },
-    {
-      key: "hb-trends",
-      icon: <LineChartOutlined className="text-cyan-500 text-base" />,
-      label: (
-        <Link href="/cam-nang-nghe-nghiep?category=thi-truong" className="font-medium text-slate-700 hover:text-primary py-1 block">
-          Xu hướng thị trường
-        </Link>
-      ),
-    },
-    {
-      key: "hb-salary",
-      icon: <DollarOutlined className="text-emerald-500 text-base" />,
-      label: (
-        <Link href="/cam-nang-nghe-nghiep?category=luong-phuc-loi" className="font-medium text-slate-700 hover:text-primary py-1 block">
-          Lương & chế độ
-        </Link>
-      ),
-    },
-    {
-      key: "hb-development",
-      icon: <RocketOutlined className="text-rose-500 text-base" />,
-      label: (
-        <Link href="/cam-nang-nghe-nghiep?category=phat-trien-su-nghiep" className="font-medium text-slate-700 hover:text-primary py-1 block">
-          Phát triển sự nghiệp
-        </Link>
-      ),
-    },
-    {
-      key: "hb-news",
-      icon: <ReadOutlined className="text-blue-500 text-base" />,
-      label: (
-        <Link href="/cam-nang-nghe-nghiep?category=tin-tuc-careza" className="font-medium text-slate-700 hover:text-primary py-1 block">
-          Tin tức Careza
         </Link>
       ),
     },
@@ -546,216 +304,209 @@ function PublicHeaderMain() {
     },
   ];
 
-  const isCandidate = !user || user.roles.includes(RoleCode.CANDIDATE);
+  const isCandidate =
+    !user ||
+    userRoles.some((r) => r === "CANDIDATE" || r === RoleCode.CANDIDATE) ||
+    (!userRoles.some((r) =>
+      r === "ADMIN" ||
+      r === "SUPER_ADMIN" ||
+      r === "COMPANY_OWNER" ||
+      r === "EMPLOYER" ||
+      r === "RECRUITER" ||
+      r === RoleCode.ADMIN ||
+      r === RoleCode.SUPER_ADMIN ||
+      r === RoleCode.COMPANY_OWNER ||
+      r === RoleCode.RECRUITER
+    ));
 
   const userMenuItems: MenuProps["items"] = isCandidate
     ? [
-        {
-          key: "dashboard",
-          icon: <HomeOutlined className="text-primary text-base" />,
-          label: (
-            <Link href="/ung-vien/dashboard" className={`font-medium py-1 block ${pathname === "/ung-vien/dashboard" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
-              Tổng quan
-            </Link>
-          ),
-        },
-        {
-          key: "profile",
-          icon: <IdcardOutlined className="text-indigo-500 text-base" />,
-          label: (
-            <Link href="/ung-vien/ho-so" className={`font-medium py-1 block ${pathname === "/ung-vien/ho-so" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
-              Hồ sơ nghề nghiệp
-            </Link>
-          ),
-        },
-        {
-          key: "cv",
-          icon: <FileTextOutlined className="text-blue-500 text-base" />,
-          label: (
-            <Link href="/ung-vien/cv" className={`font-medium py-1 block ${pathname.startsWith("/ung-vien/cv") ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
-              CV của tôi
-            </Link>
-          ),
-        },
-        {
-          key: "applied-jobs",
-          icon: <SendOutlined className="text-emerald-500 text-base" />,
-          label: (
-            <Link href="/ung-vien/ung-tuyen" className={`font-medium py-1 block ${pathname === "/ung-vien/ung-tuyen" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
-              Việc đã ứng tuyển
-            </Link>
-          ),
-        },
-        {
-          key: "saved-jobs",
-          icon: <HeartOutlined className="text-rose-500 text-base" />,
-          label: (
-            <Link href="/ung-vien/viec-da-luu" className={`font-medium py-1 block ${pathname === "/ung-vien/viec-da-luu" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
-              Việc đã lưu {favoriteCount > 0 ? `(${favoriteCount})` : ""}
-            </Link>
-          ),
-        },
-        {
-          key: "interviews",
-          icon: <CalendarOutlined className="text-amber-500 text-base" />,
-          label: (
-            <Link href="/ung-vien/lich-phong-van" className={`font-medium py-1 block ${pathname === "/ung-vien/lich-phong-van" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
-              Lịch phỏng vấn
-            </Link>
-          ),
-        },
-        {
-          key: "notifications",
-          icon: <BellOutlined className="text-purple-500 text-base" />,
-          label: (
-            <Link href="/ung-vien/thong-bao" className={`font-medium py-1 block ${pathname === "/ung-vien/thong-bao" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
-              Thông báo
-            </Link>
-          ),
-        },
-        {
-          key: "settings",
-          icon: <SettingOutlined className="text-slate-500 text-base" />,
-          label: (
-            <Link href="/ung-vien/cai-dat" className={`font-medium py-1 block ${pathname === "/ung-vien/cai-dat" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
-              Cài đặt
-            </Link>
-          ),
-        },
-        {
-          type: "divider" as const,
-        },
-        {
-          key: "logout",
-          icon: <LogoutOutlined className="text-rose-500 text-base" />,
-          label: <span className="font-semibold text-rose-500 py-1 block">Đăng xuất</span>,
-          danger: true,
-          onClick: handleLogout,
-        },
-      ]
+      {
+        key: "profile",
+        icon: <UserOutlined className="text-indigo-500 text-base" />,
+        label: (
+          <Link href="/ung-vien/ho-so" className={`font-medium py-1 block ${pathname === "/ung-vien/ho-so" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
+            Hồ sơ cá nhân
+          </Link>
+        ),
+      },
+      {
+        key: "cv",
+        icon: <FileTextOutlined className="text-blue-500 text-base" />,
+        label: (
+          <Link href="/ung-vien/cv" className={`font-medium py-1 block ${pathname.startsWith("/ung-vien/cv") ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
+            CV của tôi
+          </Link>
+        ),
+      },
+      {
+        key: "applied-jobs",
+        icon: <SendOutlined className="text-emerald-500 text-base" />,
+        label: (
+          <Link href="/ung-vien/ung-tuyen" className={`font-medium py-1 block ${pathname === "/ung-vien/ung-tuyen" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
+            Việc đã ứng tuyển
+          </Link>
+        ),
+      },
+      {
+        key: "saved-jobs",
+        icon: <HeartOutlined className="text-rose-500 text-base" />,
+        label: (
+          <Link href="/ung-vien/viec-lam-da-luu" className={`font-medium py-1 block ${pathname === "/ung-vien/viec-lam-da-luu" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
+            Việc đã lưu {favoriteCount > 0 ? `(${favoriteCount})` : ""}
+          </Link>
+        ),
+      },
+      {
+        key: "interviews",
+        icon: <CalendarOutlined className="text-amber-500 text-base" />,
+        label: (
+          <Link href="/ung-vien/lich-phong-van" className={`font-medium py-1 block ${pathname === "/ung-vien/lich-phong-van" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
+            Lịch phỏng vấn
+          </Link>
+        ),
+      },
+      {
+        key: "notifications",
+        icon: <BellOutlined className="text-purple-500 text-base" />,
+        label: (
+          <Link href="/ung-vien/thong-bao" className={`font-medium py-1 block ${pathname === "/ung-vien/thong-bao" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
+            Thông báo
+          </Link>
+        ),
+      },
+      {
+        key: "settings",
+        icon: <SettingOutlined className="text-slate-500 text-base" />,
+        label: (
+          <Link href="/ung-vien/cai-dat" className={`font-medium py-1 block ${pathname === "/ung-vien/cai-dat" ? "text-primary font-bold" : "text-slate-700 hover:text-primary"}`}>
+            Cài đặt
+          </Link>
+        ),
+      },
+      {
+        type: "divider" as const,
+      },
+      {
+        key: "logout",
+        icon: <LogoutOutlined className="text-rose-500 text-base" />,
+        label: <span className="font-semibold text-rose-500 py-1 block">Đăng xuất</span>,
+        danger: true,
+        onClick: handleLogout,
+      },
+    ]
     : [
-        {
-          key: "dashboard",
-          icon: <DashboardOutlined />,
-          label: <Link href={getDashboardLink()}>Tổng quan</Link>,
-        },
-        {
-          key: "profile",
-          icon: <UserOutlined />,
-          label: <Link href="/doanh-nghiep/ho-so">Thông tin doanh nghiệp</Link>,
-        },
-        {
-          type: "divider" as const,
-        },
-        {
-          key: "logout",
-          icon: <LogoutOutlined />,
-          label: "Đăng xuất",
-          danger: true,
-          onClick: handleLogout,
-        },
-      ];
+      {
+        key: "dashboard",
+        icon: <DashboardOutlined />,
+        label: <Link href={getDashboardLink()}>Tổng quan</Link>,
+      },
+      {
+        key: "profile",
+        icon: <UserOutlined />,
+        label: <Link href="/doanh-nghiep/ho-so">Thông tin doanh nghiệp</Link>,
+      },
+      {
+        type: "divider" as const,
+      },
+      {
+        key: "logout",
+        icon: <LogoutOutlined />,
+        label: "Đăng xuất",
+        danger: true,
+        onClick: handleLogout,
+      },
+    ];
 
   return (
-    <header className="sticky top-0 left-0 w-full z-50 glass-header h-20 flex items-center border-b border-slate-100 bg-white/95 backdrop-blur-md transition-all shadow-[0_1px_3px_0_rgba(0,0,0,0.02)]">
-      <div className="w-full flex justify-between items-center px-4 sm:px-6 md:px-8 xl:px-12">
+    <header className="sticky top-0 left-0 w-full z-50 glass-header h-[72px] flex items-center border-b border-slate-100 bg-white/95 backdrop-blur-md transition-all shadow-[0_1px_3px_0_rgba(0,0,0,0.02)]">
+      <style jsx global>{`
+        @media (min-width: 1024px) {
+          .careza-mobile-hamburger {
+            display: none !important;
+          }
+        }
+      `}</style>
+      <div className="w-full max-w-[1440px] mx-auto flex justify-between items-center px-4 sm:px-6 lg:px-8">
         {/* LOGO & MENU TRÁI */}
-        <div className="flex items-center gap-6 lg:gap-8 xl:gap-10">
+        <div className="flex items-center gap-5 lg:gap-7 xl:gap-8">
           {/* Logo Careza */}
-          <Link className="text-2xl font-extrabold tracking-tighter text-primary flex items-center gap-2.5 shrink-0" href="/">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-tr from-primary via-blue-600 to-sky-400 flex items-center justify-center text-white shadow-md shadow-primary/25">
-              <span className="material-symbols-outlined text-2xl font-bold">star</span>
-            </div>
-            <div className="flex flex-col">
-              <span className="leading-none text-2xl font-black text-slate-900 tracking-tight">Careza</span>
-              <span className="text-[10px] text-slate-500 font-medium tracking-normal mt-0.5">
-                Kết nối nhân tài - Kiến tạo tương lai
-              </span>
-            </div>
+          <Link className="inline-flex items-center shrink-0" href="/">
+            <img
+              src="/images/logos/010cd82d-47e5-4e32-86e1-2df16032be39.png"
+              alt="Careza"
+              className="h-12 sm:h-[52px] lg:h-[56px] w-auto object-contain"
+            />
           </Link>
 
           {/* Nav Items Chính (Desktop) */}
           <nav className="hidden lg:flex items-center gap-1 xl:gap-1.5">
-            {/* 1. Việc làm */}
-            <Dropdown menu={{ items: jobsMenuItems }} placement="bottomLeft" arrow>
-              <Link
-                href="/viec-lam"
-                className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors flex items-center gap-1.5 ${
-                  pathname.startsWith("/viec-lam")
-                    ? "text-primary bg-primary/5 font-bold"
-                    : "text-slate-600 hover:text-primary hover:bg-slate-50"
+            {/* 1. Việc làm - Điều hướng trực tiếp */}
+            <Link
+              href="/viec-lam"
+              className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors ${pathname.startsWith("/viec-lam")
+                ? "!text-primary bg-primary/5 font-bold"
+                : "!text-[#0F172A] hover:!text-primary hover:bg-slate-50"
                 }`}
-              >
-                <span>Việc làm</span>
-                <DownOutlined className="text-[10px] text-slate-400" />
-              </Link>
-            </Dropdown>
+            >
+              <span>Việc làm</span>
+            </Link>
 
-            {/* 2. Công ty */}
-            <Dropdown menu={{ items: companyMenuItems, selectedKeys: selectedCompanyKeys }} placement="bottomLeft" arrow>
-              <Link
-                href="/cong-ty"
-                className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors flex items-center gap-1.5 ${
-                  pathname.startsWith("/cong-ty")
-                    ? "text-primary bg-primary/5 font-bold"
-                    : "text-slate-600 hover:text-primary hover:bg-slate-50"
+            {/* 2. Công ty - Điều hướng trực tiếp */}
+            <Link
+              href="/cong-ty"
+              className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors ${pathname.startsWith("/cong-ty")
+                ? "!text-primary bg-primary/5 font-bold"
+                : "!text-[#0F172A] hover:!text-primary hover:bg-slate-50"
                 }`}
-              >
-                <span>Công ty</span>
-                <DownOutlined className="text-[10px] text-slate-400" />
-              </Link>
-            </Dropdown>
+            >
+              <span>Công ty</span>
+            </Link>
 
             {/* 3. CV & Hồ sơ */}
             <Dropdown menu={{ items: cvMenuItems }} placement="bottomLeft" arrow>
               <Link
                 href="/ung-vien/cv"
-                className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors flex items-center gap-1.5 ${
-                  pathname.startsWith("/ung-vien/cv") || pathname.startsWith("/ung-vien/ho-so")
-                    ? "text-primary bg-primary/5 font-bold"
-                    : "text-slate-600 hover:text-primary hover:bg-slate-50"
-                }`}
+                className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors flex items-center gap-1.5 ${pathname.startsWith("/ung-vien/cv") || pathname.startsWith("/ung-vien/ho-so")
+                  ? "!text-primary bg-primary/5 font-bold"
+                  : "!text-[#0F172A] hover:!text-primary hover:bg-slate-50"
+                  }`}
               >
-                <span>CV & Hồ sơ</span>
-                <DownOutlined className="text-[10px] text-slate-400" />
+                <span className="text-current">CV & Hồ sơ</span>
+                <DownOutlined className="text-[10px] text-[#0F172A]/70" />
               </Link>
             </Dropdown>
 
-            {/* 4. Cẩm nang nghề nghiệp */}
-            <Dropdown menu={{ items: handbookMenuItems }} placement="bottomLeft" arrow>
-              <Link
-                href="/cam-nang-nghe-nghiep"
-                className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors flex items-center gap-1.5 ${
-                  pathname.startsWith("/cam-nang-nghe-nghiep")
-                    ? "text-primary bg-primary/5 font-bold"
-                    : "text-slate-600 hover:text-primary hover:bg-slate-50"
+            {/* 4. Cẩm nang nghề nghiệp - Điều hướng trực tiếp */}
+            <Link
+              href="/cam-nang-nghe-nghiep"
+              className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors ${pathname.startsWith("/cam-nang-nghe-nghiep")
+                ? "!text-primary bg-primary/5 font-bold"
+                : "!text-[#0F172A] hover:!text-primary hover:bg-slate-50"
                 }`}
-              >
-                <span>Cẩm nang nghề nghiệp</span>
-                <DownOutlined className="text-[10px] text-slate-400" />
-              </Link>
-            </Dropdown>
+            >
+              <span>Cẩm nang nghề nghiệp</span>
+            </Link>
 
             {/* 5. Công cụ */}
             <Dropdown menu={{ items: toolsMenuItems }} placement="bottomLeft" arrow>
               <Link
                 href="/cong-cu"
-                className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors flex items-center gap-1.5 ${
-                  pathname.startsWith("/cong-cu")
-                    ? "text-primary bg-primary/5 font-bold"
-                    : "text-slate-600 hover:text-primary hover:bg-slate-50"
-                }`}
+                className={`px-3 py-2 rounded-xl text-xs xl:text-sm font-semibold transition-colors flex items-center gap-1.5 ${pathname.startsWith("/cong-cu")
+                  ? "!text-primary bg-primary/5 font-bold"
+                  : "!text-[#0F172A] hover:!text-primary hover:bg-slate-50"
+                  }`}
               >
-                <span>Công cụ</span>
-                <DownOutlined className="text-[10px] text-slate-400" />
+                <span className="text-current">Công cụ</span>
+                <DownOutlined className="text-[10px] text-[#0F172A]/70" />
               </Link>
             </Dropdown>
           </nav>
         </div>
 
-        {/* MENU PHẢI (User, Saved Jobs, CTA) */}
-        <div className="flex items-center gap-2 sm:gap-3">
-          {/* 1. Nút Việc làm đã lưu */}
+        {/* MENU PHẢI (User, Saved Jobs, Notifications, CTA) */}
+        <div className="flex items-center gap-1.5 sm:gap-2">
+          {/* 1. Nút Việc làm đã lưu (Tim) */}
           <Tooltip title="Danh sách việc làm đã lưu">
             <button
               onClick={() => {
@@ -764,67 +515,70 @@ function PublicHeaderMain() {
                   router.push("/dang-nhap");
                   return;
                 }
-                setIsFavoritesOpen(true);
-                loadFavoriteJobs();
+                router.push("/ung-vien/viec-lam-da-luu");
               }}
-              className="relative p-2 rounded-full text-slate-600 hover:text-rose-600 hover:bg-rose-50/60 transition-all flex items-center justify-center cursor-pointer group"
+              className="relative p-1.5 rounded-full text-slate-600 hover:text-rose-600 hover:bg-rose-50/60 transition-all flex items-center justify-center cursor-pointer group"
               aria-label="Việc đã lưu"
             >
               <Badge count={favoriteCount} size="small" offset={[2, -2]} overflowCount={99} color="#ef4444">
                 {favoriteCount > 0 ? (
-                  <HeartFilled className="text-xl text-rose-500 group-hover:scale-110 transition-transform" />
+                  <HeartFilled className="text-lg text-rose-500 group-hover:scale-110 transition-transform" />
                 ) : (
-                  <HeartOutlined className="text-xl text-slate-600 group-hover:text-rose-500 group-hover:scale-110 transition-transform" />
+                  <HeartOutlined className="text-lg text-slate-600 group-hover:text-rose-500 group-hover:scale-110 transition-transform" />
                 )}
               </Badge>
             </button>
           </Tooltip>
 
-          {/* 2 & 3. Đăng nhập / Đăng ký hoặc User Profile */}
+          {/* 2. Nút Thông báo (Chuông) - Ngay bên phải Tim */}
+          {isAuthenticated && (
+            <Tooltip title="Thông báo">
+              <Link
+                href="/ung-vien/thong-bao"
+                className="relative p-1.5 rounded-full text-slate-600 hover:text-primary hover:bg-blue-50/60 transition-all flex items-center justify-center cursor-pointer group"
+                aria-label="Thông báo"
+              >
+                <Badge
+                  count={unreadNotificationCount}
+                  size="small"
+                  offset={[2, -2]}
+                  overflowCount={99}
+                  color="#0062ff"
+                >
+                  <BellOutlined className="text-lg text-slate-600 group-hover:text-primary group-hover:scale-110 transition-transform" />
+                </Badge>
+              </Link>
+            </Tooltip>
+          )}
+
+          {/* 3. Avatar + Tên tài khoản hoặc Đăng nhập / Đăng ký */}
           {isAuthenticated ? (
             <div className="flex items-center gap-2">
               <Dropdown
                 placement="bottomRight"
                 arrow
+                trigger={["hover", "click"]}
                 popupRender={() =>
                   isCandidate ? (
                     <div className="bg-white rounded-2xl shadow-xl border border-slate-100 p-2.5 w-[360px] sm:w-[390px]">
                       {/* Grid 2 Cột Chức năng Ứng viên */}
                       <div className="grid grid-cols-2 gap-1">
-                        {/* 1. Tổng quan */}
-                        <Link
-                          href="/ung-vien/dashboard"
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-900 hover:text-primary hover:bg-slate-100/80 transition-all group"
-                        >
-                          <HomeOutlined className="text-primary text-base group-hover:scale-110 transition-transform" />
-                          <span>Tổng quan</span>
-                        </Link>
-
-                        {/* 5. Việc đã lưu */}
-                        <Link
-                          href="/ung-vien/viec-da-luu"
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-900 hover:text-primary hover:bg-slate-100/80 transition-all group"
-                        >
-                          <HeartOutlined className="text-rose-500 text-base group-hover:scale-110 transition-transform" />
-                          <span>Việc đã lưu {favoriteCount > 0 ? `(${favoriteCount})` : ""}</span>
-                        </Link>
-
-                        {/* 2. Hồ sơ nghề nghiệp */}
+                        {/* 1. Hồ sơ cá nhân */}
                         <Link
                           href="/ung-vien/ho-so"
                           className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-900 hover:text-primary hover:bg-slate-100/80 transition-all group"
                         >
-                          <IdcardOutlined className="text-indigo-500 text-base group-hover:scale-110 transition-transform" />
-                          <span>Hồ sơ nghề nghiệp</span>
+                          <UserOutlined className="text-indigo-500 text-base group-hover:scale-110 transition-transform" />
+                          <span>Hồ sơ cá nhân</span>
                         </Link>
 
-                        {/* 6. Lịch phỏng vấn */}
+                        {/* 2. Việc đã lưu */}
                         <Link
-                          href="/ung-vien/lich-phong-van"
+                          href="/ung-vien/viec-lam-da-luu"
                           className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-900 hover:text-primary hover:bg-slate-100/80 transition-all group"
                         >
-                          <CalendarOutlined className="text-amber-500 text-base group-hover:scale-110 transition-transform" />
-                          <span>Lịch phỏng vấn</span>
+                          <HeartOutlined className="text-rose-500 text-base group-hover:scale-110 transition-transform" />
+                          <span>Việc đã lưu {favoriteCount > 0 ? `(${favoriteCount})` : ""}</span>
                         </Link>
 
                         {/* 3. CV của tôi */}
@@ -836,15 +590,6 @@ function PublicHeaderMain() {
                           <span>CV của tôi</span>
                         </Link>
 
-                        {/* 7. Thông báo */}
-                        <Link
-                          href="/ung-vien/thong-bao"
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-900 hover:text-primary hover:bg-slate-100/80 transition-all group"
-                        >
-                          <BellOutlined className="text-purple-500 text-base group-hover:scale-110 transition-transform" />
-                          <span>Thông báo</span>
-                        </Link>
-
                         {/* 4. Việc đã ứng tuyển */}
                         <Link
                           href="/ung-vien/ung-tuyen"
@@ -854,10 +599,28 @@ function PublicHeaderMain() {
                           <span>Việc đã ứng tuyển</span>
                         </Link>
 
-                        {/* 8. Cài đặt */}
+                        {/* 5. Lịch phỏng vấn */}
+                        <Link
+                          href="/ung-vien/lich-phong-van"
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-900 hover:text-primary hover:bg-slate-100/80 transition-all group"
+                        >
+                          <CalendarOutlined className="text-amber-500 text-base group-hover:scale-110 transition-transform" />
+                          <span>Lịch phỏng vấn</span>
+                        </Link>
+
+                        {/* 6. Thông báo */}
+                        <Link
+                          href="/ung-vien/thong-bao"
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-900 hover:text-primary hover:bg-slate-100/80 transition-all group"
+                        >
+                          <BellOutlined className="text-purple-500 text-base group-hover:scale-110 transition-transform" />
+                          <span>Thông báo</span>
+                        </Link>
+
+                        {/* 7. Cài đặt */}
                         <Link
                           href="/ung-vien/cai-dat"
-                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-900 hover:text-primary hover:bg-slate-100/80 transition-all group"
+                          className="flex items-center gap-2.5 px-3 py-2 rounded-xl text-xs font-bold text-slate-900 hover:text-primary hover:bg-slate-100/80 transition-all group col-span-2 sm:col-span-1"
                         >
                           <SettingOutlined className="text-slate-500 text-base group-hover:scale-110 transition-transform" />
                           <span>Cài đặt</span>
@@ -904,22 +667,33 @@ function PublicHeaderMain() {
                   )
                 }
               >
-                <div className="flex items-center gap-2 cursor-pointer p-1 pr-2.5 rounded-full hover:bg-slate-100/70 border border-slate-200/60 transition-colors">
-                  <Avatar src={user?.avatarUrl} icon={<UserOutlined />} className="bg-primary/10 text-primary border border-primary/20" />
-                  <span className="hidden sm:inline-block text-xs font-bold text-slate-700 max-w-[120px] truncate">
-                    {user?.fullName || "Mai Phương"}
-                  </span>
-                  <DownOutlined className="text-[10px] text-slate-400" />
+                <div className="flex items-center py-0.5 pl-1 pr-1.5 rounded-full hover:bg-slate-100/70 border border-slate-200/60 transition-colors bg-white shadow-2xs">
+                  <Link
+                    href={isCandidate ? "/ung-vien/ho-so" : getDashboardLink()}
+                    className="flex items-center gap-1.5 text-slate-800 hover:text-[#0062ff] transition-colors"
+                    title={isCandidate ? "Xem hồ sơ cá nhân" : "Trang quản lý"}
+                  >
+                    <Avatar
+                      size={28}
+                      src={user?.avatarUrl}
+                      icon={<UserOutlined />}
+                      className="bg-primary/10 text-primary border border-primary/20 shrink-0 cursor-pointer"
+                    />
+                    <span className="hidden sm:inline-block text-xs font-bold text-[#0F172A] max-w-[125px] truncate cursor-pointer hover:text-primary">
+                      {user?.fullName || "Nguyễn Thanh Tùng"}
+                    </span>
+                  </Link>
+                  <DownOutlined className="text-[10px] text-slate-400 ml-1.5 cursor-pointer hover:text-slate-600 p-0.5" />
                 </div>
               </Dropdown>
             </div>
           ) : (
-            <div className="hidden sm:flex items-center gap-2">
+            <div className="hidden sm:flex items-center gap-1.5">
               {/* Nút Đăng nhập (text/outline) */}
               <Link href="/dang-nhap">
                 <Button
                   type="text"
-                  className="font-semibold text-slate-700 hover:text-primary hover:bg-slate-50 px-3.5 h-9 rounded-lg transition-all"
+                  className="font-semibold text-[#0F172A] hover:text-primary hover:bg-slate-50 px-3 h-8.5 rounded-lg transition-all"
                 >
                   Đăng nhập
                 </Button>
@@ -929,7 +703,7 @@ function PublicHeaderMain() {
               <Link href="/dang-ky">
                 <Button
                   type="primary"
-                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-4 h-9 rounded-lg shadow-sm shadow-primary/25 border-none transition-all"
+                  className="bg-primary hover:bg-primary/90 text-white font-semibold px-3.5 h-8.5 rounded-lg shadow-sm shadow-primary/25 border-none transition-all"
                 >
                   Đăng ký
                 </Button>
@@ -937,24 +711,33 @@ function PublicHeaderMain() {
             </div>
           )}
 
-          {/* Vạch ngăn cách tinh tế */}
-          <div className="hidden sm:block w-px h-5 bg-slate-200 mx-1" />
+          {/* 4. Dành cho Nhà tuyển dụng → Ẩn hoàn toàn nếu đã đăng nhập vai trò Candidate hoặc đang ở route ứng viên */}
+          {(!isAuthenticated || (!isCandidate && !pathname.startsWith("/ung-vien"))) && (
+            <>
+              {/* Vạch ngăn cách tinh tế */}
+              <div className="hidden sm:block w-px h-4 bg-slate-200 mx-0.5" />
 
-          {/* 4. Dành cho Nhà tuyển dụng → (CTA Riêng biệt, dễ nhận biết) */}
-          <Link href="/nha-tuyen-dung" className="hidden md:inline-flex">
-            <div className="flex items-center gap-1.5 px-3 py-1.5 rounded-lg border border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary transition-all text-xs font-bold shadow-xs hover:border-primary/50 group">
-              <span>Dành cho Nhà tuyển dụng</span>
-              <ArrowRightOutlined className="text-[10px] group-hover:translate-x-0.5 transition-transform" />
-            </div>
-          </Link>
+              <Link
+                href={isAuthenticated ? getDashboardLink() : "/nha-tuyen-dung"}
+                className="hidden md:inline-flex"
+              >
+                <div className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg border border-primary/30 bg-primary/5 hover:bg-primary/10 text-primary transition-all text-xs font-bold shadow-xs hover:border-primary/50 group">
+                  <span>Dành cho Nhà tuyển dụng</span>
+                  <ArrowRightOutlined className="text-[10px] group-hover:translate-x-0.5 transition-transform" />
+                </div>
+              </Link>
+            </>
+          )}
 
-          {/* Mobile Menu Toggle Button */}
-          <Button
-            type="text"
-            icon={<MenuOutlined className="text-lg" />}
+          {/* Nút menu mobile 3 gạch - Chỉ hiện ở mobile/tablet (<1024px), Desktop TUYỆT ĐỐI ẨN */}
+          <button
+            type="button"
             onClick={() => setIsMobileMenuOpen(true)}
-            className="lg:hidden text-slate-700 hover:text-primary flex items-center justify-center p-2 rounded-lg"
-          />
+            className="careza-mobile-hamburger flex lg:!hidden items-center justify-center p-1.5 text-[#0F172A] hover:text-primary rounded-lg transition-colors cursor-pointer border-none bg-transparent"
+            aria-label="Mở menu mobile"
+          >
+            <MenuOutlined className="text-base" />
+          </button>
         </div>
       </div>
 
@@ -1100,12 +883,13 @@ function PublicHeaderMain() {
             <Link
               href="/"
               onClick={() => setIsMobileMenuOpen(false)}
-              className="flex items-center gap-2 text-primary font-extrabold text-lg tracking-tight"
+              className="inline-flex items-center"
             >
-              <span className="w-7 h-7 bg-primary rounded-lg flex items-center justify-center">
-                <span className="material-symbols-outlined text-white text-[16px]">auto_awesome</span>
-              </span>
-              <span>Careza</span>
+              <img
+                src="/images/logos/010cd82d-47e5-4e32-86e1-2df16032be39.png"
+                alt="Careza"
+                className="h-10 w-auto object-contain"
+              />
             </Link>
           </div>
         }
@@ -1115,19 +899,21 @@ function PublicHeaderMain() {
         size={320}
       >
         <div className="flex flex-col gap-6 h-full justify-between pb-4">
-          {/* CTA Dành cho Nhà tuyển dụng nổi bật trên Mobile */}
+          {/* CTA Dành cho Nhà tuyển dụng nổi bật trên Mobile: Ẩn nếu là Candidate */}
           <div>
-            <Link
-              href="/nha-tuyen-dung"
-              onClick={() => setIsMobileMenuOpen(false)}
-              className="w-full flex items-center justify-between p-3 rounded-xl bg-primary/10 border border-primary/25 text-primary font-bold text-xs hover:bg-primary/15 transition-colors mb-4"
-            >
-              <div className="flex items-center gap-2">
-                <TeamOutlined className="text-base" />
-                <span>Dành cho Nhà tuyển dụng</span>
-              </div>
-              <ArrowRightOutlined className="text-xs" />
-            </Link>
+            {(!isAuthenticated || !isCandidate) && (
+              <Link
+                href={isAuthenticated ? getDashboardLink() : "/nha-tuyen-dung"}
+                onClick={() => setIsMobileMenuOpen(false)}
+                className="w-full flex items-center justify-between p-3 rounded-xl bg-primary/10 border border-primary/25 text-primary font-bold text-xs hover:bg-primary/15 transition-colors mb-4"
+              >
+                <div className="flex items-center gap-2">
+                  <TeamOutlined className="text-base" />
+                  <span>Dành cho Nhà tuyển dụng</span>
+                </div>
+                <ArrowRightOutlined className="text-xs" />
+              </Link>
+            )}
 
             {/* Menu dạng Collapse Accordion */}
             <Collapse
@@ -1480,10 +1266,10 @@ function PublicHeaderMain() {
               <>
                 <Link href={getDashboardLink()} onClick={() => setIsMobileMenuOpen(false)}>
                   <Button type="primary" block className="bg-primary border-none h-10 font-bold">
-                    Vào trang quản lý
+                    {isCandidate ? "Hồ sơ cá nhân" : "Vào trang quản lý"}
                   </Button>
                 </Link>
-                <Link href="/ung-vien/viec-da-luu" onClick={() => setIsMobileMenuOpen(false)}>
+                <Link href="/ung-vien/viec-lam-da-luu" onClick={() => setIsMobileMenuOpen(false)}>
                   <Button block className="h-10 font-semibold flex items-center justify-center gap-2 text-rose-600 border-rose-200 hover:bg-rose-50">
                     <HeartFilled /> Việc làm đã lưu ({favoriteCount})
                   </Button>

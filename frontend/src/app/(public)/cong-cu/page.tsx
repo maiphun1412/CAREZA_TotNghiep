@@ -206,21 +206,8 @@ export default function AllToolsDirectoryPage() {
 
         {/* Nội dung bên trái Hero */}
         <div className="relative z-10 max-w-2xl space-y-2 text-white">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs sm:text-[13px] text-blue-200 font-medium">
-            <Link href="/" className="hover:text-white transition-colors">
-              Trang chủ
-            </Link>
-            <span>›</span>
-            <Link href="/cong-cu" className="hover:text-white transition-colors">
-              Công cụ
-            </Link>
-            <span>›</span>
-            <span className="text-white font-semibold">Tất cả công cụ tiện ích</span>
-          </div>
-
           {/* Heading + Badge */}
-          <div className="flex flex-wrap items-center gap-3 pt-0.5">
+          <div className="flex flex-wrap items-center gap-3">
             <h1 className="text-2xl sm:text-3xl lg:text-[30px] font-black text-white tracking-tight m-0 leading-tight">
               Tất cả công cụ tiện ích
             </h1>
@@ -229,8 +216,8 @@ export default function AllToolsDirectoryPage() {
             </span>
           </div>
 
-          <p className="text-[13.5px] sm:text-[14.5px] text-blue-100 font-normal m-0 leading-relaxed max-w-xl">
-            Bộ công cụ toàn diện giúp bạn phát triển sự nghiệp, tối ưu hồ sơ và nắm bắt cơ hội tốt hơn mỗi ngày.
+          <p className="text-[13px] sm:text-sm text-blue-100 font-normal m-0 leading-relaxed max-w-xl">
+            Bộ công cụ toàn diện giúp bạn phát triển sự nghiệp, tối ưu hồ sơ và nắm bắt cơ hội.
           </p>
         </div>
 
@@ -289,17 +276,15 @@ export default function AllToolsDirectoryPage() {
                     key={cat.key}
                     type="button"
                     onClick={() => setSelectedCategory(cat.key)}
-                    className={`w-full flex items-center justify-between p-2 rounded-xl text-left transition-all cursor-pointer ${
-                      isActive
+                    className={`w-full flex items-center justify-between p-2 rounded-xl text-left transition-all cursor-pointer ${isActive
                         ? "bg-[#eef5ff] text-[#0062ff] font-bold shadow-2xs"
                         : "text-slate-700 hover:bg-slate-50 font-medium hover:text-[#0062ff]"
-                    }`}
+                      }`}
                   >
                     <div className="flex items-center gap-2 min-w-0">
                       <div
-                        className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${
-                          isActive ? "bg-blue-100 text-[#0062ff]" : "bg-slate-100 text-slate-500"
-                        }`}
+                        className={`w-6 h-6 rounded-lg flex items-center justify-center shrink-0 ${isActive ? "bg-blue-100 text-[#0062ff]" : "bg-slate-100 text-slate-500"
+                          }`}
                       >
                         <IconComponent className="w-3.5 h-3.5" />
                       </div>
@@ -307,11 +292,10 @@ export default function AllToolsDirectoryPage() {
                     </div>
 
                     <span
-                      className={`text-[11px] font-bold px-1.5 py-0.5 rounded-md ${
-                        isActive
+                      className={`text-[11px] font-bold px-1.5 py-0.5 rounded-md ${isActive
                           ? "bg-[#0062ff] text-white"
                           : "bg-slate-100 text-slate-500"
-                      }`}
+                        }`}
                     >
                       {cat.count}
                     </span>
@@ -400,11 +384,10 @@ export default function AllToolsDirectoryPage() {
 
                       {tool.badge && (
                         <span
-                          className={`text-[10.5px] font-bold px-2.5 py-0.5 rounded-full ${
-                            tool.badge === "popular"
+                          className={`text-[10.5px] font-bold px-2.5 py-0.5 rounded-full ${tool.badge === "popular"
                               ? "bg-rose-100 text-rose-600 border border-rose-200"
                               : "bg-sky-100 text-sky-700 border border-sky-200"
-                          }`}
+                            }`}
                         >
                           {tool.badgeText}
                         </span>
@@ -494,13 +477,12 @@ export default function AllToolsDirectoryPage() {
                   className="flex items-center gap-2.5 p-2 rounded-xl hover:bg-amber-100/40 text-slate-800 hover:text-[#0062ff] transition-all group"
                 >
                   <span
-                    className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[11px] shrink-0 ${
-                      item.rank === 1
+                    className={`w-5 h-5 rounded-full flex items-center justify-center font-bold text-[11px] shrink-0 ${item.rank === 1
                         ? "bg-amber-400 text-amber-950"
                         : item.rank === 2
-                        ? "bg-amber-300 text-amber-900"
-                        : "bg-amber-200 text-amber-800"
-                    }`}
+                          ? "bg-amber-300 text-amber-900"
+                          : "bg-amber-200 text-amber-800"
+                      }`}
                   >
                     {item.rank}
                   </span>

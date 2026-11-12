@@ -1,0 +1,1246 @@
+{
+  "metadata": {
+    "dataset_name": "CAREZA Synthetic CV Parsing Benchmark V1",
+    "description": "Bộ dữ liệu kiểm thử chất lượng bóc tách thông tin CV (CV Parsing) độc lập gồm 25 hồ sơ, 5 nhóm kịch bản và 2 định dạng PDF/DOCX (50 files)",
+    "total_cvs": 25,
+    "total_files": 50,
+    "groups": [
+      {
+        "group_id": "GROUP_1_STANDARD",
+        "name": "Bố cục một cột chuẩn",
+        "count": 5
+      },
+      {
+        "group_id": "GROUP_2_MULTIPAGE",
+        "name": "Nhiều kinh nghiệm và dài trang",
+        "count": 5
+      },
+      {
+        "group_id": "GROUP_3_SKILL_HEAVY",
+        "name": "Nhiều kỹ năng và dày đặc từ khóa",
+        "count": 5
+      },
+      {
+        "group_id": "GROUP_4_INCOMPLETE",
+        "name": "Thiếu thông tin và ca biên",
+        "count": 5
+      },
+      {
+        "group_id": "GROUP_5_TWO_COLUMN",
+        "name": "Bố cục hai cột (Sidebar)",
+        "count": 5
+      }
+    ],
+    "created_at": "2026-10-21"
+  },
+  "cv_samples": [
+    {
+      "cv_id": "PARSE_CV_01",
+      "group_id": "GROUP_1_STANDARD",
+      "group_name": "Bố cục một cột chuẩn",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_01.pdf",
+      "docx_file": "docx/PARSE_CV_01.docx",
+      "expected_extraction": {
+        "full_name": "Nguyễn Hoàng Nam",
+        "email": "hoangnam.dev@example.com",
+        "phone": "0912345601",
+        "skills": [
+          "python",
+          "django",
+          "fastapi",
+          "postgresql",
+          "docker",
+          "git"
+        ],
+        "total_experience_years": 2.5,
+        "educations": [
+          {
+            "institution": "Đại học Bách Khoa Hà Nội",
+            "degree": "Cử nhân Công nghệ thông tin",
+            "raw_text": "Đại học Bách Khoa Hà Nội - Cử nhân Công nghệ thông tin (2018 - 2022)"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Lập trình viên Backend Python tại Công ty Cổ phần Công nghệ VinaTech",
+            "raw_text": "Lập trình viên Backend Python tại Công ty Cổ phần Công nghệ VinaTech (2022 - nay)"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Hệ thống quản lý kho vận Logistics VinaTrack",
+            "description": "Dự án Hệ thống quản lý kho vận Logistics VinaTrack: Xây dựng REST API bằng FastAPI và PostgreSQL"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Chứng chỉ AWS Certified Cloud Practitioner"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_02",
+      "group_id": "GROUP_1_STANDARD",
+      "group_name": "Bố cục một cột chuẩn",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_02.pdf",
+      "docx_file": "docx/PARSE_CV_02.docx",
+      "expected_extraction": {
+        "full_name": "Trần Thị Mai",
+        "email": "maitran.frontend@example.com",
+        "phone": "0987654302",
+        "skills": [
+          "javascript",
+          "typescript",
+          "react",
+          "reactjs",
+          "nextjs",
+          "rest api",
+          "git"
+        ],
+        "total_experience_years": 3.0,
+        "educations": [
+          {
+            "institution": "Đại học Công Nghệ - ĐHQGHN",
+            "degree": "Kỹ sư Phần mềm",
+            "raw_text": "Đại học Công Nghệ - ĐHQGHN - Kỹ sư Công nghệ phần mềm"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Kỹ sư Frontend ReactJS tại Công ty TNHH Giải pháp Số NextWave",
+            "raw_text": "Kỹ sư Frontend ReactJS tại Công ty TNHH Giải pháp Số NextWave"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Nền tảng thương mại điện tử ShopHub",
+            "description": "Dự án Nền tảng thương mại điện tử ShopHub xây dựng bằng React và NextJS"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Chứng chỉ TOEIC 850"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_03",
+      "group_id": "GROUP_1_STANDARD",
+      "group_name": "Bố cục một cột chuẩn",
+      "language": "en",
+      "pdf_file": "pdf/PARSE_CV_03.pdf",
+      "docx_file": "docx/PARSE_CV_03.docx",
+      "expected_extraction": {
+        "full_name": "David Le",
+        "email": "david.le.engineer@example.com",
+        "phone": "0903112203",
+        "skills": [
+          "java",
+          "spring",
+          "spring boot",
+          "mysql",
+          "git",
+          "rest api",
+          "unit test"
+        ],
+        "total_experience_years": 1.5,
+        "educations": [
+          {
+            "institution": "HCMC University of Technology",
+            "degree": "Bachelor of Computer Science",
+            "raw_text": "HCMC University of Technology - Bachelor of Computer Science"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Software Developer at FPT Software",
+            "raw_text": "Software Developer at FPT Software"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Project Banking Core Gateway",
+            "description": "Project Banking Core Gateway built with Spring Boot"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Oracle Certified Associate Java Programmer"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_04",
+      "group_id": "GROUP_1_STANDARD",
+      "group_name": "Bố cục một cột chuẩn",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_04.pdf",
+      "docx_file": "docx/PARSE_CV_04.docx",
+      "expected_extraction": {
+        "full_name": "Lê Quang Vinh",
+        "email": "quangvinh.data@example.com",
+        "phone": "0934567804",
+        "skills": [
+          "python",
+          "sql",
+          "pandas",
+          "numpy",
+          "data analysis"
+        ],
+        "total_experience_years": 2.0,
+        "educations": [
+          {
+            "institution": "Đại học Kinh Tế Quốc Dân",
+            "degree": "Cử nhân Hệ thống thông tin quản lý",
+            "raw_text": "Đại học Kinh Tế Quốc Dân - Cử nhân"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Chuyên viên phân tích dữ liệu tại Công ty Cổ phần FinSmart",
+            "raw_text": "Chuyên viên phân tích dữ liệu tại Công ty Cổ phần FinSmart"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Phân tích xu hướng tiêu dùng tín dụng",
+            "description": "Dự án Phân tích xu hướng tiêu dùng tín dụng bằng Python và SQL"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Chứng chỉ Google Data Analytics Professional Certificate"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_05",
+      "group_id": "GROUP_1_STANDARD",
+      "group_name": "Bố cục một cột chuẩn",
+      "language": "en",
+      "pdf_file": "pdf/PARSE_CV_05.pdf",
+      "docx_file": "docx/PARSE_CV_05.docx",
+      "expected_extraction": {
+        "full_name": "Sarah Pham",
+        "email": "sarah.pham.qa@example.com",
+        "phone": "0918765405",
+        "skills": [
+          "python",
+          "automation test",
+          "unit test",
+          "git",
+          "ci/cd"
+        ],
+        "total_experience_years": 3.0,
+        "educations": [
+          {
+            "institution": "FPT University",
+            "degree": "Bachelor of Software Engineering",
+            "raw_text": "FPT University - Bachelor of Software Engineering"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "QA Automation Engineer at TechCorp Vietnam",
+            "raw_text": "QA Automation Engineer at TechCorp Vietnam"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Project Automation Framework for Payment Engine",
+            "description": "Project Automation Framework for Payment Engine using Python"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "ISTQB Certified Tester Foundation Level"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_06",
+      "group_id": "GROUP_2_MULTIPAGE",
+      "group_name": "Nhiều kinh nghiệm và dài trang",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_06.pdf",
+      "docx_file": "docx/PARSE_CV_06.docx",
+      "expected_extraction": {
+        "full_name": "Phạm Minh Tuấn",
+        "email": "tuan.pham.architect@example.com",
+        "phone": "0901234506",
+        "skills": [
+          "java",
+          "spring",
+          "spring boot",
+          "microservices",
+          "kubernetes",
+          "k8s",
+          "docker",
+          "redis",
+          "postgresql",
+          "aws",
+          "system design",
+          "git"
+        ],
+        "total_experience_years": 8.0,
+        "educations": [
+          {
+            "institution": "Đại học Bách Khoa Hà Nội",
+            "degree": "Kỹ sư Công nghệ thông tin",
+            "raw_text": "Đại học Bách Khoa Hà Nội - Kỹ sư Công nghệ thông tin"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Kỹ sư Trưởng kiến trúc phần mềm tại Tập đoàn Công nghệ FPT",
+            "raw_text": "Kỹ sư Trưởng kiến trúc phần mềm tại Tập đoàn Công nghệ FPT (2022 - nay)"
+          },
+          {
+            "title": "Senior Java Backend Engineer tại Công ty Cổ phần VNG",
+            "raw_text": "Senior Java Backend Engineer tại Công ty Cổ phần VNG (2019 - 2022)"
+          },
+          {
+            "title": "Java Developer tại Công ty TNHH Phần mềm CMC",
+            "raw_text": "Java Developer tại Công ty TNHH Phần mềm CMC (2016 - 2019)"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Nền tảng thanh toán điện tử quốc gia E-Pay",
+            "description": "Dự án Nền tảng thanh toán điện tử quốc gia E-Pay"
+          },
+          {
+            "name": "Dự án Hệ thống microservices ngân hàng số BankX",
+            "description": "Dự án Hệ thống microservices ngân hàng số BankX"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Chứng chỉ AWS Certified Solutions Architect Professional"
+          },
+          {
+            "name": "Chứng chỉ Certified Kubernetes Administrator (CKA)"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_07",
+      "group_id": "GROUP_2_MULTIPAGE",
+      "group_name": "Nhiều kinh nghiệm và dài trang",
+      "language": "en",
+      "pdf_file": "pdf/PARSE_CV_07.pdf",
+      "docx_file": "docx/PARSE_CV_07.docx",
+      "expected_extraction": {
+        "full_name": "Michael Tran",
+        "email": "michael.tran.devops@example.com",
+        "phone": "0976543207",
+        "skills": [
+          "aws",
+          "terraform",
+          "docker",
+          "kubernetes",
+          "k8s",
+          "ci/cd",
+          "linux",
+          "python",
+          "ansible",
+          "git"
+        ],
+        "total_experience_years": 7.0,
+        "educations": [
+          {
+            "institution": "Hanoi University of Science and Technology",
+            "degree": "Bachelor of Information Technology",
+            "raw_text": "Hanoi University of Science and Technology - Bachelor"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Lead DevOps & Cloud Engineer at Global Fintech Corp",
+            "raw_text": "Lead DevOps & Cloud Engineer at Global Fintech Corp (2020 - present)"
+          },
+          {
+            "title": "DevOps Engineer at SoftBank Vietnam",
+            "raw_text": "DevOps Engineer at SoftBank Vietnam (2017 - 2020)"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Project Enterprise Cloud Infrastructure Migration",
+            "description": "Project Enterprise Cloud Infrastructure Migration to AWS using Terraform"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "AWS Certified DevOps Engineer Professional"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_08",
+      "group_id": "GROUP_2_MULTIPAGE",
+      "group_name": "Nhiều kinh nghiệm và dài trang",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_08.pdf",
+      "docx_file": "docx/PARSE_CV_08.docx",
+      "expected_extraction": {
+        "full_name": "Vũ Đình Trọng",
+        "email": "trongvu.fullstack@example.com",
+        "phone": "0981122308",
+        "skills": [
+          "nodejs",
+          "react",
+          "reactjs",
+          "typescript",
+          "mongodb",
+          "docker",
+          "graphql",
+          "redis",
+          "rest api",
+          "git"
+        ],
+        "total_experience_years": 6.0,
+        "educations": [
+          {
+            "institution": "Đại học Bách Khoa TP.HCM",
+            "degree": "Kỹ sư Khoa học máy tính",
+            "raw_text": "Đại học Bách Khoa TP.HCM - Kỹ sư"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Senior Fullstack Engineer tại Công ty Cổ phần OneTech",
+            "raw_text": "Senior Fullstack Engineer tại Công ty Cổ phần OneTech (2021 - nay)"
+          },
+          {
+            "title": "Fullstack Developer tại TechBridge Solution",
+            "raw_text": "Fullstack Developer tại TechBridge Solution (2018 - 2021)"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Nền tảng SaaS quản trị nhân sự HRCloud",
+            "description": "Dự án Nền tảng SaaS quản trị nhân sự HRCloud"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Chứng chỉ Node.js Application Development (JSNAD)"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_09",
+      "group_id": "GROUP_2_MULTIPAGE",
+      "group_name": "Nhiều kinh nghiệm và dài trang",
+      "language": "en",
+      "pdf_file": "pdf/PARSE_CV_09.pdf",
+      "docx_file": "docx/PARSE_CV_09.docx",
+      "expected_extraction": {
+        "full_name": "Emily Nguyen",
+        "email": "emily.nguyen.data@example.com",
+        "phone": "0965432109",
+        "skills": [
+          "python",
+          "machine learning",
+          "deep learning",
+          "nlp",
+          "scikit-learn",
+          "tensorflow",
+          "pytorch",
+          "pandas",
+          "numpy",
+          "postgresql",
+          "sql",
+          "git"
+        ],
+        "total_experience_years": 6.5,
+        "educations": [
+          {
+            "institution": "Vietnam National University",
+            "degree": "Master of Computer Science",
+            "raw_text": "Vietnam National University - Master of Computer Science"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Senior AI & Data Scientist at VinAI Research",
+            "raw_text": "Senior AI & Data Scientist at VinAI Research (2021 - present)"
+          },
+          {
+            "title": "Machine Learning Engineer at VNG Corp",
+            "raw_text": "Machine Learning Engineer at VNG Corp (2018 - 2021)"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Project Large-scale NLP Recommendation Engine",
+            "description": "Project Large-scale NLP Recommendation Engine"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "TensorFlow Developer Certificate"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_10",
+      "group_id": "GROUP_2_MULTIPAGE",
+      "group_name": "Nhiều kinh nghiệm và dài trang",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_10.pdf",
+      "docx_file": "docx/PARSE_CV_10.docx",
+      "expected_extraction": {
+        "full_name": "Hoàng Kim Long",
+        "email": "kimlong.hoang@example.com",
+        "phone": "0944332210",
+        "skills": [
+          "c#",
+          ".net",
+          "asp.net",
+          "sql",
+          "microservices",
+          "agile",
+          "scrum",
+          "system design",
+          "clean code",
+          "unit test",
+          "git"
+        ],
+        "total_experience_years": 10.0,
+        "educations": [
+          {
+            "institution": "Đại học Bách Khoa Hà Nội",
+            "degree": "Kỹ sư Điện tử viễn thông",
+            "raw_text": "Đại học Bách Khoa Hà Nội - Kỹ sư"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Giám đốc Kỹ thuật (Engineering Manager) tại Tập đoàn Viettel",
+            "raw_text": "Giám đốc Kỹ thuật tại Tập đoàn Viettel (2020 - nay)"
+          },
+          {
+            "title": "Senior .NET Specialist tại Công ty Cổ phần MISA",
+            "raw_text": "Senior .NET Specialist tại Công ty Cổ phần MISA (2014 - 2020)"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Nền tảng Kế toán Doanh nghiệp Cloud MISA",
+            "description": "Dự án Nền tảng Kế toán Doanh nghiệp Cloud MISA"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Certified Scrum Master (CSM)"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_11",
+      "group_id": "GROUP_3_SKILL_HEAVY",
+      "group_name": "Nhiều kỹ năng và dày đặc từ khóa",
+      "language": "en",
+      "pdf_file": "pdf/PARSE_CV_11.pdf",
+      "docx_file": "docx/PARSE_CV_11.docx",
+      "expected_extraction": {
+        "full_name": "Alex Nguyen",
+        "email": "alex.polyglot@example.com",
+        "phone": "0915678911",
+        "skills": [
+          "python",
+          "django",
+          "fastapi",
+          "javascript",
+          "typescript",
+          "react",
+          "vue",
+          "nodejs",
+          "express",
+          "go",
+          "golang",
+          "docker",
+          "redis",
+          "postgres",
+          "postgresql",
+          "graphql",
+          "rest api",
+          "git"
+        ],
+        "total_experience_years": 4.0,
+        "educations": [
+          {
+            "institution": "RMIT University Vietnam",
+            "degree": "Bachelor of Information Technology",
+            "raw_text": "RMIT University Vietnam - Bachelor"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Senior Polyglot Software Engineer at VibeTech",
+            "raw_text": "Senior Polyglot Software Engineer at VibeTech"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Project Omnichannel Communication Hub",
+            "description": "Project Omnichannel Communication Hub"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "AWS Certified Developer Associate"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_12",
+      "group_id": "GROUP_3_SKILL_HEAVY",
+      "group_name": "Nhiều kỹ năng và dày đặc từ khóa",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_12.pdf",
+      "docx_file": "docx/PARSE_CV_12.docx",
+      "expected_extraction": {
+        "full_name": "Đặng Thu Trang",
+        "email": "thutrang.ai@example.com",
+        "phone": "0982345612",
+        "skills": [
+          "python",
+          "pytorch",
+          "tensorflow",
+          "nlp",
+          "deep learning",
+          "machine learning",
+          "scikit-learn",
+          "rag",
+          "llm",
+          "prompt engineering",
+          "pandas",
+          "numpy",
+          "git"
+        ],
+        "total_experience_years": 3.0,
+        "educations": [
+          {
+            "institution": "Đại học Khoa học Tự nhiên - ĐHQGHN",
+            "degree": "Cử nhân Toán tin",
+            "raw_text": "Đại học Khoa học Tự nhiên - ĐHQGHN"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Kỹ sư Trí tuệ nhân tạo (AI Engineer) tại Viện Công nghệ VinBigData",
+            "raw_text": "Kỹ sư Trí tuệ nhân tạo tại Viện Công nghệ VinBigData"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Trợ lý ảo hỏi đáp chuyên sâu RAG LLM",
+            "description": "Dự án Trợ lý ảo hỏi đáp chuyên sâu RAG LLM"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "DeepLearning.AI Generative AI with LLMs"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_13",
+      "group_id": "GROUP_3_SKILL_HEAVY",
+      "group_name": "Nhiều kỹ năng và dày đặc từ khóa",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_13.pdf",
+      "docx_file": "docx/PARSE_CV_13.docx",
+      "expected_extraction": {
+        "full_name": "Bùi Anh Khoa",
+        "email": "khoabui.cloud@example.com",
+        "phone": "0931234513",
+        "skills": [
+          "docker",
+          "kubernetes",
+          "k8s",
+          "terraform",
+          "ansible",
+          "nginx",
+          "linux",
+          "ci/cd",
+          "git",
+          "gitlab",
+          "aws",
+          "gcp",
+          "azure"
+        ],
+        "total_experience_years": 3.5,
+        "educations": [
+          {
+            "institution": "Học viện Công nghệ Bưu chính Viễn thông",
+            "degree": "Kỹ sư An toàn thông tin",
+            "raw_text": "Học viện Công nghệ Bưu chính Viễn thông"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Chuyên viên Hạ tầng Đám mây tại Công ty Cổ phần CloudOps",
+            "raw_text": "Chuyên viên Hạ tầng Đám mây tại Công ty Cổ phần CloudOps"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Tự động hóa hạ tầng Multi-Cloud với Terraform",
+            "description": "Dự án Tự động hóa hạ tầng Multi-Cloud với Terraform"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Chứng chỉ CKA - Certified Kubernetes Administrator"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_14",
+      "group_id": "GROUP_3_SKILL_HEAVY",
+      "group_name": "Nhiều kỹ năng và dày đặc từ khóa",
+      "language": "en",
+      "pdf_file": "pdf/PARSE_CV_14.pdf",
+      "docx_file": "docx/PARSE_CV_14.docx",
+      "expected_extraction": {
+        "full_name": "Kevin Vu",
+        "email": "kevin.vu.mobile@example.com",
+        "phone": "0971234514",
+        "skills": [
+          "kotlin",
+          "swift",
+          "rest api",
+          "sqlite",
+          "git"
+        ],
+        "total_experience_years": 2.5,
+        "educations": [
+          {
+            "institution": "Can Tho University",
+            "degree": "Bachelor of Information Technology",
+            "raw_text": "Can Tho University - Bachelor"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Mobile Software Engineer at AppStudio Vietnam",
+            "raw_text": "Mobile Software Engineer at AppStudio Vietnam"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Project Smart Fitness Tracking App",
+            "description": "Project Smart Fitness Tracking App"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Google Associate Android Developer"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_15",
+      "group_id": "GROUP_3_SKILL_HEAVY",
+      "group_name": "Nhiều kỹ năng và dày đặc từ khóa",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_15.pdf",
+      "docx_file": "docx/PARSE_CV_15.docx",
+      "expected_extraction": {
+        "full_name": "Phan Quốc Huy",
+        "email": "quochuy.db@example.com",
+        "phone": "0961234515",
+        "skills": [
+          "sql",
+          "postgresql",
+          "postgres",
+          "mysql",
+          "mongodb",
+          "redis",
+          "elasticsearch",
+          "oracle",
+          "sqlite",
+          "clean code",
+          "design patterns",
+          "oop",
+          "unit test",
+          "git"
+        ],
+        "total_experience_years": 5.0,
+        "educations": [
+          {
+            "institution": "Đại học Bách Khoa Đà Nẵng",
+            "degree": "Kỹ sư Phần mềm",
+            "raw_text": "Đại học Bách Khoa Đà Nẵng - Kỹ sư"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Chuyên gia Tối ưu Cơ sở dữ liệu tại Công ty Cổ phần DataCore",
+            "raw_text": "Chuyên gia Tối ưu Cơ sở dữ liệu tại Công ty Cổ phần DataCore"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Tối ưu hóa phân vùng Database cho Viễn thông",
+            "description": "Dự án Tối ưu hóa phân vùng Database cho Viễn thông"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Oracle Database Certified Professional (OCP)"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_16",
+      "group_id": "GROUP_4_INCOMPLETE",
+      "group_name": "Thiếu thông tin và ca biên",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_16.pdf",
+      "docx_file": "docx/PARSE_CV_16.docx",
+      "expected_extraction": {
+        "full_name": "Đỗ Quốc Hưng",
+        "email": "quochung.embedded@example.com",
+        "phone": null,
+        "skills": [
+          "c",
+          "c++",
+          "linux",
+          "git",
+          "oop"
+        ],
+        "total_experience_years": 2.0,
+        "educations": [
+          {
+            "institution": "Đại học Bách Khoa Hà Nội",
+            "degree": "Kỹ sư",
+            "raw_text": "Đại học Bách Khoa Hà Nội - Kỹ sư"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Lập trình viên C/C++ tại Công ty TNHH Nhúng Việt",
+            "raw_text": "Lập trình viên C/C++ tại Công ty TNHH Nhúng Việt"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Firmware vi điều khiển IoT Gateway",
+            "description": "Dự án Firmware vi điều khiển IoT Gateway"
+          }
+        ],
+        "certificates": []
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_17",
+      "group_id": "GROUP_4_INCOMPLETE",
+      "group_name": "Thiếu thông tin và ca biên",
+      "language": "en",
+      "pdf_file": "pdf/PARSE_CV_17.pdf",
+      "docx_file": "docx/PARSE_CV_17.docx",
+      "expected_extraction": {
+        "full_name": "Mark Harrison",
+        "email": "mark.harrison.code@example.com",
+        "phone": "0923456717",
+        "skills": [
+          "python",
+          "flask",
+          "docker",
+          "git"
+        ],
+        "total_experience_years": 0.0,
+        "educations": [
+          {
+            "institution": "RMIT University",
+            "degree": "Bachelor of Software Engineering",
+            "raw_text": "RMIT University - Bachelor"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Software Developer Intern at DevHouse",
+            "raw_text": "Software Developer Intern at DevHouse"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Project Web Scraper and Aggregator",
+            "description": "Project Web Scraper and Aggregator"
+          }
+        ],
+        "certificates": []
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_18",
+      "group_id": "GROUP_4_INCOMPLETE",
+      "group_name": "Thiếu thông tin và ca biên",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_18.pdf",
+      "docx_file": "docx/PARSE_CV_18.docx",
+      "expected_extraction": {
+        "full_name": "Nguyễn Mai Phương",
+        "email": "maiphuong.freelance@example.com",
+        "phone": "0988776618",
+        "skills": [
+          "php",
+          "laravel",
+          "mysql",
+          "git",
+          "rest api"
+        ],
+        "total_experience_years": 3.0,
+        "educations": [],
+        "experiences": [
+          {
+            "title": "Lập trình viên Web Tự do (Freelance Web Developer)",
+            "raw_text": "Lập trình viên Web Tự do"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Website thương mại điện tử Đồ gỗ Mỹ nghệ",
+            "description": "Dự án Website thương mại điện tử Đồ gỗ Mỹ nghệ"
+          }
+        ],
+        "certificates": []
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_19",
+      "group_id": "GROUP_4_INCOMPLETE",
+      "group_name": "Thiếu thông tin và ca biên",
+      "language": "en",
+      "pdf_file": "pdf/PARSE_CV_19.pdf",
+      "docx_file": "docx/PARSE_CV_19.docx",
+      "expected_extraction": {
+        "full_name": null,
+        "email": "candidate.anonymous19@example.com",
+        "phone": "0919988719",
+        "skills": [
+          "python",
+          "django",
+          "postgresql",
+          "docker",
+          "git"
+        ],
+        "total_experience_years": 4.0,
+        "educations": [
+          {
+            "institution": "State University",
+            "degree": "Bachelor of Science",
+            "raw_text": "State University - Bachelor"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Backend Software Developer at CloudServices Inc",
+            "raw_text": "Backend Software Developer at CloudServices Inc"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Project High-Throughput Notification Engine",
+            "description": "Project High-Throughput Notification Engine"
+          }
+        ],
+        "certificates": []
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_20",
+      "group_id": "GROUP_4_INCOMPLETE",
+      "group_name": "Thiếu thông tin và ca biên",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_20.pdf",
+      "docx_file": "docx/PARSE_CV_20.docx",
+      "expected_extraction": {
+        "full_name": "Vũ Hải Đăng",
+        "email": null,
+        "phone": "0905544320",
+        "skills": [
+          "c#",
+          ".net",
+          "asp.net",
+          "sql",
+          "git"
+        ],
+        "total_experience_years": 2.0,
+        "educations": [
+          {
+            "institution": "Đại học Bách Khoa Đà Nẵng",
+            "degree": "Kỹ sư",
+            "raw_text": "Đại học Bách Khoa Đà Nẵng - Kỹ sư"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Lập trình viên .NET tại Công ty Cổ phần Phần mềm Đăng Quang",
+            "raw_text": "Lập trình viên .NET tại Công ty Cổ phần Phần mềm Đăng Quang"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Cổng dịch vụ công trực tuyến",
+            "description": "Dự án Cổng dịch vụ công trực tuyến"
+          }
+        ],
+        "certificates": []
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_21",
+      "group_id": "GROUP_5_TWO_COLUMN",
+      "group_name": "Bố cục hai cột (Sidebar)",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_21.pdf",
+      "docx_file": "docx/PARSE_CV_21.docx",
+      "expected_extraction": {
+        "full_name": "Lương Gia Bảo",
+        "email": "giabao.luong@example.com",
+        "phone": "0912987621",
+        "skills": [
+          "python",
+          "django",
+          "postgresql",
+          "docker",
+          "redis",
+          "git",
+          "rest api"
+        ],
+        "total_experience_years": 3.0,
+        "educations": [
+          {
+            "institution": "Đại học Bách Khoa Hà Nội",
+            "degree": "Kỹ sư",
+            "raw_text": "Đại học Bách Khoa Hà Nội - Kỹ sư"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Kỹ sư Backend Python tại Công ty Công nghệ DigiPay",
+            "raw_text": "Kỹ sư Backend Python tại Công ty Công nghệ DigiPay"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Cổng thanh toán vi mô MicroPay",
+            "description": "Dự án Cổng thanh toán vi mô MicroPay"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Chứng chỉ AWS Certified Cloud Practitioner"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_22",
+      "group_id": "GROUP_5_TWO_COLUMN",
+      "group_name": "Bố cục hai cột (Sidebar)",
+      "language": "en",
+      "pdf_file": "pdf/PARSE_CV_22.pdf",
+      "docx_file": "docx/PARSE_CV_22.docx",
+      "expected_extraction": {
+        "full_name": "Jessica Hoang",
+        "email": "jessica.hoang@example.com",
+        "phone": "0987112222",
+        "skills": [
+          "javascript",
+          "typescript",
+          "react",
+          "reactjs",
+          "nextjs",
+          "git",
+          "rest api"
+        ],
+        "total_experience_years": 3.0,
+        "educations": [
+          {
+            "institution": "Swinburne University Vietnam",
+            "degree": "Bachelor of Computer Science",
+            "raw_text": "Swinburne University Vietnam - Bachelor"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Frontend Engineer at Creative Agency PixelVN",
+            "raw_text": "Frontend Engineer at Creative Agency PixelVN"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Project Brand Showcase Platform",
+            "description": "Project Brand Showcase Platform"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Meta Certified Front-End Developer"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_23",
+      "group_id": "GROUP_5_TWO_COLUMN",
+      "group_name": "Bố cục hai cột (Sidebar)",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_23.pdf",
+      "docx_file": "docx/PARSE_CV_23.docx",
+      "expected_extraction": {
+        "full_name": "Ngô Minh Trí",
+        "email": "minhtri.ngo@example.com",
+        "phone": "0934112223",
+        "skills": [
+          "java",
+          "spring",
+          "spring boot",
+          "mysql",
+          "redis",
+          "docker",
+          "git"
+        ],
+        "total_experience_years": 2.5,
+        "educations": [
+          {
+            "institution": "Đại học Sư phạm Kỹ thuật TP.HCM",
+            "degree": "Kỹ sư",
+            "raw_text": "Đại học Sư phạm Kỹ thuật TP.HCM - Kỹ sư"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Lập trình viên Java tại Công ty TNHH Phần mềm Sao Việt",
+            "raw_text": "Lập trình viên Java tại Công ty TNHH Phần mềm Sao Việt"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Nền tảng Đặt vé xe buýt trực tuyến",
+            "description": "Dự án Nền tảng Đặt vé xe buýt trực tuyến"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "Chứng chỉ TOEIC 750"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_24",
+      "group_id": "GROUP_5_TWO_COLUMN",
+      "group_name": "Bố cục hai cột (Sidebar)",
+      "language": "en",
+      "pdf_file": "pdf/PARSE_CV_24.pdf",
+      "docx_file": "docx/PARSE_CV_24.docx",
+      "expected_extraction": {
+        "full_name": "Daniel Vu",
+        "email": "daniel.vu.ops@example.com",
+        "phone": "0916554424",
+        "skills": [
+          "docker",
+          "kubernetes",
+          "k8s",
+          "aws",
+          "terraform",
+          "linux",
+          "ci/cd",
+          "git"
+        ],
+        "total_experience_years": 4.0,
+        "educations": [
+          {
+            "institution": "HCMC University of Science",
+            "degree": "Bachelor of Computer Science",
+            "raw_text": "HCMC University of Science - Bachelor"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Cloud DevOps Engineer at SiliconVN Technologies",
+            "raw_text": "Cloud DevOps Engineer at SiliconVN Technologies"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Project Automated Cloud Disaster Recovery",
+            "description": "Project Automated Cloud Disaster Recovery"
+          }
+        ],
+        "certificates": [
+          {
+            "name": "AWS Certified Solutions Architect Associate"
+          }
+        ]
+      }
+    },
+    {
+      "cv_id": "PARSE_CV_25",
+      "group_id": "GROUP_5_TWO_COLUMN",
+      "group_name": "Bố cục hai cột (Sidebar)",
+      "language": "vi",
+      "pdf_file": "pdf/PARSE_CV_25.pdf",
+      "docx_file": "docx/PARSE_CV_25.docx",
+      "expected_extraction": {
+        "full_name": "Đinh Văn Quyết",
+        "email": "quyet.dinh@example.com",
+        "phone": "0977665525",
+        "skills": [
+          "nodejs",
+          "express",
+          "mongodb",
+          "rest api",
+          "git",
+          "docker"
+        ],
+        "total_experience_years": 2.0,
+        "educations": [
+          {
+            "institution": "Đại học Công nghiệp Hà Nội",
+            "degree": "Cử nhân",
+            "raw_text": "Đại học Công nghiệp Hà Nội - Cử nhân"
+          }
+        ],
+        "experiences": [
+          {
+            "title": "Lập trình viên Backend NodeJS tại Công ty Giải pháp Phần mềm Trí Việt",
+            "raw_text": "Lập trình viên Backend NodeJS tại Công ty Giải pháp Phần mềm Trí Việt"
+          }
+        ],
+        "projects": [
+          {
+            "name": "Dự án Nền tảng đặt đồ ăn trực tuyến FoodFast",
+            "description": "Dự án Nền tảng đặt đồ ăn trực tuyến FoodFast"
+          }
+        ],
+        "certificates": []
+      }
+    }
+  ]
+}

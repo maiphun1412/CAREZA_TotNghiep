@@ -1,0 +1,752 @@
+{
+  "metadata": {
+    "benchmark_name": "CAREZA Independent Holdout AI Mock Interview Evaluation V1",
+    "version": "1.0.0",
+    "evaluated_at": "2026-10-21T16:05:29.752326",
+    "total_answers": 240,
+    "total_questions": 60,
+    "scoring_algorithm": "MockInterviewService.evaluate_answer_content (Current Production Algorithm)",
+    "ground_truth_note": "Nhãn tham chiếu là dữ liệu tổng hợp dựa trên Rubric 4 tiêu chí chuẩn hóa, chưa được chuyên gia độc lập xác nhận."
+  },
+  "overall_metrics": {
+    "mae": 1.3218,
+    "rmse": 2.2055,
+    "pearson_correlation": 0.6438,
+    "spearman_correlation": 0.5977,
+    "pairwise_ranking_accuracy": 0.95
+  },
+  "group_metrics": {
+    "good": {
+      "count": 60,
+      "mean_expected": 9.34,
+      "mean_system": 8.59,
+      "mae": 0.743,
+      "rmse": 1.3336,
+      "min_system": 6.3,
+      "max_system": 9.2,
+      "min_expected": 9.25,
+      "max_expected": 9.42
+    },
+    "average": {
+      "count": 60,
+      "mean_expected": 6.14,
+      "mean_system": 6.07,
+      "mae": 0.317,
+      "rmse": 0.5786,
+      "min_system": 3.5,
+      "max_system": 6.2,
+      "min_expected": 5.92,
+      "max_expected": 6.42
+    },
+    "poor": {
+      "count": 60,
+      "mean_expected": 2.98,
+      "mean_system": 3.65,
+      "mae": 0.759,
+      "rmse": 1.1986,
+      "min_system": 3.2,
+      "max_system": 6.2,
+      "min_expected": 2.75,
+      "max_expected": 3.42
+    },
+    "adversarial": {
+      "count": 60,
+      "mean_expected": 3.96,
+      "mean_system": 5.79,
+      "mae": 3.4683,
+      "rmse": 3.9884,
+      "min_system": 1.5,
+      "max_system": 9.1,
+      "min_expected": 1.62,
+      "max_expected": 7.92
+    }
+  },
+  "adversarial_subtypes_metrics": {
+    "keyword_stuffing": {
+      "count": 10,
+      "mean_expected": 2.72,
+      "mean_system": 7.4,
+      "mae": 4.68,
+      "rmse": 4.68,
+      "min_system": 7.4,
+      "max_system": 7.4,
+      "min_expected": 2.72,
+      "max_expected": 2.72
+    },
+    "synonym_match": {
+      "count": 10,
+      "mean_expected": 7.92,
+      "mean_system": 3.5,
+      "mae": 4.42,
+      "rmse": 4.42,
+      "min_system": 3.5,
+      "max_system": 3.5,
+      "min_expected": 7.92,
+      "max_expected": 7.92
+    },
+    "indirect_negation": {
+      "count": 10,
+      "mean_expected": 2.15,
+      "mean_system": 3.65,
+      "mae": 1.76,
+      "rmse": 2.1308,
+      "min_system": 1.5,
+      "max_system": 6.3,
+      "min_expected": 2.15,
+      "max_expected": 2.15
+    },
+    "partial_parrot": {
+      "count": 10,
+      "mean_expected": 1.82,
+      "mean_system": 6.83,
+      "mae": 5.01,
+      "rmse": 5.2876,
+      "min_system": 3.5,
+      "max_system": 9.1,
+      "min_expected": 1.82,
+      "max_expected": 1.82
+    },
+    "long_hallucination": {
+      "count": 10,
+      "mean_expected": 1.62,
+      "mean_system": 6.22,
+      "mae": 4.6,
+      "rmse": 4.6002,
+      "min_system": 6.2,
+      "max_system": 6.3,
+      "min_expected": 1.62,
+      "max_expected": 1.62
+    },
+    "short_correct": {
+      "count": 10,
+      "mean_expected": 7.5,
+      "mean_system": 7.16,
+      "mae": 0.34,
+      "rmse": 0.5882,
+      "min_system": 6.2,
+      "max_system": 7.4,
+      "min_expected": 7.5,
+      "max_expected": 7.5
+    }
+  },
+  "ranking_consistency": {
+    "details": {
+      "good_gt_average": {
+        "total": 60,
+        "correct": 60,
+        "equal": 0,
+        "inverted": 0
+      },
+      "average_gt_poor": {
+        "total": 60,
+        "correct": 51,
+        "equal": 9,
+        "inverted": 0
+      },
+      "good_gt_poor": {
+        "total": 60,
+        "correct": 60,
+        "equal": 0,
+        "inverted": 0
+      }
+    },
+    "total_pairs": 180,
+    "correct_pairs": 171,
+    "pairwise_accuracy": 0.95
+  },
+  "feedback_conflict_summary": {
+    "total_conflicts": 3,
+    "conflict_rate": 0.0125
+  },
+  "failure_analysis": {
+    "total_failures": 65,
+    "failure_rate": 0.2708,
+    "failure_cases": [
+      {
+        "answer_id": "HANS_0001",
+        "question_id": "HQ_001",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0004",
+        "question_id": "HQ_001",
+        "adversarial_subtype": "synonym_match",
+        "expected_score": 7.92,
+        "system_score": 3.5,
+        "abs_error": 4.42,
+        "reason": "Lexical Mismatch: Dùng từ đồng nghĩa tự nhiên, né từ khóa chuẩn khiến hệ thống không nhận diện được độ sâu kỹ thuật."
+      },
+      {
+        "answer_id": "HANS_0007",
+        "question_id": "HQ_002",
+        "adversarial_subtype": null,
+        "expected_score": 3.25,
+        "system_score": 6.2,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0012",
+        "question_id": "HQ_003",
+        "adversarial_subtype": "partial_parrot",
+        "expected_score": 1.82,
+        "system_score": 6.2,
+        "abs_error": 4.38,
+        "reason": "Độ lệch điểm lớn (|err| = 4.38)"
+      },
+      {
+        "answer_id": "HANS_0016",
+        "question_id": "HQ_004",
+        "adversarial_subtype": "long_hallucination",
+        "expected_score": 1.62,
+        "system_score": 6.2,
+        "abs_error": 4.58,
+        "reason": "Hallucination Blindspot: Hệ thống không có mô hình suy luận logic để phát hiện các khẳng định sai lệch kỹ thuật nghiêm trọng."
+      },
+      {
+        "answer_id": "HANS_0021",
+        "question_id": "HQ_006",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0024",
+        "question_id": "HQ_006",
+        "adversarial_subtype": "keyword_stuffing",
+        "expected_score": 2.72,
+        "system_score": 7.4,
+        "abs_error": 4.68,
+        "reason": "Keyword Stuffing Vulnerability: Spam từ khóa kỹ thuật khiến hệ thống đánh giá cao do đếm trúng từ điển (dù không có ngữ nghĩa)."
+      },
+      {
+        "answer_id": "HANS_0027",
+        "question_id": "HQ_007",
+        "adversarial_subtype": null,
+        "expected_score": 3.25,
+        "system_score": 6.2,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0028",
+        "question_id": "HQ_007",
+        "adversarial_subtype": "synonym_match",
+        "expected_score": 7.92,
+        "system_score": 3.5,
+        "abs_error": 4.42,
+        "reason": "Lexical Mismatch: Dùng từ đồng nghĩa tự nhiên, né từ khóa chuẩn khiến hệ thống không nhận diện được độ sâu kỹ thuật."
+      },
+      {
+        "answer_id": "HANS_0036",
+        "question_id": "HQ_009",
+        "adversarial_subtype": "partial_parrot",
+        "expected_score": 1.82,
+        "system_score": 6.2,
+        "abs_error": 4.38,
+        "reason": "Độ lệch điểm lớn (|err| = 4.38)"
+      },
+      {
+        "answer_id": "HANS_0040",
+        "question_id": "HQ_010",
+        "adversarial_subtype": "long_hallucination",
+        "expected_score": 1.62,
+        "system_score": 6.2,
+        "abs_error": 4.58,
+        "reason": "Hallucination Blindspot: Hệ thống không có mô hình suy luận logic để phát hiện các khẳng định sai lệch kỹ thuật nghiêm trọng."
+      },
+      {
+        "answer_id": "HANS_0041",
+        "question_id": "HQ_011",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0047",
+        "question_id": "HQ_012",
+        "adversarial_subtype": null,
+        "expected_score": 3.25,
+        "system_score": 6.2,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0048",
+        "question_id": "HQ_012",
+        "adversarial_subtype": "keyword_stuffing",
+        "expected_score": 2.72,
+        "system_score": 7.4,
+        "abs_error": 4.68,
+        "reason": "Keyword Stuffing Vulnerability: Spam từ khóa kỹ thuật khiến hệ thống đánh giá cao do đếm trúng từ điển (dù không có ngữ nghĩa)."
+      },
+      {
+        "answer_id": "HANS_0052",
+        "question_id": "HQ_013",
+        "adversarial_subtype": "synonym_match",
+        "expected_score": 7.92,
+        "system_score": 3.5,
+        "abs_error": 4.42,
+        "reason": "Lexical Mismatch: Dùng từ đồng nghĩa tự nhiên, né từ khóa chuẩn khiến hệ thống không nhận diện được độ sâu kỹ thuật."
+      },
+      {
+        "answer_id": "HANS_0060",
+        "question_id": "HQ_015",
+        "adversarial_subtype": "partial_parrot",
+        "expected_score": 1.82,
+        "system_score": 9.1,
+        "abs_error": 7.28,
+        "reason": "Độ lệch điểm lớn (|err| = 7.28)"
+      },
+      {
+        "answer_id": "HANS_0061",
+        "question_id": "HQ_016",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0064",
+        "question_id": "HQ_016",
+        "adversarial_subtype": "long_hallucination",
+        "expected_score": 1.62,
+        "system_score": 6.3,
+        "abs_error": 4.68,
+        "reason": "Hallucination Blindspot: Hệ thống không có mô hình suy luận logic để phát hiện các khẳng định sai lệch kỹ thuật nghiêm trọng."
+      },
+      {
+        "answer_id": "HANS_0066",
+        "question_id": "HQ_017",
+        "adversarial_subtype": null,
+        "expected_score": 5.92,
+        "system_score": 3.5,
+        "abs_error": 2.42,
+        "reason": "Độ lệch điểm lớn (|err| = 2.42)"
+      },
+      {
+        "answer_id": "HANS_0072",
+        "question_id": "HQ_018",
+        "adversarial_subtype": "keyword_stuffing",
+        "expected_score": 2.72,
+        "system_score": 7.4,
+        "abs_error": 4.68,
+        "reason": "Keyword Stuffing Vulnerability: Spam từ khóa kỹ thuật khiến hệ thống đánh giá cao do đếm trúng từ điển (dù không có ngữ nghĩa)."
+      },
+      {
+        "answer_id": "HANS_0076",
+        "question_id": "HQ_019",
+        "adversarial_subtype": "synonym_match",
+        "expected_score": 7.92,
+        "system_score": 3.5,
+        "abs_error": 4.42,
+        "reason": "Lexical Mismatch: Dùng từ đồng nghĩa tự nhiên, né từ khóa chuẩn khiến hệ thống không nhận diện được độ sâu kỹ thuật."
+      },
+      {
+        "answer_id": "HANS_0081",
+        "question_id": "HQ_021",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0084",
+        "question_id": "HQ_021",
+        "adversarial_subtype": "partial_parrot",
+        "expected_score": 1.82,
+        "system_score": 6.3,
+        "abs_error": 4.48,
+        "reason": "Độ lệch điểm lớn (|err| = 4.48)"
+      },
+      {
+        "answer_id": "HANS_0086",
+        "question_id": "HQ_022",
+        "adversarial_subtype": null,
+        "expected_score": 5.92,
+        "system_score": 3.5,
+        "abs_error": 2.42,
+        "reason": "Độ lệch điểm lớn (|err| = 2.42)"
+      },
+      {
+        "answer_id": "HANS_0088",
+        "question_id": "HQ_022",
+        "adversarial_subtype": "long_hallucination",
+        "expected_score": 1.62,
+        "system_score": 6.2,
+        "abs_error": 4.58,
+        "reason": "Hallucination Blindspot: Hệ thống không có mô hình suy luận logic để phát hiện các khẳng định sai lệch kỹ thuật nghiêm trọng."
+      },
+      {
+        "answer_id": "HANS_0096",
+        "question_id": "HQ_024",
+        "adversarial_subtype": "keyword_stuffing",
+        "expected_score": 2.72,
+        "system_score": 7.4,
+        "abs_error": 4.68,
+        "reason": "Keyword Stuffing Vulnerability: Spam từ khóa kỹ thuật khiến hệ thống đánh giá cao do đếm trúng từ điển (dù không có ngữ nghĩa)."
+      },
+      {
+        "answer_id": "HANS_0100",
+        "question_id": "HQ_025",
+        "adversarial_subtype": "synonym_match",
+        "expected_score": 7.92,
+        "system_score": 3.5,
+        "abs_error": 4.42,
+        "reason": "Lexical Mismatch: Dùng từ đồng nghĩa tự nhiên, né từ khóa chuẩn khiến hệ thống không nhận diện được độ sâu kỹ thuật."
+      },
+      {
+        "answer_id": "HANS_0101",
+        "question_id": "HQ_026",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0106",
+        "question_id": "HQ_027",
+        "adversarial_subtype": null,
+        "expected_score": 5.92,
+        "system_score": 3.5,
+        "abs_error": 2.42,
+        "reason": "Độ lệch điểm lớn (|err| = 2.42)"
+      },
+      {
+        "answer_id": "HANS_0112",
+        "question_id": "HQ_028",
+        "adversarial_subtype": "long_hallucination",
+        "expected_score": 1.62,
+        "system_score": 6.2,
+        "abs_error": 4.58,
+        "reason": "Hallucination Blindspot: Hệ thống không có mô hình suy luận logic để phát hiện các khẳng định sai lệch kỹ thuật nghiêm trọng."
+      },
+      {
+        "answer_id": "HANS_0120",
+        "question_id": "HQ_030",
+        "adversarial_subtype": "keyword_stuffing",
+        "expected_score": 2.72,
+        "system_score": 7.4,
+        "abs_error": 4.68,
+        "reason": "Keyword Stuffing Vulnerability: Spam từ khóa kỹ thuật khiến hệ thống đánh giá cao do đếm trúng từ điển (dù không có ngữ nghĩa)."
+      },
+      {
+        "answer_id": "HANS_0121",
+        "question_id": "HQ_031",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0124",
+        "question_id": "HQ_031",
+        "adversarial_subtype": "synonym_match",
+        "expected_score": 7.92,
+        "system_score": 3.5,
+        "abs_error": 4.42,
+        "reason": "Lexical Mismatch: Dùng từ đồng nghĩa tự nhiên, né từ khóa chuẩn khiến hệ thống không nhận diện được độ sâu kỹ thuật."
+      },
+      {
+        "answer_id": "HANS_0127",
+        "question_id": "HQ_032",
+        "adversarial_subtype": null,
+        "expected_score": 3.25,
+        "system_score": 6.2,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0128",
+        "question_id": "HQ_032",
+        "adversarial_subtype": "indirect_negation",
+        "expected_score": 2.15,
+        "system_score": 6.3,
+        "abs_error": 4.15,
+        "reason": "Indirect Negation Blindspot: Phủ định gián tiếp qua câu chuyện kể né được các pattern phủ định trực diện."
+      },
+      {
+        "answer_id": "HANS_0132",
+        "question_id": "HQ_033",
+        "adversarial_subtype": "partial_parrot",
+        "expected_score": 1.82,
+        "system_score": 9.1,
+        "abs_error": 7.28,
+        "reason": "Độ lệch điểm lớn (|err| = 7.28)"
+      },
+      {
+        "answer_id": "HANS_0136",
+        "question_id": "HQ_034",
+        "adversarial_subtype": "long_hallucination",
+        "expected_score": 1.62,
+        "system_score": 6.2,
+        "abs_error": 4.58,
+        "reason": "Hallucination Blindspot: Hệ thống không có mô hình suy luận logic để phát hiện các khẳng định sai lệch kỹ thuật nghiêm trọng."
+      },
+      {
+        "answer_id": "HANS_0141",
+        "question_id": "HQ_036",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0144",
+        "question_id": "HQ_036",
+        "adversarial_subtype": "keyword_stuffing",
+        "expected_score": 2.72,
+        "system_score": 7.4,
+        "abs_error": 4.68,
+        "reason": "Keyword Stuffing Vulnerability: Spam từ khóa kỹ thuật khiến hệ thống đánh giá cao do đếm trúng từ điển (dù không có ngữ nghĩa)."
+      },
+      {
+        "answer_id": "HANS_0147",
+        "question_id": "HQ_037",
+        "adversarial_subtype": null,
+        "expected_score": 3.25,
+        "system_score": 6.2,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0148",
+        "question_id": "HQ_037",
+        "adversarial_subtype": "synonym_match",
+        "expected_score": 7.92,
+        "system_score": 3.5,
+        "abs_error": 4.42,
+        "reason": "Lexical Mismatch: Dùng từ đồng nghĩa tự nhiên, né từ khóa chuẩn khiến hệ thống không nhận diện được độ sâu kỹ thuật."
+      },
+      {
+        "answer_id": "HANS_0152",
+        "question_id": "HQ_038",
+        "adversarial_subtype": "indirect_negation",
+        "expected_score": 2.15,
+        "system_score": 6.2,
+        "abs_error": 4.05,
+        "reason": "Indirect Negation Blindspot: Phủ định gián tiếp qua câu chuyện kể né được các pattern phủ định trực diện."
+      },
+      {
+        "answer_id": "HANS_0156",
+        "question_id": "HQ_039",
+        "adversarial_subtype": "partial_parrot",
+        "expected_score": 1.82,
+        "system_score": 6.2,
+        "abs_error": 4.38,
+        "reason": "Độ lệch điểm lớn (|err| = 4.38)"
+      },
+      {
+        "answer_id": "HANS_0160",
+        "question_id": "HQ_040",
+        "adversarial_subtype": "long_hallucination",
+        "expected_score": 1.62,
+        "system_score": 6.2,
+        "abs_error": 4.58,
+        "reason": "Hallucination Blindspot: Hệ thống không có mô hình suy luận logic để phát hiện các khẳng định sai lệch kỹ thuật nghiêm trọng."
+      },
+      {
+        "answer_id": "HANS_0161",
+        "question_id": "HQ_041",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0167",
+        "question_id": "HQ_042",
+        "adversarial_subtype": null,
+        "expected_score": 3.25,
+        "system_score": 6.2,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0168",
+        "question_id": "HQ_042",
+        "adversarial_subtype": "keyword_stuffing",
+        "expected_score": 2.72,
+        "system_score": 7.4,
+        "abs_error": 4.68,
+        "reason": "Keyword Stuffing Vulnerability: Spam từ khóa kỹ thuật khiến hệ thống đánh giá cao do đếm trúng từ điển (dù không có ngữ nghĩa)."
+      },
+      {
+        "answer_id": "HANS_0172",
+        "question_id": "HQ_043",
+        "adversarial_subtype": "synonym_match",
+        "expected_score": 7.92,
+        "system_score": 3.5,
+        "abs_error": 4.42,
+        "reason": "Lexical Mismatch: Dùng từ đồng nghĩa tự nhiên, né từ khóa chuẩn khiến hệ thống không nhận diện được độ sâu kỹ thuật."
+      },
+      {
+        "answer_id": "HANS_0180",
+        "question_id": "HQ_045",
+        "adversarial_subtype": "partial_parrot",
+        "expected_score": 1.82,
+        "system_score": 9.1,
+        "abs_error": 7.28,
+        "reason": "Độ lệch điểm lớn (|err| = 7.28)"
+      },
+      {
+        "answer_id": "HANS_0181",
+        "question_id": "HQ_046",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0184",
+        "question_id": "HQ_046",
+        "adversarial_subtype": "long_hallucination",
+        "expected_score": 1.62,
+        "system_score": 6.3,
+        "abs_error": 4.68,
+        "reason": "Hallucination Blindspot: Hệ thống không có mô hình suy luận logic để phát hiện các khẳng định sai lệch kỹ thuật nghiêm trọng."
+      },
+      {
+        "answer_id": "HANS_0187",
+        "question_id": "HQ_047",
+        "adversarial_subtype": null,
+        "expected_score": 3.25,
+        "system_score": 6.2,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0192",
+        "question_id": "HQ_048",
+        "adversarial_subtype": "keyword_stuffing",
+        "expected_score": 2.72,
+        "system_score": 7.4,
+        "abs_error": 4.68,
+        "reason": "Keyword Stuffing Vulnerability: Spam từ khóa kỹ thuật khiến hệ thống đánh giá cao do đếm trúng từ điển (dù không có ngữ nghĩa)."
+      },
+      {
+        "answer_id": "HANS_0196",
+        "question_id": "HQ_049",
+        "adversarial_subtype": "synonym_match",
+        "expected_score": 7.92,
+        "system_score": 3.5,
+        "abs_error": 4.42,
+        "reason": "Lexical Mismatch: Dùng từ đồng nghĩa tự nhiên, né từ khóa chuẩn khiến hệ thống không nhận diện được độ sâu kỹ thuật."
+      },
+      {
+        "answer_id": "HANS_0201",
+        "question_id": "HQ_051",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0204",
+        "question_id": "HQ_051",
+        "adversarial_subtype": "partial_parrot",
+        "expected_score": 1.82,
+        "system_score": 6.3,
+        "abs_error": 4.48,
+        "reason": "Độ lệch điểm lớn (|err| = 4.48)"
+      },
+      {
+        "answer_id": "HANS_0207",
+        "question_id": "HQ_052",
+        "adversarial_subtype": null,
+        "expected_score": 3.25,
+        "system_score": 6.2,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0208",
+        "question_id": "HQ_052",
+        "adversarial_subtype": "long_hallucination",
+        "expected_score": 1.62,
+        "system_score": 6.2,
+        "abs_error": 4.58,
+        "reason": "Hallucination Blindspot: Hệ thống không có mô hình suy luận logic để phát hiện các khẳng định sai lệch kỹ thuật nghiêm trọng."
+      },
+      {
+        "answer_id": "HANS_0216",
+        "question_id": "HQ_054",
+        "adversarial_subtype": "keyword_stuffing",
+        "expected_score": 2.72,
+        "system_score": 7.4,
+        "abs_error": 4.68,
+        "reason": "Keyword Stuffing Vulnerability: Spam từ khóa kỹ thuật khiến hệ thống đánh giá cao do đếm trúng từ điển (dù không có ngữ nghĩa)."
+      },
+      {
+        "answer_id": "HANS_0220",
+        "question_id": "HQ_055",
+        "adversarial_subtype": "synonym_match",
+        "expected_score": 7.92,
+        "system_score": 3.5,
+        "abs_error": 4.42,
+        "reason": "Lexical Mismatch: Dùng từ đồng nghĩa tự nhiên, né từ khóa chuẩn khiến hệ thống không nhận diện được độ sâu kỹ thuật."
+      },
+      {
+        "answer_id": "HANS_0221",
+        "question_id": "HQ_056",
+        "adversarial_subtype": null,
+        "expected_score": 9.25,
+        "system_score": 6.3,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0227",
+        "question_id": "HQ_057",
+        "adversarial_subtype": null,
+        "expected_score": 3.25,
+        "system_score": 6.2,
+        "abs_error": 2.95,
+        "reason": "Độ lệch điểm lớn (|err| = 2.95)"
+      },
+      {
+        "answer_id": "HANS_0228",
+        "question_id": "HQ_057",
+        "adversarial_subtype": "partial_parrot",
+        "expected_score": 1.82,
+        "system_score": 6.3,
+        "abs_error": 4.48,
+        "reason": "Độ lệch điểm lớn (|err| = 4.48)"
+      },
+      {
+        "answer_id": "HANS_0232",
+        "question_id": "HQ_058",
+        "adversarial_subtype": "long_hallucination",
+        "expected_score": 1.62,
+        "system_score": 6.2,
+        "abs_error": 4.58,
+        "reason": "Hallucination Blindspot: Hệ thống không có mô hình suy luận logic để phát hiện các khẳng định sai lệch kỹ thuật nghiêm trọng."
+      },
+      {
+        "answer_id": "HANS_0240",
+        "question_id": "HQ_060",
+        "adversarial_subtype": "keyword_stuffing",
+        "expected_score": 2.72,
+        "system_score": 7.4,
+        "abs_error": 4.68,
+        "reason": "Keyword Stuffing Vulnerability: Spam từ khóa kỹ thuật khiến hệ thống đánh giá cao do đếm trúng từ điển (dù không có ngữ nghĩa)."
+      }
+    ]
+  }
+}

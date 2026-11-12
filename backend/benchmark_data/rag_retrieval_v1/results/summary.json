@@ -1,0 +1,335 @@
+{
+  "benchmark_metadata": {
+    "dataset_name": "CAREZA RAG Retrieval Benchmark v1",
+    "algorithm": "TF-IDF Cosine Similarity (TfidfEngine.compute_tfidf_cosine)",
+    "score_threshold": 0.05,
+    "total_documents": 24,
+    "total_chunks": 50,
+    "total_queries": 90,
+    "answerable_queries": 80,
+    "unanswerable_queries": 10
+  },
+  "overall_answerable_metrics": {
+    "count": 80,
+    "mrr": 0.7115,
+    "precision@1": 0.6,
+    "recall@1": 0.4604,
+    "hit_rate@1": 0.6,
+    "precision@3": 0.3083,
+    "recall@3": 0.6958,
+    "hit_rate@3": 0.8125,
+    "precision@5": 0.2025,
+    "recall@5": 0.75,
+    "hit_rate@5": 0.8375
+  },
+  "group_metrics": {
+    "direct": {
+      "count": 40,
+      "mrr": 0.8833,
+      "precision@1": 0.775,
+      "recall@1": 0.6333,
+      "hit_rate@1": 0.775,
+      "precision@3": 0.3833,
+      "recall@3": 0.9167,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.24,
+      "recall@5": 0.9375,
+      "hit_rate@5": 1.0
+    },
+    "synonym_acronym": {
+      "count": 18,
+      "mrr": 0.7176,
+      "precision@1": 0.6111,
+      "recall@1": 0.4167,
+      "hit_rate@1": 0.6111,
+      "precision@3": 0.2963,
+      "recall@3": 0.5833,
+      "hit_rate@3": 0.7778,
+      "precision@5": 0.2222,
+      "recall@5": 0.7222,
+      "hit_rate@5": 0.8333
+    },
+    "indirect": {
+      "count": 14,
+      "mrr": 0.4051,
+      "precision@1": 0.2143,
+      "recall@1": 0.1429,
+      "hit_rate@1": 0.2143,
+      "precision@3": 0.2143,
+      "recall@3": 0.4643,
+      "hit_rate@3": 0.5714,
+      "precision@5": 0.1429,
+      "recall@5": 0.5357,
+      "hit_rate@5": 0.6429
+    },
+    "english": {
+      "count": 8,
+      "mrr": 0.375,
+      "precision@1": 0.375,
+      "recall@1": 0.25,
+      "hit_rate@1": 0.375,
+      "precision@3": 0.125,
+      "recall@3": 0.25,
+      "hit_rate@3": 0.375,
+      "precision@5": 0.075,
+      "recall@5": 0.25,
+      "hit_rate@5": 0.375
+    }
+  },
+  "unanswerable_metrics": {
+    "count": 10,
+    "correct_rejections": 4,
+    "correct_rejection_rate": 0.4,
+    "false_retrievals": 6,
+    "false_retrieval_rate": 0.6
+  },
+  "boundary_conditions": {
+    "equal_score_cases_count": 23,
+    "less_than_k_cases": {
+      "1": 9,
+      "3": 14,
+      "5": 15
+    },
+    "zero_retrieval_cases_count": 9
+  },
+  "representative_error_cases": [
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_42",
+      "query": "Làm sao để hệ thống ATS chấm điểm khớp hồ sơ với bản mô tả công việc JD đạt kết quả cao?",
+      "query_type": "synonym_acronym",
+      "expected_chunks": [
+        "doc_02_c01"
+      ],
+      "retrieved_chunks": [
+        "doc_07_c00",
+        "doc_03_c00",
+        "doc_03_c02",
+        "doc_03_c01",
+        "doc_17_c00"
+      ],
+      "top_score": 0.1662,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_51",
+      "query": "Tài khoản nhân sự Recruiter và Người thẩm định Reviewer khác nhau ra sao về quyền xem CV?",
+      "query_type": "synonym_acronym",
+      "expected_chunks": [
+        "doc_11_c01"
+      ],
+      "retrieved_chunks": [
+        "doc_19_c01",
+        "doc_11_c00",
+        "doc_20_c01",
+        "doc_22_c01",
+        "doc_13_c01"
+      ],
+      "top_score": 0.1671,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_56",
+      "query": "Số lượt post bài tuyển dụng và add member tối đa của subscription Pro là bao nhiêu?",
+      "query_type": "synonym_acronym",
+      "expected_chunks": [
+        "doc_16_c00"
+      ],
+      "retrieved_chunks": [
+        "doc_14_c00",
+        "doc_02_c01",
+        "doc_09_c01",
+        "doc_13_c01",
+        "doc_09_c00"
+      ],
+      "top_score": 0.1933,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_60",
+      "query": "Tại sao tôi nộp hồ sơ mà hệ thống báo tỷ lệ phù hợp với công việc còn thấp?",
+      "query_type": "indirect",
+      "expected_chunks": [
+        "doc_02_c01"
+      ],
+      "retrieved_chunks": [
+        "doc_03_c02",
+        "doc_03_c00",
+        "doc_07_c01",
+        "doc_17_c00",
+        "doc_16_c00"
+      ],
+      "top_score": 0.2542,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_63",
+      "query": "Tôi sắp phỏng vấn vị trí lập trình nhưng rất run, có chỗ nào để luyện nói trước không?",
+      "query_type": "indirect",
+      "expected_chunks": [
+        "doc_05_c00"
+      ],
+      "retrieved_chunks": [
+        "doc_12_c00",
+        "doc_23_c01",
+        "doc_05_c01",
+        "doc_03_c01",
+        "doc_18_c00"
+      ],
+      "top_score": 0.163,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_66",
+      "query": "Tôi là chủ doanh nghiệp, muốn cấp quyền cho nhân viên vào xem CV nhưng cấm không cho họ nhắn tin riêng thì chọn quyền gì?",
+      "query_type": "indirect",
+      "expected_chunks": [
+        "doc_11_c01"
+      ],
+      "retrieved_chunks": [
+        "doc_11_c00",
+        "doc_15_c00",
+        "doc_01_c00",
+        "doc_17_c01",
+        "doc_16_c01"
+      ],
+      "top_score": 0.2332,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_68",
+      "query": "Công ty muốn tìm ứng viên lập trình viên nhưng không muốn đăng tin chờ đợi thì làm cách nào?",
+      "query_type": "indirect",
+      "expected_chunks": [
+        "doc_13_c00"
+      ],
+      "retrieved_chunks": [
+        "doc_08_c01",
+        "doc_17_c01",
+        "doc_03_c00",
+        "doc_07_c01",
+        "doc_05_c00"
+      ],
+      "top_score": 0.2647,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_70",
+      "query": "Ứng viên phát hiện một công ty bắt đóng tiền đặt cọc trước khi nhận việc thì cần làm gì?",
+      "query_type": "indirect",
+      "expected_chunks": [
+        "doc_20_c00",
+        "doc_20_c01"
+      ],
+      "retrieved_chunks": [
+        "doc_08_c01",
+        "doc_07_c01",
+        "doc_10_c00",
+        "doc_12_c01",
+        "doc_13_c01"
+      ],
+      "top_score": 0.1635,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_73",
+      "query": "What are the core required sections to include in a standard resume on CAREZA?",
+      "query_type": "english",
+      "expected_chunks": [
+        "doc_01_c01",
+        "doc_01_c02",
+        "doc_01_c00"
+      ],
+      "retrieved_chunks": [],
+      "top_score": 0.0,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_75",
+      "query": "What are the lifecycle status stages of an application on the platform?",
+      "query_type": "english",
+      "expected_chunks": [
+        "doc_03_c00",
+        "doc_03_c02",
+        "doc_03_c01"
+      ],
+      "retrieved_chunks": [],
+      "top_score": 0.0,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_77",
+      "query": "What are the different member roles and permissions within an enterprise employer account?",
+      "query_type": "english",
+      "expected_chunks": [
+        "doc_11_c00",
+        "doc_11_c01"
+      ],
+      "retrieved_chunks": [],
+      "top_score": 0.0,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_78",
+      "query": "How can an employer search for anonymous candidates and unlock full profiles in the Talent Pool?",
+      "query_type": "english",
+      "expected_chunks": [
+        "doc_13_c01",
+        "doc_13_c00"
+      ],
+      "retrieved_chunks": [],
+      "top_score": 0.0,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "completely_missed",
+      "query_id": "query_79",
+      "query": "What documents are required for a company to obtain the Verified Badge?",
+      "query_type": "english",
+      "expected_chunks": [
+        "doc_15_c00"
+      ],
+      "retrieved_chunks": [],
+      "top_score": 0.0,
+      "reason": "Không có chunk kỳ vọng nào vượt threshold 0.05 hoặc không chứa từ khóa trùng khớp trực tiếp (Vocabulary Mismatch / Chênh lệch ngôn ngữ)."
+    },
+    {
+      "error_type": "suboptimal_ranking",
+      "query_id": "query_04",
+      "query": "Tính năng Match Score giữa CV và JD của CAREZA hoạt động dựa trên nguyên lý nào?",
+      "query_type": "direct",
+      "expected_chunks": [
+        "doc_02_c01"
+      ],
+      "first_relevant_rank": 2,
+      "top_retrieved_irrelevant": "doc_02_c00",
+      "top_score": 0.1664,
+      "reason": "Chunk không liên quan chứa nhiều từ ngữ phổ biến trùng lặp với câu hỏi đẩy score lên cao hơn chunk đúng."
+    },
+    {
+      "error_type": "suboptimal_ranking",
+      "query_id": "query_05",
+      "query": "AI của CAREZA hỗ trợ phát hiện những thông tin gì từ CV của ứng viên?",
+      "query_type": "direct",
+      "expected_chunks": [
+        "doc_02_c00",
+        "doc_02_c01"
+      ],
+      "first_relevant_rank": 2,
+      "top_retrieved_irrelevant": "doc_01_c00",
+      "top_score": 0.2089,
+      "reason": "Chunk không liên quan chứa nhiều từ ngữ phổ biến trùng lặp với câu hỏi đẩy score lên cao hơn chunk đúng."
+    }
+  ]
+}

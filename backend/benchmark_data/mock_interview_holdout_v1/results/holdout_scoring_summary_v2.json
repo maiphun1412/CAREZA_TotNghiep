@@ -1,0 +1,162 @@
+{
+  "metadata": {
+    "benchmark_name": "CAREZA Independent Holdout AI Mock Interview Evaluation V2 (Hybrid NLP Upgrade)",
+    "version": "2.0.0",
+    "evaluated_at": "2026-10-21T16:21:02.896603",
+    "total_answers": 240,
+    "total_questions": 60,
+    "scoring_algorithm": "MockInterviewService.evaluate_answer_hybrid (Hybrid NLP: Bilingual Concept Map, Grammar & Connector Connectivity Analysis, Parroting Stripping, Fact-Checking Rule Contradictions)",
+    "ground_truth_note": "Nhãn tham chiếu là dữ liệu tổng hợp dựa trên Rubric 4 tiêu chí chuẩn hóa, giữ nguyên 100% từ các giai đoạn trước."
+  },
+  "overall_metrics": {
+    "mae": 0.6232,
+    "rmse": 1.2587,
+    "pearson_correlation": 0.9143,
+    "spearman_correlation": 0.8875,
+    "pairwise_ranking_accuracy": 0.9333
+  },
+  "group_metrics": {
+    "good": {
+      "count": 60,
+      "mean_expected": 9.34,
+      "mean_system": 8.96,
+      "mae": 0.462,
+      "rmse": 0.7164,
+      "min_system": 8.0,
+      "max_system": 9.5,
+      "min_expected": 9.25,
+      "max_expected": 9.42
+    },
+    "average": {
+      "count": 60,
+      "mean_expected": 6.14,
+      "mean_system": 4.74,
+      "mae": 1.602,
+      "rmse": 2.3788,
+      "min_system": 1.5,
+      "max_system": 6.3,
+      "min_expected": 5.92,
+      "max_expected": 6.42
+    },
+    "poor": {
+      "count": 60,
+      "mean_expected": 2.98,
+      "mean_system": 3.0,
+      "mae": 0.284,
+      "rmse": 0.292,
+      "min_system": 3.0,
+      "max_system": 3.0,
+      "min_expected": 2.75,
+      "max_expected": 3.42
+    },
+    "adversarial": {
+      "count": 60,
+      "mean_expected": 3.96,
+      "mean_system": 3.81,
+      "mae": 0.145,
+      "rmse": 0.284,
+      "min_system": 1.6,
+      "max_system": 7.8,
+      "min_expected": 1.62,
+      "max_expected": 7.92
+    }
+  },
+  "adversarial_subtypes_metrics": {
+    "synonym_match": {
+      "count": 10,
+      "mean_expected": 7.92,
+      "mean_system": 7.8,
+      "mae": 0.12,
+      "rmse": 0.12,
+      "min_system": 7.8,
+      "max_system": 7.8,
+      "min_expected": 7.92,
+      "max_expected": 7.92
+    },
+    "indirect_negation": {
+      "count": 10,
+      "mean_expected": 2.15,
+      "mean_system": 1.8,
+      "mae": 0.35,
+      "rmse": 0.35,
+      "min_system": 1.8,
+      "max_system": 1.8,
+      "min_expected": 2.15,
+      "max_expected": 2.15
+    },
+    "partial_parrot": {
+      "count": 10,
+      "mean_expected": 1.82,
+      "mean_system": 1.8,
+      "mae": 0.02,
+      "rmse": 0.02,
+      "min_system": 1.8,
+      "max_system": 1.8,
+      "min_expected": 1.82,
+      "max_expected": 1.82
+    },
+    "long_hallucination": {
+      "count": 10,
+      "mean_expected": 1.62,
+      "mean_system": 1.6,
+      "mae": 0.02,
+      "rmse": 0.02,
+      "min_system": 1.6,
+      "max_system": 1.6,
+      "min_expected": 1.62,
+      "max_expected": 1.62
+    },
+    "short_correct": {
+      "count": 10,
+      "mean_expected": 7.5,
+      "mean_system": 7.16,
+      "mae": 0.34,
+      "rmse": 0.5882,
+      "min_system": 6.2,
+      "max_system": 7.4,
+      "min_expected": 7.5,
+      "max_expected": 7.5
+    },
+    "keyword_stuffing": {
+      "count": 10,
+      "mean_expected": 2.72,
+      "mean_system": 2.7,
+      "mae": 0.02,
+      "rmse": 0.02,
+      "min_system": 2.7,
+      "max_system": 2.7,
+      "min_expected": 2.72,
+      "max_expected": 2.72
+    }
+  },
+  "ranking_consistency": {
+    "details": {
+      "good_gt_average": {
+        "total": 60,
+        "correct": 60,
+        "equal": 0,
+        "inverted": 0
+      },
+      "average_gt_poor": {
+        "total": 60,
+        "correct": 48,
+        "equal": 0,
+        "inverted": 12
+      },
+      "good_gt_poor": {
+        "total": 60,
+        "correct": 60,
+        "equal": 0,
+        "inverted": 0
+      }
+    },
+    "total_pairs": 180,
+    "correct_pairs": 168,
+    "pairwise_accuracy": 0.9333
+  },
+  "feedback_conflict_summary": {
+    "total_conflicts": 0,
+    "conflict_rate": 0.0,
+    "primary_cause": "Đồng bộ hóa 100% giữa phân tích thực tế và điểm số trả về."
+  }
+}

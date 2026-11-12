@@ -4,6 +4,7 @@ import { useState, useRef, useEffect } from "react";
 import Link from "next/link";
 import { Tooltip, message, Switch } from "antd";
 import { useAuthStore } from "@/store/auth-store";
+import { aiService } from "@/services/ai.service";
 import {
   Bot,
   Send,
@@ -46,6 +47,14 @@ interface ChatMessage {
   timestamp: string;
   attachmentName?: string;
   tags?: string[];
+  retrieved_chunks?: Array<{
+    chunk_id: number;
+    document_id?: number;
+    document_title: string;
+    content?: string;
+    score?: number;
+    is_available?: boolean;
+  }>;
 }
 
 interface ConversationHistoryItem {
@@ -126,9 +135,18 @@ export default function AICareerPage() {
     setInputText(prompt);
   };
 
-  // Xử lý gửi tin nhắn
-  const handleSendMessage = () => {
+  const { isAuthenticated } = useAuthStore();
+  const [sessionId, setSessionId] = useState<number | undefined>(undefined);
+
+  // Xử lý gửi tin nhắn AI thật
+  const handleSendMessage = async () => {
     if (!inputText.trim() && !attachedFile) return;
+
+    // Kiểm tra đăng nhập bắt buộc đối với chức năng chat có lưu lịch sử
+    if (!isAuthenticated) {
+      message.warning("Vui lòng đăng nhập tài khoản để trò chuyện cùng Trợ lý AI và lưu lại lịch sử tư vấn.");
+      return;
+    }
 
     const userMsg: ChatMessage = {
       id: Date.now().toString(),
@@ -140,19 +158,28 @@ export default function AICareerPage() {
 
     setMessages((prev) => [...prev, userMsg]);
     const currentInput = inputText;
+    const fileToUpload = attachedFile;
     setInputText("");
     setAttachedFile(null);
     setIsAiTyping(true);
 
-    // Giả lập phản hồi AI chuyên sâu có cấu trúc
-    setTimeout(() => {
+    try {
       let aiResponseText = "";
-      if (currentInput.toLowerCase().includes("cv") || userMsg.attachmentName) {
-        aiResponseText = `Chào bạn, tôi đã tiếp nhận yêu cầu phân tích CV của bạn!\n\n**Đánh giá tổng quan:**\n- **Bố cục & Định dạng:** Rõ ràng, cấu trúc mạch lạc, chuẩn ATS.\n- **Điểm mạnh:** Các kỹ năng chuyên môn được làm nổi bật, có liên kết với kết quả công việc.\n- **Gợi ý cải thiện:** Nên bổ sung thêm các số liệu định lượng (KPIs, % tăng trưởng, số người dùng) để tăng tính thuyết phục.\n\nBạn có muốn tôi hỗ trợ viết lại phần Kinh nghiệm làm việc để ấn tượng hơn không?`;
-      } else if (currentInput.toLowerCase().includes("phỏng vấn")) {
-        aiResponseText = `Rất sẵn lòng! Hãy cùng bắt đầu buổi luyện phỏng vấn thử nhé.\n\n**Câu hỏi 1:** *"Hãy mô tả một tình huống bạn phải giải quyết xung đột ý kiến với các thành viên khác trong nhóm dự án để đạt được mục tiêu chung?"*\n\n👉 Bạn hãy gõ câu trả lời của mình, tôi sẽ nhận xét và đưa ra gợi ý cách trả lời theo mô hình STAR (Situation - Task - Action - Result).`;
+      let retrievedChunks: any[] = [];
+      if (fileToUpload) {
+        const formData = new FormData();
+        formData.append("file", fileToUpload);
+        formData.append("file_name", fileToUpload.name);
+        const res = await aiService.parseCv(formData);
+        const parsed = res?.data?.parsed_data || {};
+        aiResponseText = `Đã phân tích xong CV "${fileToUpload.name}":\n\n- Họ tên: ${parsed.name || "Đã trích xuất"}\n- Email: ${parsed.email || "Đã trích xuất"}\n- Kỹ năng phát hiện: ${Array.isArray(parsed.skills) && parsed.skills.length > 0 ? parsed.skills.join(", ") : "Chưa phát hiện kỹ năng rõ ràng"}\n- Học vấn: ${Array.isArray(parsed.education) ? parsed.education.map((e: any) => e.school || e).join("; ") : "Thông tin cơ bản"}`;
       } else {
-        aiResponseText = `Cảm ơn bạn đã đặt câu hỏi. Dựa trên phân tích xu hướng thị trường tuyển dụng hiện nay, đây là các gợi ý chi tiết dành cho bạn:\n\n1. **Xác định mục tiêu rõ ràng:** Lựa chọn lĩnh vực có tốc độ phát triển tốt.\n2. **Tập trung vào kỹ năng lõi:** Nâng cao các kỹ năng thực chiến được nhà tuyển dụng săn đón.\n3. **Mở rộng cơ hội kết nối:** Tối ưu hóa hồ sơ và tham gia các cộng đồng chuyên môn.\n\nTôi luôn sẵn sàng giải đáp thêm các thắc mắc chuyên sâu của bạn!`;
+        const res = await aiService.chatRag(currentInput, sessionId);
+        aiResponseText = res?.data?.content || res?.data?.answer || "Hệ thống AI đã tiếp nhận câu hỏi và đưa ra tư vấn phù hợp nhất cho bạn.";
+        retrievedChunks = res?.data?.retrieved_chunks || [];
+        if (res?.data?.session_id) {
+          setSessionId(res.data.session_id);
+        }
       }
 
       const aiMsg: ChatMessage = {
@@ -160,11 +187,21 @@ export default function AICareerPage() {
         sender: "ai",
         text: aiResponseText,
         timestamp: new Date().toLocaleTimeString("vi-VN", { hour: "2-digit", minute: "2-digit" }),
+        retrieved_chunks: retrievedChunks,
       };
 
       setMessages((prev) => [...prev, aiMsg]);
+    } catch (err: any) {
+      const errMsg =
+        err?.response?.data?.detail ||
+        err?.response?.data?.message ||
+        err?.response?.data?.error ||
+        err?.message ||
+        "Lỗi khi kết nối với máy chủ AI. Vui lòng thử lại!";
+      message.error(errMsg);
+    } finally {
       setIsAiTyping(false);
-    }, 1000);
+    }
   };
 
   const handleFileUpload = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -180,12 +217,27 @@ export default function AICareerPage() {
   };
 
   return (
-    <div className="w-full max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-[38px] pb-12 pt-2 bg-[#F5F8FF] min-h-screen space-y-4.5">
+    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 pb-12 pt-2 bg-[#f7faff] min-h-screen space-y-2.5">
       {/* ======================================================== */}
-      {/* 1. HERO / BANNER SỬ DỤNG /images/Ai.png                   */}
+      {/* 1. BREADCRUMB NỀN TRANG NGOÀI BANNER                      */}
+      {/* ======================================================== */}
+      <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium py-1">
+        <Link href="/" className="text-[#2563EB] hover:underline">
+          Trang chủ
+        </Link>
+        <span className="text-slate-400">/</span>
+        <Link href="/cong-cu" className="text-[#2563EB] hover:underline">
+          Công cụ
+        </Link>
+        <span className="text-slate-400">/</span>
+        <span className="text-slate-800 font-semibold">Trợ lý AI Career & Phỏng vấn</span>
+      </div>
+
+      {/* ======================================================== */}
+      {/* 2. HERO BANNER SỬ DỤNG /images/Ai.png (GỌN 110-120px)    */}
       {/* ======================================================== */}
       <div
-        className="relative w-full rounded-[22px] overflow-hidden min-h-[190px] sm:min-h-[215px] border border-blue-200/70 shadow-sm p-5 sm:p-6 lg:p-7 flex flex-col justify-between"
+        className="relative w-full rounded-2xl overflow-hidden min-h-[110px] md:min-h-[116px] border border-blue-200/80 shadow-2xs p-4 sm:p-5 md:px-7 flex items-center justify-between"
         style={{
           backgroundImage: "url('/images/Ai.png')",
           backgroundSize: "cover",
@@ -193,78 +245,32 @@ export default function AICareerPage() {
           backgroundRepeat: "no-repeat",
         }}
       >
-        {/* Lớp Overlay gradient bên trái để chữ luôn nổi bật */}
-        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/85 to-transparent sm:w-[65%] pointer-events-none" />
+        {/* Lớp Overlay gradient bên trái để chữ luôn nổi bật và hiển thị hình minh họa bên phải */}
+        <div className="absolute inset-0 bg-gradient-to-r from-white/95 via-white/80 to-transparent sm:w-[60%] pointer-events-none" />
 
         {/* Nội dung bên trái Hero */}
-        <div className="relative z-10 max-w-2xl space-y-2">
-          {/* Breadcrumb */}
-          <div className="flex items-center gap-2 text-xs sm:text-[13px] text-slate-600 font-medium">
-            <Link href="/" className="hover:text-[#0062ff] transition-colors">
-              Trang chủ
-            </Link>
-            <span>›</span>
-            <Link href="/cong-cu" className="hover:text-[#0062ff] transition-colors">
-              Công cụ
-            </Link>
-            <span>›</span>
-            <span className="text-[#0062ff] font-semibold">Trợ lý AI Career & Phỏng vấn</span>
-          </div>
-
-          {/* Heading + Badge */}
-          <div className="flex flex-wrap items-center gap-3 pt-0.5">
-            <div className="w-11 h-11 rounded-xl bg-[#0062ff] text-white flex items-center justify-center shadow-xs shrink-0">
-              <Bot className="w-6 h-6" />
+        <div className="relative z-10 max-w-2xl space-y-1.5 py-1">
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="w-8 h-8 rounded-lg bg-[#2563eb] text-white flex items-center justify-center shadow-xs shrink-0">
+              <Bot className="w-5 h-5" />
             </div>
-            <h1 className="text-2xl sm:text-3xl lg:text-[28px] font-black text-slate-900 tracking-tight m-0 leading-tight">
+            <h1 className="text-lg sm:text-xl md:text-2xl font-black text-slate-900 tracking-tight m-0 leading-tight">
               Trợ lý AI Career & Phỏng vấn
             </h1>
-            <span className="bg-blue-100/90 text-[#0062ff] text-xs font-bold px-3.5 py-1 rounded-full border border-blue-200">
-              AI đồng hành cùng sự nghiệp của bạn
+            <span className="bg-blue-100 text-[#2563eb] text-[11px] font-bold px-2.5 py-0.5 rounded-full border border-blue-200">
+              AI đồng hành sự nghiệp
             </span>
           </div>
-        </div>
-
-        {/* 4 Mini Benefit Badges */}
-        <div className="relative z-10 grid grid-cols-2 sm:grid-cols-4 gap-2.5 pt-3 max-w-2xl">
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/95 backdrop-blur-xs border border-blue-100 shadow-2xs">
-            <Users className="w-4.5 h-4.5 text-[#0062ff] shrink-0" />
-            <div className="min-w-0">
-              <span className="text-xs sm:text-[12.5px] font-bold text-slate-800 block truncate">10.000+</span>
-              <span className="text-[10.5px] text-slate-500 block truncate">Người dùng tin tưởng</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/95 backdrop-blur-xs border border-blue-100 shadow-2xs">
-            <Clock className="w-4.5 h-4.5 text-emerald-600 shrink-0" />
-            <div className="min-w-0">
-              <span className="text-xs sm:text-[12.5px] font-bold text-slate-800 block truncate">24/7</span>
-              <span className="text-[10.5px] text-slate-500 block truncate">Luôn sẵn sàng hỗ trợ</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/95 backdrop-blur-xs border border-blue-100 shadow-2xs">
-            <Briefcase className="w-4.5 h-4.5 text-purple-600 shrink-0" />
-            <div className="min-w-0">
-              <span className="text-xs sm:text-[12.5px] font-bold text-slate-800 block truncate">Đa năng</span>
-              <span className="text-[10.5px] text-slate-500 block truncate">Từ CV đến phỏng vấn</span>
-            </div>
-          </div>
-
-          <div className="flex items-center gap-2 px-3 py-2 rounded-xl bg-white/95 backdrop-blur-xs border border-blue-100 shadow-2xs">
-            <Sparkles className="w-4.5 h-4.5 text-amber-500 shrink-0" />
-            <div className="min-w-0">
-              <span className="text-xs sm:text-[12.5px] font-bold text-slate-800 block truncate">Cá nhân hóa</span>
-              <span className="text-[10.5px] text-slate-500 block truncate">Dựa trên mục tiêu của bạn</span>
-            </div>
-          </div>
+          <p className="text-xs sm:text-[13px] text-slate-600 font-normal m-0 leading-relaxed">
+            Khám phá tiềm năng, tối ưu hồ sơ ứng tuyển và tự tin chinh phục phỏng vấn cùng Trợ lý AI Careza.
+          </p>
         </div>
       </div>
 
       {/* ======================================================== */}
-      {/* 2. TOOL NAVIGATION TABS (PILL/TAB ROW)                    */}
+      {/* 3. TOOL NAVIGATION TABS (CÁCH BANNER 20px VỚI !mt-5)     */}
       {/* ======================================================== */}
-      <div className="flex flex-nowrap overflow-x-auto no-scrollbar items-center gap-2.5 pt-1 pb-1">
+      <div className="flex flex-nowrap overflow-x-auto no-scrollbar items-center gap-2 !mt-5 pt-0.5">
         {[
           { key: "chat", title: "Chat với AI" },
           { key: "cv", title: "Phân tích CV" },
@@ -283,10 +289,10 @@ export default function AICareerPage() {
               else if (tab.key === "interview") setInputText("Luyện phỏng vấn thử với tôi vị trí ");
               else if (tab.key === "jobs") setInputText("Gợi ý các việc làm phù hợp nhất với hồ sơ của tôi.");
             }}
-            className={`px-4.5 py-2.5 rounded-xl text-xs sm:text-sm font-semibold whitespace-nowrap transition-all cursor-pointer ${
+            className={`px-4 py-2 rounded-xl text-xs sm:text-[13px] font-bold whitespace-nowrap transition-all cursor-pointer ${
               activeTab === tab.key
-                ? "bg-[#0062ff] text-white shadow-xs"
-                : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/50 border border-slate-200"
+                ? "bg-[#2563eb] text-white shadow-xs"
+                : "bg-white text-slate-700 hover:text-[#2563eb] hover:bg-blue-50/60 border border-slate-200"
             }`}
           >
             {tab.title}
@@ -321,7 +327,7 @@ export default function AICareerPage() {
                 setInputText("");
                 message.info("Đã tạo phiên trò chuyện mới!");
               }}
-              className="w-full py-2.5 px-3 rounded-xl border border-blue-200 text-[#0062ff] hover:bg-blue-50 font-bold text-xs sm:text-[13px] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              className="w-full py-2.5 px-3 rounded-xl border border-blue-200 text-[#2563eb] hover:bg-blue-50 font-bold text-xs sm:text-[13px] flex items-center justify-center gap-1.5 transition-all cursor-pointer"
             >
               <span>+ Cuộc trò chuyện mới</span>
             </button>
@@ -346,7 +352,7 @@ export default function AICareerPage() {
                       {item.iconType === "doc" && <FileText className="w-4 h-4 text-blue-500 shrink-0" />}
                       {item.iconType === "chat" && <Bot className="w-4 h-4 text-purple-500 shrink-0" />}
                       {item.iconType === "briefcase" && <Briefcase className="w-4 h-4 text-emerald-500 shrink-0" />}
-                      <span className="text-[12.5px] sm:text-[13px] font-medium text-slate-700 group-hover:text-[#0062ff] truncate">
+                      <span className="text-[12.5px] sm:text-[13px] font-medium text-slate-700 group-hover:text-[#2563eb] truncate">
                         {item.title}
                       </span>
                     </div>
@@ -376,7 +382,7 @@ export default function AICareerPage() {
                       {item.iconType === "doc" && <FileText className="w-4 h-4 text-blue-500 shrink-0" />}
                       {item.iconType === "chat" && <Bot className="w-4 h-4 text-purple-500 shrink-0" />}
                       {item.iconType === "briefcase" && <Briefcase className="w-4 h-4 text-emerald-500 shrink-0" />}
-                      <span className="text-[12.5px] sm:text-[13px] font-medium text-slate-700 group-hover:text-[#0062ff] truncate">
+                      <span className="text-[12.5px] sm:text-[13px] font-medium text-slate-700 group-hover:text-[#2563eb] truncate">
                         {item.title}
                       </span>
                     </div>
@@ -390,7 +396,7 @@ export default function AICareerPage() {
               <button
                 type="button"
                 onClick={() => message.info("Đang hiển thị toàn bộ lịch sử trò chuyện.")}
-                className="text-xs sm:text-[12.5px] font-semibold text-[#0062ff] hover:underline cursor-pointer"
+                className="text-xs sm:text-[12.5px] font-semibold text-[#2563eb] hover:underline cursor-pointer"
               >
                 Xem tất cả lịch sử →
               </button>
@@ -398,7 +404,7 @@ export default function AICareerPage() {
           </div>
 
           {/* Card: Nâng cấp trải nghiệm AI mạnh mẽ hơn (Navy Blue Gradient Card) */}
-          <div className="rounded-2xl p-5 bg-gradient-to-br from-[#0a2356] via-[#0b2f7a] to-[#093e9e] text-white shadow-md space-y-3.5 relative overflow-hidden">
+          <div className="rounded-2xl p-5 bg-gradient-to-br from-[#1e3a8a] via-[#1d4ed8] to-[#2563eb] text-white shadow-md space-y-3.5 relative overflow-hidden">
             <div className="flex items-start gap-2.5">
               <div className="w-8 h-8 rounded-lg bg-amber-400/20 text-amber-300 flex items-center justify-center shrink-0">
                 <Crown className="w-4.5 h-4.5" />
@@ -430,7 +436,7 @@ export default function AICareerPage() {
             <button
               type="button"
               onClick={() => message.success("Tính năng nâng cấp gói Careza AI Pro đang được phát hành!")}
-              className="w-full py-2.5 px-3 rounded-xl bg-white text-[#0a2356] hover:bg-blue-50 font-bold text-xs sm:text-[13px] shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer"
+              className="w-full py-2.5 px-3 rounded-xl bg-white text-[#1e3a8a] hover:bg-blue-50 font-bold text-xs sm:text-[13px] shadow-xs flex items-center justify-center gap-1.5 transition-all cursor-pointer border-none"
             >
               <span>Nâng cấp ngay</span>
               <ArrowRight className="w-4 h-4" />
@@ -443,13 +449,13 @@ export default function AICareerPage() {
           {/* Header AI Workspace: Lời chào người dùng */}
           <div className="flex items-center gap-3.5 pb-2 border-b border-slate-100">
             <div className="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-indigo-600 p-0.5 shrink-0 shadow-xs">
-              <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-[#0062ff]">
+              <div className="w-full h-full rounded-full bg-white flex items-center justify-center text-[#2563eb]">
                 <Bot className="w-7 h-7" />
               </div>
             </div>
             <div>
               <h2 className="text-base sm:text-lg font-bold text-slate-900 m-0">
-                Xin chào <span className="text-[#0062ff]">{userName}!</span> 👋
+                Xin chào <span className="text-[#2563eb]">{userName}!</span> 👋
               </h2>
               <p className="text-xs sm:text-[13.5px] text-slate-600 font-normal m-0 mt-0.5">
                 Tôi là Trợ lý AI Career của Careza. Hôm nay bạn muốn tôi hỗ trợ gì?
@@ -457,124 +463,136 @@ export default function AICareerPage() {
             </div>
           </div>
 
-          {/* 6 Quick Action Cards (Bám sát 100% hình reference) */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3 pt-1">
-            {/* Action 1 */}
+          {/* 6 Quick Action Cards (Cân đối bằng nhau, màu sắc nổi bật rõ nét) */}
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-3.5 pt-1 items-stretch">
+            {/* Action 1: Phân tích CV (Xanh dương) */}
             <button
               type="button"
               onClick={() => {
                 setActiveTab("cv");
                 setInputText("Hãy phân tích điểm mạnh và điểm cần cải thiện của CV của tôi.");
               }}
-              className="p-3.5 rounded-xl bg-blue-50/60 hover:bg-blue-100/70 border border-blue-100 text-left transition-all group cursor-pointer space-y-1.5"
+              className="p-3.5 sm:p-4 rounded-xl bg-blue-50/90 hover:bg-blue-100/90 border border-blue-200/90 text-left transition-all duration-150 group cursor-pointer space-y-2 flex flex-col justify-between shadow-2xs hover:shadow-xs hover:-translate-y-0.5"
             >
-              <div className="w-8 h-8 rounded-lg bg-blue-100 text-[#0062ff] flex items-center justify-center">
-                <FileText className="w-4 h-4" />
+              <div>
+                <div className="w-8.5 h-8.5 rounded-lg bg-blue-100 text-[#2563eb] border border-blue-200 flex items-center justify-center mb-2 shadow-2xs">
+                  <FileText className="w-4.5 h-4.5" />
+                </div>
+                <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-900 group-hover:text-[#2563eb] m-0">
+                  Phân tích CV
+                </h4>
               </div>
-              <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-800 group-hover:text-[#0062ff] m-0">
-                Phân tích CV
-              </h4>
-              <p className="text-[11px] sm:text-[11.5px] text-slate-500 m-0 leading-tight line-clamp-2">
+              <p className="text-[11px] sm:text-[11.5px] text-slate-600 font-medium m-0 leading-snug line-clamp-2">
                 Nhận đánh giá chi tiết và gợi ý cải thiện
               </p>
             </button>
 
-            {/* Action 2 */}
+            {/* Action 2: Luyện phỏng vấn (Hồng/Rose) */}
             <button
               type="button"
               onClick={() => {
                 setActiveTab("interview");
                 setInputText("Luyện phỏng vấn với tôi theo các câu hỏi vị trí...");
               }}
-              className="p-3.5 rounded-xl bg-rose-50/60 hover:bg-rose-100/70 border border-rose-100 text-left transition-all group cursor-pointer space-y-1.5"
+              className="p-3.5 sm:p-4 rounded-xl bg-rose-50/90 hover:bg-rose-100/90 border border-rose-200/90 text-left transition-all duration-150 group cursor-pointer space-y-2 flex flex-col justify-between shadow-2xs hover:shadow-xs hover:-translate-y-0.5"
             >
-              <div className="w-8 h-8 rounded-lg bg-rose-100 text-rose-600 flex items-center justify-center">
-                <Search className="w-4 h-4" />
+              <div>
+                <div className="w-8.5 h-8.5 rounded-lg bg-rose-100 text-rose-600 border border-rose-200 flex items-center justify-center mb-2 shadow-2xs">
+                  <Search className="w-4.5 h-4.5" />
+                </div>
+                <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-900 group-hover:text-rose-600 m-0">
+                  Luyện phỏng vấn
+                </h4>
               </div>
-              <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-800 group-hover:text-rose-600 m-0">
-                Luyện phỏng vấn
-              </h4>
-              <p className="text-[11px] sm:text-[11.5px] text-slate-500 m-0 leading-tight line-clamp-2">
+              <p className="text-[11px] sm:text-[11.5px] text-slate-600 font-medium m-0 leading-snug line-clamp-2">
                 Thực hành phỏng vấn với AI theo vị trí
               </p>
             </button>
 
-            {/* Action 3 */}
+            {/* Action 3: Tư vấn nghề nghiệp (Xanh lá) */}
             <button
               type="button"
               onClick={() => {
                 setActiveTab("career");
                 setInputText("Tư vấn lộ trình phát triển nghề nghiệp phù hợp với tôi.");
               }}
-              className="p-3.5 rounded-xl bg-emerald-50/60 hover:bg-emerald-100/70 border border-emerald-100 text-left transition-all group cursor-pointer space-y-1.5"
+              className="p-3.5 sm:p-4 rounded-xl bg-emerald-50/90 hover:bg-emerald-100/90 border border-emerald-200/90 text-left transition-all duration-150 group cursor-pointer space-y-2 flex flex-col justify-between shadow-2xs hover:shadow-xs hover:-translate-y-0.5"
             >
-              <div className="w-8 h-8 rounded-lg bg-emerald-100 text-emerald-700 flex items-center justify-center">
-                <UserCheck className="w-4 h-4" />
+              <div>
+                <div className="w-8.5 h-8.5 rounded-lg bg-emerald-100 text-emerald-700 border border-emerald-200 flex items-center justify-center mb-2 shadow-2xs">
+                  <UserCheck className="w-4.5 h-4.5" />
+                </div>
+                <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-900 group-hover:text-emerald-700 m-0">
+                  Tư vấn nghề nghiệp
+                </h4>
               </div>
-              <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-800 group-hover:text-emerald-700 m-0">
-                Tư vấn nghề nghiệp
-              </h4>
-              <p className="text-[11px] sm:text-[11.5px] text-slate-500 m-0 leading-tight line-clamp-2">
+              <p className="text-[11px] sm:text-[11.5px] text-slate-600 font-medium m-0 leading-snug line-clamp-2">
                 Định hướng dựa trên năng lực & sở thích
               </p>
             </button>
 
-            {/* Action 4 */}
+            {/* Action 4: Gợi ý việc làm (Tím) */}
             <button
               type="button"
               onClick={() => {
                 setActiveTab("jobs");
                 setInputText("Gợi ý các cơ hội việc làm tuyển dụng phù hợp với hồ sơ của tôi.");
               }}
-              className="p-3.5 rounded-xl bg-purple-50/60 hover:bg-purple-100/70 border border-purple-100 text-left transition-all group cursor-pointer space-y-1.5"
+              className="p-3.5 sm:p-4 rounded-xl bg-purple-50/90 hover:bg-purple-100/90 border border-purple-200/90 text-left transition-all duration-150 group cursor-pointer space-y-2 flex flex-col justify-between shadow-2xs hover:shadow-xs hover:-translate-y-0.5"
             >
-              <div className="w-8 h-8 rounded-lg bg-purple-100 text-purple-700 flex items-center justify-center">
-                <Briefcase className="w-4 h-4" />
+              <div>
+                <div className="w-8.5 h-8.5 rounded-lg bg-purple-100 text-purple-700 border border-purple-200 flex items-center justify-center mb-2 shadow-2xs">
+                  <Briefcase className="w-4.5 h-4.5" />
+                </div>
+                <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-900 group-hover:text-purple-700 m-0">
+                  Gợi ý việc làm
+                </h4>
               </div>
-              <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-800 group-hover:text-purple-700 m-0">
-                Gợi ý việc làm
-              </h4>
-              <p className="text-[11px] sm:text-[11.5px] text-slate-500 m-0 leading-tight line-clamp-2">
+              <p className="text-[11px] sm:text-[11.5px] text-slate-600 font-medium m-0 leading-snug line-clamp-2">
                 Tìm việc phù hợp với hồ sơ của bạn
               </p>
             </button>
 
-            {/* Action 5 */}
+            {/* Action 5: Tối ưu LinkedIn (Cyan/Sky) */}
             <button
               type="button"
               onClick={() => {
                 setActiveTab("linkedin");
                 setInputText("Hướng dẫn cách tối ưu hồ sơ LinkedIn và phần Tóm tắt cá nhân.");
               }}
-              className="p-3.5 rounded-xl bg-sky-50/60 hover:bg-sky-100/70 border border-sky-100 text-left transition-all group cursor-pointer space-y-1.5"
+              className="p-3.5 sm:p-4 rounded-xl bg-sky-50/90 hover:bg-sky-100/90 border border-sky-200/90 text-left transition-all duration-150 group cursor-pointer space-y-2 flex flex-col justify-between shadow-2xs hover:shadow-xs hover:-translate-y-0.5"
             >
-              <div className="w-8 h-8 rounded-lg bg-sky-100 text-sky-700 flex items-center justify-center">
-                <Linkedin className="w-4 h-4" />
+              <div>
+                <div className="w-8.5 h-8.5 rounded-lg bg-sky-100 text-sky-700 border border-sky-200 flex items-center justify-center mb-2 shadow-2xs">
+                  <Linkedin className="w-4.5 h-4.5" />
+                </div>
+                <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-900 group-hover:text-sky-700 m-0">
+                  Tối ưu LinkedIn
+                </h4>
               </div>
-              <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-800 group-hover:text-sky-700 m-0">
-                Tối ưu LinkedIn
-              </h4>
-              <p className="text-[11px] sm:text-[11.5px] text-slate-500 m-0 leading-tight line-clamp-2">
+              <p className="text-[11px] sm:text-[11.5px] text-slate-600 font-medium m-0 leading-snug line-clamp-2">
                 Cải thiện hồ sơ chuyên nghiệp hơn
               </p>
             </button>
 
-            {/* Action 6 */}
+            {/* Action 6: Kế hoạch phát triển (Vàng/Amber) */}
             <button
               type="button"
               onClick={() => {
                 setActiveTab("plan");
                 setInputText("Lập kế hoạch 6 tháng để nâng cao kỹ năng và đạt mục tiêu thăng tiến.");
               }}
-              className="p-3.5 rounded-xl bg-amber-50/60 hover:bg-amber-100/70 border border-amber-100 text-left transition-all group cursor-pointer space-y-1.5"
+              className="p-3.5 sm:p-4 rounded-xl bg-amber-50/90 hover:bg-amber-100/90 border border-amber-200/90 text-left transition-all duration-150 group cursor-pointer space-y-2 flex flex-col justify-between shadow-2xs hover:shadow-xs hover:-translate-y-0.5"
             >
-              <div className="w-8 h-8 rounded-lg bg-amber-100 text-amber-700 flex items-center justify-center">
-                <TrendingUp className="w-4 h-4" />
+              <div>
+                <div className="w-8.5 h-8.5 rounded-lg bg-amber-100 text-amber-700 border border-amber-200 flex items-center justify-center mb-2 shadow-2xs">
+                  <TrendingUp className="w-4.5 h-4.5" />
+                </div>
+                <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-900 group-hover:text-amber-700 m-0">
+                  Kế hoạch phát triển
+                </h4>
               </div>
-              <h4 className="text-xs sm:text-[13.5px] font-bold text-slate-800 group-hover:text-amber-700 m-0">
-                Kế hoạch phát triển
-              </h4>
-              <p className="text-[11px] sm:text-[11.5px] text-slate-500 m-0 leading-tight line-clamp-2">
+              <p className="text-[11px] sm:text-[11.5px] text-slate-600 font-medium m-0 leading-snug line-clamp-2">
                 Xây dựng lộ trình học tập & kỹ năng
               </p>
             </button>
@@ -589,7 +607,7 @@ export default function AICareerPage() {
               <button
                 type="button"
                 onClick={handleShuffleSuggestions}
-                className="text-xs sm:text-[12.5px] font-semibold text-[#0062ff] hover:underline flex items-center gap-1 cursor-pointer"
+                className="text-xs sm:text-[12.5px] font-semibold text-[#2563eb] hover:underline flex items-center gap-1 cursor-pointer"
               >
                 <span>Đổi gợi ý</span>
                 <RotateCcw className="w-3.5 h-3.5" />
@@ -605,8 +623,8 @@ export default function AICareerPage() {
                   onClick={() => handleSelectSuggestion(sug)}
                   className="p-3 rounded-xl bg-slate-50 hover:bg-blue-50/70 border border-slate-200/80 hover:border-blue-200 text-left text-xs sm:text-[13px] font-medium text-slate-700 transition-all group cursor-pointer flex items-start gap-2.5"
                 >
-                  <span className="text-[#0062ff] font-bold mt-0.5">💬</span>
-                  <span className="group-hover:text-[#0062ff] leading-snug line-clamp-2">
+                  <span className="text-[#2563eb] font-bold mt-0.5">💬</span>
+                  <span className="group-hover:text-[#2563eb] leading-snug line-clamp-2">
                     {sug}
                   </span>
                 </button>
@@ -623,7 +641,7 @@ export default function AICareerPage() {
                   className={`flex gap-3 ${m.sender === "user" ? "justify-end" : "justify-start"}`}
                 >
                   {m.sender === "ai" && (
-                    <div className="w-8 h-8 rounded-full bg-[#0062ff] text-white flex items-center justify-center shrink-0 mt-1 shadow-2xs">
+                    <div className="w-8 h-8 rounded-full bg-[#2563eb] text-white flex items-center justify-center shrink-0 mt-1 shadow-2xs">
                       <Bot className="w-5 h-5" />
                     </div>
                   )}
@@ -631,7 +649,7 @@ export default function AICareerPage() {
                   <div
                     className={`p-4 rounded-2xl text-xs sm:text-sm leading-relaxed max-w-[85%] ${
                       m.sender === "user"
-                        ? "bg-[#0062ff] text-white rounded-br-none shadow-2xs"
+                        ? "bg-[#2563eb] text-white rounded-br-none shadow-2xs"
                         : "bg-slate-50 text-slate-800 rounded-bl-none border border-slate-200/80 whitespace-pre-line shadow-2xs"
                     }`}
                   >
@@ -642,6 +660,25 @@ export default function AICareerPage() {
                       </div>
                     )}
                     <div>{m.text}</div>
+                    {m.retrieved_chunks && m.retrieved_chunks.length > 0 && (
+                      <div className="mt-2.5 pt-2 border-t border-slate-200/60 space-y-1">
+                        <span className="text-[10px] font-bold uppercase tracking-wider text-slate-500 block">
+                          Nguồn tài liệu đã xác thực:
+                        </span>
+                        <div className="flex flex-wrap gap-1.5">
+                          {m.retrieved_chunks.map((chk, cIdx) => (
+                            <span
+                              key={chk.chunk_id || cIdx}
+                              className="inline-flex items-center gap-1 px-2 py-0.5 rounded-md bg-blue-100/70 text-blue-800 text-[11px] font-medium border border-blue-200"
+                              title={chk.content ? `${chk.content.slice(0, 150)}...` : ""}
+                            >
+                              <FileText className="w-3 h-3 text-[#2563eb]" />
+                              <span>{chk.document_title || `Tài liệu #${chk.document_id}`}</span>
+                            </span>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                     <span
                       className={`text-[10px] block text-right mt-1.5 ${
                         m.sender === "user" ? "text-blue-100" : "text-slate-400"
@@ -661,7 +698,7 @@ export default function AICareerPage() {
 
               {isAiTyping && (
                 <div className="flex gap-3 items-center text-xs text-slate-500 pl-1">
-                  <div className="w-8 h-8 rounded-full bg-[#0062ff] text-white flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-full bg-[#2563eb] text-white flex items-center justify-center shrink-0">
                     <Bot className="w-5 h-5" />
                   </div>
                   <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl flex items-center gap-1.5">
@@ -680,11 +717,24 @@ export default function AICareerPage() {
 
           {/* Chat Input Bar */}
           <div className="p-3.5 bg-slate-50 rounded-2xl border border-slate-200/90 space-y-3">
+            {/* Banner hướng dẫn đăng nhập cho khách chưa xác thực */}
+            {!isAuthenticated && (
+              <div className="flex flex-wrap items-center justify-between p-3 bg-amber-50/80 border border-amber-200 rounded-xl text-xs text-amber-900 font-medium gap-2">
+                <span>Vui lòng đăng nhập để trò chuyện cùng Trợ lý AI và lưu lại lịch sử hội thoại.</span>
+                <Link
+                  href="/dang-nhap"
+                  className="font-bold text-[#2563eb] hover:underline shrink-0"
+                >
+                  Đăng nhập ngay →
+                </Link>
+              </div>
+            )}
+
             {/* File attachment chip */}
             {attachedFile && (
               <div className="flex items-center justify-between px-3 py-1.5 bg-blue-100/70 border border-blue-200 rounded-lg text-xs sm:text-[13px] text-blue-900 font-medium">
                 <span className="flex items-center gap-2 truncate">
-                  <Paperclip className="w-4 h-4 text-[#0062ff]" />
+                  <Paperclip className="w-4 h-4 text-[#2563eb]" />
                   <span className="truncate">{attachedFile.name}</span>
                 </span>
                 <button
@@ -707,7 +757,11 @@ export default function AICareerPage() {
                   handleSendMessage();
                 }
               }}
-              placeholder="Nhập câu hỏi hoặc yêu cầu của bạn..."
+              placeholder={
+                isAuthenticated
+                  ? "Nhập câu hỏi hoặc yêu cầu của bạn..."
+                  : "Vui lòng đăng nhập để bắt đầu trò chuyện cùng AI..."
+              }
               className="w-full bg-transparent border-0 resize-none text-xs sm:text-sm font-medium text-slate-800 placeholder:text-slate-400 focus:outline-hidden"
             />
 
@@ -725,7 +779,7 @@ export default function AICareerPage() {
                 <button
                   type="button"
                   onClick={() => fileInputRef.current?.click()}
-                  className="flex items-center gap-1.5 text-xs sm:text-[12.5px] font-semibold text-slate-700 hover:text-[#0062ff] cursor-pointer"
+                  className="flex items-center gap-1.5 text-xs sm:text-[12.5px] font-semibold text-slate-700 hover:text-[#2563eb] cursor-pointer"
                 >
                   <Paperclip className="w-4 h-4 text-slate-500" />
                   <span>Đính kèm file</span>
@@ -763,10 +817,10 @@ export default function AICareerPage() {
                   type="button"
                   onClick={handleSendMessage}
                   disabled={!inputText.trim() && !attachedFile}
-                  className="px-4.5 py-2 rounded-xl bg-[#0062ff] hover:bg-[#0047ba] disabled:opacity-40 text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shadow-xs transition-all cursor-pointer"
+                  className="px-4.5 py-2 rounded-xl bg-[#2563eb] hover:bg-[#1d4ed8] disabled:opacity-40 text-white hover:text-white font-bold text-xs sm:text-sm flex items-center gap-1.5 shadow-xs transition-all cursor-pointer border-none"
                 >
-                  <span>Gửi</span>
-                  <Send className="w-3.5 h-3.5" />
+                  <span className="text-white">Gửi</span>
+                  <Send className="w-3.5 h-3.5 text-white" />
                 </button>
               </div>
             </div>
@@ -787,7 +841,7 @@ export default function AICareerPage() {
               <h3 className="text-sm font-bold text-slate-800 m-0">Hồ sơ của bạn</h3>
               <Link
                 href="/ung-vien/ho-so"
-                className="text-xs font-semibold text-[#0062ff] hover:underline"
+                className="text-xs font-semibold text-[#2563eb] hover:underline"
               >
                 Xem hồ sơ →
               </Link>
@@ -795,7 +849,7 @@ export default function AICareerPage() {
 
             {/* Profile Avatar & Info */}
             <div className="flex items-center gap-3">
-              <div className="w-11 h-11 rounded-full bg-blue-100 text-[#0062ff] font-black text-base flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-full bg-blue-100 text-[#2563eb] font-black text-base flex items-center justify-center shrink-0">
                 {userName.charAt(0).toUpperCase()}
               </div>
               <div className="min-w-0">
@@ -830,10 +884,10 @@ export default function AICareerPage() {
               <Link href="/ung-vien/ho-so" className="block">
                 <button
                   type="button"
-                  className="w-full py-2 rounded-lg bg-white hover:bg-slate-50 text-[#0062ff] font-bold text-xs sm:text-[12.5px] border border-blue-200 shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer transition-colors"
+                  className="w-full py-2 rounded-lg bg-[#2563eb] hover:bg-[#1d4ed8] text-white hover:text-white font-bold text-xs sm:text-[12.5px] shadow-2xs flex items-center justify-center gap-1.5 cursor-pointer transition-colors border-none"
                 >
-                  <span>Cập nhật hồ sơ</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                  <span className="text-white">Cập nhật hồ sơ</span>
+                  <ArrowRight className="w-3.5 h-3.5 text-white" />
                 </button>
               </Link>
             </div>
@@ -841,7 +895,7 @@ export default function AICareerPage() {
 
           {/* Card: 💡 Tại sao nên dùng Trợ lý AI? */}
           <div className="bg-[#fffdf5] rounded-2xl p-4.5 border border-[#fde68a] shadow-2xs space-y-3">
-            <h3 className="text-sm font-bold text-slate-800 m-0 flex items-center gap-1.5">
+            <h3 className="text-sm font-black text-slate-800 m-0 pb-1 border-b border-amber-200/70 flex items-center gap-1.5">
               <span>💡</span>
               <span>Tại sao nên dùng Trợ lý AI?</span>
             </h3>
@@ -867,7 +921,9 @@ export default function AICareerPage() {
 
           {/* Card: Công cụ liên quan */}
           <div className="bg-white rounded-2xl p-4.5 border border-[#E5ECF6] shadow-2xs space-y-3">
-            <h3 className="text-sm font-bold text-slate-800 m-0">Công cụ liên quan</h3>
+            <h3 className="text-sm font-black text-slate-800 m-0 pb-1 border-b border-slate-100">
+              Công cụ liên quan
+            </h3>
             <div className="space-y-2">
               <Link
                 href="/cong-cu/mbti"
@@ -885,18 +941,18 @@ export default function AICareerPage() {
               </Link>
 
               <Link
-                href="/cong-cu"
+                href="/cong-cu/tinh-luong-gross-net"
                 className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50/60 border border-transparent hover:border-blue-200 transition-all text-left group cursor-pointer"
               >
                 <div className="flex items-center gap-2.5 min-w-0">
-                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#2563eb] flex items-center justify-center shrink-0">
                     <Calculator className="w-4 h-4" />
                   </div>
-                  <span className="text-xs sm:text-[13px] font-semibold text-slate-700 group-hover:text-[#0062ff] truncate">
+                  <span className="text-xs sm:text-[13px] font-semibold text-slate-700 group-hover:text-[#2563eb] truncate">
                     Tính lương Gross - Net
                   </span>
                 </div>
-                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#0062ff] group-hover:translate-x-0.5 transition-all shrink-0" />
+                <ArrowRight className="w-4 h-4 text-slate-400 group-hover:text-[#2563eb] group-hover:translate-x-0.5 transition-all shrink-0" />
               </Link>
 
               <Link
@@ -919,7 +975,7 @@ export default function AICareerPage() {
           {/* Card: Cần hỗ trợ? */}
           <div className="bg-[#f0f7ff] rounded-2xl p-4.5 border border-[#dbeafe] shadow-2xs space-y-3 relative overflow-hidden">
             <div>
-              <h4 className="text-sm font-bold text-slate-800 m-0">Cần hỗ trợ?</h4>
+              <h4 className="text-sm font-black text-slate-800 m-0">Cần hỗ trợ?</h4>
               <p className="text-xs text-slate-600 font-normal m-0 mt-0.5 leading-tight">
                 Đội ngũ Careza luôn sẵn sàng đồng hành cùng bạn.
               </p>
@@ -928,12 +984,12 @@ export default function AICareerPage() {
               <button
                 type="button"
                 onClick={() => message.info("Tổng đài Careza: 1900 6868")}
-                className="px-3.5 py-2 rounded-xl bg-white hover:bg-slate-50 text-[#0062ff] font-bold text-xs sm:text-[12.5px] border border-blue-200 shadow-2xs flex items-center gap-1.5 transition-all cursor-pointer"
+                className="px-3.5 py-2 rounded-xl bg-[#2563eb] hover:bg-[#1d4ed8] text-white hover:text-white font-bold text-xs sm:text-[12.5px] border-none shadow-xs flex items-center gap-1.5 transition-all cursor-pointer"
               >
-                <span>Liên hệ hỗ trợ</span>
-                <ArrowRight className="w-3.5 h-3.5" />
+                <span className="text-white">Liên hệ hỗ trợ</span>
+                <ArrowRight className="w-3.5 h-3.5 text-white" />
               </button>
-              <div className="w-11 h-11 rounded-full bg-blue-100 text-[#0062ff] flex items-center justify-center shrink-0">
+              <div className="w-11 h-11 rounded-full bg-blue-100 text-[#2563eb] flex items-center justify-center shrink-0">
                 <Headphones className="w-5.5 h-5.5" />
               </div>
             </div>
@@ -944,12 +1000,12 @@ export default function AICareerPage() {
       {/* ======================================================== */}
       {/* 4. SECTION: BẠN SẼ ĐẠT ĐƯỢC GÌ VỚI TRỢ LÝ AI CAREER?     */}
       {/* ======================================================== */}
-      <div className="space-y-3.5 pt-2">
-        <h3 className="text-base sm:text-lg font-bold text-slate-900 m-0">
+      <div className="space-y-3 pt-2">
+        <h3 className="text-base sm:text-lg font-black text-slate-900 m-0">
           Bạn sẽ đạt được gì với Trợ lý AI Career?
         </h3>
 
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3.5 items-stretch">
           {/* Benefit 1 */}
           <div className="p-4 bg-white rounded-2xl border border-[#E5ECF6] shadow-2xs flex items-center gap-3.5">
             <div className="w-11 h-11 rounded-xl bg-cyan-50 text-cyan-600 flex items-center justify-center shrink-0">
@@ -965,7 +1021,7 @@ export default function AICareerPage() {
 
           {/* Benefit 2 */}
           <div className="p-4 bg-white rounded-2xl border border-[#E5ECF6] shadow-2xs flex items-center gap-3.5">
-            <div className="w-11 h-11 rounded-xl bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0">
+            <div className="w-11 h-11 rounded-xl bg-blue-50 text-[#2563eb] flex items-center justify-center shrink-0">
               <FileText className="w-5.5 h-5.5" />
             </div>
             <div>
@@ -1007,38 +1063,27 @@ export default function AICareerPage() {
       {/* ======================================================== */}
       {/* 5. CTA BANNER CUỐI TRANG: CAREZA AI CAREER               */}
       {/* ======================================================== */}
-      <div className="relative w-full rounded-2xl overflow-hidden min-h-[110px] sm:min-h-[125px] bg-gradient-to-r from-[#0a359c] via-[#0047ba] to-[#0062ff] text-white shadow-md p-5 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
-        <div className="space-y-1 max-w-xl z-10">
-          <h3 className="text-base sm:text-lg lg:text-xl font-bold text-white m-0 leading-tight">
+      <div className="rounded-2xl bg-gradient-to-r from-blue-50/70 via-white to-blue-50/50 border border-blue-200/90 shadow-2xs p-5 sm:p-6 flex flex-col md:flex-row items-center justify-between gap-4 mt-4">
+        <div className="space-y-1 text-center sm:text-left">
+          <h3 className="text-base sm:text-lg font-black text-slate-900 m-0">
             Công nghệ AI, giá trị thật cho hành trình sự nghiệp
           </h3>
-          <p className="text-xs sm:text-[13.5px] text-blue-100 font-normal m-0 leading-relaxed">
-            Careza đồng hành cùng bạn từ hôm nay, mở ra nhiều cơ hội hơn ngày mai.
+          <p className="text-xs sm:text-sm text-slate-600 font-medium m-0">
+            Careza đồng hành cùng bạn trên từng bước phát triển kỹ năng và định hướng việc làm.
           </p>
         </div>
 
-        <div className="flex items-center gap-6 z-10 shrink-0 pr-2">
-          <div className="text-right -rotate-3 pointer-events-none select-none hidden sm:block">
-            <span className="font-serif italic text-xs sm:text-sm font-bold text-blue-200 block leading-tight">
-              Better People
-            </span>
-            <span className="font-serif italic text-xs sm:text-sm font-bold text-blue-100 block leading-tight">
-              Brighter Careers
-            </span>
-          </div>
-
-          <button
-            type="button"
-            onClick={() => {
-              window.scrollTo({ top: 280, behavior: "smooth" });
-              setInputText("Tôi muốn được tư vấn định hướng nghề nghiệp!");
-            }}
-            className="px-5.5 py-2.5 rounded-xl bg-white hover:bg-blue-50 text-[#0047ba] font-bold text-xs sm:text-sm shadow-md flex items-center gap-2 transition-all cursor-pointer"
-          >
-            <span>Bắt đầu trò chuyện ngay</span>
-            <ArrowRight className="w-4 h-4" />
-          </button>
-        </div>
+        <button
+          type="button"
+          onClick={() => {
+            window.scrollTo({ top: 180, behavior: "smooth" });
+            setInputText("Tôi muốn được tư vấn định hướng nghề nghiệp!");
+          }}
+          className="shrink-0 px-5 py-2.5 rounded-xl bg-[#2563eb] hover:bg-[#1d4ed8] text-white hover:text-white font-bold text-xs sm:text-sm shadow-xs transition-all inline-flex items-center gap-2 cursor-pointer border-none"
+        >
+          <span className="text-white">Bắt đầu trò chuyện ngay</span>
+          <ArrowRight className="w-4 h-4 text-white" />
+        </button>
       </div>
     </div>
   );

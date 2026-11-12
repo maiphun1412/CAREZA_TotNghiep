@@ -1,0 +1,82 @@
+{
+  "metadata": {
+    "algorithm": "Hybrid Lexical Search (Filtered TF-IDF + Concept Coverage + Title Match + Confidence Gate)",
+    "total_documents": 24,
+    "total_chunks": 50,
+    "total_queries": 90
+  },
+  "overall_answerable_metrics": {
+    "count": 80,
+    "mrr": 0.8099,
+    "precision@1": 0.7125,
+    "recall@1": 0.5646,
+    "hit_rate@1": 0.7125,
+    "precision@3": 0.3792,
+    "recall@3": 0.8417,
+    "hit_rate@3": 0.9,
+    "precision@5": 0.25,
+    "recall@5": 0.9,
+    "hit_rate@5": 0.9375
+  },
+  "group_metrics": {
+    "direct": {
+      "count": 40,
+      "mrr": 0.9187,
+      "precision@1": 0.85,
+      "recall@1": 0.7083,
+      "hit_rate@1": 0.85,
+      "precision@3": 0.4083,
+      "recall@3": 0.95,
+      "hit_rate@3": 0.975,
+      "precision@5": 0.255,
+      "recall@5": 0.975,
+      "hit_rate@5": 1.0
+    },
+    "synonym_acronym": {
+      "count": 18,
+      "mrr": 0.9074,
+      "precision@1": 0.8333,
+      "recall@1": 0.6389,
+      "hit_rate@1": 0.8333,
+      "precision@3": 0.4444,
+      "recall@3": 0.9167,
+      "hit_rate@3": 1.0,
+      "precision@5": 0.2889,
+      "recall@5": 0.9722,
+      "hit_rate@5": 1.0
+    },
+    "indirect": {
+      "count": 14,
+      "mrr": 0.372,
+      "precision@1": 0.1429,
+      "recall@1": 0.1071,
+      "hit_rate@1": 0.1429,
+      "precision@3": 0.1905,
+      "recall@3": 0.5,
+      "hit_rate@3": 0.5714,
+      "precision@5": 0.1571,
+      "recall@5": 0.6429,
+      "hit_rate@5": 0.7143
+    },
+    "english": {
+      "count": 8,
+      "mrr": 0.8125,
+      "precision@1": 0.75,
+      "recall@1": 0.4792,
+      "hit_rate@1": 0.75,
+      "precision@3": 0.4167,
+      "recall@3": 0.7292,
+      "hit_rate@3": 0.875,
+      "precision@5": 0.3,
+      "recall@5": 0.8125,
+      "hit_rate@5": 0.875
+    }
+  },
+  "unanswerable_metrics": {
+    "count": 10,
+    "correct_rejections": 10,
+    "correct_rejection_rate": 1.0,
+    "false_retrievals": 0,
+    "false_retrieval_rate": 0.0
+  }
+}

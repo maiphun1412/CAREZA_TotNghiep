@@ -17,6 +17,10 @@ import {
   AlertCircle,
   Plus,
   ChevronUp,
+  Clock,
+  CheckCircle2,
+  BookOpen,
+  Lightbulb,
 } from "lucide-react";
 
 // ==================== 4 VÙNG LƯƠNG TỐI THIỂU THEO QUY ĐỊNH ====================
@@ -49,7 +53,7 @@ export default function UnemploymentInsurancePage() {
 
   // Accordion state
   const [openAccordion, setOpenAccordion] = useState<{ [key: number]: boolean }>({
-    1: false,
+    1: true,
     2: false,
     3: false,
     4: false,
@@ -130,177 +134,304 @@ export default function UnemploymentInsurancePage() {
     setTimeout(() => {
       setIsCalculating(false);
       message.success("Đã tính toán mức trợ cấp thất nghiệp!");
-    }, 250);
+    }, 200);
   };
 
   return (
-    <div className="w-full max-w-[1460px] mx-auto px-4 sm:px-6 md:px-8 xl:px-[38px] pb-12 pt-2 bg-[#f7faff] min-h-screen space-y-4">
+    <div className="w-full max-w-[1440px] mx-auto px-4 sm:px-6 md:px-8 pb-12 pt-2 bg-[#f7faff] min-h-screen space-y-2.5">
       {/* ======================================================== */}
-      {/* 1. HERO COMPACT: BẢO HIỂM THẤT NGHIỆP                     */}
+      {/* 1. BREADCRUMB ĐỘC LẬP NGOÀI BANNER                       */}
       {/* ======================================================== */}
-      <div className="relative w-full rounded-2xl overflow-hidden min-h-[135px] sm:min-h-[145px] lg:min-h-[150px] bg-gradient-to-r from-[#eaf2ff] via-[#f0f6ff] to-[#e4efff] border border-blue-100/90 shadow-2xs p-4 sm:p-5 lg:p-6 flex flex-col justify-between">
-        {/* Right Calligraphy & 3D Shield/Clipboard Visual */}
-        <div className="absolute top-0 right-0 h-full w-[48%] md:w-[42%] pointer-events-none select-none overflow-hidden hidden sm:block">
-          <div className="relative w-full h-full flex items-center justify-end pr-8">
-            {/* Calligraphy text */}
-            <div className="absolute top-3.5 left-2 z-10 text-left -rotate-6 pointer-events-none">
-              <span className="font-serif italic text-sm sm:text-base font-bold text-[#0062ff] block leading-tight drop-shadow-2xs">
-                Bảo hiểm thất nghiệp
-              </span>
-              <span className="font-serif italic text-sm sm:text-base font-bold text-[#0062ff] block leading-tight drop-shadow-2xs">
-                Đồng hành cùng bạn
-              </span>
-            </div>
+      <nav aria-label="Breadcrumb" className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
+        <Link href="/" className="text-slate-500 hover:text-[#0062ff] transition-colors">
+          Trang chủ
+        </Link>
+        <span className="text-slate-400">/</span>
+        <Link href="/cong-cu" className="text-slate-500 hover:text-[#0062ff] transition-colors">
+          Công cụ
+        </Link>
+        <span className="text-slate-400">/</span>
+        <span className="text-[#0062ff] font-semibold">Tính bảo hiểm thất nghiệp</span>
+      </nav>
 
-            {/* Visual 3D Shield & Clipboard & Coins */}
-            <div className="flex items-center gap-2.5 relative z-0 pr-2">
-              <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-200 border-2 border-yellow-200 shadow-md flex items-center justify-center text-amber-950 font-black text-xs -rotate-12 translate-y-3">
-                ₫
-              </div>
+      {/* ======================================================== */}
+      {/* 2. HERO BANNER: THU GỌN CHIỀU CAO 110-120PX, CĂN GIỮA DỌC */}
+      {/* ======================================================== */}
+      <div className="relative w-full rounded-2xl overflow-hidden bg-gradient-to-r from-[#1d4ed8] via-[#2563eb] to-[#4f9cf8] border border-blue-300/40 shadow-md shadow-blue-600/10 px-6 sm:px-8 py-3.5 sm:py-4 flex flex-col md:flex-row items-center justify-between gap-4 min-h-[110px] md:min-h-[116px]">
+        {/* Subtle decorative background glow */}
+        <div className="absolute -right-8 -bottom-10 w-52 h-52 rounded-full bg-white/10 blur-2xl pointer-events-none" />
+        <div className="absolute top-0 right-1/4 w-32 h-32 rounded-full bg-sky-200/15 blur-xl pointer-events-none" />
 
-              {/* 3D Shield */}
-              <div className="w-16 h-20 bg-gradient-to-br from-[#0062ff] via-[#0052db] to-[#003da6] rounded-2xl shadow-lg border-2 border-blue-300/40 p-2 flex flex-col items-center justify-center text-white rotate-6 relative overflow-hidden">
-                <ShieldCheck className="w-9 h-9 text-white drop-shadow-xs" />
-              </div>
-
-              {/* Floating Card */}
-              <div className="w-16 h-22 bg-white rounded-xl border border-blue-200 shadow-md p-1.5 flex flex-col justify-between text-center -rotate-6">
-                <span className="text-[9px] font-black text-[#0062ff] uppercase block">Quyền lợi</span>
-                <span className="text-[9px] font-black text-emerald-600 uppercase block">Cơ hội mới</span>
-                <div className="w-full h-0.5 bg-blue-100 my-0.5" />
-                <span className="text-[8px] font-bold text-slate-500 block leading-tight">Tương lai tốt hơn</span>
-              </div>
-            </div>
-          </div>
+        {/* Nội dung bên trái: Tiêu đề + Badge cùng 1 hàng */}
+        <div className="relative z-10 flex flex-wrap items-center gap-3 sm:gap-3.5">
+          <h1 className="text-xl sm:text-2xl md:text-[25px] font-black text-white tracking-tight m-0 leading-tight drop-shadow-2xs">
+            Tính bảo hiểm thất nghiệp
+          </h1>
+          <span className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-white text-[#1d4ed8] text-xs font-bold shadow-xs shrink-0 border border-white/90">
+            <ShieldCheck className="w-3.5 h-3.5 text-[#2563eb]" />
+            <span>Chuẩn Luật Việc làm & BHXH</span>
+          </span>
         </div>
 
-        {/* Content Bên Trái */}
-        <div className="relative z-10 max-w-2xl space-y-1.5">
-          <div className="flex items-center gap-1.5 text-xs text-slate-500 font-medium">
-            <Link href="/" className="hover:text-[#0062ff] transition-colors">
-              Trang chủ
-            </Link>
-            <span>›</span>
-            <Link href="/cong-cu" className="hover:text-[#0062ff] transition-colors">
-              Công cụ
-            </Link>
-            <span>›</span>
-            <span className="text-[#0062ff] font-semibold">Tính bảo hiểm thất nghiệp</span>
-          </div>
-
-          <div className="flex items-center gap-3 pt-0.5">
-            <div className="w-10 h-10 rounded-xl bg-[#0062ff] text-white flex items-center justify-center shadow-xs shrink-0">
-              <ShieldCheck className="w-5 h-5" />
+        {/* Minh họa vector phẳng bên phải: Thẻ nền trắng thu gọn chiều cao */}
+        <div className="relative z-10 hidden md:flex items-center gap-3 shrink-0">
+          {/* Card 1: Mức hưởng tiêu chuẩn */}
+          <div className="bg-white rounded-xl py-2 px-3.5 border border-white/90 shadow-xs flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-blue-50 border border-blue-100 text-[#0062ff] flex items-center justify-center shrink-0">
+              <ShieldCheck className="w-4 h-4 stroke-[2.2]" />
             </div>
             <div>
-              <div className="flex items-center gap-2">
-                <h1 className="text-xl sm:text-2xl font-black text-slate-900 tracking-tight m-0 leading-tight">
-                  Tính bảo hiểm thất nghiệp
-                </h1>
-                <span className="bg-blue-100/70 text-[#0062ff] text-[10.5px] font-bold px-2.5 py-0.5 rounded-full border border-blue-200/80 hidden sm:inline-block">
-                  An tâm hôm nay, vững bước ngày mai
-                </span>
-              </div>
-              <p className="text-xs text-slate-600 font-normal m-0 mt-0.5 leading-relaxed">
-                Ước tính nhanh mức trợ cấp thất nghiệp, kiểm tra điều kiện hưởng và hiểu rõ quyền lợi của bạn theo quy định hiện hành.
-              </p>
+              <span className="text-[10.5px] font-bold text-slate-500 block leading-tight">
+                Mức hưởng trợ cấp
+              </span>
+              <span className="text-xs sm:text-[13px] font-black text-[#0062ff] block leading-tight mt-0.5">
+                60% lương bình quân
+              </span>
+            </div>
+          </div>
+
+          {/* Card 2: Thời hạn hồ sơ */}
+          <div className="bg-white rounded-xl py-2 px-3.5 border border-white/90 shadow-xs flex items-center gap-2.5">
+            <div className="w-8 h-8 rounded-lg bg-sky-50 border border-sky-100 text-sky-600 flex items-center justify-center shrink-0">
+              <Clock className="w-4 h-4 stroke-[2.2]" />
+            </div>
+            <div>
+              <span className="text-[10.5px] font-bold text-slate-500 block leading-tight">
+                Thời hạn nộp hồ sơ
+              </span>
+              <span className="text-xs sm:text-[13px] font-black text-slate-900 block leading-tight mt-0.5">
+                Trong 03 tháng
+              </span>
             </div>
           </div>
         </div>
       </div>
 
       {/* ======================================================== */}
-      {/* 2. MODE/TAB NGHIỆP VỤ (3 TABS)                            */}
+      {/* 2. CHỌN TAB CHỨC NĂNG (3 TABS RÕ RÀNG, ACTIVE NỔI BẬT)   */}
       {/* ======================================================== */}
-      <div className="flex flex-wrap items-center gap-2 pt-1">
+      <div className="flex flex-wrap items-center gap-2 !mt-5">
         <button
           type="button"
           onClick={() => setActiveBhtnTab("quick")}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-            activeBhtnTab === "quick"
-              ? "bg-[#0062ff] text-white shadow-xs"
-              : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/50 border border-slate-200"
-          }`}
+          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeBhtnTab === "quick"
+            ? "bg-[#0062ff] text-white shadow-xs"
+            : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/60 border border-slate-200"
+            }`}
         >
-          Tính nhanh
+          <Calculator className="w-3.5 h-3.5" />
+          <span>Tính nhanh</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveBhtnTab("conditions")}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-            activeBhtnTab === "conditions"
-              ? "bg-[#0062ff] text-white shadow-xs"
-              : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/50 border border-slate-200"
-          }`}
+          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeBhtnTab === "conditions"
+            ? "bg-[#0062ff] text-white shadow-xs"
+            : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/60 border border-slate-200"
+            }`}
         >
-          Kiểm tra điều kiện
+          <CheckCircle2 className="w-3.5 h-3.5" />
+          <span>Kiểm tra điều kiện</span>
         </button>
 
         <button
           type="button"
           onClick={() => setActiveBhtnTab("guide")}
-          className={`px-4 py-2 rounded-xl text-xs font-semibold transition-all cursor-pointer ${
-            activeBhtnTab === "guide"
-              ? "bg-[#0062ff] text-white shadow-xs"
-              : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/50 border border-slate-200"
-          }`}
+          className={`inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer ${activeBhtnTab === "guide"
+            ? "bg-[#0062ff] text-white shadow-xs"
+            : "bg-white text-slate-700 hover:text-[#0062ff] hover:bg-blue-50/60 border border-slate-200"
+            }`}
         >
-          Hướng dẫn & Quy trình
+          <BookOpen className="w-3.5 h-3.5" />
+          <span>Hướng dẫn & Quy trình</span>
         </button>
       </div>
 
+      {/* Panel bổ trợ tương ứng với tab đang chọn */}
+      {activeBhtnTab === "conditions" && (
+        <div className="bg-white rounded-2xl p-4 sm:p-5 border border-blue-200 shadow-2xs space-y-3">
+          <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+            <h3 className="text-xs sm:text-sm font-black text-slate-900 m-0 flex items-center gap-2">
+              <CheckCircle2 className="w-4 h-4 text-[#0062ff]" />
+              <span>Bảng kiểm tra 4 điều kiện hưởng bảo hiểm thất nghiệp</span>
+            </h3>
+            <span className="text-xs font-semibold text-slate-500">Đối chiếu dữ liệu vừa nhập</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <div className={`p-3.5 rounded-xl border ${totalMonths >= 12 ? "bg-emerald-50/70 border-emerald-200" : "bg-rose-50/70 border-rose-200"}`}>
+              <div className="flex items-center gap-1.5 font-bold mb-1">
+                {totalMonths >= 12 ? (
+                  <Check className="w-4 h-4 text-emerald-600" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 text-rose-600" />
+                )}
+                <span className={totalMonths >= 12 ? "text-emerald-900" : "text-rose-900"}>
+                  1. Thời gian đóng BHTN
+                </span>
+              </div>
+              <p className="text-xs text-slate-700 leading-relaxed m-0">
+                Đã đóng: <strong>{totalMonths} tháng</strong> ({totalMonths >= 12 ? "Đạt chuẩn ≥ 12 tháng" : "Chưa đủ tối thiểu 12 tháng"})
+              </p>
+            </div>
+
+            <div className={`p-3.5 rounded-xl border ${terminationReason !== "illegal" && terminationReason !== "pension" ? "bg-emerald-50/70 border-emerald-200" : "bg-rose-50/70 border-rose-200"}`}>
+              <div className="flex items-center gap-1.5 font-bold mb-1">
+                {terminationReason !== "illegal" && terminationReason !== "pension" ? (
+                  <Check className="w-4 h-4 text-emerald-600" />
+                ) : (
+                  <AlertCircle className="w-4 h-4 text-rose-600" />
+                )}
+                <span className={terminationReason !== "illegal" && terminationReason !== "pension" ? "text-emerald-900" : "text-rose-900"}>
+                  2. Chấm dứt HĐLĐ
+                </span>
+              </div>
+              <p className="text-xs text-slate-700 leading-relaxed m-0">
+                {terminationReason === "illegal"
+                  ? "Trái luật (Không được hưởng)"
+                  : terminationReason === "pension"
+                    ? "Nghỉ hưu (Không thuộc diện)"
+                    : "Chấm dứt hợp pháp theo luật"}
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-xl border bg-blue-50/70 border-blue-200">
+              <div className="flex items-center gap-1.5 font-bold mb-1 text-blue-900">
+                <Clock className="w-4 h-4 text-[#0062ff]" />
+                <span>3. Hạn nộp hồ sơ</span>
+              </div>
+              <p className="text-xs text-slate-700 leading-relaxed m-0">
+                Trước ngày: <strong>{bhtnResult.deadlineDateStr}</strong> (Trong vòng 03 tháng)
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-xl border bg-slate-50/80 border-slate-200">
+              <div className="flex items-center gap-1.5 font-bold mb-1 text-slate-900">
+                <Info className="w-4 h-4 text-slate-500" />
+                <span>4. Trạng thái việc làm</span>
+              </div>
+              <p className="text-xs text-slate-700 leading-relaxed m-0">
+                Chưa tìm được việc sau 15 ngày kể từ ngày nộp đủ hồ sơ
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {activeBhtnTab === "guide" && (
+        <div className="bg-white rounded-2xl p-4 sm:p-5 border border-blue-200 shadow-2xs space-y-3">
+          <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+            <h3 className="text-xs sm:text-sm font-black text-slate-900 m-0 flex items-center gap-2">
+              <BookOpen className="w-4 h-4 text-[#0062ff]" />
+              <span>Quy trình 4 bước nhận trợ cấp thất nghiệp</span>
+            </h3>
+            <span className="text-xs font-semibold text-slate-500">Trung tâm Dịch vụ Việc làm</span>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-3 text-xs">
+            <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-1.5">
+              <span className="inline-block px-2 py-0.5 rounded-md bg-[#0062ff] text-white font-bold text-[11px]">
+                Bước 1
+              </span>
+              <h4 className="text-xs font-bold text-slate-900 m-0">Nộp hồ sơ</h4>
+              <p className="text-xs text-slate-600 leading-relaxed m-0">
+                Nộp đủ hồ sơ trong vòng 03 tháng tại Trung tâm Dịch vụ Việc làm nơi muốn nhận trợ cấp.
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-1.5">
+              <span className="inline-block px-2 py-0.5 rounded-md bg-[#0062ff] text-white font-bold text-[11px]">
+                Bước 2
+              </span>
+              <h4 className="text-xs font-bold text-slate-900 m-0">Nhận quyết định</h4>
+              <p className="text-xs text-slate-600 leading-relaxed m-0">
+                Trong vòng 20 ngày làm việc kể từ ngày nộp đủ hồ sơ hợp lệ, nhận Quyết định hưởng trợ cấp.
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-1.5">
+              <span className="inline-block px-2 py-0.5 rounded-md bg-[#0062ff] text-white font-bold text-[11px]">
+                Bước 3
+              </span>
+              <h4 className="text-xs font-bold text-slate-900 m-0">Nhận tiền chi trả</h4>
+              <p className="text-xs text-slate-600 leading-relaxed m-0">
+                Cơ quan BHXH chi trả tiền trợ cấp tháng đầu trong 05 ngày qua tài khoản ngân hàng (ATM).
+              </p>
+            </div>
+
+            <div className="p-3.5 rounded-xl bg-slate-50/80 border border-slate-200/90 space-y-1.5">
+              <span className="inline-block px-2 py-0.5 rounded-md bg-[#0062ff] text-white font-bold text-[11px]">
+                Bước 4
+              </span>
+              <h4 className="text-xs font-bold text-slate-900 m-0">Thông báo việc làm</h4>
+              <p className="text-xs text-slate-600 leading-relaxed m-0">
+                Hàng tháng đến Trung tâm DVVL thông báo về tình hình tìm kiếm việc làm theo lịch hẹn.
+              </p>
+            </div>
+          </div>
+        </div>
+      )}
+
       {/* ======================================================== */}
-      {/* 3. MAIN LAYOUT: INPUT (42%) | RESULT (33%) | SIDEBAR (25%)*/}
+      {/* 3. MAIN LAYOUT: INPUT (5 cols) | RESULT (4 cols) | SIDEBAR (3 cols) */}
       {/* ======================================================== */}
-      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4.5 pt-1 items-start">
+      <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 items-start">
         {/* ==================== CỘT 1: NHẬP THÔNG TIN (5/12 cols) ==================== */}
-        <div className="lg:col-span-5 bg-white rounded-2xl p-5 border border-[#E5ECF6] shadow-2xs space-y-4">
-          <div>
-            <h2 className="text-sm sm:text-base font-bold text-slate-800 m-0">
-              1. Nhập thông tin
+        <div className="lg:col-span-5 bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs space-y-4">
+          <div className="pb-1.5 border-b border-slate-100">
+            <h2 className="text-sm sm:text-base font-black text-slate-900 m-0 flex items-center gap-2">
+              <span>1. Nhập thông tin đóng BHTN</span>
             </h2>
-            <p className="text-xs text-slate-500 font-normal m-0 mt-0.5">
-              Điền đầy đủ thông tin để hệ thống tính toán chính xác mức trợ cấp thất nghiệp của bạn
-            </p>
+
           </div>
 
           {/* Hình thức nhập lương đóng BHTN */}
-          <div className="space-y-1.5 pt-1">
-            <span className="text-xs font-semibold text-slate-700 block">
+          <div className="space-y-1.5">
+            <span className="text-xs font-bold text-slate-700 block">
               Hình thức nhập lương đóng BHTN
             </span>
-            <div className="space-y-1.5">
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <label
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-semibold cursor-pointer transition-all ${calcMethod === "average"
+                  ? "border-[#0062ff] bg-blue-50/60 text-[#0062ff]"
+                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  }`}
+              >
                 <input
                   type="radio"
                   name="calcMethod"
                   checked={calcMethod === "average"}
                   onChange={() => setCalcMethod("average")}
-                  className="text-[#0062ff]"
+                  className="accent-[#0062ff]"
                 />
-                <span>Nhập mức lương bình quân 6 tháng</span>
+                <span>Lương bình quân 6 tháng</span>
               </label>
 
-              <label className="flex items-center gap-2 cursor-pointer text-xs font-medium text-slate-700">
+              <label
+                className={`flex items-center gap-2 px-3 py-2 rounded-xl border text-xs font-semibold cursor-pointer transition-all ${calcMethod === "monthly"
+                  ? "border-[#0062ff] bg-blue-50/60 text-[#0062ff]"
+                  : "border-slate-200 bg-white text-slate-700 hover:bg-slate-50"
+                  }`}
+              >
                 <input
                   type="radio"
                   name="calcMethod"
                   checked={calcMethod === "monthly"}
                   onChange={() => setCalcMethod("monthly")}
-                  className="text-[#0062ff]"
+                  className="accent-[#0062ff]"
                 />
-                <span>Nhập chi tiết 6 tháng gần nhất</span>
+                <span>Chi tiết 6 tháng gần nhất</span>
               </label>
             </div>
           </div>
 
-          {/* Form 2 Cột Desktop */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-1">
+          {/* Form Fields */}
+          <div className="space-y-3">
             {/* Field 1: Mức lương đóng BHTN */}
             {calcMethod === "average" ? (
-              <div className="space-y-1.5 sm:col-span-1">
-                <label className="text-xs font-semibold text-slate-700 block">
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 block">
                   Mức lương bình quân 6 tháng liền kề <span className="text-rose-500">*</span>
                 </label>
                 <div className="relative flex items-center">
@@ -311,22 +442,22 @@ export default function UnemploymentInsurancePage() {
                       const raw = e.target.value.replace(/\D/g, "");
                       setAvgSalary(raw ? parseInt(raw, 10) : 0);
                     }}
-                    className="w-full px-3.5 py-2.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800 pr-14"
+                    className="w-full h-10 px-3.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-900 pr-14 transition-colors"
                   />
-                  <span className="absolute right-3 text-xs font-bold text-slate-400 pointer-events-none">
+                  <span className="absolute right-3.5 text-xs font-bold text-slate-400 pointer-events-none">
                     VNĐ
                   </span>
                 </div>
               </div>
             ) : (
-              <div className="space-y-2 sm:col-span-2 bg-slate-50/70 p-3 rounded-xl border border-slate-200">
-                <span className="text-xs font-semibold text-slate-700 block">
-                  Lương đóng BHTN 6 tháng gần nhất:
+              <div className="space-y-2 bg-slate-50/70 p-3 rounded-xl border border-slate-200/90">
+                <span className="text-xs font-bold text-slate-700 block">
+                  Lương đóng BHTN từng tháng:
                 </span>
                 <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
                   {[1, 2, 3, 4, 5, 6].map((m, idx) => (
                     <div key={m} className="space-y-1">
-                      <label className="text-[10.5px] text-slate-500 font-medium">Tháng {m}</label>
+                      <label className="text-xs text-slate-600 font-semibold">Tháng {m}</label>
                       <input
                         type="text"
                         value={formatCurrency(monthlySalaries[idx])}
@@ -336,7 +467,7 @@ export default function UnemploymentInsurancePage() {
                           updated[idx] = raw ? parseInt(raw, 10) : 0;
                           setMonthlySalaries(updated);
                         }}
-                        className="w-full px-2 py-1.5 bg-white rounded-lg border border-slate-200 text-xs font-semibold text-slate-800"
+                        className="w-full h-9 px-2.5 bg-white rounded-lg border border-slate-200 text-xs font-semibold text-slate-900"
                       />
                     </div>
                   ))}
@@ -344,252 +475,256 @@ export default function UnemploymentInsurancePage() {
               </div>
             )}
 
-            {/* Field 2: Tổng thời gian đã đóng BHTN */}
-            <div className="space-y-1.5 sm:col-span-1">
-              <label className="text-xs font-semibold text-slate-700 block">
-                Tổng thời gian đã đóng BHTN <span className="text-rose-500">*</span>
-              </label>
-              <div className="relative flex items-center">
-                <input
-                  type="number"
-                  min={0}
-                  max={480}
-                  value={totalMonths}
-                  onChange={(e) => setTotalMonths(parseInt(e.target.value, 10) || 0)}
-                  className="w-full px-3.5 py-2.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800 pr-16"
-                />
-                <span className="absolute right-3 text-xs font-bold text-slate-400 pointer-events-none">
-                  Tháng
-                </span>
+            {/* Form 2 Cột */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              {/* Field 2: Tổng thời gian đã đóng BHTN */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 block">
+                  Tổng thời gian đóng BHTN <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative flex items-center">
+                  <input
+                    type="number"
+                    min={0}
+                    max={480}
+                    value={totalMonths}
+                    onChange={(e) => setTotalMonths(parseInt(e.target.value, 10) || 0)}
+                    className="w-full h-10 px-3.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-900 pr-16 transition-colors"
+                  />
+                  <span className="absolute right-3.5 text-xs font-bold text-slate-400 pointer-events-none">
+                    Tháng
+                  </span>
+                </div>
+                <p className="text-[11.5px] text-slate-500 font-medium m-0 leading-normal">
+                  Gồm cả thời gian ở các công ty trước
+                </p>
               </div>
-              <p className="text-[10px] text-slate-400 m-0">
-                Bao gồm cả thời gian đóng BHTN ở các công ty trước đây
-              </p>
+
+              {/* Field 3: Ngày chấm dứt hợp đồng */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 block">
+                  Ngày chấm dứt hợp đồng <span className="text-rose-500">*</span>
+                </label>
+                <div className="relative flex items-center">
+                  <input
+                    type="date"
+                    value={terminationDate}
+                    onChange={(e) => setTerminationDate(e.target.value)}
+                    className="w-full h-10 px-3.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-900 transition-colors"
+                  />
+                </div>
+                <p className="text-[11.5px] text-slate-500 font-medium m-0 leading-normal">
+                  Căn cứ tính hạn nộp hồ sơ (3 tháng)
+                </p>
+              </div>
+
+              {/* Field 4: Loại hợp đồng lao động */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 block">
+                  Loại hợp đồng lao động <span className="text-rose-500">*</span>
+                </label>
+                <select
+                  value={contractType}
+                  onChange={(e) => setContractType(e.target.value)}
+                  className="w-full h-10 px-3 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800 cursor-pointer"
+                >
+                  <option value="indefinite">HĐ không xác định thời hạn</option>
+                  <option value="fixed">HĐ xác định thời hạn (12-36 tháng)</option>
+                  <option value="seasonal">HĐ mùa vụ / dưới 12 tháng</option>
+                </select>
+              </div>
+
+              {/* Field 5: Tỉnh/Thành phố nộp hồ sơ */}
+              <div className="space-y-1">
+                <label className="text-xs font-bold text-slate-700 block">
+                  Khu vực nộp hồ sơ <span className="text-rose-500">*</span>
+                </label>
+                <select
+                  value={selectedRegionId}
+                  onChange={(e) => setSelectedRegionId(parseInt(e.target.value, 10))}
+                  className="w-full h-10 px-3 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800 cursor-pointer"
+                >
+                  {REGIONS.map((r) => (
+                    <option key={r.id} value={r.id}>
+                      {r.name}
+                    </option>
+                  ))}
+                </select>
+              </div>
             </div>
 
-            {/* Field 3: Loại hợp đồng lao động */}
-            <div className="space-y-1.5 sm:col-span-1">
-              <label className="text-xs font-semibold text-slate-700 block">
-                Loại hợp đồng lao động <span className="text-rose-500">*</span>
-              </label>
-              <select
-                value={contractType}
-                onChange={(e) => setContractType(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800"
-              >
-                <option value="indefinite">Hợp đồng không xác định thời hạn</option>
-                <option value="fixed">Hợp đồng xác định thời hạn (12-36 tháng)</option>
-                <option value="seasonal">Hợp đồng mùa vụ / công việc dưới 12 tháng</option>
-              </select>
-            </div>
-
-            {/* Field 4: Lý do chấm dứt hợp đồng */}
-            <div className="space-y-1.5 sm:col-span-1">
-              <label className="text-xs font-semibold text-slate-700 block">
+            {/* Field 6: Lý do chấm dứt hợp đồng */}
+            <div className="space-y-1">
+              <label className="text-xs font-bold text-slate-700 block">
                 Lý do chấm dứt hợp đồng <span className="text-rose-500">*</span>
               </label>
               <select
                 value={terminationReason}
                 onChange={(e) => setTerminationReason(e.target.value)}
-                className="w-full px-3.5 py-2.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800"
+                className="w-full h-10 px-3.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800 cursor-pointer"
               >
-                <option value="voluntary">Chấm dứt hợp đồng theo nhu cầu cá nhân</option>
+                <option value="voluntary">Chấm dứt hợp đồng theo thỏa thuận / nhu cầu cá nhân</option>
                 <option value="expired">Hết hạn hợp đồng lao động</option>
-                <option value="restructure">Doanh nghiệp giải thể / cơ cấu lại</option>
+                <option value="restructure">Doanh nghiệp giải thể / cơ cấu lại tổ chức</option>
                 <option value="illegal">Đơn phương chấm dứt HĐLĐ trái pháp luật</option>
                 <option value="pension">Nghỉ việc hưởng lương hưu</option>
               </select>
             </div>
-
-            {/* Field 5: Ngày chấm dứt hợp đồng */}
-            <div className="space-y-1.5 sm:col-span-1">
-              <label className="text-xs font-semibold text-slate-700 block">
-                Ngày chấm dứt hợp đồng <span className="text-rose-500">*</span>
-              </label>
-              <div className="relative flex items-center">
-                <input
-                  type="date"
-                  value={terminationDate}
-                  onChange={(e) => setTerminationDate(e.target.value)}
-                  className="w-full px-3.5 py-2.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800"
-                />
-              </div>
-            </div>
-
-            {/* Field 6: Tỉnh/Thành phố nộp hồ sơ */}
-            <div className="space-y-1.5 sm:col-span-1">
-              <label className="text-xs font-semibold text-slate-700 block">
-                Tỉnh/Thành phố nộp hồ sơ <span className="text-rose-500">*</span>
-              </label>
-              <select
-                value={selectedRegionId}
-                onChange={(e) => setSelectedRegionId(parseInt(e.target.value, 10))}
-                className="w-full px-3.5 py-2.5 bg-white rounded-xl border border-slate-200 focus:border-[#0062ff] focus:outline-hidden text-xs font-semibold text-slate-800"
-              >
-                {REGIONS.map((r) => (
-                  <option key={r.id} value={r.id}>
-                    {r.name}
-                  </option>
-                ))}
-              </select>
-              <p className="text-[10px] text-slate-400 m-0">
-                Dùng để xác định mức lương tối thiểu vùng (nếu có)
-              </p>
-            </div>
           </div>
 
-          {/* Card Lưu ý quan trọng */}
-          <div className="bg-[#f0f7ff] rounded-xl p-3.5 border border-[#dbeafe] space-y-1.5">
-            <h4 className="text-xs font-bold text-[#0062ff] m-0 flex items-center gap-1.5">
-              <Info className="w-3.5 h-3.5 text-[#0062ff]" />
+          {/* Card Lưu ý quan trọng: Tăng font chữ và khoảng cách bullet */}
+          <div className="bg-blue-50/60 rounded-xl p-4 border border-blue-200/80 space-y-2.5">
+            <h4 className="text-sm font-bold text-[#0062ff] m-0 flex items-center gap-2">
+              <Info className="w-4 h-4 text-[#0062ff] shrink-0" />
               <span>Lưu ý quan trọng</span>
             </h4>
-            <ul className="text-[11px] text-slate-600 space-y-1 pl-4 m-0 leading-relaxed list-disc">
-              <li>Bạn cần nộp hồ sơ trong thời hạn 03 tháng kể từ ngày chấm dứt hợp đồng lao động.</li>
-              <li>Mức trợ cấp được tính dựa trên mức lương bình quân 6 tháng đóng BHTN, thời gian đóng và quy định hiện hành.</li>
-              <li>Kết quả chỉ mang tính tham khảo, vui lòng đối chiếu với cơ quan BHXH.</li>
+            <ul className="text-[13px] sm:text-[13.5px] text-slate-700 space-y-2 pl-4.5 m-0 leading-[1.6] list-disc font-normal">
+              <li>
+                Cần nộp hồ sơ trong thời hạn <strong className="text-slate-900 font-bold">03 tháng</strong> kể từ ngày chấm dứt HĐLĐ.
+              </li>
+              <li>
+                Mức hưởng hàng tháng tối đa không quá <strong className="text-slate-900 font-bold">5 lần mức lương tối thiểu vùng</strong>.
+              </li>
             </ul>
           </div>
 
           {/* Nút Tính BHTN */}
-          <div className="pt-2">
-            <button
-              type="button"
-              disabled={isCalculating}
-              onClick={handleCalculate}
-              className="w-full py-3 rounded-xl bg-[#0062ff] hover:bg-[#0047ba] disabled:opacity-60 text-white font-bold text-xs flex items-center justify-center gap-2 shadow-xs transition-all cursor-pointer"
-            >
-              <Calculator className="w-4 h-4" />
-              <span>{isCalculating ? "Đang kiểm tra & tính toán..." : "Kiểm tra điều kiện & Tính trợ cấp"}</span>
-            </button>
-          </div>
+          <button
+            type="button"
+            disabled={isCalculating}
+            onClick={handleCalculate}
+            className="w-full h-10.5 rounded-xl bg-[#0062ff] hover:bg-blue-700 disabled:opacity-60 text-white font-bold text-xs sm:text-sm flex items-center justify-center gap-2 shadow-md shadow-blue-500/20 transition-all cursor-pointer border-none"
+          >
+            <Calculator className="w-4 h-4" />
+            <span>{isCalculating ? "Đang tính toán..." : "Kiểm tra điều kiện & Tính trợ cấp"}</span>
+          </button>
         </div>
 
         {/* ==================== CỘT 2: KẾT QUẢ ƯỚC TÍNH (4/12 cols) ==================== */}
-        <div className="lg:col-span-4 bg-white rounded-2xl p-5 border border-[#E5ECF6] shadow-2xs space-y-4">
-          <div className="flex items-center justify-between">
-            <h2 className="text-sm sm:text-base font-bold text-slate-800 m-0">
+        <div className="lg:col-span-4 bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs space-y-4">
+          <div className="flex items-center justify-between pb-1.5 border-b border-slate-100">
+            <h2 className="text-sm sm:text-base font-black text-slate-900 m-0">
               2. Kết quả ước tính
             </h2>
-            <span className="text-[10px] text-slate-400 font-medium">
+            <span className="text-xs font-bold text-slate-500 bg-slate-50 px-2 py-0.5 rounded-md border border-slate-200">
               Đơn vị: VNĐ
             </span>
           </div>
 
           {/* Card Trạng thái đủ điều kiện */}
           {bhtnResult.isEligible ? (
-            <div className="bg-[#f0fdf4] rounded-2xl p-3.5 border border-[#bbf7d0] flex items-start gap-2.5">
+            <div className="bg-emerald-50/90 rounded-xl p-3.5 border border-emerald-200 flex items-start gap-2.5">
               <div className="w-6 h-6 rounded-full bg-emerald-500 text-white flex items-center justify-center shrink-0 mt-0.5">
                 <Check className="w-3.5 h-3.5 stroke-[3]" />
               </div>
-              <div className="space-y-0.5">
+              <div className="space-y-1 min-w-0">
                 <h4 className="text-xs font-bold text-emerald-900 m-0 leading-tight">
-                  Bạn đủ điều kiện hưởng trợ cấp thất nghiệp
+                  Đủ điều kiện hưởng trợ cấp
                 </h4>
-                <p className="text-[10.5px] text-emerald-700 font-normal m-0 leading-tight">
-                  Dựa trên thông tin bạn cung cấp, bạn đáp ứng các điều kiện hưởng trợ cấp thất nghiệp theo quy định hiện hành.
+                <p className="text-xs text-emerald-700 font-medium m-0 leading-relaxed">
+                  Bạn đáp ứng các điều kiện hưởng trợ cấp thất nghiệp theo quy định hiện hành.
                 </p>
               </div>
             </div>
           ) : (
-            <div className="bg-amber-50 rounded-2xl p-3.5 border border-amber-200 flex items-start gap-2.5">
+            <div className="bg-amber-50/90 rounded-xl p-3.5 border border-amber-200 flex items-start gap-2.5">
               <AlertCircle className="w-5 h-5 text-amber-600 shrink-0 mt-0.5" />
-              <div className="space-y-0.5">
+              <div className="space-y-1 min-w-0">
                 <h4 className="text-xs font-bold text-amber-900 m-0 leading-tight">
-                  Chưa đủ điều kiện hưởng trợ cấp thất nghiệp
+                  Chưa đủ điều kiện hưởng trợ cấp
                 </h4>
-                <p className="text-[10.5px] text-amber-700 font-normal m-0 leading-tight">
+                <p className="text-xs text-amber-700 font-medium m-0 leading-relaxed">
                   {bhtnResult.ineligibilityReason}
                 </p>
               </div>
             </div>
           )}
 
-          {/* Khối Lương trợ cấp hàng tháng Xanh Pastel Lớn */}
-          <div className="bg-[#f0fdf4] rounded-2xl p-4 border border-[#bbf7d0] space-y-2">
-            <span className="text-xs font-bold text-emerald-800 block">
+          {/* Khối Lương trợ cấp hàng tháng: Làm nổi bật có kiểm soát, nền xám nhạt thanh lịch */}
+          <div className="bg-slate-50/90 rounded-xl p-4 border border-slate-200 space-y-2.5">
+            <span className="text-xs font-bold text-slate-500 uppercase tracking-wider block">
               Mức trợ cấp hàng tháng
             </span>
-            <div className="text-2xl sm:text-3xl font-black text-emerald-600 tracking-tight">
-              {formatCurrency(bhtnResult.monthlyBenefit)}
+            <div className="text-2xl sm:text-3xl font-black text-[#0062ff] tracking-tight">
+              {formatCurrency(bhtnResult.monthlyBenefit)} <span className="text-sm font-bold text-slate-500">VNĐ</span>
             </div>
 
-            <div className="grid grid-cols-2 gap-2 pt-1 border-t border-emerald-200/60">
+            <div className="grid grid-cols-2 gap-2 pt-2 border-t border-slate-200/80">
               <div className="space-y-0.5">
-                <span className="text-[10px] text-slate-500 block">Thời gian hưởng</span>
-                <span className="text-xs font-bold text-slate-800 block">
+                <span className="text-xs font-semibold text-slate-500 block">Thời gian hưởng</span>
+                <span className="text-xs sm:text-sm font-bold text-slate-900 block">
                   {bhtnResult.benefitMonths} tháng
                 </span>
               </div>
               <div className="space-y-0.5 text-right">
-                <span className="text-[10px] text-slate-500 block">Tổng trợ cấp dự kiến</span>
-                <span className="text-xs font-bold text-[#0062ff] block">
-                  {formatCurrency(bhtnResult.totalBenefit)}
+                <span className="text-xs font-semibold text-slate-500 block">Tổng trợ cấp dự kiến</span>
+                <span className="text-xs sm:text-sm font-bold text-emerald-600 block">
+                  {formatCurrency(bhtnResult.totalBenefit)} VNĐ
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Chi tiết tính toán */}
-          <div className="space-y-2 pt-1">
-            <h4 className="text-xs font-bold text-slate-800 m-0">Chi tiết tính toán</h4>
-            <div className="space-y-1.5 text-xs">
-              <div className="flex items-center justify-between text-slate-600">
-                <span>Mức lương bình quân 6 tháng</span>
-                <span className="font-semibold text-slate-800">
-                  {formatCurrency(bhtnResult.computedAvgSalary)}
+          {/* Chi tiết tính toán: Thoáng hơn, chữ to rõ ràng, căn gióng đều 2 bên */}
+          <div className="space-y-3 pt-2">
+            <h4 className="text-sm sm:text-[15px] font-bold text-slate-900 m-0 pb-1 border-b border-slate-100">
+              Chi tiết tính toán
+            </h4>
+            <div className="space-y-2.5 text-[13px] sm:text-[13.5px]">
+              <div className="flex items-center justify-between text-slate-600 py-0.5">
+                <span>Lương bình quân 6 tháng</span>
+                <span className="font-semibold text-slate-900 tabular-nums">
+                  {formatCurrency(bhtnResult.computedAvgSalary)} VNĐ
                 </span>
               </div>
-              <div className="flex items-center justify-between text-slate-600">
-                <span>Tỷ lệ trợ cấp (60%)</span>
-                <span className="font-semibold text-slate-800">
-                  {formatCurrency(bhtnResult.rawMonthlyBenefit)}
+              <div className="flex items-center justify-between text-slate-600 py-0.5">
+                <span>Tỷ lệ hưởng theo luật (60%)</span>
+                <span className="font-semibold text-slate-900 tabular-nums">
+                  {formatCurrency(bhtnResult.rawMonthlyBenefit)} VNĐ
                 </span>
               </div>
-              <div className="flex items-center justify-between text-slate-600">
-                <span>Giới hạn mức hưởng theo quy định</span>
-                <span className="font-semibold text-slate-800">
-                  {formatCurrency(bhtnResult.maxCap)}
+              <div className="flex items-center justify-between text-slate-600 py-0.5">
+                <span>Mức trần tối đa vùng ({REGIONS.find((r) => r.id === selectedRegionId)?.name})</span>
+                <span className="font-semibold text-slate-900 tabular-nums">
+                  {formatCurrency(bhtnResult.maxCap)} VNĐ
                 </span>
               </div>
-              <div className="flex items-center justify-between text-slate-800 font-bold pt-1 border-t border-slate-100">
-                <span>Mức trợ cấp thực tế/tháng</span>
-                <span className="text-emerald-700">
-                  {formatCurrency(bhtnResult.monthlyBenefit)}
+              <div className="flex items-center justify-between text-slate-900 font-bold pt-2.5 border-t border-slate-100">
+                <span className="text-[13.5px] sm:text-sm">Mức trợ cấp thực tế/tháng</span>
+                <span className="text-[#0062ff] text-base font-black tabular-nums">
+                  {formatCurrency(bhtnResult.monthlyBenefit)} VNĐ
                 </span>
               </div>
             </div>
           </div>
 
-          {/* Thông tin bổ sung */}
-          <div className="space-y-2 pt-2 border-t border-slate-100">
-            <h4 className="text-xs font-bold text-slate-800 m-0">Thông tin bổ sung</h4>
-            <div className="space-y-1.5 text-xs text-slate-600">
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5 text-[11px]">
-                  <Calendar className="w-3.5 h-3.5 text-blue-500" />
+          {/* Thông tin bổ sung / Mốc thời gian: Khoảng cách dòng thoáng, font chữ rõ ràng */}
+          <div className="space-y-3 pt-2.5 border-t border-slate-100">
+            <h4 className="text-sm sm:text-[15px] font-bold text-slate-900 m-0 pb-1 border-b border-slate-100">
+              Mốc thời gian quan trọng
+            </h4>
+            <div className="space-y-2.5 text-[13px] sm:text-[13.5px]">
+              <div className="flex items-center justify-between py-1">
+                <span className="flex items-center gap-2 text-slate-700 font-medium">
+                  <Calendar className="w-4 h-4 text-[#0062ff] shrink-0" />
                   <span>Thời gian đã đóng BHTN</span>
                 </span>
-                <span className="font-semibold text-slate-800">{totalMonths} tháng</span>
+                <span className="font-bold text-slate-900 tabular-nums">{totalMonths} tháng</span>
               </div>
-              <div className="flex items-center justify-between">
-                <span className="flex items-center gap-1.5 text-[11px]">
-                  <FileText className="w-3.5 h-3.5 text-blue-500" />
-                  <span>Số tháng được hưởng trợ cấp</span>
-                </span>
-                <span className="font-semibold text-slate-800">{bhtnResult.benefitMonths} tháng</span>
-              </div>
-              <div className="space-y-0.5 pt-0.5">
+
+              <div className="p-3.5 rounded-xl bg-amber-50/80 border border-amber-200 space-y-1.5">
                 <div className="flex items-center justify-between">
-                  <span className="flex items-center gap-1.5 text-[11px]">
-                    <span className="text-amber-500 font-bold">⏰</span>
-                    <span>Ngày hết hạn nộp hồ sơ</span>
+                  <span className="flex items-center gap-2 text-xs sm:text-[13px] font-bold text-amber-900">
+                    <Clock className="w-4 h-4 text-amber-600 shrink-0" />
+                    <span>Hạn chót nộp hồ sơ:</span>
                   </span>
-                  <span className="font-bold text-slate-800">{bhtnResult.deadlineDateStr}</span>
+                  <span className="font-bold text-amber-900 tabular-nums text-xs sm:text-[13px]">
+                    {bhtnResult.deadlineDateStr}
+                  </span>
                 </div>
-                <span className="text-[10px] text-slate-400 block pl-5">
-                  (Trong vòng 03 tháng kể từ ngày chấm dứt HĐLĐ)
-                </span>
+                <p className="text-[12.5px] sm:text-[13px] text-amber-800/90 font-medium m-0 pl-6 leading-[1.6]">
+                  Trong thời hạn 03 tháng kể từ ngày nghỉ việc
+                </p>
               </div>
             </div>
           </div>
@@ -597,47 +732,47 @@ export default function UnemploymentInsurancePage() {
 
         {/* ==================== CỘT 3: RIGHT SIDEBAR (3/12 cols) ==================== */}
         <div className="lg:col-span-3 space-y-3.5">
-          {/* Card 1: 💡 Bạn có biết? */}
-          <div className="bg-[#fffdf5] rounded-2xl p-4 border border-[#fde68a] shadow-2xs space-y-2.5">
-            <h3 className="text-xs font-bold text-slate-800 m-0 flex items-center gap-1.5">
-              <span>💡</span>
+          {/* Card 1: Bạn có biết?: Tăng font chữ mô tả (13.5px - 14px), line-height 1.6, giãn cách các ý 11-12px */}
+          <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3.5">
+            <h3 className="text-sm sm:text-[15px] font-black text-slate-900 m-0 flex items-center gap-2 pb-1 border-b border-slate-100">
+              <Lightbulb className="w-4 h-4 text-amber-500 shrink-0" />
               <span>Bạn có biết?</span>
             </h3>
-            <ul className="space-y-2 text-[11px] text-slate-700 pl-0 list-none m-0 leading-relaxed">
-              <li className="flex items-start gap-1.5">
-                <span className="text-amber-600 font-bold">✓</span>
-                <span>BHTN giúp người lao động giảm bớt khó khăn tài chính khi mất việc làm.</span>
+            <ul className="space-y-3 text-[13px] sm:text-[13.5px] text-slate-700 pl-0 list-none m-0 leading-[1.6] font-normal">
+              <li className="flex items-start gap-2.5">
+                <span className="text-[#0062ff] font-bold text-sm shrink-0 mt-0.5">✓</span>
+                <span>BHTN hỗ trợ tài chính kịp thời khi người lao động chưa tìm được việc mới.</span>
               </li>
-              <li className="flex items-start gap-1.5">
-                <span className="text-amber-600 font-bold">✓</span>
-                <span>Mức trợ cấp hàng tháng bằng 60% mức lương bình quân 6 tháng đóng BHTN.</span>
+              <li className="flex items-start gap-2.5">
+                <span className="text-[#0062ff] font-bold text-sm shrink-0 mt-0.5">✓</span>
+                <span>Mức hưởng bằng 60% lương bình quân đóng BHTN của 06 tháng liền kề.</span>
               </li>
-              <li className="flex items-start gap-1.5">
-                <span className="text-amber-600 font-bold">✓</span>
-                <span>Thời gian hưởng từ 3 đến 12 tháng tùy thuộc thời gian đóng BHTN.</span>
+              <li className="flex items-start gap-2.5">
+                <span className="text-[#0062ff] font-bold text-sm shrink-0 mt-0.5">✓</span>
+                <span>Thời gian hưởng từ 3 đến 12 tháng tùy thuộc vào tổng thời gian đóng góp.</span>
               </li>
-              <li className="flex items-start gap-1.5">
-                <span className="text-amber-600 font-bold">✓</span>
-                <span>Hãy nộp hồ sơ đúng thời hạn để đảm bảo quyền lợi của mình.</span>
+              <li className="flex items-start gap-2.5">
+                <span className="text-[#0062ff] font-bold text-sm shrink-0 mt-0.5">✓</span>
+                <span>Người hưởng BHTN được hỗ trợ tư vấn, giới thiệu việc làm và học nghề miễn phí.</span>
               </li>
             </ul>
           </div>
 
           {/* Card 2: Công cụ liên quan */}
-          <div className="bg-white rounded-2xl p-4 border border-[#E5ECF6] shadow-2xs space-y-2.5">
-            <h3 className="text-xs font-bold text-slate-800 m-0">
+          <div className="bg-white rounded-2xl p-4 sm:p-5 border border-slate-200/90 shadow-2xs space-y-3">
+            <h3 className="text-xs sm:text-sm font-black text-slate-900 m-0">
               Công cụ liên quan
             </h3>
             <div className="space-y-1.5">
               <Link
-                href="/cong-cu"
-                className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-blue-50/60 border border-transparent hover:border-blue-200 transition-all text-left group cursor-pointer"
+                href="/cong-cu/tinh-luong-gross-net"
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50/70 border border-transparent hover:border-blue-200 transition-all text-left group cursor-pointer"
               >
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0">
-                    <Calculator className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0">
+                    <Calculator className="w-4 h-4" />
                   </div>
-                  <span className="text-[11.5px] font-semibold text-slate-700 group-hover:text-[#0062ff] truncate">
+                  <span className="text-xs font-semibold text-slate-700 group-hover:text-[#0062ff] truncate">
                     Tính lương Gross - Net
                   </span>
                 </div>
@@ -646,14 +781,14 @@ export default function UnemploymentInsurancePage() {
 
               <Link
                 href="/cong-cu/mbti"
-                className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-purple-50/60 border border-transparent hover:border-purple-200 transition-all text-left group cursor-pointer"
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-purple-50/70 border border-transparent hover:border-purple-200 transition-all text-left group cursor-pointer"
               >
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
-                    <Brain className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-purple-50 text-purple-600 flex items-center justify-center shrink-0">
+                    <Brain className="w-4 h-4" />
                   </div>
-                  <span className="text-[11.5px] font-semibold text-slate-700 group-hover:text-purple-700 truncate">
-                    Trắc nghiệm MBTI / Tính cách
+                  <span className="text-xs font-semibold text-slate-700 group-hover:text-purple-700 truncate">
+                    Trắc nghiệm tính cách MBTI
                   </span>
                 </div>
                 <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-purple-600 group-hover:translate-x-0.5 transition-all shrink-0" />
@@ -661,14 +796,14 @@ export default function UnemploymentInsurancePage() {
 
               <Link
                 href="/ai-career"
-                className="w-full flex items-center justify-between p-2 rounded-xl hover:bg-blue-50/60 border border-transparent hover:border-blue-200 transition-all text-left group cursor-pointer"
+                className="w-full flex items-center justify-between p-2.5 rounded-xl hover:bg-blue-50/70 border border-transparent hover:border-blue-200 transition-all text-left group cursor-pointer"
               >
-                <div className="flex items-center gap-2 min-w-0">
-                  <div className="w-7 h-7 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0">
-                    <Bot className="w-3.5 h-3.5" />
+                <div className="flex items-center gap-2.5 min-w-0">
+                  <div className="w-8 h-8 rounded-lg bg-blue-50 text-[#0062ff] flex items-center justify-center shrink-0">
+                    <Bot className="w-4 h-4" />
                   </div>
-                  <span className="text-[11.5px] font-semibold text-slate-700 group-hover:text-[#0062ff] truncate">
-                    Trợ lý AI Career & Phỏng vấn
+                  <span className="text-xs font-semibold text-slate-700 group-hover:text-[#0062ff] truncate">
+                    Trợ lý AI Hướng nghiệp
                   </span>
                 </div>
                 <ArrowRight className="w-3.5 h-3.5 text-slate-400 group-hover:text-[#0062ff] group-hover:translate-x-0.5 transition-all shrink-0" />
@@ -676,26 +811,23 @@ export default function UnemploymentInsurancePage() {
             </div>
           </div>
 
-          {/* Card 3: Cần hỗ trợ? */}
-          <div className="bg-[#f0f7ff] rounded-2xl p-4 border border-[#dbeafe] shadow-2xs space-y-2.5 relative overflow-hidden">
+          {/* Card 3: Cần hỗ trợ? (Tư vấn chính sách BHXH) */}
+          <div className="bg-blue-50/50 rounded-2xl p-4 sm:p-5 border border-blue-200/70 shadow-2xs space-y-2.5">
             <div>
-              <h4 className="text-xs font-bold text-slate-800 m-0">Cần hỗ trợ?</h4>
-              <p className="text-[10.5px] text-slate-600 font-normal m-0 mt-0.5 leading-tight">
-                Đội ngũ Careza luôn sẵn sàng đồng hành cùng bạn.
+              <h4 className="text-sm font-bold text-slate-900 m-0 pb-1 border-b border-blue-100">Tư vấn chính sách BHXH</h4>
+              <p className="text-[13px] sm:text-[13.5px] text-slate-600 font-normal m-0 mt-2 leading-[1.6]">
+                Liên hệ tổng đài hoặc Trung tâm Dịch vụ Việc làm gần nhất để được giải đáp hồ sơ.
               </p>
             </div>
-            <div className="flex items-center justify-between gap-2">
+            <div className="flex items-center justify-between pt-1">
               <button
                 type="button"
-                onClick={() => message.info("Tổng đài Careza: 1900 6868")}
-                className="px-3 py-1.5 rounded-xl bg-white hover:bg-slate-50 text-[#0062ff] font-bold text-[11px] border border-blue-200 shadow-2xs flex items-center gap-1 transition-all cursor-pointer"
+                onClick={() => message.info("Tổng đài hỗ trợ BHXH Việt Nam: 1900 9068")}
+                className="px-3.5 py-2 rounded-xl bg-white hover:bg-blue-50 text-[#0062ff] font-bold text-xs border border-blue-200 shadow-2xs flex items-center gap-1.5 transition-all cursor-pointer"
               >
-                <span>Liên hệ hỗ trợ</span>
-                <ArrowRight className="w-3 h-3" />
+                <Headphones className="w-3.5 h-3.5" />
+                <span>Tổng đài 1900 9068</span>
               </button>
-              <div className="w-10 h-10 rounded-full bg-blue-100 text-[#0062ff] flex items-center justify-center shrink-0">
-                <Headphones className="w-5 h-5" />
-              </div>
             </div>
           </div>
         </div>
@@ -704,22 +836,25 @@ export default function UnemploymentInsurancePage() {
       {/* ======================================================== */}
       {/* 4. SECTION ACCORDION: TÌM HIỂU THÊM VỀ BHTN                */}
       {/* ======================================================== */}
-      <div className="bg-white rounded-2xl p-5 border border-[#E5ECF6] shadow-2xs space-y-3">
-        <h3 className="text-sm sm:text-base font-bold text-slate-800 m-0">
-          Tìm hiểu thêm về bảo hiểm thất nghiệp
-        </h3>
+      <div className="bg-white rounded-2xl p-5 border border-slate-200/90 shadow-2xs space-y-3">
+        <div className="pb-1 border-b border-slate-100">
+          <h3 className="text-sm sm:text-base font-black text-slate-900 m-0">
+            Tìm hiểu thêm về bảo hiểm thất nghiệp
+          </h3>
 
-        <div className="space-y-2 pt-1">
+        </div>
+
+        <div className="space-y-2 pt-0.5">
           {/* Accordion 1 */}
-          <div className="border border-slate-200/80 rounded-xl overflow-hidden">
+          <div className="border border-slate-200 rounded-xl overflow-hidden">
             <button
               type="button"
               onClick={() => toggleAccordion(1)}
-              className="w-full px-4 py-3 bg-slate-50/60 hover:bg-slate-100/70 flex items-center justify-between transition-colors text-left cursor-pointer"
+              className="w-full px-4 py-3 bg-slate-50/70 hover:bg-slate-100/70 flex items-center justify-between transition-colors text-left cursor-pointer"
             >
               <div className="flex items-center gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-[#0062ff]" />
-                <span className="text-xs font-semibold text-slate-800">
+                <span className="text-xs font-bold text-slate-900">
                   Đối tượng được hưởng trợ cấp thất nghiệp
                 </span>
               </div>
@@ -730,22 +865,22 @@ export default function UnemploymentInsurancePage() {
               )}
             </button>
             {openAccordion[1] && (
-              <div className="p-4 bg-white text-xs text-slate-600 leading-relaxed border-t border-slate-100 animate-in fade-in">
-                Người lao động làm việc theo hợp đồng lao động không xác định thời hạn, hợp đồng xác định thời hạn hoặc hợp đồng theo mùa vụ từ đủ 03 tháng trở lên đã tham gia đóng BHTN đầy đủ theo quy định.
+              <div className="p-4 bg-white text-xs text-slate-600 leading-relaxed border-t border-slate-100">
+                Người lao động làm việc theo hợp đồng lao động không xác định thời hạn, hợp đồng xác định thời hạn hoặc hợp đồng theo mùa vụ từ đủ 03 tháng trở lên đã tham gia đóng BHTN đầy đủ theo quy định của pháp luật.
               </div>
             )}
           </div>
 
           {/* Accordion 2 */}
-          <div className="border border-slate-200/80 rounded-xl overflow-hidden">
+          <div className="border border-slate-200 rounded-xl overflow-hidden">
             <button
               type="button"
               onClick={() => toggleAccordion(2)}
-              className="w-full px-4 py-3 bg-slate-50/60 hover:bg-slate-100/70 flex items-center justify-between transition-colors text-left cursor-pointer"
+              className="w-full px-4 py-3 bg-slate-50/70 hover:bg-slate-100/70 flex items-center justify-between transition-colors text-left cursor-pointer"
             >
               <div className="flex items-center gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-[#0062ff]" />
-                <span className="text-xs font-semibold text-slate-800">
+                <span className="text-xs font-bold text-slate-900">
                   Điều kiện hưởng trợ cấp thất nghiệp
                 </span>
               </div>
@@ -756,7 +891,7 @@ export default function UnemploymentInsurancePage() {
               )}
             </button>
             {openAccordion[2] && (
-              <div className="p-4 bg-white text-xs text-slate-600 leading-relaxed border-t border-slate-100 space-y-1.5 animate-in fade-in">
+              <div className="p-4 bg-white text-xs text-slate-600 leading-relaxed border-t border-slate-100 space-y-1.5">
                 <p className="m-0">• Đã chấm dứt HĐLĐ hoặc HĐLV (không áp dụng với trường hợp đơn phương chấm dứt HĐLĐ trái pháp luật hoặc hưởng lương hưu).</p>
                 <p className="m-0">• Đã đóng BHTN từ đủ 12 tháng trở lên trong thời gian 24 tháng trước khi chấm dứt HĐLĐ.</p>
                 <p className="m-0">• Đã nộp hồ sơ hưởng BHTN tại Trung tâm dịch vụ việc làm trong thời hạn 03 tháng kể từ ngày chấm dứt HĐLĐ.</p>
@@ -766,15 +901,15 @@ export default function UnemploymentInsurancePage() {
           </div>
 
           {/* Accordion 3 */}
-          <div className="border border-slate-200/80 rounded-xl overflow-hidden">
+          <div className="border border-slate-200 rounded-xl overflow-hidden">
             <button
               type="button"
               onClick={() => toggleAccordion(3)}
-              className="w-full px-4 py-3 bg-slate-50/60 hover:bg-slate-100/70 flex items-center justify-between transition-colors text-left cursor-pointer"
+              className="w-full px-4 py-3 bg-slate-50/70 hover:bg-slate-100/70 flex items-center justify-between transition-colors text-left cursor-pointer"
             >
               <div className="flex items-center gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-[#0062ff]" />
-                <span className="text-xs font-semibold text-slate-800">
+                <span className="text-xs font-bold text-slate-900">
                   Hồ sơ và thủ tục nhận trợ cấp
                 </span>
               </div>
@@ -785,25 +920,25 @@ export default function UnemploymentInsurancePage() {
               )}
             </button>
             {openAccordion[3] && (
-              <div className="p-4 bg-white text-xs text-slate-600 leading-relaxed border-t border-slate-100 space-y-1.5 animate-in fade-in">
-                <p className="m-0">• Đề nghị hưởng trợ cấp thất nghiệp theo mẫu do Bộ Lao động - Thương binh và Xã hội quy định.</p>
+              <div className="p-4 bg-white text-xs text-slate-600 leading-relaxed border-t border-slate-100 space-y-1.5">
+                <p className="m-0">• Đơn đề nghị hưởng trợ cấp thất nghiệp theo mẫu quy định.</p>
                 <p className="m-0">• Bản chính hoặc bản sao có chứng thực của HĐLĐ đã hết hạn hoặc quyết định thôi việc.</p>
                 <p className="m-0">• Sổ Bảo hiểm xã hội bản chính đã chốt thời gian đóng BHTN.</p>
-                <p className="m-0">• Căn cước công dân và thông tin tài khoản ngân hàng để nhận trợ cấp.</p>
+                <p className="m-0">• Căn cước công dân và thông tin tài khoản ngân hàng chính chủ để nhận trợ cấp.</p>
               </div>
             )}
           </div>
 
           {/* Accordion 4 */}
-          <div className="border border-slate-200/80 rounded-xl overflow-hidden">
+          <div className="border border-slate-200 rounded-xl overflow-hidden">
             <button
               type="button"
               onClick={() => toggleAccordion(4)}
-              className="w-full px-4 py-3 bg-slate-50/60 hover:bg-slate-100/70 flex items-center justify-between transition-colors text-left cursor-pointer"
+              className="w-full px-4 py-3 bg-slate-50/70 hover:bg-slate-100/70 flex items-center justify-between transition-colors text-left cursor-pointer"
             >
               <div className="flex items-center gap-2.5">
                 <ShieldCheck className="w-4 h-4 text-[#0062ff]" />
-                <span className="text-xs font-semibold text-slate-800">
+                <span className="text-xs font-bold text-slate-900">
                   Quy trình nhận trợ cấp thất nghiệp
                 </span>
               </div>
@@ -814,7 +949,7 @@ export default function UnemploymentInsurancePage() {
               )}
             </button>
             {openAccordion[4] && (
-              <div className="p-4 bg-white text-xs text-slate-600 leading-relaxed border-t border-slate-100 space-y-1.5 animate-in fade-in">
+              <div className="p-4 bg-white text-xs text-slate-600 leading-relaxed border-t border-slate-100 space-y-1.5">
                 <p className="m-0">• <strong>Bước 1:</strong> Nộp đủ hồ sơ trong vòng 03 tháng tại Trung tâm Dịch vụ Việc làm.</p>
                 <p className="m-0">• <strong>Bước 2:</strong> Nhận Quyết định hưởng trợ cấp thất nghiệp trong vòng 20 ngày làm việc.</p>
                 <p className="m-0">• <strong>Bước 3:</strong> Nhận tiền chi trả qua thẻ ATM ngân hàng theo từng tháng.</p>
@@ -826,40 +961,31 @@ export default function UnemploymentInsurancePage() {
       </div>
 
       {/* ======================================================== */}
-      {/* 5. CTA BANNER CUỐI TRANG: CHỦ ĐỘNG HIỂU RÕ QUYỀN LỢI      */}
+      {/* 5. CTA BANNER CUỐI TRANG: ĐỒNG HÀNH SỰ NGHIỆP CÙNG CAREZA*/}
       {/* ======================================================== */}
-      <div className="relative w-full rounded-2xl overflow-hidden min-h-[100px] sm:min-h-[115px] bg-gradient-to-r from-[#edf5ff] via-[#f4f8ff] to-[#e4efff] border border-blue-100 shadow-2xs p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4 mt-6">
-        <div className="space-y-1 max-w-lg z-10">
-          <h3 className="text-sm sm:text-base font-bold text-slate-800 m-0 leading-tight">
-            Chủ động hiểu rõ quyền lợi<br className="hidden sm:inline" /> Vững vàng cho tương lai
-          </h3>
-          <p className="text-xs text-slate-600 font-normal m-0 leading-relaxed">
-            Careza đồng hành cùng bạn trên mọi chặng đường sự nghiệp.
-          </p>
+      <div className="rounded-2xl bg-gradient-to-r from-blue-50/70 via-white to-blue-50/50 border border-blue-200/90 shadow-2xs p-4 sm:p-5 flex flex-col md:flex-row items-center justify-between gap-4">
+        <div className="flex items-center gap-3">
+          <div className="w-10 h-10 rounded-xl bg-blue-100/80 text-[#0062ff] flex items-center justify-center shrink-0">
+            <ShieldCheck className="w-5 h-5 stroke-[2.2]" />
+          </div>
+          <div>
+            <h3 className="text-sm font-bold text-slate-900 m-0 leading-tight">
+              Chủ động hiểu rõ quyền lợi · Vững vàng cho tương lai
+            </h3>
+            <p className="text-xs text-slate-600 font-medium m-0 mt-0.5 leading-relaxed">
+              Careza đồng hành cùng bạn tìm kiếm cơ hội việc làm mới nhanh chóng và phù hợp nhất.
+            </p>
+          </div>
         </div>
 
-        {/* Decorative Calligraphy & Shield Visual */}
-        <div className="flex items-center gap-5 z-10 shrink-0 pr-2">
-          <div className="flex items-center gap-2 relative">
-            <div className="w-8 h-8 rounded-full bg-gradient-to-tr from-amber-500 via-yellow-400 to-amber-200 border-2 border-yellow-200 shadow-xs flex items-center justify-center text-amber-950 font-black text-xs -rotate-12">
-              ₫
-            </div>
-            <div className="w-12 h-14 bg-gradient-to-br from-[#0062ff] to-[#0047ba] rounded-xl shadow-md flex items-center justify-center text-white rotate-6">
-              <ShieldCheck className="w-6 h-6 text-white" />
-            </div>
-          </div>
-
-          <div className="text-right -rotate-3 pointer-events-none select-none">
-            <span className="font-serif italic text-xs sm:text-sm font-bold text-[#0062ff] block leading-tight">
-              An tâm
-            </span>
-            <span className="font-serif italic text-xs sm:text-sm font-bold text-[#0062ff] block leading-tight">
-              Phát triển
-            </span>
-            <span className="font-serif italic text-xs sm:text-sm font-bold text-[#0062ff] block leading-tight">
-              Bền vững
-            </span>
-          </div>
+        <div className="flex items-center gap-2.5 shrink-0">
+          <Link
+            href="/viec-lam"
+            className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl bg-[#0062ff] hover:bg-blue-700 text-white font-bold text-xs shadow-xs transition-all"
+          >
+            <span>Tìm việc làm ngay</span>
+            <ArrowRight className="w-3.5 h-3.5" />
+          </Link>
         </div>
       </div>
     </div>
