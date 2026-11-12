@@ -168,14 +168,14 @@ function PublicHeaderMain() {
     }
   };
 
-  const userRoles: RoleCode[] = useMemo(() => {
+  const userRoles: string[] = useMemo(() => {
     if (!user) return [];
     const list: string[] = [];
     if (Array.isArray(user.roles)) list.push(...user.roles.map(String));
     if ((user as any).role) list.push(String((user as any).role));
     if ((user as any).account_type) list.push(String((user as any).account_type));
     if ((user as any).user_type) list.push(String((user as any).user_type));
-    return list.map((r) => r.toUpperCase()) as RoleCode[];
+    return list.map((r) => r.toUpperCase());
   }, [user]);
 
   const getDashboardLink = () => {
